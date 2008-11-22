@@ -1,0 +1,4 @@
+We'll put external third party Django libraries in here.
+
+/ext/ will be added to the Python Path by magic (in our maange.py)
+
