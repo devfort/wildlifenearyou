@@ -1,2 +1,4 @@
 *.pyc
 zoo/local_settings.py
+*~
+
