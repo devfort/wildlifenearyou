@@ -31,7 +31,7 @@ class Command(BaseCommand):
             except ValueError:
                 addr, port = '', addrport
         if not addr:
-            addr = '127.0.0.1'
+            addr = '0.0.0.0'
 
         if not port.isdigit():
             raise CommandError("%r is not a valid port number." % port)
