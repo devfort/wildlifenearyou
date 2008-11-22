@@ -1,5 +1,8 @@
 # Django settings for zoo project.
 
+import os
+OUR_ROOT = os.path.realpath(os.path.dirname(__file__))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -76,7 +79,10 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'dmigrations',
 )
+
+DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
 
 try:
     from local_settings import *
