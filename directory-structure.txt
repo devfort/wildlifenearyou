@@ -1,4 +1,3 @@
 Put the Django stuff in the 'zoo' project directory.
 Create other directories parallel to 'zoo' for docs and other stuff like that.
 
-Hello Test git svn
