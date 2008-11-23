@@ -86,8 +86,10 @@ class EnclosureAnimal(models.Model):
     number_of_inhabitants = models.IntegerField(default=0, null=True, blank=True)
 
     def __unicode__(self):
-        retstr = "%i %s" % (self.number_of_inhabitants,
-                            '%s%s' % (self.animal.common_name, pluralize(self.number_of_inhabitants)),)
+        retstr = self.animal.common_name
+        if self.number_of_inhabitants:
+            retstr += ' (%i)' % self.number_of_inhabitants
         if self.enclosure.name:
-            retstr += " in %s" % self.enclosure.name
+            retstr += ', %s' % self.enclosure.name
+        retstr += ', %s' % self.enclosure.place.known_as
         return retstr
