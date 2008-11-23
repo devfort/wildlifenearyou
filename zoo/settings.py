@@ -83,6 +83,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'dmigrations',
+    'zoo.animals',
 )
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')

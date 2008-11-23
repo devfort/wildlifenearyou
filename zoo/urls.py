@@ -38,6 +38,17 @@ urlpatterns = patterns('',
     
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
+
     # Databrowse
     (r'^databrowse/(.*)', databrowse.site.root),
+
+
+    url(r'^animal/(?P<common_name>[^/]+)/$', 'zoo.animals.views.animal',
+        name='animal'),
+
+    url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.animal_latin',),
+
+#    url(r'^(?P<country_code>.*)/(?P<slug>.*)/$', 'zoo.places.views.place',
+#        name='place'),
+
 )
