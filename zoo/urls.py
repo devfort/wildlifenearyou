@@ -29,11 +29,11 @@ urlpatterns = patterns('',
     }, name='accounts-login'),
    
     # Dodo
-    (r'^animals/dodo/$', 
+    (r'^animal/dodo/$(?i)', 
         lambda r: http.HttpResponseGone('410 Gone')
     ),
-    (r'^latin/raphus-cucullatus/$', 
-        lambda r: http.HttpResponseRedirect('/animals/dodo/')
+    (r'^latin/raphus-cucullatus/$(?i)', 
+        lambda r: http.HttpResponseRedirect('/animal/dodo/')
     ),
     
     # Django built-in admin
