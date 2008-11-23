@@ -9,7 +9,9 @@ admin.autodiscover()
 
 from django.contrib import databrowse
 from django.contrib.auth.models import User
-databrowse.site.register(User)
+from django.db.models import get_models
+for model in get_models():
+    databrowse.site.register(model)
 
 urlpatterns = patterns('',
     # Example:
@@ -48,7 +50,7 @@ urlpatterns = patterns('',
 
     url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.animal_latin',),
 
-#    url(r'^(?P<country_code>.*)/(?P<slug>.*)/$', 'zoo.places.views.place',
-#        name='place'),
+    url(r'^(?P<country_code>.*)/(?P<slug>.*)/$', 'zoo.places.views.place',
+        name='place'),
 
 )
