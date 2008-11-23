@@ -66,6 +66,14 @@ class Place(models.Model):
     def __unicode__(self):
         return '%s, commonly known as %s' % (self.legal_name, self.known_as,)
 
+class Webcam(models.Model):
+    place = models.ForeignKey(Place, related_name = 'webcams')
+    name = models.CharField(max_length=300, null=True, blank=True)
+    url = models.URLField()
+    
+    def __unicode__(self):
+        return self.name
+
 class Enclosure(models.Model):
     place = models.ForeignKey(Place, related_name = 'enclosures')
     animals = models.ManyToManyField(Animal, through='EnclosureAnimal')
