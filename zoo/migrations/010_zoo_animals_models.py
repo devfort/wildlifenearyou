@@ -9,7 +9,7 @@ migration = m.Migration(sql_up=["""
         `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
         `name` varchar(500) NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-    ;
+""", """
     CREATE TABLE `animals_animal` (
         `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
         `common_name` varchar(500) NOT NULL,
@@ -20,5 +20,6 @@ migration = m.Migration(sql_up=["""
 
 """], sql_down=["""
     DROP TABLE `animals_animalclass`;
+""", """
     DROP TABLE `animals_animal`;
 """])

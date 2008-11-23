@@ -11,6 +11,7 @@ migration = m.Migration(sql_up=["""
         `country_code` varchar(2) NOT NULL UNIQUE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ;
+""", """
     CREATE TABLE `places_place` (
         `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
         `legal_name` varchar(500) NOT NULL,
@@ -28,5 +29,6 @@ migration = m.Migration(sql_up=["""
     ;
 """], sql_down=["""
     DROP TABLE `places_country`;
+""", """
     DROP TABLE `places_place`;
 """])
