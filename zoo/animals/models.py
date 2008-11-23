@@ -8,6 +8,8 @@ class AnimalClass(models.Model):
         return self.name
 
 class Animal(models.Model):
+    "An Animal isn't strictly an animal, it could be a plant maybe..."
+
     common_name = models.CharField(max_length=500, blank=False, null=False)
     latin_name = models.CharField(max_length=500, blank=False, null=False)
     slug = models.SlugField(max_length=255, blank=False, null=False, unique=True)
