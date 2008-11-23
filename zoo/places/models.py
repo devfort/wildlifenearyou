@@ -32,6 +32,10 @@ class Place(models.Model):
     zip = models.CharField(max_length=50, null=True, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True)
 
+    # long and lot for mapping
+    longitude = models.FloatField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+
     def __unicode__(self):
         return '%s, commonly known as %s' % (self.legal_name, self.known_as,)
 
