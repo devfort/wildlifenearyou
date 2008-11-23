@@ -68,6 +68,9 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'zoo.urls'
 
+AUTH_PROFILE_MODULE = 'accounts.profile'
+LOGIN_REDIRECT_URL = '/welcome/'
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -83,6 +86,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'dmigrations',
+    'zoo.accounts',
     'zoo.animals',
 )
 

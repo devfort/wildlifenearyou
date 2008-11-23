@@ -13,6 +13,8 @@ from django.db.models import get_models
 for model in get_models():
     databrowse.site.register(model)
 
+from accounts import views as accounts
+
 urlpatterns = patterns('',
     # Example:
     # (r'^zoo/', include('zoo.foo.urls')),
@@ -29,6 +31,14 @@ urlpatterns = patterns('',
     url(r'^login/$(?i)', 'django.contrib.auth.views.login', {
         'template_name': 'accounts/login.html'
     }, name='accounts-login'),
+    url(r'^register/$', accounts.register, 
+        name='accounts-register'),
+    url(r'^welcome/$', accounts.welcome, 
+        name='accounts-welcome'),
+    url(r'^profile/(\w+)/$', accounts.profile, 
+        name='accounts-profile'),
+    url(r'^profile/(\w+)/edit/$', accounts.profile_edit, 
+        name='accounts-profile-edit'),
    
     # Dodo
     (r'^animal/dodo/$(?i)', 
