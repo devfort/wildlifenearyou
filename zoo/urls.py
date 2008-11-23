@@ -45,7 +45,7 @@ urlpatterns = patterns('',
     (r'^databrowse/(.*)', databrowse.site.root),
 
 
-    url(r'^animal/(?P<common_name>[^/]+)/$(?i)', 'zoo.animals.views.animal',
+    url(r'^animal/(?P<slug>[^/]+)/$(?i)', 'zoo.animals.views.animal',
         name='animal'),
 
     url(r'^latin/(?P<latin_name>[^/]+)/$(?i)', 'zoo.animals.views.animal_latin',),

@@ -10,11 +10,12 @@ class AnimalClass(models.Model):
 class Animal(models.Model):
     common_name = models.CharField(max_length=500, blank=False, null=False)
     latin_name = models.CharField(max_length=500, blank=False, null=False)
+    slug = models.SlugField(max_length=500, blank=False, null=False)
     animal_class = models.ForeignKey(AnimalClass)
 
     @models.permalink
     def get_absolute_url(self):
-        return ('animal', (), {'common_name': self.common_name})
+        return ('animal', (), {'slug': self.slug})
 
     @attrproperty
     def urls(self, name):
