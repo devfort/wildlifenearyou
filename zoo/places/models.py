@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.template.defaultfilters import pluralize
 
 from zoo.animals.models import Animal
 from zoo.utils import attrproperty
@@ -85,3 +86,10 @@ class EnclosureAnimal(models.Model):
     enclosure = models.ForeignKey(Enclosure)
     animal = models.ForeignKey(Animal)
     number_of_inhabitants = models.IntegerField(default=0, null=True, blank=True)
+
+    def __unicode__(self):
+        retstr = "%i %s" % (self.number_of_inhabitants,
+                            '%s%s' % (self.animal.common_name, pluralize(self.number_of_inhabitants)),)
+        if self.enclosure.name:
+            retstr += " in %s" % self.enclosure.name
+        return retstr
