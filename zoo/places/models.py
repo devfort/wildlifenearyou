@@ -8,7 +8,10 @@ from zoo.utils import attrproperty
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     country_code = models.CharField(max_length=2, null=False, blank=False, unique=True)
-
+    
+    class Meta:
+        verbose_name_plural = 'countries'
+    
     def __unicode__(self):
         return '%s (%s)' % (self.name, self.country_code,)
 
