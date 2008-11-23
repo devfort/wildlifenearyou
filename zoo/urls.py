@@ -23,28 +23,28 @@ urlpatterns = patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     
-    (r'^static/(?P<path>.*)$(?i)', 'django.views.static.serve', {
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
     
     # User accounts stuff
-    url(r'^login/$(?i)', 'django.contrib.auth.views.login', {
+    url(r'^login/$', 'django.contrib.auth.views.login', {
         'template_name': 'accounts/login.html'
     }, name='accounts-login'),
-    url(r'^register/$(?i)', accounts.register, 
+    url(r'^register/$', accounts.register, 
         name='accounts-register'),
-    url(r'^welcome/$(?i)', accounts.welcome, 
+    url(r'^welcome/$', accounts.welcome, 
         name='accounts-welcome'),
-    url(r'^profile/(\w+)/$(?i)', accounts.profile, 
+    url(r'^profile/(\w+)/$', accounts.profile, 
         name='accounts-profile'),
-    url(r'^profile/(\w+)/edit/$(?i)', accounts.profile_edit, 
+    url(r'^profile/(\w+)/edit/$', accounts.profile_edit, 
         name='accounts-profile-edit'),
    
     # Dodo
-    (r'^animal/dodo/$(?i)', 
+    (r'^animal/dodo/$', 
         lambda r: http.HttpResponseGone('410 Gone')
     ),
-    (r'^latin/raphus-cucullatus/$(?i)', 
+    (r'^latin/raphus-cucullatus/$', 
         lambda r: http.HttpResponseRedirect('/animal/dodo/')
     ),
     
@@ -55,10 +55,10 @@ urlpatterns = patterns('',
     (r'^databrowse/(.*)', databrowse.site.root),
 
 
-    url(r'^animal/(?P<slug>[^/]+)/$(?i)', 'zoo.animals.views.animal',
+    url(r'^animal/(?P<slug>[^/]+)/$', 'zoo.animals.views.animal',
         name='animal'),
 
-    url(r'^latin/(?P<latin_name>[^/]+)/$(?i)', 'zoo.animals.views.animal_latin',),
+    url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.animal_latin',),
 
     url(r'^(?P<country_code>.*)/(?P<slug>.*)/$', 'zoo.places.views.place',
         name='place'),
