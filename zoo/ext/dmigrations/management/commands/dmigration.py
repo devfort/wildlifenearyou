@@ -20,8 +20,7 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         import_path = getattr(settings, 'DMIGRATION_GENERATOR',
-            # Default generator depends on DATABASE_ENGINE
-            'dmigrations.%s.generator' % settings.DATABASE_ENGINE
+            'dmigrations.generator'
         )
         try:
             db_generator = __import__(import_path, {}, {}, [''])

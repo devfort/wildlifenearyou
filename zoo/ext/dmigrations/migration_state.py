@@ -1,6 +1,8 @@
 from django.db import connection
 from exceptions import *
 import re
+import sys
+from django.conf import settings
 
 def _execute(*sql):
     cursor = connection.cursor()
@@ -10,12 +12,23 @@ def _execute(*sql):
 def _execute_in_transaction(*sql):
     cursor = connection.cursor()
     cursor.execute("BEGIN")
-    cursor.execute(*sql)
+    try:
+        cursor.execute(*sql)
+    except Exception, e:
+        print "!", e
+        sys.exit()
     cursor.execute("COMMIT")
 
 def table_present(table_name):
-    cursor = _execute("SHOW TABLES LIKE %s", [table_name])
-    return bool(cursor.fetchone())
+    if settings.DATABASE_ENGINE == 'mysql':
+        cursor = _execute("SHOW TABLES LIKE %s", [table_name])
+        return bool(cursor.fetchone())
+    elif settings.DATABASE_ENGINE == 'sqlite3':
+        try:
+            cursor = _execute("select * from %s" % table_name)
+        except Exception, e:
+            return False
+        return True
 
 def _up(migrations):
     return [(m, 'up') for m in migrations]
@@ -69,9 +82,11 @@ class MigrationState(object):
     
     def mark_as_applied(self, name, log=True):
         if not self.is_applied(name):
-            _execute_in_transaction(
-                "INSERT INTO dmigrations (migration) VALUES (%s)", [name]
-            )
+            statement = "INSERT INTO dmigrations (migration) VALUES (%s)"
+            if settings.DATABASE_ENGINE == 'mysql':
+                _execute_in_transaction(statement, [name])
+            elif settings.DATABASE_ENGINE == 'sqlite3':
+                _execute(statement, [name])
         if log:
             self.log('mark_as_applied', name)
     
@@ -96,12 +111,20 @@ class MigrationState(object):
         )
     
     def create_migration_table(self):
-        create_new = """
+        if settings.DATABASE_ENGINE == 'mysql':
+            create_new = """
             CREATE TABLE `dmigrations` (
              `id` int(11) NOT NULL auto_increment,
              `migration` VARCHAR(255) NOT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        """
+        elif settings.DATABASE_ENGINE == 'sqlite3':
+            create_new = """
+            CREATE TABLE `dmigrations` (
+             `id` integer NOT NULL primary key,
+             `migration` VARCHAR(255) NOT NULL
+            )
         """
         _execute_in_transaction(create_new)
     

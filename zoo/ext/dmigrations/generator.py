@@ -337,13 +337,17 @@ def extract_column_spec(sql, column, is_foreign_key=False):
     assert False, 'Could not find column spec for column %s' % column
 
 
-migration_template = """from dmigrations.%(db_engine)s import migrations as m
+migration_template = """from django.conf import settings
+if settings.DATABASE_ENGINE == 'mysql':
+    from dmigrations.mysql import migrations as m
+elif settings.DATABASE_ENGINE == 'sqlite3':
+    from dmigrations.sqlite3 import migrations as m
 import datetime
 migration = %(migration_body)s
 """
 
 def migration_code(*migration_defs):
-    db_engine = getattr(settings, 'DMIGRATIONS_DATABASE_BACKEND', 'mysql')
+    #db_engine = getattr(settings, 'DMIGRATIONS_DATABASE_BACKEND', 'mysql')
     if len(migration_defs) == 1:
         migration_body = migration_defs[0]
     else:
@@ -356,7 +360,7 @@ def migration_code(*migration_defs):
         )
     
     return migration_template % {
-        'db_engine': db_engine,
+        #'db_engine': db_engine,
         'migration_body': migration_body
     }
 
