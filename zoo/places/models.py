@@ -15,16 +15,12 @@ class Country(models.Model):
 class Place(models.Model):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
     known_as = models.CharField(max_length=500, null=False, blank=False)
-    slug = models.SlugField(max_length=255, null=False, blank=False, unique=True)
+    slug = models.SlugField(max_length=255, null=False, blank=False,    
+        unique=True
+    )
     created_at = models.DateTimeField(null=False, blank=False)
-    last_modified_at = models.DateTimeField(null=False, blank=False)
-
-    def save(self):
-        if not self.id:
-            self.created_at = datetime.datetime.now()
-        self.last_modified_at = datetime.datetime.now()
-        super(Place, self).save()
-
+    modified_at = models.DateTimeField(null=False, blank=False)
+    
     # Address
     address_line_1 = models.CharField(max_length=250, null=True, blank=True)
     address_line_2 = models.CharField(max_length=250,  null=True, blank=True)
