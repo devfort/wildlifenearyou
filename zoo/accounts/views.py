@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect as Redirect
 
+from django.shortcuts import get_object_or_404
+
 def welcome(request):
     # Just to show people that they are logged in, really
     return render(request, 'accounts/welcome.html', {
@@ -27,7 +29,10 @@ def register(request):
     })
 
 def profile(request, username):
-    pass
+    user = get_object_or_404(User, username = username)
+    return render(request, 'accounts/profile.html', {
+        'profile_user': user
+    })
 
 def profile_edit(request, username):
     pass
