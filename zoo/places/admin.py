@@ -1,5 +1,5 @@
 from django.contrib import admin
-from zoo.places.models import Country, Place
+from zoo.places.models import Country, Place, Enclosure
 
 class PlaceAdmin(admin.ModelAdmin):
     exclude = ['created_at', 'last_modified_at']
