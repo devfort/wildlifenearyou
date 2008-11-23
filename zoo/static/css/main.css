@@ -1,0 +1,9 @@
+body {
+	font-family: "Helvetica Neue", sans-serif;
+}
+
+#hd {
+	border-bottom: 1px solid black;
+	font-size: 0.85em;
+	margin-bottom: 2em;
+}

@@ -31,7 +31,18 @@ class Place(models.Model):
     state = models.CharField(max_length=250, null=True, blank=True)
     zip = models.CharField(max_length=50, null=True, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True)
-
+    
+    def address(self):
+        bits = []
+        for attr in (
+            'address_line_1', 'address_line_2', 'town', 'state', 'zip',
+            'country'
+            ):
+            val = unicode(getattr(self, attr, None))
+            if val:
+                bits.append(val)
+        return '\n'.join(bits)
+    
     # long and lot for mapping
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
@@ -40,7 +51,7 @@ class Place(models.Model):
         return '%s, commonly known as %s' % (self.legal_name, self.known_as,)
 
 class Enclosure(models.Model):
-    place = models.ForeignKey(Place)
+    place = models.ForeignKey(Place, related_name = 'enclosures')
     animals = models.ManyToManyField(Animal, through='EnclosureAnimal')
     name = models.CharField(max_length=300, null=True, blank=True)
 

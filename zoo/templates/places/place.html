@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ place.known_as }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ place.known_as }}</h1>
+<p class="sub-head">{{ place.legal_name }}</p>
+<address>{{ place.address|linebreaksbr }}</address>
+
+{% with place.enclosures.all as enclosures %}
+    {% if enclosures %}
+        <h2>Enclosures</h2>
+        {% for enclosure in enclosures %}
+            <h3>{{ enclosure }}</h3>
+            {% for inhabitant in enclosure.enclosureanimal_set.all %}
+                <p>{{ inhabitant.animal }} - {{ inhabitant.number_of_inhabitants }}</p>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+{% endwith %}
+
+{% endblock %}
