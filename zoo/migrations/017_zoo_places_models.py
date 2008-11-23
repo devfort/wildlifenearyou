@@ -9,11 +9,13 @@ migration = m.Migration(sql_up=["""
         `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
         `enclosure_id` integer NOT NULL,
         `animal_id` integer NOT NULL,
-        `number_of_inhabitants` integer NOT NULL
+        `number_of_inhabitants` integer NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ;
 """, """
     ALTER TABLE `places_enclosureanimal` ADD CONSTRAINT animal_id_refs_id_7ec919dc FOREIGN KEY (`animal_id`) REFERENCES `animals_animal` (`id`);
+""", """
+    ALTER TABLE `places_enclosureanimal` ADD CONSTRAINT enclosure_id_refs_id_6767ea03 FOREIGN KEY (`enclosure_id`) REFERENCES `places_enclosure` (`id`);
 """], sql_down=["""
     DROP TABLE `places_enclosureanimal`;
 """])

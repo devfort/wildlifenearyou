@@ -46,4 +46,4 @@ class Enclosure(models.Model):
 class EnclosureAnimal(models.Model):
     enclosure = models.ForeignKey(Enclosure)
     animal = models.ForeignKey(Animal)
-    number_of_inhabitants = models.IntegerField(default=0, null=False, blank=False)
+    number_of_inhabitants = models.IntegerField(default=0, null=True, blank=True)
