@@ -40,6 +40,9 @@ class Enclosure(models.Model):
     animals = models.ManyToManyField(Animal, through='EnclosureAnimal')
     name = models.CharField(max_length=300, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 class EnclosureAnimal(models.Model):
     enclosure = models.ForeignKey(Enclosure)
     animal = models.ForeignKey(Animal)
