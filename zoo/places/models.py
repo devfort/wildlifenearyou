@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 
 from zoo.animals.models import Animal
+from zoo.utils import attrproperty
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -46,7 +47,22 @@ class Place(models.Model):
     # long and lot for mapping
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
+    
+    def get_absolute_url(self):
+        return '/%s/%s/' % (self.country.country_code, self.slug)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('place', (), {
+            'country_code': self.country.country_code,
+            'slug': self.slug,
+        })
 
+    @attrproperty
+    def urls(self, name):
+        if name == 'absolute':
+            return self.get_absolute_url()
+    
     def __unicode__(self):
         return '%s, commonly known as %s' % (self.legal_name, self.known_as,)
 

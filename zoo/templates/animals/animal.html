@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ animal }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ animal }}</h1>
+<p class="sub-head">{{ animal.latin_name }}</p>
+
+{% with animal.enclosure_set.all as enclosures %}
+    {% if enclosures %}
+        <h2>See them here:</h2>
+        {% for enclosure in enclosures %}
+            <p>{{ enclosure }} at <a href="{{ enclosure.place.urls.absolute }}">{{ enclosure.place.known_as }}</a></p>
+        {% endfor %}
+    {% endif %}
+
+{% endwith %}
+
+{% endblock %}

@@ -14,7 +14,7 @@
         {% for enclosure in enclosures %}
             <h3>{{ enclosure }}</h3>
             {% for inhabitant in enclosure.enclosureanimal_set.all %}
-                <p>{{ inhabitant.animal }} - {{ inhabitant.number_of_inhabitants }}</p>
+                <p><a href="{{ inhabitant.animal.urls.absolute }}">{{ inhabitant.animal }}</a> - {{ inhabitant.number_of_inhabitants }}</p>
             {% endfor %}
         {% endfor %}
     {% endif %}
