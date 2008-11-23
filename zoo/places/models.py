@@ -2,6 +2,8 @@ import datetime
 
 from django.db import models
 
+from zoo.animals.models import Animal
+
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     country_code = models.CharField(max_length=2, null=False, blank=False, unique=True)
@@ -32,3 +34,13 @@ class Place(models.Model):
 
     def __unicode__(self):
         return '%s, commonly known as %s' % (self.legal_name, self.known_as,)
+
+class Enclosure(models.Model):
+    place = models.ForeignKey(Place)
+    animals = models.ManyToManyField(Animal, through='EnclosureAnimal')
+    name = models.CharField(max_length=300, null=True, blank=True)
+
+class EnclosureAnimal(models.Model):
+    enclosure = models.ForeignKey(Enclosure)
+    animal = models.ForeignKey(Animal)
+    number_of_inhabitants = models.IntegerField(default=0, null=False, blank=False)
