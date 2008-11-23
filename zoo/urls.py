@@ -62,5 +62,6 @@ urlpatterns = patterns('',
 
     url(r'^(?P<country_code>.*)/(?P<slug>.*)/$', 'zoo.places.views.place',
         name='place'),
-
+    url(r'^(?P<country_code>.*)/$', 'zoo.places.views.country',
+        name='country'),
 )
