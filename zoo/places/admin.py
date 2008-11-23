@@ -6,4 +6,4 @@ class PlaceAdmin(admin.ModelAdmin):
 
 admin.site.register(Country)
 admin.site.register(Place, PlaceAdmin)
-
+admin.site.register(Enclosure)
