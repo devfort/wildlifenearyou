@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+thisdir="$(dirname "${0}")"
+
+FILE="${1:-}"
+
+shift
+
+case "${FILE}" in
+	*.html)
+	    echo "Extracting inline javascript"
+	    TEMPFILE="$(tempfile)"
+	    extract_inline_js.py "${1}" > ${TEMPFILE}
+	    FILE="${TEMPFILE}"
+	    ;;
+esac
+
+
+exec java -cp $thisdir/rhino.jar org.mozilla.javascript.tools.shell.Main $thisdir/jslint-playfire.js "${FILE}" "$@"
