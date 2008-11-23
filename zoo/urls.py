@@ -7,6 +7,10 @@ import os
 from django.contrib import admin
 admin.autodiscover()
 
+from django.contrib import databrowse
+from django.contrib.auth.models import User
+databrowse.site.register(User)
+
 urlpatterns = patterns('',
     # Example:
     # (r'^zoo/', include('zoo.foo.urls')),
@@ -29,4 +33,6 @@ urlpatterns = patterns('',
     
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
+    # Databrowse
+    (r'^databrowse/(.*)', databrowse.site.root),
 )
