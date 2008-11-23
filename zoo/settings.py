@@ -88,6 +88,7 @@ INSTALLED_APPS = (
     'dmigrations',
     'zoo.accounts',
     'zoo.animals',
+    'zoo.places',
 )
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')

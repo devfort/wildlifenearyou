@@ -2,7 +2,7 @@ from django.db import models
 from zoo.utils import attrproperty
 
 class AnimalClass(models.Model):
-    name = models.CharField(max_length=500, blank=False, null=False)
+    name = models.CharField(max_length=255, blank=False, null=False, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -10,7 +10,7 @@ class AnimalClass(models.Model):
 class Animal(models.Model):
     common_name = models.CharField(max_length=500, blank=False, null=False)
     latin_name = models.CharField(max_length=500, blank=False, null=False)
-    slug = models.SlugField(max_length=500, blank=False, null=False)
+    slug = models.SlugField(max_length=255, blank=False, null=False, unique=True)
     animal_class = models.ForeignKey(AnimalClass)
 
     @models.permalink
