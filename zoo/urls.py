@@ -23,6 +23,11 @@ urlpatterns = patterns('',
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
     
+    # User accounts stuff
+    url(r'^login/$', 'django.contrib.auth.views.login', {
+        'template_name': 'accounts/login.html'
+    }, name='accounts-login'),
+   
     # Dodo
     (r'^animals/dodo/$', 
         lambda r: http.HttpResponseGone('410 Gone')
