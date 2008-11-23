@@ -21,12 +21,12 @@ urlpatterns = patterns('',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
+    (r'^static/(?P<path>.*)$(?i)', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
     
     # User accounts stuff
-    url(r'^login/$', 'django.contrib.auth.views.login', {
+    url(r'^login/$(?i)', 'django.contrib.auth.views.login', {
         'template_name': 'accounts/login.html'
     }, name='accounts-login'),
    
@@ -45,10 +45,10 @@ urlpatterns = patterns('',
     (r'^databrowse/(.*)', databrowse.site.root),
 
 
-    url(r'^animal/(?P<common_name>[^/]+)/$', 'zoo.animals.views.animal',
+    url(r'^animal/(?P<common_name>[^/]+)/$(?i)', 'zoo.animals.views.animal',
         name='animal'),
 
-    url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.animal_latin',),
+    url(r'^latin/(?P<latin_name>[^/]+)/$(?i)', 'zoo.animals.views.animal_latin',),
 
     url(r'^(?P<country_code>.*)/(?P<slug>.*)/$', 'zoo.places.views.place',
         name='place'),
