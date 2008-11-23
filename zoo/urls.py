@@ -31,13 +31,13 @@ urlpatterns = patterns('',
     url(r'^login/$(?i)', 'django.contrib.auth.views.login', {
         'template_name': 'accounts/login.html'
     }, name='accounts-login'),
-    url(r'^register/$', accounts.register, 
+    url(r'^register/$(?i)', accounts.register, 
         name='accounts-register'),
-    url(r'^welcome/$', accounts.welcome, 
+    url(r'^welcome/$(?i)', accounts.welcome, 
         name='accounts-welcome'),
-    url(r'^profile/(\w+)/$', accounts.profile, 
+    url(r'^profile/(\w+)/$(?i)', accounts.profile, 
         name='accounts-profile'),
-    url(r'^profile/(\w+)/edit/$', accounts.profile_edit, 
+    url(r'^profile/(\w+)/edit/$(?i)', accounts.profile_edit, 
         name='accounts-profile-edit'),
    
     # Dodo
