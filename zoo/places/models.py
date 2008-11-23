@@ -22,6 +22,8 @@ class Place(models.Model):
     slug = models.SlugField(max_length=255, null=False, blank=False,    
         unique=True
     )
+    country = models.ForeignKey(Country, null=False, blank=False)
+
     created_at = models.DateTimeField(null=False, blank=False)
     modified_at = models.DateTimeField(null=False, blank=False)
     
@@ -31,7 +33,6 @@ class Place(models.Model):
     town = models.CharField(max_length=250, null=True, blank=True)
     state = models.CharField(max_length=250, null=True, blank=True)
     zip = models.CharField(max_length=50, null=True, blank=True)
-    country = models.ForeignKey(Country, null=True, blank=True)
     
     def address(self):
         bits = []
@@ -47,9 +48,6 @@ class Place(models.Model):
     # long and lot for mapping
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
-    
-    def get_absolute_url(self):
-        return '/%s/%s/' % (self.country.country_code, self.slug)
     
     @models.permalink
     def get_absolute_url(self):
