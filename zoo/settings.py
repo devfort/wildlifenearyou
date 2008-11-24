@@ -102,6 +102,8 @@ INSTALLED_APPS = (
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
 
+XAPIAN_LOCATION_SEARCH_URL = 'http://10.0.1.205/xapian/search/simontestdb/'
+
 try:
     from local_settings import *
 except ImportError:

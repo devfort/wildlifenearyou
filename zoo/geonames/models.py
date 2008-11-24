@@ -16,6 +16,12 @@ class Geoname(models.Model):
     def __unicode__(self):
         return u'%s (%s)' % (self.place_name, self.country_code)
     
+    def summary(self):
+        "Used in a cookie"
+        return u'%s: %s, %s' % (
+            self.place_name, self.latitude, self.longitude
+        )
+    
     def for_xapian(self):
         bits = []
         for field in (

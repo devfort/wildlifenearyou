@@ -58,7 +58,8 @@ urlpatterns = patterns('',
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
 
     (r'^photos/upload/$', photos.upload),
-
+    
+    (r'^set-location/$', 'zoo.geonames.views.set_location'),
     
     # Dodo
     (r'^animal/dodo/$',

@@ -10,6 +10,14 @@
 	<p>Well hey there, you look new around here. If you're already registered you should <a href="/login/">login</a>, otherwise you can <a href="/register/">register</a>.</p>
 {% endif %}	
 
+{% if current_location %}
+    <p>Your location: {{ current_location }}</p>
+{% else %}
+    <form action="/set-location/" method="POST">
+        <p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location"> <input type="submit" value="Go"></p>
+    </form>
+{% endif %}
+
 	<h2>Look Around</h2>
 	<ul>
 		<li><a href="/latin/">Our menagerie of animals by latin name</a></li>
