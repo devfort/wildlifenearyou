@@ -13,6 +13,7 @@
 {% for species in species_list %}
 <h3><strong>{{ species.common_name }}</strong>, seen by {{ species.count }}{% if species.seen %} (seen){% endif %}</h3>
 {% endfor %}
+<a href="{% url place-species place.country.country_code,place.slug %}">All species</a>
 
 
 {% with place.enclosures.all as enclosures %}

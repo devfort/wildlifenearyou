@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{{ place.known_as }} - Species{% endblock %}
+
+{% block content %}
+
+<h1>{{ place.known_as }} - Species</h1>
+
+
+<h2>Species</h2>
+{% for species in species_list %}
+<h3><strong>{{ species.common_name }}</strong>, seen by {{ species.count }}{% if species.seen %} (seen){% endif %}</h3>
+{% endfor %}
+
+{% endblock %}

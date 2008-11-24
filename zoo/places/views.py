@@ -7,11 +7,10 @@ from zoo.places.models import Place, Country
 from zoo.animals.models import Species
 from zoo.trips.models import Trip
 
-def place(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
+SPECIES_ON_PLACE_PAGE = 10
 
-    passport = Trip.get_passport(request.user)
+def get_place_species(place, user, limit=None):
+    passport = Trip.get_passport(user)
     species_list = list(Species.objects.filter(trip__place=place))
 
     by_count = {}
@@ -27,10 +26,33 @@ def place(request, country_code, slug):
 
     species_list.sort(key=lambda s:s.count, reverse=True)
 
+    if limit:
+        species_list = species_list[:limit]
+
+    return species_list
+
+def place(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+
+    species_list = get_place_species(place, request.user, SPECIES_ON_PLACE_PAGE)
+
     return render(request, 'places/place.html', {
         'place': place,
         'species_list': species_list,
     })
+
+def place_species(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+
+    species_list = get_place_species(place, request.user)
+
+    return render(request, 'places/place_species.html', {
+        'place': place,
+        'species_list': species_list,
+    })
+
 
 def country(request, country_code):
     country = get_object_or_404(Country, country_code=country_code)
