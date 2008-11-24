@@ -10,8 +10,10 @@ admin.autodiscover()
 from django.contrib import databrowse
 from django.contrib.auth.models import User
 from django.db.models import get_models
+from dmigrations.migration_state import table_present
 for model in get_models():
-    databrowse.site.register(model)
+    if table_present(model._meta.db_table):
+        databrowse.site.register(model)
 
 from accounts import views as accounts
 
