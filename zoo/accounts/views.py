@@ -37,7 +37,7 @@ def profile_default(request):
 def profile(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'accounts/profile.html', {
-        'profile_user': user
+        'profile': user.get_profile(),
     })
 
 def profile_edit(request, username):

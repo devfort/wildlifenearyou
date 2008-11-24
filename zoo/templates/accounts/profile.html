@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ profile_user }}{% endblock %}
+{% block title %}{{ profile.user }}{% endblock %}
 
 {% block content %}
 
-<h1>{{ profile_user }}</h1>
+<h1>{{ profile.user }}</h1>
 
-{% for photo in profile_user.photos.all %}
+{% for photo in profile.user.photos.all %}
 <a href="{{ photo.photo.url }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
 {% endfor %}
 <p><a href="/photos/upload/">Upload a photo!</a></p>
