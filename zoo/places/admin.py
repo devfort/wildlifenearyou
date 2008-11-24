@@ -30,8 +30,9 @@ admin.site.register(Country,
 admin.site.register(Webcam)
 admin.site.register(Place, 
     exclude = excludees,
-    list_filter = ['country', 'town'],
-    search_fields = ['known_as', 'legal_name'],
+    list_filter = ['country'],
+    list_display = ('known_as', 'legal_name', 'town', 'country')
+    search_fields = ['known_as', 'legal_name', 'town', 'address_line_1', 'address_line_2'],
     inlines = [PlaceInline]
 )
 admin.site.register(Enclosure, EnclosureAdmin)

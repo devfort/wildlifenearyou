@@ -63,7 +63,7 @@ class Place(models.Model):
             return self.get_absolute_url()
     
     def __unicode__(self):
-        return '%s, commonly known as %s' % (self.legal_name, self.known_as,)
+        return self.known_as
 
 class Webcam(models.Model):
     place = models.ForeignKey(Place, related_name = 'webcams')
