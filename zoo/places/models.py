@@ -87,8 +87,8 @@ class Enclosure(models.Model):
 
     def __unicode__(self):
         if self.name is None:
-            return u"Nameless enclosure for %s" % self.place.known_as
-        return u"'%s' in %s" % (self.name, self.place.known_as)
+            return u"Nameless enclosure"
+        return self.name
 
 class EnclosureAnimal(models.Model):
     enclosure = models.ForeignKey(Enclosure)

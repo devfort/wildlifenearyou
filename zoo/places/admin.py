@@ -9,7 +9,7 @@ class EnclosureAnimalInline(admin.TabularInline):
     exclude = excludees
 
 class EnclosureAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'place')
+    list_display = ('name', 'place')
     inlines = [
         EnclosureAnimalInline,
     ]
