@@ -7,6 +7,7 @@
 <h1>{{ place.known_as }}</h1>
 <p class="sub-head">{{ place.legal_name }}</p>
 <address>{{ place.address|linebreaksbr }}</address>
+{% if place.opening_times %}<pre>{{ place.opening_times }}</pre>{% endif %}
 
 
 <h2>Species seen (<span class="seen">by you</span>)</h2>

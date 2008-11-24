@@ -13,7 +13,7 @@ class Country(models.Model):
 
     class Meta:
         verbose_name_plural = 'countries'
-        
+
     @models.permalink
     def get_absolute_url(self):
         return ('country', (), {
@@ -35,6 +35,8 @@ class Place(AuditedModel):
         unique=True
     )
     country = models.ForeignKey(Country, null=False, blank=False)
+
+    opening_times = models.TextField()
 
     # Address
     address_line_1 = models.CharField(max_length=250, null=True, blank=True)
@@ -84,10 +86,10 @@ class PlaceNews(AuditedModel):
     headline = models.CharField(max_length=300)
     url = models.URLField(verify_exists=False)
     story_date = models.DateField()
-    
+
     class Meta:
         verbose_name_plural = 'place news'
-    
+
     def __unicode__(self):
         return u'%s (%s on %s)' % (self.headline, self.place, self.story_date)
 
