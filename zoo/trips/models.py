@@ -18,14 +18,14 @@ class Trip(models.Model):
         if self.end==None:
             self.end = self.start + datetime.timedelta(1)
         super(Trip,self).save(args, kwargs)
-        
+    
     #THIS MUST BE static.  It does not act on an instance and is called from the profile model
     @staticmethod
     def get_passport(user):
         class Passport:
             def __init__(self, seen):
                 self.seen_species = seen
-
+        
         species_list = list(Species.objects.filter(trip__user=user))
         by_count = {}
         for species in species_list:
@@ -54,6 +54,6 @@ class Trip(models.Model):
 class TripSighting(models.Model):
     trip = models.ForeignKey(Trip)
     species = models.ForeignKey(Species)
-
+    
     def __unicode__(self):
         return u'' + unicode(self.trip) + u': ' + self.species.common_name

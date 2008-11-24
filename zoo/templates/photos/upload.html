@@ -6,7 +6,9 @@
 
 <h1>Upload a photo</h1>
 
-<form enctype="multipart/form-data" method="post" action="/photos/upload/">
+{% if attach_to %}This photo will be attached to <strong>{{ attach_to }}</strong>{% endif %}
+
+<form enctype="multipart/form-data" method="post" action=".">
 {{ form.as_p }}
 <p><input type="submit" value="Upload"></p>
 </form>

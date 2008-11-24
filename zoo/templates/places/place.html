@@ -31,4 +31,13 @@
     {% endif %}
 {% endwith %}
 
+{% for photo in place.photos.all %}
+<div>
+<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="/profile/{{ photo.created_by.username }}/">{{ photo.created_by }}</a>
+</div>
+{% endfor %}
+{% if not user.is_anonymous %}
+<p><a href="upload/">Upload a photo you took here!</a></p>
+{% endif %}
+
 {% endblock %}
