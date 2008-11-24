@@ -5,10 +5,15 @@ from models import FaceArea
 def profile_images_xml(request):
     profileImages = ET.Element('profileImages')
     for area in FaceArea.objects.all():
-        partlist = ET.Element(area.plural.replace(' ', '-'))
+        partlist = ET.Element(area.plural.lower().replace(' ', '-'))
+        partlist.attrib = {
+            'name': area.name,
+            'plural': area.plural,
+            'description': area.description,
+        }
         profileImages.append(partlist)
         for part in area.parts.all():
-            p = ET.Element(area.shortname)
+            p = ET.Element(area.name.lower().replace(' ', '-'))
             p.attrib = {
                 'src': part.image.url,
                 'id': str(part.id),
