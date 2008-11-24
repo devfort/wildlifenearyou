@@ -6,7 +6,7 @@
 
 <h1>All animals</h1>
 {% for animal in animals %}
-    <p><a href="{{ animal.urls.absolute }}">{{ animal }}</a></p>
+    <p><a href="{{ animal.urls.absolute }}">{{ animal.common_name }}</a></p>
 {% endfor %}
 
 {% endblock %}
