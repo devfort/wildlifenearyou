@@ -12,7 +12,7 @@ stash.current_user = None
 
 def onanymodel_presave(sender, **kwargs):
     current_user = stash.current_user
-    if not current_user.is_authenticated():
+    if current_user==None or not current_user.is_authenticated():
         current_user = None
     
     obj = kwargs['instance']
