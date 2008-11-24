@@ -13,7 +13,7 @@ def animal(request, slug):
 
 def animals(request):
     return render(request, 'animals/animals.html', {
-        'animals': Animal.objects.all(),
+        'animals': Animal.objects.all().order_by('common_name'),
     })
 
 def animals_xml(request):
@@ -25,3 +25,8 @@ def animals_xml(request):
 def animal_latin(request, latin_name):
     animal = get_object_or_404(Animal, latin_name=latin_name)
     return HttpResponseRedirect(animal.urls.absolute)
+    
+def animals_latin(request):
+    return render(request, 'animals/animals_latin.html', {
+        'animals': Animal.objects.all().order_by('latin_name'),
+    })
