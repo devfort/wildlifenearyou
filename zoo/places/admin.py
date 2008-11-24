@@ -9,10 +9,14 @@ class EnclosureAnimalInline(admin.TabularInline):
     exclude = excludees
 
 class EnclosureAdmin(admin.ModelAdmin):
-    list_display = ('place', 'name') # XXX: Doesn't display foreign key, displays nowt?
+    list_display = ('name', 'place')
     inlines = [
         EnclosureAnimalInline,
     ]
+    
+    def changelist_view(self, request):
+        #import pdb; pdb.set_trace()
+        return super(EnclosureAdmin, self).changelist_view(request)
 
 class PlaceInline(admin.TabularInline):
     model = Enclosure
@@ -20,5 +24,10 @@ class PlaceInline(admin.TabularInline):
 
 admin.site.register(Country)
 admin.site.register(Webcam)
-admin.site.register(Place, exclude=excludees, list_filter=['country', 'town'], search_fields=['known_as', 'legal_name'], inlines=[ PlaceInline, ])
+admin.site.register(Place, 
+    exclude = excludees,
+    list_filter = ['country', 'town'],
+    search_fields = ['known_as', 'legal_name'],
+    inlines = [PlaceInline]
+)
 admin.site.register(Enclosure, EnclosureAdmin)
