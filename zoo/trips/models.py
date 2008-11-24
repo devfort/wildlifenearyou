@@ -10,7 +10,7 @@ class Trip(models.Model):
     start = models.DateTimeField(null=False, blank=False)
     end = models.DateTimeField(null=False, blank=True)
     place = models.ForeignKey(Place)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='trips')
     name = models.CharField(null=True, blank=True, max_length=100)
     sightings = models.ManyToManyField(Species, through='TripSighting')
     

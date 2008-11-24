@@ -14,13 +14,19 @@
 <div id="animal_passport">
 	<h2>Animal Passport</h2>
 	
-	<ul>
+	<ol>
 	{% for species in profile.passport.seen_species %}
 		<li>{{ species.count }}&times; {{ species }}</li>
 	{% endfor %}
-	</ul>
+	</ol>
 	
+	<h2>My Trips</h2>
+	
+	<ol>
+	{% for trip in profile.user.trips.all %}
+		<li>{{ trip }} on {{ trip.start|date:"jS F Y" }}</li>
+	{% endfor %}
+	</ol>
 </div>
 
-    
 {% endblock %}
