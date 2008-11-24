@@ -7,5 +7,9 @@ def set_location(request):
     if location:
         results = search_location(location)
         if results:
-            response.set_cookie('current_location', results[0].summary())
+            response.set_cookie(
+                'current_location',
+                results[0].summary(),
+                path = '/',
+            )
     return response
