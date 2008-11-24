@@ -7,6 +7,7 @@ import dircache
 import os
 import re
 import shutil
+import time
 import xappy
 
 def render_result_as_json(result):
@@ -64,6 +65,17 @@ def jsonreturning(fn):
 
     """
     def res(*args, **kwargs): return render_result_as_json(fn(*args, **kwargs))
+    return res
+
+def timed(fn):
+    """Decorator to time function and insert time into result
+
+    """
+    def res(*args, **kwargs): 
+        start = time.time()
+        retval = fn(*args, **kwargs)
+        retval['elapsed'] = time.time() - start
+        return retval
     return res
 
 def validate_param(key, vals, minreps, maxreps, pattern, default):
@@ -137,6 +149,7 @@ def get_db_path(dbname):
     return os.path.join(settings.XAPPY_DATABASE_DIR, dbname)
 
 @jsonreturning
+@timed
 @errchecked
 def search(request, db_name):
     """Serve a search request.
@@ -173,9 +186,16 @@ def search(request, db_name):
                              'q': (0, None, '^.*$', []),
                              'startrank': (1, 1, '^\d+$', ['0']),
                              'endrank': (1, 1, '^\d+$', ['10']),
+                             'spellcorrect': (0, 1, '^never|auto|always$', ['auto']),
                              })
 
     db = xappy.SearchConnection(get_db_path(db_name))
+
+    retval = {
+        'db': db_name,
+        'doccount': db.get_doccount(),
+    }
+
     if len(params['q']) == 0:
         q = db.query_all()
     else:
@@ -184,6 +204,19 @@ def search(request, db_name):
     res = q.search(int(params['startrank'][0]),
                    int(params['endrank'][0]))
 
+    if len(res) == 0:
+        if len(params['q']) != 0:
+            # Try spell correcting
+            corrected_q = [db.spell_correct(subq) for subq in params['q']]
+            qs = [db.query_parse(subq) for subq in corrected_q]
+            q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
+
+            res = q.search(int(params['startrank'][0]),
+                           int(params['endrank'][0]))
+            if len(res) != 0:
+                retval['spellcorrected'] = True
+                retval['spellcorr_q'] = corrected_q
+
     items = ({
              'rank': (item.rank),
              'id': (item.id),
@@ -191,25 +224,25 @@ def search(request, db_name):
              }
              for item in res)
 
-    retval = {
-        'db': db_name,
+    retval.update({
         'items': list(items),
         'matches_lower_bound': res.matches_lower_bound,
         'matches_estimated': res.matches_estimated,
         'matches_upper_bound': res.matches_upper_bound,
-        'doccount': db.get_doccount(),
-    }
+    })
     return retval
 
 @jsonreturning
+@timed
 @errchecked
 def listdbs(request):
     """Get a list of available databases.
 
     """
-    return dircache.listdir(settings.XAPPY_DATABASE_DIR)
+    return {'dbs': dircache.listdir(settings.XAPPY_DATABASE_DIR)}
 
 @jsonreturning
+@timed
 @errchecked
 def newdb(request):
     """Create a new database.
@@ -241,6 +274,7 @@ def newdb(request):
     return {'ok': 1}
 
 @jsonreturning
+@timed
 @errchecked
 def deldb(request, db_name):
     """Delete a database.
@@ -262,6 +296,7 @@ def deldb(request, db_name):
     return {'ok': 1}
 
 @jsonreturning
+@timed
 @errchecked
 def add(request, db_name):
     params = validate_params(request, {
@@ -277,3 +312,4 @@ def add(request, db_name):
     newid = db.add(doc)
     db.flush()
     return {'ok': 1, 'id': newid, 'doccount': db.get_doccount()}
+
