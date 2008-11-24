@@ -7,7 +7,7 @@ from zoo.places.models import Place, Country
 
 def place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug)
+    place = get_object_or_404(Place, slug=slug, country=country)
 
     return render(request, 'places/place.html', {
         'place': place,
