@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from django.http import HttpResponseRedirect as Redirect
 
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 def welcome(request):
     # Just to show people that they are logged in, really
@@ -27,6 +28,10 @@ def register(request):
     return render(request, 'accounts/register.html', {
         'form': form,
     })
+
+@login_required
+def profile_default(request):
+    return Redirect(u'/profile/%s' % (request.user,))
 
 def profile(request, username):
     user = get_object_or_404(User, username = username)
