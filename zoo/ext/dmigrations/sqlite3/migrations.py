@@ -165,7 +165,7 @@ class InsertRows(Migration):
             v = unicode(v) # In case v is an integer or long
             # escape_string wants a bytestring
             #escaped = connection.connection.escape_string(v.encode('utf8'))
-            escaped = v.encode('utf8')
+            escaped = v.replace("'", "''").encode('utf8')
             # We get bugs if we use bytestrings elsewhere, so convert back to unicode
             # http://sourceforge.net/forum/forum.php?thread_id=1609278&forum_id=70461
             return u"'%s'" % escaped.decode('utf8')

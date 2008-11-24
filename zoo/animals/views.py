@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseServerError
 from django.core import serializers
+from django.template import loader, Context
 
 from zoo.animals.models import Species
 from zoo.shortcuts import render
@@ -33,3 +34,14 @@ def all_species_latin(request):
 
 def narwhals(request):
     return render(request, 'species/narwhals.html', {})
+
+def extinct(request):
+    t = loader.get_template('species/extinct.html')
+    c = Context()
+    return HttpResponse(t.render(c), status=410) # Gone
+
+def imaginary(request, animal):
+    t = loader.get_template('species/imaginary.html')
+    c = Context()
+    return HttpResponse(t.render(c), status=417) # Expectation failed
+

@@ -63,14 +63,12 @@ urlpatterns = patterns('',
     (r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete'),
 
 
-    # Dodo
-    (r'^animal/dodo/$',
-        lambda r: http.HttpResponseGone('410 Gone')
-    ),
+    # Dodo etc.
+    (r'^animal/dodo/$', 'zoo.animals.views.extinct'),
     (r'^latin/raphus-cucullatus/$',
         lambda r: http.HttpResponseRedirect('/animal/dodo/')
     ),
-
+    (r'^animal/(unicorn|dragon)/$', 'zoo.animals.views.imaginary'),
 
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
