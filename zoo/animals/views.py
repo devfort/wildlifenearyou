@@ -28,5 +28,5 @@ def species_latin(request, latin_name):
 
 def all_species_latin(request):
     return render(request, 'species/all_species_latin.html', {
-        'species': Species.objects.all().order_by('latin_name'),
+        'all_species': Species.objects.all().order_by('latin_name'),
     })
