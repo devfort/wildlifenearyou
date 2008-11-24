@@ -12,6 +12,9 @@ stash.current_user = None
 
 def onanymodel_presave(sender, **kwargs):
     current_user = stash.current_user
+    if not current_user.is_authenticated():
+        current_user = None
+    
     obj = kwargs['instance']
     if hasattr(obj, 'modified_at'):
         obj.modified_at = datetime.datetime.now()
