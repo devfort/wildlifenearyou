@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <profileImages>
 	<hair-accessories description="Choose your pigtails." name="Hair Accessory" plural="Hair Accessories">
-		<hair-accessory id="3" src="/static/uploaded/faceparts/hair_accessories.png" title=""/>
+		<hair-accessory id="3" src="../../images/hair_accessories.png" title=""/>
 	</hair-accessories>
 	<hairs description="" name="Hair" plural="Hairs">
-		<hair id="4" src="/static/uploaded/faceparts/hair.png" title=""/>
+		<hair id="4" src="../../images/hair.png" title=""/>
 	</hairs>
 	<ears description="" name="Ear" plural="Ears"/>
 	<eyes description="" name="Eye" plural="Eyes">
-		<eye id="5" src="/static/uploaded/faceparts/eye.png" title=""/>
+		<eye id="5" src="../../images/eye.png" title=""/>
 	</eyes>
 	<cheeks description="" name="Cheek" plural="Cheeks">
-		<cheek id="6" src="/static/uploaded/faceparts/cheek.png" title=""/>
+		<cheek id="6" src="../../images/cheek.png" title=""/>
 	</cheeks>
 	<noses description="" name="Nose" plural="Noses">
-		<nose id="7" src="/static/uploaded/faceparts/nose.png" title=""/>
+		<nose id="7" src="../../images/nose.png" title=""/>
 	</noses>
 	<facial-hairs description="" name="Facial Hair" plural="Facial Hairs"/>
 	<mouths description="" name="Mouth" plural="Mouths">
-		<mouth id="8" src="/static/uploaded/faceparts/mouth.png" title=""/>
+		<mouth id="8" src="../../images/mouth.png" title=""/>
 	</mouths>
 	<faces description="" name="Face" plural="Faces">
-		<face id="9" src="/static/uploaded/faceparts/face.png" title=""/>
+		<face id="9" src="../../images/face.png" title=""/>
 	</faces>
 </profileImages>
