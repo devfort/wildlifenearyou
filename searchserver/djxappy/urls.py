@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+import os
 
 urlpatterns = patterns('',
     # Example:
@@ -18,4 +19,13 @@ urlpatterns = patterns('',
 
     # Adding documents
     ('^' + settings.BASEURL + r'add/(?P<db_name>\w+)', "search.add"),
+    
+    # API explorer
+    ('^' + settings.BASEURL + r'api-explorer/(?P<path>.*)$', 
+        'django.views.static.serve', {
+            'document_root': os.path.join(
+                os.path.dirname(__file__), 'api-explorer'
+            )
+        },
+    ),
 )
