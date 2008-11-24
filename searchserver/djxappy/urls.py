@@ -6,8 +6,8 @@ urlpatterns = patterns('',
 
     # Uncomment this for admin:
 #     (r'^admin/', include('django.contrib.admin.urls')),
-    (r'^search/', "search.search"),
-    (r'^newdb/', "search.newdb"),
-    (r'^deldb/', "search.deldb"),
-    (r'^add/', "search.add"),
+    (r'^xapian/(?P<db_name>\w+)/search/', "search.search"),
+    (r'^xapian/newdb/', "search.newdb"),
+    (r'^xapian/(?P<db_name>\w+)/deldb/', "search.deldb"),
+    (r'^xapian/(?P<db_name>\w+)/add/', "search.add"),
 )

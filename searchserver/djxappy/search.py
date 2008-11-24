@@ -12,7 +12,8 @@ def render_result_as_json(result):
     """Render a result structure to JSON and return it from the request.
 
     """
-    return HttpResponse(simplejson.dumps(result), mimetype="text/javascript")
+    return HttpResponse(simplejson.dumps(result, indent=4),
+                        mimetype="text/javascript")
 
 class SearchError(Exception):
     """Base class for errors raised and to be shown to user.
@@ -64,7 +65,7 @@ def jsonreturning(fn):
     def res(*args, **kwargs): return render_result_as_json(fn(*args, **kwargs))
     return res
 
-def validate_param(vals, minreps, maxreps, pattern, default):
+def validate_param(key, vals, minreps, maxreps, pattern, default):
     """Validate a particular parameter.
 
     """
@@ -127,7 +128,7 @@ def validate_params(request, constraints):
                 raise ValidationError("Unknown parameter %r supplied" % key)
             else:
                 raise ValidationError("Unknown parameter supplied")
-        p[key] = validate_param(request.GET.getlist(key), *constraint)
+        p[key] = validate_param(key, request.GET.getlist(key), *constraint)
 
     return p
 
@@ -136,12 +137,13 @@ def get_db_path(dbname):
 
 @jsonreturning
 @errchecked
-def search(request):
+def search(request, db_name):
     """Serve a search request.
+
+     - `db_name`: contains the name of the database.
 
     Supported query parameters:
 
-     - `db`: contains the name of the database.
      - `q`: contains the query string.
      - `startrank` is the rank of the start of the range of matching documents
        to return (ie, the result with this rank will be returned).  ranks start
@@ -154,13 +156,12 @@ def search(request):
 
     """
     params = validate_params(request, {
-                             'db': (1, 1, '^\w+$', None),
                              'q': (1, None, '^.*$', None),
                              'startrank': (1, 1, '^\d+$', ['0']),
                              'endrank': (1, 1, '^\d+$', ['10']),
                              })
 
-    db = xappy.SearchConnection(get_db_path(params['db'][0]))
+    db = xappy.SearchConnection(get_db_path(db_name))
     qs = [db.query_parse(subq) for subq in params['q']]
     q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
     res = q.search(int(params['startrank'][0]),
@@ -174,11 +175,12 @@ def search(request):
              for item in res)
 
     retval = {
-        'db': params['db'][0],
+        'db': db_name,
         'items': list(items),
         'matches_lower_bound': res.matches_lower_bound,
         'matches_estimated': res.matches_estimated,
         'matches_upper_bound': res.matches_upper_bound,
+        'doccount': db.get_doccount(),
     }
     return retval
 
@@ -215,7 +217,7 @@ def newdb(request):
 
 @jsonreturning
 @errchecked
-def deldb(request):
+def deldb(request, db_name):
     """Delete a database.
 
     Returns an error if the database doesn't already exist.
@@ -226,10 +228,7 @@ def deldb(request):
  
     """
 
-    params = validate_params(request, {
-                             'db': (1, 1, '^\w+$', None),
-                             })
-    db_path = os.path.realpath(get_db_path(params['db'][0]))
+    db_path = os.path.realpath(get_db_path(db_name))
 
     if not os.path.exists(db_path):
         raise DbNotFound("The path '%s' is already empty" % db_path)
@@ -239,16 +238,17 @@ def deldb(request):
 
 @jsonreturning
 @errchecked
-def add(request):
+def add(request, db_name):
     params = validate_params(request, {
-                        'db': (1, 1, '^\w+$', None),
-                        'id': (1, 1, '^\w+$', None),
-                        'text': (1, None, '^\w+$', None),
+                        'id': (0, 1, '^\w+$', []),
+                        'text': (1, None, '^.*$', None),
                         })
-    db = xappy.IndexerConnection(get_db_path(params['db'][0]))
+    db = xappy.IndexerConnection(get_db_path(db_name))
     doc = xappy.UnprocessedDocument()
     for val in params['text']:
         doc.append('text', val)
+    if len(params['id']) > 0:
+        doc.id = params['id'][0]
     newid = db.add(doc)
     db.flush()
-    return 
+    return {'ok': 1, 'id': newid, 'doccount': db.get_doccount()}
