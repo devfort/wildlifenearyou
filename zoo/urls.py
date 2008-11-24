@@ -16,6 +16,7 @@ for model in get_models():
         databrowse.site.register(model)
 
 from accounts import views as accounts
+from faces import views as faces
 
 urlpatterns = patterns('',
     # Example:
@@ -50,7 +51,9 @@ urlpatterns = patterns('',
         name='accounts-profile'),
     url(r'^profile/(\w+)/edit/$', accounts.profile_edit,
         name='accounts-profile-edit'),
-
+    
+    (r'^faces/profile-images.xml$', faces.profile_images_xml),
+    
     # Dodo
     (r'^animal/dodo/$',
         lambda r: http.HttpResponseGone('410 Gone')
