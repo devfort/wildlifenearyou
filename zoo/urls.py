@@ -57,6 +57,8 @@ urlpatterns = patterns('',
 
     url(r'^animal/$', 'zoo.animals.views.animals',
         name='animals'),
+    url(r'^animal/all\.xml$', 'zoo.animals.views.animals_xml',
+        name='animals-xml'),
     url(r'^animal/(?P<slug>[^/]+)/$', 'zoo.animals.views.animal',
         name='animal'),
 
