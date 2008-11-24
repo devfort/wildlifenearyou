@@ -72,6 +72,7 @@ ROOT_URLCONF = 'zoo.urls'
 
 AUTH_PROFILE_MODULE = 'accounts.profile'
 LOGIN_REDIRECT_URL = '/welcome/'
+LOGIN_URL = '/login/'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
