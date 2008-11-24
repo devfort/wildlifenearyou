@@ -1,0 +1,1 @@
+﻿package com.supereveildevfort.nov2008.profilepicture {	import flash.display.MovieClip; 		/**	 * @class AppController.as	 * @namespace com.supereveildevfort.nov2008.profilepicture	 * @author Niqui Merret	 * @version 1.0	 * @date Nov 24, 2008	 * @description	 * @usage	 * NOTE:	 * TODO:	 *	 */	public class AppController extends MovieClip 	{	}}
