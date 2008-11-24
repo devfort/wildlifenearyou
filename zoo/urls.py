@@ -28,6 +28,10 @@ urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
+    
+    # Landing Page
+    url(r'^$', 'zoo.homepage.views.landing', 
+        name='landing-page'),
 
     # User accounts stuff
     url(r'^login/$', 'django.contrib.auth.views.login', {
