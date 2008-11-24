@@ -3,8 +3,6 @@ from zoo.places.models import Country, Place, Enclosure, EnclosureAnimal, \
     Webcam
 
 excludees = ['created_at', 'created_by', 'modified_at', 'modified_by']
-    list_filter = ['country', 'town']
-    search_fields = ['known_as', 'legal_name']
 
 class EnclosureAnimalInline(admin.TabularInline):
     model = EnclosureAnimal
@@ -17,5 +15,5 @@ class EnclosureAdmin(admin.ModelAdmin):
 
 admin.site.register(Country)
 admin.site.register(Webcam)
-admin.site.register(Place, **{'exclude': excludees})
+admin.site.register(Place, exclude=excludees, list_filter=['country', 'town'], search_fields=['known_as', 'legal_name'])
 admin.site.register(Enclosure, EnclosureAdmin)
