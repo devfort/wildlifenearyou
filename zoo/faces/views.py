@@ -1,5 +1,8 @@
 from django.http import HttpResponse
-from xml.etree import ElementTree as ET
+try:
+    from xml.etree import ElementTree as ET
+except ImportError:
+    from elementtree import ElementTree as ET
 from models import FaceArea
 
 def profile_images_xml(request):
