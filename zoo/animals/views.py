@@ -47,5 +47,5 @@ def imaginary(request, animal):
     c = Context({
         'animal': animal.replace('-', ' ')
     })
-    return HttpResponse(t.render(c), status=417) # Expectation failed
+    return HttpResponse(t.render(c), status=501) # Not implemented
 
