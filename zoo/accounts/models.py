@@ -8,14 +8,12 @@ class Profile(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        raise self.user.username
         return ('accounts-profile', (), {
             'username': self.user.username
         })
 
     @attrproperty
     def urls(self, name):
-        raise 'merry hell'
         if name == 'absolute':
             return self.get_absolute_url()
 
