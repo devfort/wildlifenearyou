@@ -14,6 +14,9 @@ class Trip(models.Model):
     name = models.CharField(null=True, blank=True, max_length=100)
     sightings = models.ManyToManyField(Species, through='TripSighting')
 
+    class Meta:
+        ordering = ['-start']
+    
     def save(self, *args, **kwargs):
         if self.end==None:
             self.end = self.start + datetime.timedelta(1)
