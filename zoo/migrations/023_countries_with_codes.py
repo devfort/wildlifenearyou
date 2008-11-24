@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from dmigrations.mysql import migrations as m
 
 class CustomMigration(m.Migration):
