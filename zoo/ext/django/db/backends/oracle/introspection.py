@@ -34,7 +34,7 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
     def table_name_converter(self, name):
         "Table name comparison is case insensitive under Oracle"
         return name.upper()
-        
+
     def _name_to_index(self, cursor, table_name):
         """
         Returns a dictionary of {field_name: field_index} for the given table.

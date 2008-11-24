@@ -17,7 +17,7 @@ class Command(BaseCommand):
             help='Output migration to console instead of writing to file'),
     )
     requires_model_validation = True
-    
+
     def handle(self, *args, **options):
         import_path = getattr(settings, 'DMIGRATION_GENERATOR',
             'dmigrations.generator'
@@ -26,7 +26,7 @@ class Command(BaseCommand):
             db_generator = __import__(import_path, {}, {}, [''])
         except ImportError, e:
             raise # Just let them see the error
-        
+
         available_args = db_generator.get_commands()
         if args:
             arg, remaining = args[0], args[1:]

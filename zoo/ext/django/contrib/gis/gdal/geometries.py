@@ -29,7 +29,7 @@
   +proj=longlat +ellps=clrk66 +datum=NAD27 +no_defs
   >>> print mpnt
   MULTIPOINT (-89.999930378602485 29.999797886557641,-89.999930378602485 29.999797886557641)
-  
+
   The OGRGeomType class is to make it easy to specify an OGR geometry type:
   >>> from django.contrib.gis.gdal import OGRGeomType
   >>> gt1 = OGRGeomType(3) # Using an integer for the type
@@ -78,7 +78,7 @@ class OGRGeometry(object):
             geom_input = buffer(a2b_hex(geom_input.upper()))
             str_instance = False
 
-        # Constructing the geometry, 
+        # Constructing the geometry,
         if str_instance:
             # Checking if unicode
             if isinstance(geom_input, unicode):
@@ -230,7 +230,7 @@ class OGRGeometry(object):
         return self.envelope.tuple
 
     #### SpatialReference-related Properties ####
-    
+
     # The SRS property
     def get_srs(self):
         "Returns the Spatial Reference for this Geometry."
@@ -286,7 +286,7 @@ class OGRGeometry(object):
 
     @property
     def json(self):
-        if GEOJSON: 
+        if GEOJSON:
             return to_json(self._ptr)
         else:
             raise NotImplementedError('GeoJSON output only supported on GDAL 1.5+.')
@@ -315,7 +315,7 @@ class OGRGeometry(object):
     def wkt(self):
         "Returns the WKT representation of the Geometry."
         return to_wkt(self._ptr, byref(c_char_p()))
-    
+
     #### Geometry Methods ####
     def clone(self):
         "Clones this OGR Geometry."
@@ -371,7 +371,7 @@ class OGRGeometry(object):
     def intersects(self, other):
         "Returns True if this geometry intersects with the other."
         return self._topology(ogr_intersects, other)
-    
+
     def equals(self, other):
         "Returns True if this geometry is equivalent to the other."
         return self._topology(ogr_equals, other)
@@ -416,7 +416,7 @@ class OGRGeometry(object):
     @property
     def convex_hull(self):
         """
-        Returns the smallest convex Polygon that contains all the points in 
+        Returns the smallest convex Polygon that contains all the points in
         this Geometry.
         """
         return self._geomgen(geom_convex_hull)
@@ -436,7 +436,7 @@ class OGRGeometry(object):
         return self._geomgen(geom_intersection, other)
 
     def sym_difference(self, other):
-        """                                                                                                                                                
+        """
         Returns a new geometry which is the symmetric difference of this
         geometry and the other.
         """
@@ -525,7 +525,7 @@ class LineString(OGRGeometry):
     def y(self):
         "Returns the Y coordinates in a list."
         return self._listarr(gety)
-    
+
     @property
     def z(self):
         "Returns the Z coordinates in a list."
@@ -590,7 +590,7 @@ class GeometryCollection(OGRGeometry):
             raise OGRIndexError('index out of range: %s' % index)
         else:
             return OGRGeometry(clone_geom(get_geom_ref(self._ptr, index)), self.srs)
-        
+
     def __iter__(self):
         "Iterates over each Geometry."
         for i in xrange(self.geom_count):
@@ -638,5 +638,5 @@ GEO_CLASSES = {1 : Point,
                5 : MultiLineString,
                6 : MultiPolygon,
                7 : GeometryCollection,
-               101: LinearRing, 
+               101: LinearRing,
                }

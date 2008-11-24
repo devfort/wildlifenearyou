@@ -46,7 +46,7 @@ class Command(BaseCommand):
             help='Verbosity level; 0=minimal, 1=normal output, 2=all output'),
     )
     requires_model_validation = False
-    
+
     def handle(self, *args, **options):
         try:
             migrations_dir = settings.DMIGRATIONS_DIR
@@ -58,12 +58,12 @@ class Command(BaseCommand):
             migration_db = migration_db, dev = options.get('dev')
         )
         verbosity = int(options.get('verbosity', 1))
-        
+
         if not args or args[0] == 'help':
             # TODO: Do this without calling os.system
             os.system('python manage.py help dmigrate')
             return
-        
+
         elif args[0] in 'all up down upto downto to apply unapply'.split():
             migration_state.init()
             for (migration_name, action) in migration_state.plan(*args):
@@ -78,7 +78,7 @@ class Command(BaseCommand):
                         print "Unapplying migration %s" % migration.name
                     if not options.get('print_plan'):
                         migration_state.unapply(migration_name)
-        
+
         elif args[0] == 'mark_as_applied':
             migration_state.init()
             for name in args[1:]:
@@ -86,7 +86,7 @@ class Command(BaseCommand):
                 if resolved_name == None:
                     raise NoSuchMigrationError(name)
                 migration_state.mark_as_applied(resolved_name)
-        
+
         elif args[0] == 'mark_as_unapplied':
             migration_state.init()
             for name in args[1:]:
@@ -94,7 +94,7 @@ class Command(BaseCommand):
                 if resolved_name == None:
                     raise NoSuchMigrationError(name)
                 migration_state.mark_as_unapplied(resolved_name)
-        
+
         elif args[0] == 'list':
             migration_state.init()
             for migration_name in migration_db.list():
@@ -109,24 +109,24 @@ class Command(BaseCommand):
                 for migration_name in migrations_not_in_db:
                     print "* [?] %s" % migration_name
             return
-        
+
         elif args[0] == 'init':
             migration_state.init()
-        
+
         elif args[0] == 'cat':
             for name in args[1:]:
                 print open(
                     migration_db.resolve_migration_path(name), 'r'
                 ).read()
             return
-        
+
         else:
             raise CommandError(
                 'Argument should be one of: list, help, up, down, all, init, '
                 'apply, unapply, to, downto, upto, mark_as_applied, '
                 'mark_as_unapplied'
             )
-        
+
         # Ensure Django permissions and content_types have been created
         # NOTE: Don't run if django_content_type doesn't exist yet.
         if table_present('django_content_type'):

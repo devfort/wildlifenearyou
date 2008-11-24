@@ -22,7 +22,7 @@
 
  For more information about GEOS:
   http://geos.refractions.net
-  
+
  For more info about PCL and the discontinuation of the Python GEOS
  library see Sean Gillies' writeup (and subsequent update) at:
   http://zcologia.com/news/150/geometries-for-python/
@@ -66,4 +66,4 @@ def centroid(input):
 def area(input):
     "Returns the area of the geometry (given in HEXEWKB)."
     return GEOSGeometry(input).area
-    
+

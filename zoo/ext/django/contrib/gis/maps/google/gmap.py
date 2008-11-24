@@ -18,8 +18,8 @@ class GoogleMap(object):
     vml_css  = mark_safe('v\:* {behavior:url(#default#VML);}') # CSS for IE VML
     xmlns    = mark_safe('xmlns:v="urn:schemas-microsoft-com:vml"') # XML Namespace (for IE VML).
 
-    def __init__(self, key=None, api_url=None, version=None, 
-                 center=None, zoom=None, dom_id='map', load_func='gmap_load', 
+    def __init__(self, key=None, api_url=None, version=None,
+                 center=None, zoom=None, dom_id='map', load_func='gmap_load',
                  kml_urls=[], polygons=[], polylines=[], markers=[],
                  template='gis/google/js/google-map.js',
                  extra_context={}):
@@ -34,7 +34,7 @@ class GoogleMap(object):
                 raise GoogleMapException('Google Maps API Key not found (try adding GOOGLE_MAPS_API_KEY to your settings).')
         else:
             self.key = key
-        
+
         # Getting the Google Maps API version, defaults to using the latest ("2.x"),
         #  this is not necessarily the most stable.
         if not version:
@@ -54,18 +54,18 @@ class GoogleMap(object):
         self.load_func = load_func
         self.template = template
         self.kml_urls = kml_urls
-        
+
         # Does the user want any GMarker, GPolygon, and/or GPolyline overlays?
         self.polygons, self.polylines, self.markers = [], [], []
         if markers:
             for point in markers:
-                if isinstance(point, GMarker): 
+                if isinstance(point, GMarker):
                     self.markers.append(point)
                 else:
                     self.markers.append(GMarker(point))
         if polygons:
             for poly in polygons:
-                if isinstance(poly, GPolygon): 
+                if isinstance(poly, GPolygon):
                     self.polygons.append(poly)
                 else:
                     self.polygons.append(GPolygon(poly))
@@ -75,8 +75,8 @@ class GoogleMap(object):
                     self.polylines.append(pline)
                 else:
                     self.polylines.append(GPolyline(pline))
-       
-        # If GMarker, GPolygons, and/or GPolylines 
+
+        # If GMarker, GPolygons, and/or GPolylines
         # are used the zoom will be automatically
         # calculated via the Google Maps API.  If both a zoom level and a
         # center coordinate are provided with polygons/polylines, no automatic
@@ -85,7 +85,7 @@ class GoogleMap(object):
         if self.polygons or self.polylines  or self.markers:
             if center is None or zoom is None:
                 self.calc_zoom = True
-    
+
         # Defaults for the zoom level and center coordinates if the zoom
         # is not automatically calculated.
         if zoom is None: zoom = 4

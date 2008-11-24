@@ -1,5 +1,5 @@
 """
- This module houses the GEOS ctypes prototype functions for the 
+ This module houses the GEOS ctypes prototype functions for the
  topological operations on geometries.
 """
 from ctypes import c_char_p, c_double, c_int

@@ -363,7 +363,7 @@ class BoundField(StrAndUnicode):
         else:
             name = self.html_initial_name
         return widget.render(name, data, attrs=attrs)
-        
+
     def as_text(self, attrs=None, **kwargs):
         """
         Returns a string of HTML for representing this as an <input type="text">.

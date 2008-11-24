@@ -207,9 +207,9 @@ def smart_split(text):
 
     >>> list(smart_split(r'This is "a person\'s" test.'))
     [u'This', u'is', u'"a person\\\'s"', u'test.']
-    >>> list(smart_split(r"Another 'person\'s' test.")) 
+    >>> list(smart_split(r"Another 'person\'s' test."))
     [u'Another', u"'person's'", u'test.']
-    >>> list(smart_split(r'A "\"funky\" style" test.')) 
+    >>> list(smart_split(r'A "\"funky\" style" test.'))
     [u'A', u'""funky" style"', u'test.']
     """
     text = force_unicode(text)

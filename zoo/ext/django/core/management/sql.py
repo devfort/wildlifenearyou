@@ -119,7 +119,7 @@ def sql_reset(app, style):
 def sql_flush(style, only_django=False):
     """
     Returns a list of the SQL statements used to flush the database.
-    
+
     If only_django is True, then only table names that have associated Django
     models and are in INSTALLED_APPS will be included.
     """

@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
         verbosity = int(options.get('verbosity', 1))
         interactive = options.get('interactive', True)
-    
+
         test_path = settings.TEST_RUNNER.split('.')
         # Allow for Python 2.5 relative paths
         if len(test_path) > 1:

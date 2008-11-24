@@ -18,7 +18,7 @@ libc = CDLL(find_library(libc_name))
 def last_arg_byref(args):
     "Returns the last C argument's by reference value."
     return args[-1]._obj.value
-        
+
 def check_dbl(result, func, cargs):
     "Checks the status code and returns the double value passed in by reference."
     # Checking the status code
@@ -28,7 +28,7 @@ def check_dbl(result, func, cargs):
 
 def check_geom(result, func, cargs):
     "Error checking on routines that return Geometries."
-    if not result: 
+    if not result:
         raise GEOSException('Error encountered checking Geometry returned from GEOS C function "%s".' % func.__name__)
     return result
 
@@ -73,4 +73,4 @@ def check_zero(result, func, cargs):
         raise GEOSException('Error encountered in GEOS C function "%s".' % func.__name__)
     else:
         return result
-                            
+

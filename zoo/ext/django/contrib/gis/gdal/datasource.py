@@ -88,7 +88,7 @@ class DataSource(object):
             self._ptr = ds
             self._driver = Driver(ds_driver)
         else:
-            # Raise an exception if the returned pointer is NULL 
+            # Raise an exception if the returned pointer is NULL
             raise OGRException('Invalid data source file "%s"' % ds_input)
 
     def __del__(self):
@@ -112,7 +112,7 @@ class DataSource(object):
         else:
             raise TypeError('Invalid index type: %s' % type(index))
         return Layer(l, self)
-        
+
     def __len__(self):
         "Returns the number of layers within the data source."
         return self.layer_count
@@ -126,7 +126,7 @@ class DataSource(object):
     def driver(self):
         "Returns the Driver object for this Data Source."
         return self._driver
-        
+
     @property
     def layer_count(self):
         "Returns the number of layers in the data source."

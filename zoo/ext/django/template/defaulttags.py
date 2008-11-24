@@ -362,11 +362,11 @@ class URLNode(Node):
         args = [arg.resolve(context) for arg in self.args]
         kwargs = dict([(smart_str(k,'ascii'), v.resolve(context))
                        for k, v in self.kwargs.items()])
-        
-        
+
+
         # Try to look up the URL twice: once given the view name, and again
-        # relative to what we guess is the "main" app. If they both fail, 
-        # re-raise the NoReverseMatch unless we're using the 
+        # relative to what we guess is the "main" app. If they both fail,
+        # re-raise the NoReverseMatch unless we're using the
         # {% url ... as var %} construct in which cause return nothing.
         url = ''
         try:
@@ -379,7 +379,7 @@ class URLNode(Node):
             except NoReverseMatch:
                 if self.asvar is None:
                     raise
-                    
+
         if self.asvar:
             context[self.asvar] = url
             return ''
@@ -1067,7 +1067,7 @@ def url(parser, token):
     args = []
     kwargs = {}
     asvar = None
-        
+
     if len(bits) > 2:
         bits = iter(bits[2:])
         for bit in bits:

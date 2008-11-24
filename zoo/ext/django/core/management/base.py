@@ -28,7 +28,7 @@ class CommandError(Exception):
     result, raising this exception (with a sensible description of the
     error) is the preferred way to indicate that something has gone
     wrong in the execution of a command.
-    
+
     """
     pass
 
@@ -37,7 +37,7 @@ def handle_default_options(options):
     Include any default options that all commands should accept here
     so that ManagementUtility can handle them before searching for
     user commands.
-    
+
     """
     if options.settings:
         os.environ['DJANGO_SETTINGS_MODULE'] = options.settings
@@ -83,7 +83,7 @@ class BaseCommand(object):
     specialized methods as needed.
 
     Several attributes affect behavior at various steps along the way:
-    
+
     ``args``
         A string listing the arguments accepted by the command,
         suitable for use in help messages; e.g., a command which takes
@@ -117,7 +117,7 @@ class BaseCommand(object):
         rather than all applications' models, call
         ``self.validate(app)`` from ``handle()``, where ``app`` is the
         application's Python module.
-    
+
     """
     # Metadata about this command.
     option_list = (
@@ -144,7 +144,7 @@ class BaseCommand(object):
         Return the Django version, which should be correct for all
         built-in Django commands. User-supplied commands should
         override this method.
-        
+
         """
         return django.get_version()
 
@@ -152,7 +152,7 @@ class BaseCommand(object):
         """
         Return a brief description of how to use this command, by
         default from the attribute ``self.help``.
-        
+
         """
         usage = '%%prog %s [options] %s' % (subcommand, self.args)
         if self.help:
@@ -164,7 +164,7 @@ class BaseCommand(object):
         """
         Create and return the ``OptionParser`` which will be used to
         parse the arguments to this command.
-        
+
         """
         return OptionParser(prog=prog_name,
                             usage=self.usage(subcommand),
@@ -175,7 +175,7 @@ class BaseCommand(object):
         """
         Print the help message for this command, derived from
         ``self.usage()``.
-        
+
         """
         parser = self.create_parser(prog_name, subcommand)
         parser.print_help()
@@ -184,7 +184,7 @@ class BaseCommand(object):
         """
         Set up any environment changes requested (e.g., Python path
         and Django settings), then run this command.
-        
+
         """
         parser = self.create_parser(argv[0], argv[1])
         options, args = parser.parse_args(argv[2:])
@@ -198,7 +198,7 @@ class BaseCommand(object):
         ``self.requires_model_validation``). If the command raises a
         ``CommandError``, intercept it and print it sensibly to
         stderr.
-        
+
         """
         # Switch to English, because django-admin.py creates database content
         # like permissions, and those shouldn't contain any translations.
@@ -209,7 +209,7 @@ class BaseCommand(object):
                 from django.utils import translation
                 translation.activate('en-us')
             except ImportError, e:
-                # If settings should be available, but aren't, 
+                # If settings should be available, but aren't,
                 # raise the error and quit.
                 sys.stderr.write(self.style.ERROR(str('Error: %s\n' % e)))
                 sys.exit(1)
@@ -233,9 +233,9 @@ class BaseCommand(object):
     def validate(self, app=None, display_num_errors=False):
         """
         Validates the given app, raising CommandError for any errors.
-        
+
         If app is None, then this will validate all installed apps.
-        
+
         """
         from django.core.management.validation import get_validation_errors
         try:
@@ -255,7 +255,7 @@ class BaseCommand(object):
         """
         The actual logic of the command. Subclasses must implement
         this method.
-        
+
         """
         raise NotImplementedError()
 
@@ -266,7 +266,7 @@ class AppCommand(BaseCommand):
 
     Rather than implementing ``handle()``, subclasses must implement
     ``handle_app()``, which will be called once for each application.
-    
+
     """
     args = '<appname appname ...>'
 
@@ -290,7 +290,7 @@ class AppCommand(BaseCommand):
         Perform the command's actions for ``app``, which will be the
         Python module corresponding to an application name given on
         the command line.
-        
+
         """
         raise NotImplementedError()
 
@@ -305,7 +305,7 @@ class LabelCommand(BaseCommand):
 
     If the arguments should be names of installed applications, use
     ``AppCommand`` instead.
-    
+
     """
     args = '<label label ...>'
     label = 'label'
@@ -325,7 +325,7 @@ class LabelCommand(BaseCommand):
         """
         Perform the command's actions for ``label``, which will be the
         string as given on the command line.
-        
+
         """
         raise NotImplementedError()
 
@@ -338,7 +338,7 @@ class NoArgsCommand(BaseCommand):
     no arguments are passed to the command.
 
     Attempting to pass arguments will raise ``CommandError``.
-    
+
     """
     args = ''
 
@@ -350,7 +350,7 @@ class NoArgsCommand(BaseCommand):
     def handle_noargs(self, **options):
         """
         Perform this command's actions.
-        
+
         """
         raise NotImplementedError()
 
@@ -414,7 +414,7 @@ def _make_writeable(filename):
     """
     Make sure that the file is writeable. Useful if our source is
     read-only.
-    
+
     """
     import stat
     if sys.platform.startswith('java'):

@@ -13,15 +13,15 @@ class MySQLGeoField(Field):
     def _geom_index(self, style, db_table):
         """
         Creates a spatial index for the geometry column.  If MyISAM tables are
-        used an R-Tree index is created, otherwise a B-Tree index is created. 
+        used an R-Tree index is created, otherwise a B-Tree index is created.
         Thus, for best spatial performance, you should use MyISAM tables
-        (which do not support transactions).  For more information, see Ch. 
+        (which do not support transactions).  For more information, see Ch.
         16.6.1 of the MySQL 5.0 documentation.
         """
 
         # Getting the index name.
         idx_name = '%s_%s_id' % (db_table, self.column)
-        
+
         sql = style.SQL_KEYWORD('CREATE SPATIAL INDEX ') + \
               style.SQL_TABLE(qn(idx_name)) + \
               style.SQL_KEYWORD(' ON ') + \
@@ -46,8 +46,8 @@ class MySQLGeoField(Field):
 
     def get_placeholder(self, value):
         """
-        The placeholder here has to include MySQL's WKT constructor.  Because 
-        MySQL does not support spatial transformations, there is no need to 
+        The placeholder here has to include MySQL's WKT constructor.  Because
+        MySQL does not support spatial transformations, there is no need to
         modify the placeholder based on the contents of the given value.
         """
         return '%s(%%s)' % GEOM_FROM_TEXT

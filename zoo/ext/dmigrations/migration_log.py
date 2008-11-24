@@ -31,11 +31,11 @@ def init():
     """
     if not table_present('dmigrations_log'):
       _execute(MIGRATION_LOG_SQL)
-  
+
 def get_log():
     return list(_execute("""
-        SELECT action, migration, status, datetime 
-        FROM dmigrations_log 
+        SELECT action, migration, status, datetime
+        FROM dmigrations_log
         ORDER BY datetime, id"""
     ).fetchall())
 
@@ -43,7 +43,7 @@ def log_action(action, migration, status, when=None):
     if when == None:
         when = datetime.datetime.now()
     statement = """
-        INSERT INTO dmigrations_log(action, migration, status, datetime) 
+        INSERT INTO dmigrations_log(action, migration, status, datetime)
         VALUES (%s, %s, %s, %s)
     """
     params = [action, migration, status, when]

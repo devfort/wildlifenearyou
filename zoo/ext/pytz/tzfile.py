@@ -16,7 +16,7 @@ def build_tzinfo(zone, fp):
     head_size = calcsize(head_fmt)
     (magic,ttisgmtcnt,ttisstdcnt,leapcnt,
      timecnt,typecnt,charcnt) =  unpack(head_fmt, fp.read(head_size))
-    
+
     # Make sure it is a tzinfo(5) file
     assert magic == 'TZif'
 

@@ -60,7 +60,7 @@ class OracleSpatialField(Field):
         # Getting the index name, Oracle doesn't allow object
         # names > 30 characters.
         idx_name = truncate_name('%s_%s_id' % (db_table, self.column), 30)
-        
+
         sql = style.SQL_KEYWORD('CREATE INDEX ') + \
               style.SQL_TABLE(qn(idx_name)) + \
               style.SQL_KEYWORD(' ON ') + \
@@ -87,7 +87,7 @@ class OracleSpatialField(Field):
     def db_type(self):
         "The Oracle geometric data type is MDSYS.SDO_GEOMETRY."
         return 'MDSYS.SDO_GEOMETRY'
-        
+
     def get_placeholder(self, value):
         """
         Provides a proper substitution value for Geometries that are not in the

@@ -178,7 +178,7 @@ model_index = staff_member_required(model_index)
 def model_detail(request, app_label, model_name):
     if not utils.docutils_is_available:
         return missing_docutils_page(request)
-        
+
     # Get the model class.
     try:
         app_mod = models.get_app(app_label)

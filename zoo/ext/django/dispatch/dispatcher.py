@@ -15,11 +15,11 @@ def _make_id(target):
 
 class Signal(object):
     """Base class for all signals
-    
+
     Internal attributes:
         receivers -- { receriverkey (id) : weakref(receiver) }
     """
-    
+
     def __init__(self, providing_args=None):
         """providing_args -- A list of the arguments this signal can pass along in
                        a send() call.
@@ -31,7 +31,7 @@ class Signal(object):
 
     def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
         """Connect receiver to sender for signal
-    
+
         receiver -- a function or an instance method which is to
             receive signals.  Receivers must be
             hashable objects.
@@ -39,7 +39,7 @@ class Signal(object):
             if weak is True, then receiver must be weak-referencable
             (more precisely saferef.safeRef() must be able to create
             a reference to the receiver).
-        
+
             Receivers must be able to accept keyword arguments.
 
             If receivers have a dispatch_uid attribute, the receiver will
@@ -54,7 +54,7 @@ class Signal(object):
             By default, the module will attempt to use weak
             references to the receiver objects.  If this parameter
             is false, then strong references will be used.
-        
+
         dispatch_uid -- an identifier used to uniquely identify a particular
             instance of a receiver. This will usually be a string, though it
             may be anything hashable.
@@ -62,12 +62,12 @@ class Signal(object):
         returns None
         """
         from django.conf import settings
-        
+
         # If DEBUG is on, check that we got a good receiver
         if settings.DEBUG:
             import inspect
             assert callable(receiver), "Signal receivers must be callable."
-            
+
             # Check for **kwargs
             # Not all callables are inspectable with getargspec, so we'll
             # try a couple different ways but in the end fall back on assuming
@@ -83,7 +83,7 @@ class Signal(object):
             if argspec:
                 assert argspec[2] is not None, \
                     "Signal receivers must accept keyword arguments (**kwargs)."
-        
+
         if dispatch_uid:
             lookup_key = (dispatch_uid, _make_id(sender))
         else:
@@ -100,13 +100,13 @@ class Signal(object):
 
     def disconnect(self, receiver=None, sender=None, weak=True, dispatch_uid=None):
         """Disconnect receiver from sender for signal
-    
+
         receiver -- the registered receiver to disconnect. May be none if
             dispatch_uid is specified.
         sender -- the registered sender to disconnect
         weak -- the weakref state to disconnect
         dispatch_uid -- the unique identifier of the receiver to disconnect
-    
+
         disconnect reverses the process of connect.
 
         If weak references are used, disconnect need not be called.
@@ -129,7 +129,7 @@ class Signal(object):
 
         sender -- the sender of the signal
             Either a specific object or None.
-    
+
         named -- named arguments which will be passed to receivers.
 
         Returns a list of tuple pairs [(receiver, response), ... ].

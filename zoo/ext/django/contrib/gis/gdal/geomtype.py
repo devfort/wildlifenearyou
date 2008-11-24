@@ -33,7 +33,7 @@ class OGRGeomType(object):
             num = type_input
         else:
             raise TypeError('Invalid OGR input type given.')
-        
+
         # Setting the OGR geometry type number.
         self.num = num
 

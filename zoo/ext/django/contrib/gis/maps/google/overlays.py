@@ -18,28 +18,28 @@ class GEvent(object):
 
       def sample_request(request):
           polyline = GPolyline('LINESTRING(101 26, 112 26, 102 31)')
-          event = GEvent('click', 
+          event = GEvent('click',
             'function() { location.href = "http://www.google.com"}')
           polyline.add_event(event)
-          return render_to_response('mytemplate.html', 
+          return render_to_response('mytemplate.html',
           {'google' : GoogleMap(polylines=[polyline])})
     """
 
     def __init__(self, event, action):
         """
-        Initializes a GEvent object. 
-        
+        Initializes a GEvent object.
+
         Parameters:
 
-        event: 
+        event:
           string for the event, such as 'click'. The event must be a valid
-          event for the object in the Google Maps API. 
+          event for the object in the Google Maps API.
           There is no validation of the event type within Django.
 
         action:
-          string containing a Javascript function, such as 
+          string containing a Javascript function, such as
           'function() { location.href = "newurl";}'
-          The string must be a valid Javascript function. Again there is no 
+          The string must be a valid Javascript function. Again there is no
           validation fo the function within Django.
         """
         self.event = event
@@ -71,7 +71,7 @@ class GPolygon(GOverlayBase):
     please see the Google Maps API Reference:
      http://code.google.com/apis/maps/documentation/reference.html#GPolygon
     """
-    def __init__(self, poly, 
+    def __init__(self, poly,
                  stroke_color='#0000ff', stroke_weight=2, stroke_opacity=1,
                  fill_color='#0000ff', fill_opacity=0.4):
         """
@@ -98,25 +98,25 @@ class GPolygon(GOverlayBase):
         """
         if isinstance(poly, basestring): poly = fromstr(poly)
         if isinstance(poly, (tuple, list)): poly = Polygon(poly)
-        if not isinstance(poly, Polygon): 
+        if not isinstance(poly, Polygon):
             raise TypeError('GPolygon may only initialize on GEOS Polygons.')
 
         # Getting the envelope of the input polygon (used for automatically
         # determining the zoom level).
         self.envelope = poly.envelope
 
-        # Translating the coordinates into a JavaScript array of 
+        # Translating the coordinates into a JavaScript array of
         # Google `GLatLng` objects.
         self.points = self.latlng_from_coords(poly.shell.coords)
 
         # Stroke settings.
         self.stroke_color, self.stroke_opacity, self.stroke_weight = stroke_color, stroke_opacity, stroke_weight
-      
+
         # Fill settings.
         self.fill_color, self.fill_opacity = fill_color, fill_opacity
-       
+
         super(GPolygon, self).__init__()
- 
+
     @property
     def js_params(self):
         return '%s, "%s", %s, %s, "%s", %s' % (self.points, self.stroke_color, self.stroke_weight, self.stroke_opacity,
@@ -135,10 +135,10 @@ class GPolyline(GOverlayBase):
         may instantiated into one of the above geometries.
 
         Keyword Options:
-          
+
           color:
             The color to use for the polyline.  Defaults to '#0000ff' (blue).
-  
+
           weight:
             The width of the polyline, in pixels.  Defaults to 2.
 
@@ -160,7 +160,7 @@ class GPolyline(GOverlayBase):
         self.envelope = geom.envelope
         self.color, self.weight, self.opacity = color, weight, opacity
         super(GPolyline, self).__init__()
-        
+
     @property
     def js_params(self):
         return '%s, "%s", %s, %s' % (self.latlngs, self.color, self.weight, self.opacity)
@@ -175,13 +175,13 @@ class GMarker(GOverlayBase):
 
       from django.shortcuts import render_to_response
       from django.contrib.gis.maps.google.overlays import GMarker, GEvent
-     
+
       def sample_request(request):
           marker = GMarker('POINT(101 26)')
-          event = GEvent('click', 
+          event = GEvent('click',
                          'function() { location.href = "http://www.google.com"}')
           marker.add_event(event)
-          return render_to_response('mytemplate.html', 
+          return render_to_response('mytemplate.html',
                  {'google' : GoogleMap(markers=[marker])})
     """
     def __init__(self, geom, title=None):
@@ -191,7 +191,7 @@ class GMarker(GOverlayBase):
         GMarkerOptions -- so far only the title option is supported.
 
         Keyword Options:
-         title: 
+         title:
            Title option for GMarker, will be displayed as a tooltip.
         """
         # If a GEOS geometry isn't passed in, try to construct one.
@@ -209,10 +209,10 @@ class GMarker(GOverlayBase):
 
     def latlng_from_coords(self, coords):
         return 'new GLatLng(%s,%s)' %(coords[1], coords[0])
-    
+
     def options(self):
         result = []
-        if self.title: result.append('title: "%s"' % self.title) 
+        if self.title: result.append('title: "%s"' % self.title)
         return '{%s}' % ','.join(result)
 
     @property

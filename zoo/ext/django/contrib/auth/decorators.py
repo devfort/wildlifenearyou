@@ -57,11 +57,11 @@ class _CheckLogin(object):
         self.login_url = login_url
         self.redirect_field_name = redirect_field_name
         update_wrapper(self, view_func)
-        
+
     def __get__(self, obj, cls=None):
         view_func = self.view_func.__get__(obj, cls)
         return _CheckLogin(view_func, self.test_func, self.login_url, self.redirect_field_name)
-    
+
     def __call__(self, request, *args, **kwargs):
         if self.test_func(request.user):
             return self.view_func(request, *args, **kwargs)

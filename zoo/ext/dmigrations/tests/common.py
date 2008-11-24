@@ -35,12 +35,12 @@ class TestCase(unittest.TestCase):
   def setUp(self):
     self.mock_migrations_dir = os.path.join(os.path.dirname(__file__), "mock_migrations_dir")
     self.set_up()
-  
+
   def set_up(self):
     pass
 
   def tearDown(self):
     self.tear_down()
-  
+
   def tear_down(self):
     pass

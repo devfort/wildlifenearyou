@@ -27,7 +27,7 @@ ds_list = (TestDS('test_point', nfeat=5, nfld=3, geom='POINT', gtype=1, driver='
                   extent=(1.0, 2.0, 100.0, 523.5), # Min/Max from CSV
                   field_values={'POINT_X' : ['1.0', '5.0', '100.0'], 'POINT_Y' : ['2.0', '23.0', '523.5'], 'NUM' : ['5', '17', '23']},
                   fids=range(1,4)),
-           TestDS('test_poly', nfeat=3, nfld=3, geom='POLYGON', gtype=3, 
+           TestDS('test_poly', nfeat=3, nfld=3, geom='POLYGON', gtype=3,
                   driver='ESRI Shapefile',
                   fields={'float' : OFTReal, 'int' : OFTInteger, 'str' : OFTString,},
                   extent=(-1.01513,-0.558245,0.161876,0.839637), # Got extent from QGIS
@@ -62,7 +62,7 @@ class DataSourceTest(unittest.TestCase):
                 pass
             else:
                 self.fail('Expected an IndexError!')
-                        
+
     def test02_invalid_shp(self):
         "Testing invalid SHP files for the Data Source."
         for source in bad_ds:
@@ -75,7 +75,7 @@ class DataSourceTest(unittest.TestCase):
             ds = DataSource(source.ds)
 
             # Incrementing through each layer, this tests DataSource.__iter__
-            for layer in ds:                
+            for layer in ds:
                 # Making sure we get the number of features we expect
                 self.assertEqual(len(layer), source.nfeat)
 
@@ -93,7 +93,7 @@ class DataSourceTest(unittest.TestCase):
                 # Now checking the field names.
                 flds = layer.fields
                 for f in flds: self.assertEqual(True, f in source.fields)
-                
+
                 # Negative FIDs are not allowed.
                 self.assertRaises(OGRIndexError, layer.__getitem__, -1)
                 self.assertRaises(OGRIndexError, layer.__getitem__, 50000)
@@ -114,7 +114,7 @@ class DataSourceTest(unittest.TestCase):
                         for fld_name in fld_names:
                             self.assertEqual(source.field_values[fld_name][i], feat.get(fld_name))
         print "\nEND - expecting out of range feature id error; safe to ignore."
-                        
+
     def test03b_layer_slice(self):
         "Test indexing and slicing on Layers."
         # Using the first data-source because the same slice
@@ -145,7 +145,7 @@ class DataSourceTest(unittest.TestCase):
         # Making sure we can call OGR routines on the Layer returned.
         lyr = get_layer()
         self.assertEqual(source.nfeat, len(lyr))
-        self.assertEqual(source.gtype, lyr.geom_type.num)        
+        self.assertEqual(source.gtype, lyr.geom_type.num)
 
     def test04_features(self):
         "Testing Data Source Features."
@@ -169,7 +169,7 @@ class DataSourceTest(unittest.TestCase):
 
                     # Testing Feature.__iter__
                     for fld in feat: self.assertEqual(True, fld.name in source.fields.keys())
-                        
+
     def test05_geometries(self):
         "Testing Geometries from Data Source Features."
         for source in ds_list:

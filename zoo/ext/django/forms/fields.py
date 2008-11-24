@@ -256,8 +256,8 @@ class DecimalField(Field):
         digits = len(digittuple)
         if decimals > digits:
             # We have leading zeros up to or past the decimal point.  Count
-            # everything past the decimal point as a digit.  We do not count 
-            # 0 before the decimal point as a digit since that would mean 
+            # everything past the decimal point as a digit.  We do not count
+            # 0 before the decimal point as a digit since that would mean
             # we would not allow max_digits = decimal_places.
             digits = decimals
         whole_digits = digits - decimals

@@ -28,8 +28,8 @@ class Layer(object):
     def __init__(self, layer_ptr, ds):
         """
         Initializes on an OGR C pointer to the Layer and the `DataSource` object
-        that owns this layer.  The `DataSource` object is required so that a 
-        reference to it is kept with this Layer.  This prevents garbage 
+        that owns this layer.  The `DataSource` object is required so that a
+        reference to it is kept with this Layer.  This prevents garbage
         collection of the `DataSource` while this Layer is still active.
         """
         self._ptr = None # Initially NULL
@@ -89,7 +89,7 @@ class Layer(object):
             # each feature until the given feature ID is encountered.
             for feat in self:
                 if feat.fid == feat_id: return feat
-        # Should have returned a Feature, raise an OGRIndexError.    
+        # Should have returned a Feature, raise an OGRIndexError.
         raise OGRIndexError('Invalid feature id: %s.' % feat_id)
 
     #### Layer properties ####
@@ -135,9 +135,9 @@ class Layer(object):
         Returns a list of string names corresponding to each of the Fields
         available in this Layer.
         """
-        return [get_field_name(get_field_defn(self._ldefn, i)) 
+        return [get_field_name(get_field_defn(self._ldefn, i))
                 for i in xrange(self.num_fields) ]
-    
+
     @property
     def field_types(self):
         """
@@ -149,13 +149,13 @@ class Layer(object):
         return [FIELD_CLASSES[get_field_type(get_field_defn(self._ldefn, i))]
                 for i in xrange(self.num_fields)]
 
-    @property 
+    @property
     def field_widths(self):
         "Returns a list of the maximum field widths for the features."
         return [get_field_width(get_field_defn(self._ldefn, i))
                 for i in xrange(self.num_fields)]
 
-    @property 
+    @property
     def field_precisions(self):
         "Returns the field precisions for the features."
         return [get_field_precision(get_field_defn(self._ldefn, i))

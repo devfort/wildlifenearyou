@@ -30,7 +30,7 @@ Optional Fcgi settings: (setting=value)
   port=PORTNUM         port to listen on.
   socket=FILE          UNIX socket to listen on.
   method=IMPL          prefork or threaded (default prefork)
-  maxrequests=NUMBER   number of requests a child handles before it is 
+  maxrequests=NUMBER   number of requests a child handles before it is
                        killed and a new child is forked (0 = no limit).
   maxspare=NUMBER      max number of spare processes / threads
   minspare=NUMBER      min number of spare processes / threads.
@@ -113,7 +113,7 @@ def runfastcgi(argset=[], **kwargs):
             'maxSpare': int(options["maxspare"]),
             'minSpare': int(options["minspare"]),
             'maxChildren': int(options["maxchildren"]),
-            'maxRequests': int(options["maxrequests"]), 
+            'maxRequests': int(options["maxrequests"]),
         }
         flup_module += '_fork'
     elif options['method'] in ('thread', 'threaded'):

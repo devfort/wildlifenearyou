@@ -38,7 +38,7 @@ class OpenLayersWidget(Textarea):
             # Transforming the geometry to the projection used on the
             # OpenLayers map.
             srid = self.params['srid']
-            if value.srid != srid: 
+            if value.srid != srid:
                 try:
                     value.transform(srid)
                     wkt = value.wkt
@@ -46,13 +46,13 @@ class OpenLayersWidget(Textarea):
                     wkt = ''
             else:
                 wkt = value.wkt
-               
+
             # Setting the parameter WKT with that of the transformed
             # geometry.
             self.params['wkt'] = wkt
 
         return render_to_string(self.template, self.params)
-    
+
     def map_options(self):
         "Builds the map options hash for the OpenLayers template."
 
@@ -64,8 +64,8 @@ class OpenLayersWidget(Textarea):
 
         # An array of the parameter name, the name of their OpenLayers
         # counterpart, and the type of variable they are.
-        map_types = [('srid', 'projection', 'srid'), 
-                     ('display_srid', 'displayProjection', 'srid'), 
+        map_types = [('srid', 'projection', 'srid'),
+                     ('display_srid', 'displayProjection', 'srid'),
                      ('units', 'units', str),
                      ('max_resolution', 'maxResolution', float),
                      ('max_extent', 'maxExtent', 'bounds'),

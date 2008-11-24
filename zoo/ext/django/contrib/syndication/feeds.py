@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site, RequestSite
 from django.utils import feedgenerator
 from django.utils.tzinfo import FixedOffset
 from django.utils.encoding import smart_unicode, iri_to_uri
-from django.conf import settings         
+from django.conf import settings
 from django.template import RequestContext
 
 def add_domain(domain, url):
@@ -95,7 +95,7 @@ class Feed(object):
             current_site = Site.objects.get_current()
         else:
             current_site = RequestSite(self.request)
-        
+
         link = self.__get_dynamic_attr('link', obj)
         link = add_domain(current_site.domain, link)
 

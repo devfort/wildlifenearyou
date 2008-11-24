@@ -309,7 +309,7 @@ class Field(object):
             if callable(self.default):
                 defaults['show_hidden_initial'] = True
         if self.choices:
-            # Fields with choices get special treatment. 
+            # Fields with choices get special treatment.
             include_blank = self.blank or not (self.has_default() or 'initial' in kwargs)
             defaults['choices'] = self.get_choices(include_blank=include_blank)
             defaults['coerce'] = self.to_python

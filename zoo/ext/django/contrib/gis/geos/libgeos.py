@@ -37,18 +37,18 @@ elif os.name == 'posix':
 else:
     raise ImportError('Unsupported OS "%s"' % os.name)
 
-# Using the ctypes `find_library` utility to find the the path to the GEOS 
-# shared library.  This is better than manually specifiying each library name 
+# Using the ctypes `find_library` utility to find the the path to the GEOS
+# shared library.  This is better than manually specifiying each library name
 # and extension (e.g., libgeos_c.[so|so.1|dylib].).
-if lib_names: 
+if lib_names:
     for lib_name in lib_names:
         lib_path = find_library(lib_name)
         if not lib_path is None: break
 
 # No GEOS library could be found.
-if lib_path is None: 
+if lib_path is None:
     raise ImportError('Could not find the GEOS library (tried "%s"). '
-                        'Try setting GEOS_LIBRARY_PATH in your settings.' % 
+                        'Try setting GEOS_LIBRARY_PATH in your settings.' %
                         '", "'.join(lib_names))
 
 # Getting the GEOS C library.  The C interface (CDLL) is used for
@@ -65,7 +65,7 @@ def notice_h(fmt, lst, output_h=sys.stdout):
     try:
         warn_msg = fmt % lst
     except:
-        warn_msg = fmt 
+        warn_msg = fmt
     output_h.write('GEOS_NOTICE: %s\n' % warn_msg)
 notice_h = NOTICEFUNC(notice_h)
 
@@ -94,17 +94,17 @@ class GEOSCoordSeq_t(Structure): pass
 GEOM_PTR = POINTER(GEOSGeom_t)
 CS_PTR = POINTER(GEOSCoordSeq_t)
 
-# Used specifically by the GEOSGeom_createPolygon and GEOSGeom_createCollection 
+# Used specifically by the GEOSGeom_createPolygon and GEOSGeom_createCollection
 #  GEOS routines
 def get_pointer_arr(n):
     "Gets a ctypes pointer array (of length `n`) for GEOSGeom_t opaque pointer."
     GeomArr = GEOM_PTR * n
     return GeomArr()
 
-# Returns the string version of the GEOS library. Have to set the restype 
+# Returns the string version of the GEOS library. Have to set the restype
 # explicitly to c_char_p to ensure compatibility accross 32 and 64-bit platforms.
 geos_version = lgeos.GEOSversion
-geos_version.argtypes = None   
+geos_version.argtypes = None
 geos_version.restype = c_char_p
 
 # Regular expression should be able to parse version strings such as

@@ -40,7 +40,7 @@ class tzwinbase(datetime.tzinfo):
             return datetime.timedelta(minutes=minutes)
         else:
             return datetime.timedelta(0)
-        
+
     def tzname(self, dt):
         if self._isdst(dt):
             return self._dstname
@@ -60,7 +60,7 @@ class tzwinbase(datetime.tzinfo):
 
     def display(self):
         return self._display
-    
+
     def _isdst(self, dt):
         dston = picknthweekday(dt.year, self._dstmonth, self._dstdayofweek,
                                self._dsthour, self._dstminute,
@@ -89,12 +89,12 @@ class tzwin(tzwinbase):
         self._dstname = keydict["Dlt"].encode("iso-8859-1")
 
         self._display = keydict["Display"]
-        
+
         # See http://ww_winreg.jsiinc.com/SUBA/tip0300/rh0398.htm
         tup = struct.unpack("=3l16h", keydict["TZI"])
         self._stdoffset = -tup[0]-tup[1]         # Bias + StandardBias * -1
         self._dstoffset = self._stdoffset-tup[2] # + DaylightBias * -1
-        
+
         (self._stdmonth,
          self._stddayofweek,  # Sunday = 0
          self._stdweeknumber, # Last = 5
@@ -115,7 +115,7 @@ class tzwin(tzwinbase):
 
 
 class tzwinlocal(tzwinbase):
-    
+
     def __init__(self):
 
         handle = _winreg.ConnectRegistry(None, _winreg.HKEY_LOCAL_MACHINE)
@@ -136,7 +136,7 @@ class tzwinlocal(tzwinbase):
             self._display = None
 
         handle.Close()
-        
+
         self._stdoffset = -keydict["Bias"]-keydict["StandardBias"]
         self._dstoffset = self._stdoffset-keydict["DaylightBias"]
 

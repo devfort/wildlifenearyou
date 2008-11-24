@@ -12,7 +12,7 @@
 
  Requirements:  OGR C Library (from GDAL) required.
 
- Usage: 
+ Usage:
   lm = LayerMapping(model, source_file, mapping) where,
 
   model:
@@ -34,7 +34,7 @@
    The index of the layer to use from the Data Source (defaults to 0)
 
   source_srs:
-   Use this to specify the source SRS manually (for example, 
+   Use this to specify the source SRS manually (for example,
    some shapefiles don't come with a '.prj' file).  An integer SRID,
    a string WKT, and SpatialReference objects are valid parameters.
 
@@ -47,7 +47,7 @@
    May be 'commit_on_success' (default) or 'autocommit'.
 
   transform:
-   Setting this to False will disable all coordinate transformations.  
+   Setting this to False will disable all coordinate transformations.
 
   unique:
    Setting this to the name, or a tuple of names, from the given
@@ -94,8 +94,8 @@ Example:
   >>> mapping = {'name' : 'str', # The 'name' model field maps to the 'str' layer field.
                  'poly' : 'POLYGON', # For geometry fields use OGC name.
                  } # The mapping is a dictionary
-  >>> lm = LayerMapping(TestGeo, 'test_poly.shp', mapping) 
-  >>> lm.save(verbose=True) # Save the layermap, imports the data. 
+  >>> lm = LayerMapping(TestGeo, 'test_poly.shp', mapping)
+  >>> lm.save(verbose=True) # Save the layermap, imports the data.
   Saved: Name: 1
   Saved: Name: 2
   Saved: Name: 3
@@ -129,7 +129,7 @@ class MissingForeignKey(LayerMapError): pass
 
 class LayerMapping(object):
     "A class that maps OGR Layers to GeoDjango Models."
-    
+
     # Acceptable 'base' types for a multi-geometry type.
     MULTI_TYPES = {1 : OGRGeomType('MultiPoint'),
                    2 : OGRGeomType('MultiLineString'),
@@ -162,9 +162,9 @@ class LayerMapping(object):
                          'commit_on_success' : transaction.commit_on_success,
                          }
 
-    def __init__(self, model, data, mapping, layer=0, 
+    def __init__(self, model, data, mapping, layer=0,
                  source_srs=None, encoding=None,
-                 transaction_mode='commit_on_success', 
+                 transaction_mode='commit_on_success',
                  transform=True, unique=None):
         """
         A LayerMapping object is initialized using the given Model (not an instance),
@@ -182,12 +182,12 @@ class LayerMapping(object):
         # Setting the mapping & model attributes.
         self.mapping = mapping
         self.model = model
- 
+
         # Checking the layer -- intitialization of the object will fail if
         # things don't check out before hand.
         self.check_layer()
 
-        # Getting the geometry column associated with the model (an 
+        # Getting the geometry column associated with the model (an
         # exception will be raised if there is no geometry column).
         self.geo_col = self.geometry_column()
 
@@ -217,14 +217,14 @@ class LayerMapping(object):
         else:
             self.unique = None
 
-        # Setting the transaction decorator with the function in the 
+        # Setting the transaction decorator with the function in the
         # transaction modes dictionary.
         if transaction_mode in self.TRANSACTION_MODES:
             self.transaction_decorator = self.TRANSACTION_MODES[transaction_mode]
             self.transaction_mode = transaction_mode
         else:
             raise LayerMapError('Unrecognized transaction mode: %s' % transaction_mode)
-    
+
     #### Checking routines used during initialization ####
     def check_fid_range(self, fid_range):
         "This checks the `fid_range` keyword."
@@ -298,12 +298,12 @@ class LayerMapping(object):
                 if isinstance(ogr_name, dict):
                     # Is every given related model mapping field in the Layer?
                     rel_model = model_field.rel.to
-                    for rel_name, ogr_field in ogr_name.items(): 
+                    for rel_name, ogr_field in ogr_name.items():
                         idx = check_ogr_fld(ogr_field)
                         try:
                             rel_field = rel_model._meta.get_field(rel_name)
                         except models.fields.FieldDoesNotExist:
-                            raise LayerMapError('ForeignKey mapping field "%s" not in %s fields.' % 
+                            raise LayerMapError('ForeignKey mapping field "%s" not in %s fields.' %
                                                 (rel_name, rel_model.__class__.__name__))
                     fields_val = rel_model
                 else:
@@ -319,10 +319,10 @@ class LayerMapping(object):
 
                 # Can the OGR field type be mapped to the Django field type?
                 if not issubclass(ogr_field, self.FIELD_TYPES[model_field.__class__]):
-                    raise LayerMapError('OGR field "%s" (of type %s) cannot be mapped to Django %s.' % 
+                    raise LayerMapError('OGR field "%s" (of type %s) cannot be mapped to Django %s.' %
                                         (ogr_field, ogr_field.__name__, fld_name))
                 fields_val = model_field
-        
+
             self.fields[field_name] = fields_val
 
     def check_srs(self, source_srs):
@@ -336,7 +336,7 @@ class LayerMapping(object):
         else:
             # Otherwise just pulling the SpatialReference from the layer
             sr = self.layer.srs
-        
+
         if not sr:
             raise LayerMapError('No source reference system defined.')
         else:
@@ -346,7 +346,7 @@ class LayerMapping(object):
         "Checks the `unique` keyword parameter -- may be a sequence or string."
         if isinstance(unique, (list, tuple)):
             # List of fields to determine uniqueness with
-            for attr in unique: 
+            for attr in unique:
                 if not attr in self.mapping: raise ValueError
         elif isinstance(unique, basestring):
             # Only a single field passed in.
@@ -367,7 +367,7 @@ class LayerMapping(object):
         # dictionary mapping.
         for field_name, ogr_name in self.mapping.items():
             model_field = self.fields[field_name]
-            
+
             if isinstance(model_field, GeometryField):
                 # Verify OGR geometry.
                 val = self.verify_geom(feat.geom, model_field)
@@ -382,7 +382,7 @@ class LayerMapping(object):
             # Setting the keyword arguments for the field name with the
             # value obtained above.
             kwargs[field_name] = val
-            
+
         return kwargs
 
     def unique_kwargs(self, kwargs):
@@ -400,11 +400,11 @@ class LayerMapping(object):
     def verify_ogr_field(self, ogr_field, model_field):
         """
         Verifies if the OGR Field contents are acceptable to the Django
-        model field.  If they are, the verified value is returned, 
+        model field.  If they are, the verified value is returned,
         otherwise the proper exception is raised.
         """
-        if (isinstance(ogr_field, OFTString) and 
-            isinstance(model_field, (models.CharField, models.TextField))): 
+        if (isinstance(ogr_field, OFTString) and
+            isinstance(model_field, (models.CharField, models.TextField))):
             if self.encoding:
                 # The encoding for OGR data sources may be specified here
                 # (e.g., 'cp437' for Census Bureau boundary files).
@@ -429,14 +429,14 @@ class LayerMapping(object):
             # Maximum amount of precision, or digits to the left of the decimal.
             max_prec = model_field.max_digits - model_field.decimal_places
 
-            # Getting the digits to the left of the decimal place for the 
+            # Getting the digits to the left of the decimal place for the
             # given decimal.
             if d_idx < 0:
                 n_prec = len(digits[:d_idx])
             else:
                 n_prec = len(digits) + d_idx
 
-            # If we have more than the maximum digits allowed, then throw an 
+            # If we have more than the maximum digits allowed, then throw an
             # InvalidDecimal exception.
             if n_prec > max_prec:
                 raise InvalidDecimal('A DecimalField with max_digits %d, decimal_places %d must round to an absolute value less than 10^%d.' %
@@ -459,7 +459,7 @@ class LayerMapping(object):
         mapping.
         """
         # TODO: It is expensive to retrieve a model for every record --
-        #  explore if an efficient mechanism exists for caching related 
+        #  explore if an efficient mechanism exists for caching related
         #  ForeignKey models.
 
         # Constructing and verifying the related model keyword arguments.
@@ -472,7 +472,7 @@ class LayerMapping(object):
             return rel_model.objects.get(**fk_kwargs)
         except ObjectDoesNotExist:
             raise MissingForeignKey('No ForeignKey %s model found with keyword arguments: %s' % (rel_model.__name__, fk_kwargs))
-            
+
     def verify_geom(self, geom, model_field):
         """
         Verifies the geometry -- will construct and return a GeometryCollection
@@ -488,10 +488,10 @@ class LayerMapping(object):
             g = geom
 
         # Transforming the geometry with our Coordinate Transformation object,
-        # but only if the class variable `transform` is set w/a CoordTransform 
+        # but only if the class variable `transform` is set w/a CoordTransform
         # object.
         if self.transform: g.transform(self.transform)
-        
+
         # Returning the WKT of the geometry.
         return g.wkt
 
@@ -526,21 +526,21 @@ class LayerMapping(object):
 
     def make_multi(self, geom_type, model_field):
         """
-        Given the OGRGeomType for a geometry and its associated GeometryField, 
+        Given the OGRGeomType for a geometry and its associated GeometryField,
         determine whether the geometry should be turned into a GeometryCollection.
         """
-        return (geom_type.num in self.MULTI_TYPES and 
+        return (geom_type.num in self.MULTI_TYPES and
                 model_field.__class__.__name__ == 'Multi%s' % geom_type.django)
 
-    def save(self, verbose=False, fid_range=False, step=False, 
+    def save(self, verbose=False, fid_range=False, step=False,
              progress=False, silent=False, stream=sys.stdout, strict=False):
         """
         Saves the contents from the OGR DataSource Layer into the database
-        according to the mapping dictionary given at initialization. 
-        
+        according to the mapping dictionary given at initialization.
+
         Keyword Parameters:
          verbose:
-           If set, information will be printed subsequent to each model save 
+           If set, information will be printed subsequent to each model save
            executed on the database.
 
          fid_range:
@@ -550,32 +550,32 @@ class LayerMapping(object):
            data source.
 
          step:
-           If set with an integer, transactions will occur at every step 
-           interval. For example, if step=1000, a commit would occur after 
+           If set with an integer, transactions will occur at every step
+           interval. For example, if step=1000, a commit would occur after
            the 1,000th feature, the 2,000th feature etc.
 
          progress:
-           When this keyword is set, status information will be printed giving 
-           the number of features processed and sucessfully saved.  By default, 
-           progress information will pe printed every 1000 features processed, 
-           however, this default may be overridden by setting this keyword with an 
+           When this keyword is set, status information will be printed giving
+           the number of features processed and sucessfully saved.  By default,
+           progress information will pe printed every 1000 features processed,
+           however, this default may be overridden by setting this keyword with an
            integer for the desired interval.
 
          stream:
-           Status information will be written to this file handle.  Defaults to 
+           Status information will be written to this file handle.  Defaults to
            using `sys.stdout`, but any object with a `write` method is supported.
 
          silent:
-           By default, non-fatal error notifications are printed to stdout, but 
+           By default, non-fatal error notifications are printed to stdout, but
            this keyword may be set to disable these notifications.
 
          strict:
-           Execution of the model mapping will cease upon the first error 
+           Execution of the model mapping will cease upon the first error
            encountered.  The default behavior is to attempt to continue.
         """
         # Getting the default Feature ID range.
         default_range = self.check_fid_range(fid_range)
-    
+
         # Setting the progress interval, if requested.
         if progress:
             if progress is True or not isinstance(progress, int):
@@ -583,7 +583,7 @@ class LayerMapping(object):
             else:
                 progress_interval = progress
 
-        # Defining the 'real' save method, utilizing the transaction 
+        # Defining the 'real' save method, utilizing the transaction
         # decorator created during initialization.
         @self.transaction_decorator
         def _save(feat_range=default_range, num_feat=0, num_saved=0):
@@ -600,7 +600,7 @@ class LayerMapping(object):
                 except LayerMapError, msg:
                     # Something borked the validation
                     if strict: raise
-                    elif not silent: 
+                    elif not silent:
                         stream.write('Ignoring Feature ID %s because: %s\n' % (feat.fid, msg))
                 else:
                     # Constructing the model using the keyword args
@@ -614,14 +614,14 @@ class LayerMapping(object):
                             u_kwargs = self.unique_kwargs(kwargs)
                             m = self.model.objects.get(**u_kwargs)
                             is_update = True
-                                
-                            # Getting the geometry (in OGR form), creating 
-                            # one from the kwargs WKT, adding in additional 
-                            # geometries, and update the attribute with the 
+
+                            # Getting the geometry (in OGR form), creating
+                            # one from the kwargs WKT, adding in additional
+                            # geometries, and update the attribute with the
                             # just-updated geometry WKT.
                             geom = getattr(m, self.geom_field).ogr
                             new = OGRGeometry(kwargs[self.geom_field])
-                            for g in new: geom.add(g) 
+                            for g in new: geom.add(g)
                             setattr(m, self.geom_field, geom.wkt)
                         except ObjectDoesNotExist:
                             # No unique model exists yet, create.
@@ -641,7 +641,7 @@ class LayerMapping(object):
                             # Rolling back the transaction so that other model saves
                             # will work.
                             transaction.rollback_unless_managed()
-                        if strict: 
+                        if strict:
                             # Bailing out if the `strict` keyword is set.
                             if not silent:
                                 stream.write('Failed to save the feature (id: %s) into the model with the keyword arguments:\n' % feat.fid)
@@ -653,15 +653,15 @@ class LayerMapping(object):
                 # Printing progress information, if requested.
                 if progress and num_feat % progress_interval == 0:
                     stream.write('Processed %d features, saved %d ...\n' % (num_feat, num_saved))
-        
+
             # Only used for status output purposes -- incremental saving uses the
             # values returned here.
             return num_saved, num_feat
 
         nfeat = self.layer.num_feat
         if step and isinstance(step, int) and step < nfeat:
-            # Incremental saving is requested at the given interval (step) 
-            if default_range: 
+            # Incremental saving is requested at the given interval (step)
+            if default_range:
                 raise LayerMapError('The `step` keyword may not be used in conjunction with the `fid_range` keyword.')
             beg, num_feat, num_saved = (0, 0, 0)
             indices = range(step, nfeat, step)
@@ -672,7 +672,7 @@ class LayerMapping(object):
                 # special (e.g, [100:] instead of [90:100]).
                 if i+1 == n_i: step_slice = slice(beg, None)
                 else: step_slice = slice(beg, end)
-            
+
                 try:
                     num_feat, num_saved = _save(step_slice, num_feat, num_saved)
                     beg = end

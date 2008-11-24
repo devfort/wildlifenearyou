@@ -244,7 +244,7 @@ def get_language_bidi():
     True = right-to-left layout
     """
     from django.conf import settings
-    
+
     base_lang = get_language().split('-')[0]
     return base_lang in settings.LANGUAGES_BIDI
 

@@ -41,7 +41,7 @@ class Site(models.Model):
 
     def __unicode__(self):
         return self.domain
-    
+
     def delete(self):
         pk = self.pk
         super(Site, self).delete()

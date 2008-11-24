@@ -21,7 +21,7 @@ class GeometryCollection(GEOSGeometry):
         if not args:
             raise TypeError, 'Must provide at least one Geometry to initialize %s.' % self.__class__.__name__
 
-        if len(args) == 1: 
+        if len(args) == 1:
             # If only one geometry provided or a list of geometries is provided
             #  in the first argument.
             if isinstance(args[0], (TupleType, ListType)):
@@ -52,7 +52,7 @@ class GeometryCollection(GEOSGeometry):
         self._checkindex(index)
         if not isinstance(geom, self._allowed):
             raise TypeError('Incompatible Geometry for collection.')
-        
+
         ngeoms = len(self)
         geoms = get_pointer_arr(ngeoms)
         for i in xrange(ngeoms):
@@ -60,7 +60,7 @@ class GeometryCollection(GEOSGeometry):
                 geoms[i] = geom_clone(geom.ptr)
             else:
                 geoms[i] = geom_clone(get_geomn(self.ptr, i))
-        
+
         # Creating a new collection, and destroying the contents of the previous poiner.
         prev_ptr = self.ptr
         srid = self.srid
@@ -94,12 +94,12 @@ class GeometryCollection(GEOSGeometry):
     coords = tuple
 
 # MultiPoint, MultiLineString, and MultiPolygon class definitions.
-class MultiPoint(GeometryCollection): 
+class MultiPoint(GeometryCollection):
     _allowed = Point
     _typeid = 4
-class MultiLineString(GeometryCollection): 
+class MultiLineString(GeometryCollection):
     _allowed = (LineString, LinearRing)
     _typeid = 5
-class MultiPolygon(GeometryCollection): 
+class MultiPolygon(GeometryCollection):
     _allowed = Polygon
     _typeid = 6

@@ -50,12 +50,12 @@ class MigrationStateTest(TestCase):
   def test_applying_and_unapplying(self):
     def assert_applied(f, b, h):
       self.assert_equal([f, b, h], [si.is_applied('001_foo'), si.is_applied('002_bar'), si.is_applied('005_hello')])
-  
+
     si = MigrationState()
     self.cursor.execute(create_new)
-    
+
     assert_applied(False, False, False)
-    
+
     si.mark_as_applied('001_foo')
     assert_applied(True, False, False)
 
@@ -77,7 +77,7 @@ class MigrationStateTest(TestCase):
   def assert_plans(self, si, *plans):
     while plans:
       query, expected_plan, plans = plans[0], plans[1], plans[2:]
-      
+
       if isinstance(expected_plan, type(Exception)) and issubclass(expected_plan, Exception):
         self.assert_raises(expected_plan, lambda: si.plan(*query))
       else:
@@ -89,7 +89,7 @@ class MigrationStateTest(TestCase):
     si = MigrationState(migration_db=db)
 
     si.init()
-    
+
     self.assert_plans(si,
       ['apply', '1'],         [('001_foo', 'up')],
       ['apply', '001_foo'],   [('001_foo', 'up')],
@@ -113,7 +113,7 @@ class MigrationStateTest(TestCase):
       ['downto', '1'],        [],
       ['downto', '2'],        [],
     )
-    
+
     si.mark_as_applied('002_bar')
 
     self.assert_plans(si,
@@ -195,7 +195,7 @@ class MigrationStateTest(TestCase):
     si.mark_as_applied('002_bar')
     si.mark_as_applied('005_hello')
     si.mark_as_applied('005_omg')
-    
+
     self.assert_plans(si,
       ['apply', '1'],         [],
       ['apply', '001_foo'],   [],

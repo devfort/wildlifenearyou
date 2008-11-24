@@ -16,10 +16,10 @@ def place(request, country_code, slug):
 def country(request, country_code):
     country = get_object_or_404(Country, country_code=country_code)
     places = Place.objects.filter(country__country_code=country_code).order_by('known_as')
-        
+
     return render(request, 'places/country.html', {
         'country': country,
         'places': places,
     })
-        
+
 

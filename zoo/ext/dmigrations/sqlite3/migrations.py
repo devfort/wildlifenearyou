@@ -1,9 +1,9 @@
 """
 These classes represent possible migrations. A migration is simply an object
-with an up() method and a down() method - the down() method is allowed to 
-raise an IrreversibleMigration exception. These objects are instances of 
-subclasses of BaseMigration. Migration classes will be provided for stuff 
-ranging from basic SQL migrations to more specialised things such as adding 
+with an up() method and a down() method - the down() method is allowed to
+raise an IrreversibleMigration exception. These objects are instances of
+subclasses of BaseMigration. Migration classes will be provided for stuff
+ranging from basic SQL migrations to more specialised things such as adding
 or removing an index.
 """
 from dmigrations.migrations import BaseMigration
@@ -14,22 +14,22 @@ class IrreversibleMigrationError(Exception):
 
 class Migration(BaseMigration):
     "Explict SQL migration, with sql for migrating both up and down"
-    
+
     def __init__(self, sql_up, sql_down=None):
         self.sql_up = sql_up
         self.sql_down = sql_down
-    
+
     def up(self):
         self.execute_sql(self.sql_up)
-    
+
     def down(self):
         if self.sql_down:
             self.execute_sql(self.sql_down)
         else:
             raise IrreversibleMigrationError, 'No sql_down provided'
-    
+
     def execute_sql(self, sql, return_rows=False):
-        "Executes sql, which can be a string or a list of strings"        
+        "Executes sql, which can be a string or a list of strings"
         statements = []
         if isinstance(sql, basestring):
             # Split string in to multiple statements
@@ -40,10 +40,10 @@ class Migration(BaseMigration):
             statements = sql
         else:
             assert False, 'sql argument must be string or list/tuple'
-        
+
         from django.db import connection
         cursor = connection.cursor()
-        
+
         for statement in statements:
             # Fixes for SQLite, migrations are MySQL statements. This is, of course, Awful.
             statement = re.sub(' ENGINE=[a-z]* default charset=[a-z0-9]*(?i)', '', statement)
@@ -52,24 +52,24 @@ class Migration(BaseMigration):
             statement = re.sub(' AUTO_INCREMENT(?i)', '', statement)
             # Escape % due to format strings
             cursor.execute(statement.replace('%', '%%'))
-        
+
         if return_rows:
             return cursor.fetchall()
-    
+
     def __str__(self):
         return 'Migration, up: %r, down: %r' % (self.sql_up, self.sql_down)
-    
+
 class Compound(BaseMigration):
     """
     A migration that is composed of one or more other migrations. DO NOT USE.
     """
     def __init__(self, migrations=[]):
         self.migrations = migrations
-    
+
     def up(self):
         for migration in self.migrations:
             migration.up()
-    
+
     def down(self):
         for migration in reversed(self.migrations):
             migration.down()
@@ -80,10 +80,10 @@ class Compound(BaseMigration):
 
 class AddColumn(Migration):
     "A migration that adds a database column"
-    
+
     add_column_sql = 'ALTER TABLE `%s_%s` ADD COLUMN `%s` %s;'
     drop_column_sql = 'ALTER TABLE `%s_%s` DROP COLUMN `%s`;'
-    
+
     def __init__(self, app, model, column, spec, constrain_to_table=None):
         self.app, self.model, self.column, self.spec = app, model, column, spec
         if constrain_to_table:
@@ -91,16 +91,16 @@ class AddColumn(Migration):
             sql_down = [self.drop_column_sql % (app, model, "%s_id" % column)]
             # if add_column_sql has NOT NULL in it, bin it
             sql_up[0] = sql_up[0].replace(" NOT NULL", "")
-            
+
         else:
             sql_up = [self.add_column_sql % (app, model, column, spec)]
             sql_down = [self.drop_column_sql % (app, model, column)]
-            
+
         super(AddColumn, self).__init__(
             sql_up,
             sql_down,
         )
-    
+
     def __str__(self):
         return "AddColumn: app: %s, model: %s, column: %s, spec: %s" % (
             self.app, self.model, self.column, self.spec
@@ -108,7 +108,7 @@ class AddColumn(Migration):
 
 class DropColumn(AddColumn):
     """
-    A migration that drops a database column. Needs the full column spec so 
+    A migration that drops a database column. Needs the full column spec so
     it can correctly create the down() method.
     """
     def __init__(self, *args, **kwargs):
@@ -121,10 +121,10 @@ class DropColumn(AddColumn):
 
 class AddIndex(Migration):
     "A migration that adds an index (and removes it on down())"
-    
+
     add_index_sql = 'CREATE INDEX `%s` ON `%s_%s` (`%s`);'
     drop_index_sql = 'ALTER TABLE %s_%s DROP INDEX `%s`;'
-    
+
     def __init__(self, app, model, column):
         self.app, self.model, self.column = app, model, column
         index_name = '%s_%s_%s' % (app, model, column)
@@ -132,7 +132,7 @@ class AddIndex(Migration):
             sql_up = [self.add_index_sql % (index_name, app, model, column)],
             sql_down = [self.drop_index_sql % (app, model, index_name)],
         )
-    
+
     def __str__(self):
         return "AddIndex: app: %s, model: %s, column: %s" % (
             self.app, self.model, self.column
@@ -143,22 +143,22 @@ class DropIndex(AddIndex):
     def __init__(self, app, model, column):
         super(DropIndex, self).__init__(app, model, column)
         self.sql_up, self.sql_down = self.sql_down, self.sql_up
-    
+
     def __str__(self):
         return super(DropIndex, self).replace('AddIndex', 'DropIndex')
 
 class InsertRows(Migration):
     "Inserts some rows in to a table"
-    
+
     insert_row_sql = 'INSERT INTO `%s` (%s) VALUES (%s)'
     delete_rows_sql = 'DELETE FROM `%s` WHERE id IN (%s)'
-    
+
     def __init__(self, table_name, columns, insert_rows, delete_ids):
         self.table_name = table_name
         sql_up = []
         from django.db import connection # so we can use escape_string
         connection.cursor() # Opens connection if not already open
-        
+
         def escape(v):
             if v is None:
                 return 'null'
@@ -169,7 +169,7 @@ class InsertRows(Migration):
             # We get bugs if we use bytestrings elsewhere, so convert back to unicode
             # http://sourceforge.net/forum/forum.php?thread_id=1609278&forum_id=70461
             return u"'%s'" % escaped.decode('utf8')
-        
+
         for row in insert_rows:
             values = ', '.join(map(escape, row))
             sql_up.append(
@@ -177,12 +177,12 @@ class InsertRows(Migration):
                     table_name, ', '.join(map(str, columns)), values
                 )
             )
-        
+
         if delete_ids:
             sql_down = [self.delete_rows_sql % (table_name, ', '.join(map(str, delete_ids)))]
         else:
             sql_down = ["SELECT 1"]
-        
+
         super(InsertRows, self).__init__(
             sql_up = sql_up,
             sql_down = sql_down,

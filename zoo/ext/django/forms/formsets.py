@@ -62,7 +62,7 @@ class BaseFormSet(StrAndUnicode):
             initial = {TOTAL_FORM_COUNT: self._total_form_count,
                        INITIAL_FORM_COUNT: self._initial_form_count}
             self.management_form = ManagementForm(initial=initial, auto_id=self.auto_id, prefix=self.prefix)
-        
+
         # construct the forms in the formset
         self._construct_forms()
 
@@ -74,7 +74,7 @@ class BaseFormSet(StrAndUnicode):
         self.forms = []
         for i in xrange(self._total_form_count):
             self.forms.append(self._construct_form(i))
-    
+
     def _construct_form(self, i, **kwargs):
         """
         Instantiates and returns the i-th form instance in a formset.
@@ -118,7 +118,7 @@ class BaseFormSet(StrAndUnicode):
 
     def _get_deleted_forms(self):
         """
-        Returns a list of forms that have been marked for deletion. Raises an 
+        Returns a list of forms that have been marked for deletion. Raises an
         AttributeError if deletion is not allowed.
         """
         if not self.is_valid() or not self.can_delete:

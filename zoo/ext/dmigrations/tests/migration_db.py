@@ -29,7 +29,7 @@ class MigrationDbTest(TestCase):
   def test_migrations_can_be_initialized_from_directory(self):
     db = MigrationDb(directory=self.mock_migrations_dir)
     db.warn = WarningsMocker()
-    
+
     self.assert_equal([
         "001_foo",
         "002_bar",
@@ -59,7 +59,7 @@ class MigrationDbTest(TestCase):
         "10_gah",
       ], db.list()
     )
-    
+
   def test_nonpy_and_nonnumber_are_ignored(self):
     db = MigrationDb()
     db.populate_migrations_from_ls(["1_foo.py", "1_bar.pyc", "4-ohhi.py", "-9_kitty.py", "1_bar.html", ".", ".boo", "..", "123.py.gz", "hello_45.py", "__init__.py", "___init__.pyc", "hello.py", "hello.pyc"])
@@ -155,5 +155,5 @@ class MigrationDbTest(TestCase):
   def test_migration_path(self):
     db = MigrationDb(directory=self.mock_migrations_dir)
     db.warn = WarningsMocker()
-    
+
     self.assert_equal(self.mock_migrations_dir + '/010_foo.py', db.migration_path('foo'))

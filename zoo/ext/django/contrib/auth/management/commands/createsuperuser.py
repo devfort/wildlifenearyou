@@ -40,7 +40,7 @@ class Command(BaseCommand):
         username = options.get('username', None)
         email = options.get('email', None)
         interactive = options.get('interactive')
-        
+
         # Do quick and dirty validation if --noinput
         if not interactive:
             if not username or not email:
@@ -78,7 +78,7 @@ class Command(BaseCommand):
         # try/except to trap for a keyboard interrupt and exit gracefully.
         if interactive:
             try:
-            
+
                 # Get a username
                 while 1:
                     if not username:
@@ -99,7 +99,7 @@ class Command(BaseCommand):
                     else:
                         sys.stderr.write("Error: That username is already taken.\n")
                         username = None
-            
+
                 # Get an email
                 while 1:
                     if not email:
@@ -111,7 +111,7 @@ class Command(BaseCommand):
                         email = None
                     else:
                         break
-            
+
                 # Get a password
                 while 1:
                     if not password:
@@ -129,6 +129,6 @@ class Command(BaseCommand):
             except KeyboardInterrupt:
                 sys.stderr.write("\nOperation cancelled.\n")
                 sys.exit(1)
-        
+
         User.objects.create_superuser(username, email, password)
         print "Superuser created successfully."

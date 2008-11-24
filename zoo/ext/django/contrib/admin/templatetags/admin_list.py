@@ -70,7 +70,7 @@ pagination = register.inclusion_tag('admin/pagination.html')(pagination)
 
 def result_headers(cl):
     lookup_opts = cl.lookup_opts
-    
+
     for i, field_name in enumerate(cl.list_display):
         attr = None
         try:
@@ -97,7 +97,7 @@ def result_headers(cl):
                             raise AttributeError, \
                                 "'%s' model or '%s' objects have no attribute '%s'" % \
                                     (lookup_opts.object_name, cl.model_admin.__class__, field_name)
-                
+
                 try:
                     header = attr.short_description
                 except AttributeError:

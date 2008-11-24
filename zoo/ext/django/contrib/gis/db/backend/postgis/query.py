@@ -14,7 +14,7 @@ qn = connection.ops.quote_name
 POSTGIS_VERSION, MAJOR_VERSION, MINOR_VERSION1, MINOR_VERSION2 = postgis_version_tuple()
 
 # The supported PostGIS versions.
-#  TODO: Confirm tests with PostGIS versions 1.1.x -- should work.  
+#  TODO: Confirm tests with PostGIS versions 1.1.x -- should work.
 #        Versions <= 1.0.x do not use GEOS C API, and will not be supported.
 if MAJOR_VERSION != 1 or (MAJOR_VERSION == 1 and MINOR_VERSION1 < 1):
     raise Exception('PostGIS version %s not supported.' % POSTGIS_VERSION)
@@ -97,7 +97,7 @@ class PostGISDistance(PostGISFunction):
     "For PostGIS distance operations."
     dist_func = 'Distance'
     def __init__(self, operator):
-        super(PostGISDistance, self).__init__(self.dist_func, end_subst=') %s %s', 
+        super(PostGISDistance, self).__init__(self.dist_func, end_subst=') %s %s',
                                               operator=operator, result='%%s')
 
 class PostGISSpheroidDistance(PostGISFunction):
@@ -105,8 +105,8 @@ class PostGISSpheroidDistance(PostGISFunction):
     dist_func = 'distance_spheroid'
     def __init__(self, operator):
         # An extra parameter in `end_subst` is needed for the spheroid string.
-        super(PostGISSpheroidDistance, self).__init__(self.dist_func, 
-                                                      beg_subst='%s(%s, %%s, %%s', 
+        super(PostGISSpheroidDistance, self).__init__(self.dist_func,
+                                                      beg_subst='%s(%s, %%s, %%s',
                                                       end_subst=') %s %s',
                                                       operator=operator, result='%%s')
 
@@ -116,7 +116,7 @@ class PostGISSphereDistance(PostGISFunction):
     def __init__(self, operator):
         super(PostGISSphereDistance, self).__init__(self.dist_func, end_subst=') %s %s',
                                                     operator=operator, result='%%s')
-                                                    
+
 class PostGISRelate(PostGISFunctionParam):
     "For PostGIS Relate(<geom>, <pattern>) calls."
     pattern_regex = re.compile(r'^[012TF\*]{9}$')
@@ -239,7 +239,7 @@ def get_geo_where_clause(table_alias, name, lookup_type, geo_annot):
         # See if a PostGIS geometry function matches the lookup type.
         tmp = POSTGIS_GEOMETRY_FUNCTIONS[lookup_type]
 
-        # Lookup types that are tuples take tuple arguments, e.g., 'relate' and 
+        # Lookup types that are tuples take tuple arguments, e.g., 'relate' and
         # distance lookups.
         if isinstance(tmp, tuple):
             # First element of tuple is the PostGISOperation instance, and the
@@ -248,21 +248,21 @@ def get_geo_where_clause(table_alias, name, lookup_type, geo_annot):
             op, arg_type = tmp
 
             # Ensuring that a tuple _value_ was passed in from the user
-            if not isinstance(geo_annot.value, (tuple, list)): 
+            if not isinstance(geo_annot.value, (tuple, list)):
                 raise TypeError('Tuple required for `%s` lookup type.' % lookup_type)
-           
+
             # Number of valid tuple parameters depends on the lookup type.
             nparams = len(geo_annot.value)
             if not num_params(lookup_type, nparams):
                 raise ValueError('Incorrect number of parameters given for `%s` lookup type.' % lookup_type)
-            
+
             # Ensuring the argument type matches what we expect.
             if not isinstance(geo_annot.value[1], arg_type):
                 raise TypeError('Argument type should be %s, got %s instead.' % (arg_type, type(geo_annot.value[1])))
 
             # For lookup type `relate`, the op instance is not yet created (has
             # to be instantiated here to check the pattern parameter).
-            if lookup_type == 'relate': 
+            if lookup_type == 'relate':
                 op = op(geo_annot.value[1])
             elif lookup_type in DISTANCE_FUNCTIONS and lookup_type != 'dwithin':
                 if geo_annot.geodetic:

@@ -36,7 +36,7 @@ class Feature(object):
         """
         Gets the Field object at the specified index, which may be either
         an integer or the Field's string label.  Note that the Field object
-        is not the field's _value_ -- use the `get` method instead to 
+        is not the field's _value_ -- use the `get` method instead to
         retrieve the value (e.g. an integer) instead of a Field instance.
         """
         if isinstance(index, basestring):
@@ -46,7 +46,7 @@ class Feature(object):
                 raise OGRIndexError('index out of range')
             i = index
         return Field(self._ptr, i)
-    
+
     def __iter__(self):
         "Iterates over each field in the Feature."
         for i in xrange(self.num_fields):
@@ -55,7 +55,7 @@ class Feature(object):
     def __len__(self):
         "Returns the count of fields in this feature."
         return self.num_fields
-        
+
     def __str__(self):
         "The string name of the feature."
         return 'Feature FID %d in Layer<%s>' % (self.fid, self.layer_name)
@@ -69,7 +69,7 @@ class Feature(object):
     def fid(self):
         "Returns the feature identifier."
         return get_fid(self._ptr)
-        
+
     @property
     def layer_name(self):
         "Returns the name of the layer for the feature."
@@ -83,7 +83,7 @@ class Feature(object):
     @property
     def fields(self):
         "Returns a list of fields in the Feature."
-        return [get_field_name(get_field_defn(self._fdefn, i)) 
+        return [get_field_name(get_field_defn(self._fdefn, i))
                 for i in xrange(self.num_fields)]
 
     @property
@@ -97,7 +97,7 @@ class Feature(object):
     def geom_type(self):
         "Returns the OGR Geometry Type for this Feture."
         return OGRGeomType(get_fd_geom_type(self._fdefn))
-    
+
     #### Feature Methods ####
     def get(self, field):
         """

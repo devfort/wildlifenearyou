@@ -40,12 +40,12 @@ class DatabaseCreation(BaseDatabaseCreation):
     def sql_for_inline_foreign_key_references(self, field, known_models, style):
         "All inline references are pending under MySQL"
         return [], True
-        
+
     def sql_for_inline_many_to_many_references(self, model, field, style):
         from django.db import models
         opts = model._meta
         qn = self.connection.ops.quote_name
-        
+
         table_output = [
             '    %s %s %s,' %
                 (style.SQL_FIELD(qn(field.m2m_column_name())),
@@ -63,4 +63,4 @@ class DatabaseCreation(BaseDatabaseCreation):
                 field.rel.to._meta.db_table, field.rel.to._meta.pk.column)
             ]
         return table_output, deferred
-        
+

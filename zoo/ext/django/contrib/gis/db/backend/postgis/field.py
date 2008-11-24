@@ -36,7 +36,7 @@ class PostGISField(Field):
                    style.SQL_FIELD(qn(self.column)) + \
                    style.SQL_KEYWORD(' SET NOT NULL') + ';'
         return sql
-    
+
     def _geom_index(self, style, db_table,
                     index_type='GIST', index_opts='GIST_GEOMETRY_OPS'):
         "Creates a GiST index for this geometry field."

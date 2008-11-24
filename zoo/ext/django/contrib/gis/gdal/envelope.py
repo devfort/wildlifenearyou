@@ -37,7 +37,7 @@ class Envelope(object):
         The initialization function may take an OGREnvelope structure, 4-element
         tuple or list, or 4 individual arguments.
         """
-        
+
         if len(args) == 1:
             if isinstance(args[0], OGREnvelope):
                 # OGREnvelope (a ctypes Structure) was passed in.
@@ -88,7 +88,7 @@ class Envelope(object):
         self._envelope.MinY = seq[1]
         self._envelope.MaxX = seq[2]
         self._envelope.MaxY = seq[3]
-    
+
     @property
     def min_x(self):
         "Returns the value of the minimum X coordinate."

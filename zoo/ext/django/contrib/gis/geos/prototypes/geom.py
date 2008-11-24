@@ -33,7 +33,7 @@ def int_from_geom(func, zero=False):
     "Argument is a geometry, return type is an integer."
     func.argtypes = [GEOM_PTR]
     func.restype = c_int
-    if zero: 
+    if zero:
         func.errcheck = check_zero
     else:
         func.errcheck = check_minus_one
@@ -49,7 +49,7 @@ def string_from_geom(func):
 
 ### ctypes prototypes ###
 
-# TODO: Tell all users to use GEOS 3.0.0, instead of the release 
+# TODO: Tell all users to use GEOS 3.0.0, instead of the release
 #  candidates, and use the new Reader and Writer APIs (e.g.,
 #  GEOSWKT[Reader|Writer], GEOSWKB[Reader|Writer]).  A good time
 #  to do this will be when Refractions releases a Windows PostGIS
@@ -75,7 +75,7 @@ get_num_geoms = int_from_geom(lgeos.GEOSGetNumGeometries)
 
 # Geometry creation factories
 create_point = geom_output(lgeos.GEOSGeom_createPoint, [CS_PTR])
-create_linestring = geom_output(lgeos.GEOSGeom_createLineString, [CS_PTR]) 
+create_linestring = geom_output(lgeos.GEOSGeom_createLineString, [CS_PTR])
 create_linearring = geom_output(lgeos.GEOSGeom_createLinearRing, [CS_PTR])
 
 # Polygon and collection creation routines are special and will not

@@ -2,11 +2,11 @@ import os
 from os.path import join, normcase, normpath, abspath, isabs, sep
 from django.utils.encoding import force_unicode
 
-# Define our own abspath function that can handle joining 
+# Define our own abspath function that can handle joining
 # unicode paths to a current working directory that has non-ASCII
-# characters in it.  This isn't necessary on Windows since the 
+# characters in it.  This isn't necessary on Windows since the
 # Windows version of abspath handles this correctly.  The Windows
-# abspath also handles drive letters differently than the pure 
+# abspath also handles drive letters differently than the pure
 # Python implementation, so it's best not to replace it.
 if os.name == 'nt':
     abspathu = abspath

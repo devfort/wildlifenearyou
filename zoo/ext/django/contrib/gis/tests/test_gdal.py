@@ -8,7 +8,7 @@ from unittest import TestSuite, TextTestRunner
 from django.contrib.gis.tests import \
      test_gdal_driver, test_gdal_ds, test_gdal_envelope, \
      test_gdal_geom, test_gdal_srs
-     
+
 
 test_suites = [test_gdal_driver.suite(),
                test_gdal_ds.suite(),

@@ -6,7 +6,7 @@
  GeoIP(R) is a registered trademark of MaxMind, LLC of Boston, Massachusetts.
 
  For IP-based geolocation, this module requires the GeoLite Country and City
- datasets, in binary format (CSV will not work!).  The datasets may be 
+ datasets, in binary format (CSV will not work!).  The datasets may be
  downloaded from MaxMind at http://www.maxmind.com/download/geoip/database/.
  Grab GeoIP.dat.gz and GeoLiteCity.dat.gz, and unzip them in the directory
  corresponding to settings.GEOIP_PATH.  See the GeoIP docstring and examples
@@ -34,7 +34,7 @@
  >>> g.lat_lon('salon.com')
  (37.789798736572266, -122.39420318603516)
  >>> g.lon_lat('uh.edu')
- (-95.415199279785156, 29.77549934387207) 
+ (-95.415199279785156, 29.77549934387207)
  >>> g.geos('24.124.1.80').wkt
  'POINT (-95.2087020874023438 39.0392990112304688)'
 """
@@ -45,7 +45,7 @@ from django.conf import settings
 if not settings._target: settings.configure()
 
 # Creating the settings dictionary with any settings, if needed.
-GEOIP_SETTINGS = dict((key, getattr(settings, key)) 
+GEOIP_SETTINGS = dict((key, getattr(settings, key))
                       for key in ('GEOIP_PATH', 'GEOIP_LIBRARY_PATH', 'GEOIP_COUNTRY', 'GEOIP_CITY')
                       if hasattr(settings, key))
 lib_path = GEOIP_SETTINGS.get('GEOIP_LIBRARY_PATH', None)
@@ -197,7 +197,7 @@ class GeoIP(object):
                 raise GeoIPException('Unable to recognize database edition: %s' % info)
         else:
             raise GeoIPException('GeoIP path must be a valid file or directory.')
-        
+
         # `_init_db` does the dirty work.
         self._init_db(country, cache, '_country', cntry_ptr)
         self._init_db(city, cache, '_city', city_ptr)
@@ -247,7 +247,7 @@ class GeoIP(object):
             return dict((tup[0], getattr(record, tup[0])) for tup in record._fields_)
         else:
             return None
-    
+
     def country_code(self, query):
         "Returns the country code for the given IP Address or FQDN."
         self._check_query(query, city_or_country=True)
@@ -268,12 +268,12 @@ class GeoIP(object):
 
     def country(self, query):
         """
-        Returns a dictonary with with the country code and name when given an 
+        Returns a dictonary with with the country code and name when given an
         IP address or a Fully Qualified Domain Name (FQDN).  For example, both
         '24.124.1.80' and 'djangoproject.com' are valid parameters.
         """
         # Returning the country code and name
-        return {'country_code' : self.country_code(query), 
+        return {'country_code' : self.country_code(query),
                 'country_name' : self.country_name(query),
                 }
 
@@ -318,7 +318,7 @@ class GeoIP(object):
             ci = geoip_dbinfo(self._city)
         return ci
     city_info = property(city_info)
-        
+
     def info(self):
         "Returns information about all GeoIP databases in use."
         return 'Country:\n\t%s\nCity:\n\t%s' % (self.country_info, self.city_info)

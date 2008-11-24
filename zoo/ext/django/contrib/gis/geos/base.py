@@ -12,10 +12,10 @@ from django.contrib.gis.geos.coordseq import GEOSCoordSeq
 from django.contrib.gis.geos.error import GEOSException
 from django.contrib.gis.geos.libgeos import GEOM_PTR
 
-# All other functions in this module come from the ctypes 
+# All other functions in this module come from the ctypes
 # prototypes module -- which handles all interaction with
 # the underlying GEOS library.
-from django.contrib.gis.geos.prototypes import * 
+from django.contrib.gis.geos.prototypes import *
 
 # Trying to import GDAL libraries, if available.  Have to place in
 # try/except since this package may be used outside GeoDjango.
@@ -41,21 +41,21 @@ class GEOSGeometry(object):
     #### Python 'magic' routines ####
     def __init__(self, geo_input, srid=None):
         """
-        The base constructor for GEOS geometry objects, and may take the 
+        The base constructor for GEOS geometry objects, and may take the
         following inputs:
-         
+
          * string: WKT
          * string: HEXEWKB (a PostGIS-specific canonical form)
          * buffer: WKB
-        
+
         The `srid` keyword is used to specify the Source Reference Identifier
         (SRID) number for this Geometry.  If not set, the SRID will be None.
-        """ 
+        """
         if isinstance(geo_input, basestring):
             if isinstance(geo_input, UnicodeType):
                 # Encoding to ASCII, WKT or HEXEWKB doesn't need any more.
                 geo_input = geo_input.encode('ascii')
-                            
+
             wkt_m = wkt_regex.match(geo_input)
             if wkt_m:
                 # Handling WKT input.
@@ -94,11 +94,11 @@ class GEOSGeometry(object):
         "Helper routine for performing post-initialization setup."
         # Setting the SRID, if given.
         if srid and isinstance(srid, int): self.srid = srid
-        
+
         # Setting the class type (e.g., Point, Polygon, etc.)
         self.__class__ = GEOS_CLASSES[self.geom_typeid]
 
-        # Setting the coordinate sequence for the geometry (will be None on 
+        # Setting the coordinate sequence for the geometry (will be None on
         # geometries that do not have coordinate sequences)
         self._set_cs()
 
@@ -109,7 +109,7 @@ class GEOSGeometry(object):
         this raises an exception when the pointer is NULL, thus preventing
         the C library from attempting to access an invalid memory location.
         """
-        if self._ptr: 
+        if self._ptr:
             return self._ptr
         else:
             raise GEOSException('NULL GEOS pointer encountered; was this geometry modified?')
@@ -131,7 +131,7 @@ class GEOSGeometry(object):
     def __deepcopy__(self, memodict):
         """
         The `deepcopy` routine is used by the `Node` class of django.utils.tree;
-        thus, the protocol routine needs to be implemented to return correct 
+        thus, the protocol routine needs to be implemented to return correct
         copies (clones) of these GEOS objects, which use C pointers.
         """
         return self.clone()
@@ -260,7 +260,7 @@ class GEOSGeometry(object):
     @property
     def empty(self):
         """
-        Returns a boolean indicating whether the set of points in this Geometry 
+        Returns a boolean indicating whether the set of points in this Geometry
         are empty.
         """
         return geos_isempty(self.ptr)
@@ -307,7 +307,7 @@ class GEOSGeometry(object):
 
     def equals(self, other):
         """
-        Returns true if the DE-9IM intersection matrix for the two Geometries 
+        Returns true if the DE-9IM intersection matrix for the two Geometries
         is T*F**FFF*.
         """
         return geos_equals(self.ptr, other.ptr)
@@ -384,14 +384,14 @@ class GEOSGeometry(object):
         included in this representation, because the GEOS C library uses
         -1 by default, even if the SRID is set.
         """
-        # A possible faster, all-python, implementation: 
+        # A possible faster, all-python, implementation:
         #  str(self.wkb).encode('hex')
         return to_hex(self.ptr, byref(c_size_t()))
 
     @property
     def json(self):
         """
-        Returns GeoJSON representation of this Geometry if GDAL 1.5+ 
+        Returns GeoJSON representation of this Geometry if GDAL 1.5+
         is installed.
         """
         if GEOJSON: return self.ogr.json
@@ -436,10 +436,10 @@ class GEOSGeometry(object):
 
     def transform(self, ct, clone=False):
         """
-        Requires GDAL. Transforms the geometry according to the given 
-        transformation object, which may be an integer SRID, and WKT or 
-        PROJ.4 string. By default, the geometry is transformed in-place and 
-        nothing is returned. However if the `clone` keyword is set, then this 
+        Requires GDAL. Transforms the geometry according to the given
+        transformation object, which may be an integer SRID, and WKT or
+        PROJ.4 string. By default, the geometry is transformed in-place and
+        nothing is returned. However if the `clone` keyword is set, then this
         geometry will not be modified and a transformed clone will be returned
         instead.
         """
@@ -449,7 +449,7 @@ class GEOSGeometry(object):
             g.transform(ct)
             wkb = str(g.wkb)
             ptr = from_wkb(wkb, len(wkb))
-            if clone: 
+            if clone:
                 # User wants a cloned transformed geometry returned.
                 return GEOSGeometry(ptr, srid=g.srid)
             if ptr:
@@ -493,7 +493,7 @@ class GEOSGeometry(object):
     @property
     def convex_hull(self):
         """
-        Returns the smallest convex Polygon that contains all the points 
+        Returns the smallest convex Polygon that contains all the points
         in the Geometry.
         """
         return self._topology(geos_convexhull(self.ptr))
@@ -529,11 +529,11 @@ class GEOSGeometry(object):
         to the specified tolerance (higher tolerance => less points).  If no
         tolerance provided, defaults to 0.
 
-        By default, this function does not preserve topology - e.g. polygons can 
-        be split, collapse to lines or disappear holes can be created or 
-        disappear, and lines can cross. By specifying preserve_topology=True, 
-        the result will have the same dimension and number of components as the 
-        input. This is significantly slower.         
+        By default, this function does not preserve topology - e.g. polygons can
+        be split, collapse to lines or disappear holes can be created or
+        disappear, and lines can cross. By specifying preserve_topology=True,
+        the result will have the same dimension and number of components as the
+        input. This is significantly slower.
         """
         if preserve_topology:
             return self._topology(geos_preservesimplify(self.ptr, tolerance))
@@ -563,7 +563,7 @@ class GEOSGeometry(object):
         and the other. Units will be in those of the coordinate system of
         the Geometry.
         """
-        if not isinstance(other, GEOSGeometry): 
+        if not isinstance(other, GEOSGeometry):
             raise TypeError('distance() works only on other GEOS Geometries.')
         return geos_distance(self.ptr, other.ptr, byref(c_double()))
 
@@ -589,7 +589,7 @@ class GEOSGeometry(object):
         circumfrence of a Polygon).
         """
         return geos_length(self.ptr, byref(c_double()))
-    
+
     def clone(self):
         "Clones this Geometry."
         return GEOSGeometry(geom_clone(self.ptr), srid=self.srid)

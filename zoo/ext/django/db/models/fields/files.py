@@ -88,7 +88,7 @@ class FieldFile(File):
         if hasattr(self, '_file'):
             self.close()
             del self._file
-            
+
         self.storage.delete(self.name)
 
         self._name = None

@@ -10,7 +10,7 @@ cities = (('Aurora', 'TX', -97.516111, 33.058333),
            )
 
 class RelatedGeoModelTest(unittest.TestCase):
-    
+
     def test01_setup(self):
         "Setting up for related model tests."
         for name, state, lon, lat in cities:
@@ -18,7 +18,7 @@ class RelatedGeoModelTest(unittest.TestCase):
             loc.save()
             c = City(name=name, state=state, location=loc)
             c.save()
-            
+
     def test02_select_related(self):
         "Testing `select_related` on geographic models (see #7126)."
         qs1 = City.objects.all()
@@ -31,7 +31,7 @@ class RelatedGeoModelTest(unittest.TestCase):
                 self.assertEqual(nm, c.name)
                 self.assertEqual(st, c.state)
                 self.assertEqual(Point(lon, lat), c.location.point)
-        
+
     @no_mysql
     def test03_transform_related(self):
         "Testing the `transform` GeoQuerySet method on related geographic models."
@@ -43,7 +43,7 @@ class RelatedGeoModelTest(unittest.TestCase):
         else:
             tol = 0
             nqueries = 3
-            
+
         def check_pnt(ref, pnt):
             self.assertAlmostEqual(ref.x, pnt.x, tol)
             self.assertAlmostEqual(ref.y, pnt.y, tol)
@@ -64,7 +64,7 @@ class RelatedGeoModelTest(unittest.TestCase):
         for name, srid, wkt in transformed:
             # Doing this implicitly sets `select_related` select the location.
             qs = list(City.objects.filter(name=name).transform(srid, field_name='location__point'))
-            check_pnt(GEOSGeometry(wkt, srid), qs[0].location.point) 
+            check_pnt(GEOSGeometry(wkt, srid), qs[0].location.point)
         #settings.DEBUG= dbg
 
         # Verifying the number of issued SQL queries.
@@ -91,7 +91,7 @@ class RelatedGeoModelTest(unittest.TestCase):
         self.assertEqual(ref_u2, u2)
 
     # TODO: Related tests for KML, GML, and distance lookups.
-        
+
 def suite():
     s = unittest.TestSuite()
     s.addTest(unittest.makeSuite(RelatedGeoModelTest))

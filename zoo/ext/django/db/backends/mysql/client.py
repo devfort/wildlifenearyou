@@ -14,7 +14,7 @@ class DatabaseClient(BaseDatabaseClient):
         port = settings.DATABASE_OPTIONS.get('port', settings.DATABASE_PORT)
         defaults_file = settings.DATABASE_OPTIONS.get('read_default_file')
         # Seems to be no good way to set sql_mode with CLI.
-    
+
         if defaults_file:
             args += ["--defaults-file=%s" % defaults_file]
         if user:

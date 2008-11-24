@@ -44,7 +44,7 @@ class GeoManager(Manager):
 
     def make_line(self, *args, **kwargs):
         return self.get_query_set().make_line(*args, **kwargs)
-    
+
     def mem_size(self, *args, **kwargs):
         return self.get_query_set().mem_size(*args, **kwargs)
 

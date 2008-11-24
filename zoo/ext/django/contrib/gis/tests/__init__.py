@@ -95,13 +95,13 @@ def run_gis_tests(test_labels, **kwargs):
         new_installed.append(module_name)
 
         # Getting the model test suite
-        tsuite = getattr(__import__('django.contrib.gis.tests.%s' % test_model, globals(), locals(), [test_module_name]), 
+        tsuite = getattr(__import__('django.contrib.gis.tests.%s' % test_model, globals(), locals(), [test_module_name]),
                          test_module_name)
         gis_suite.addTest(tsuite.suite())
 
-    # Resetting the loaded flag to take into account what we appended to 
-    # the INSTALLED_APPS (since this routine is invoked through 
-    # django/core/management, it caches the apps; this ensures that syncdb 
+    # Resetting the loaded flag to take into account what we appended to
+    # the INSTALLED_APPS (since this routine is invoked through
+    # django/core/management, it caches the apps; this ensures that syncdb
     # will see our appended models)
     settings.INSTALLED_APPS = new_installed
     loading.cache.loaded = False
@@ -117,12 +117,12 @@ def run_gis_tests(test_labels, **kwargs):
 
 def run_tests(test_labels, verbosity=1, interactive=True, extra_tests=[], suite=None):
     """
-    This module allows users to run tests for GIS apps that require the creation 
+    This module allows users to run tests for GIS apps that require the creation
     of a spatial database.  Currently, this is only required for PostgreSQL as
     PostGIS needs extra overhead in test database creation.
 
-    In order to create a PostGIS database, the DATABASE_USER (or 
-    TEST_DATABASE_USER, if defined) will require superuser priviliges.  
+    In order to create a PostGIS database, the DATABASE_USER (or
+    TEST_DATABASE_USER, if defined) will require superuser priviliges.
 
     To accomplish this outside the `postgres` user, you have a few options:
       (A) Make your user a super user:
@@ -136,11 +136,11 @@ def run_tests(test_labels, verbosity=1, interactive=True, extra_tests=[], suite=
       (B) Create your own PostgreSQL database as a local user:
         1. Initialize database: `initdb -D /path/to/user/db`
         2. If there's already a Postgres instance on the machine, it will need
-           to use a different TCP port than 5432. Edit postgresql.conf (in 
-           /path/to/user/db) to change the database port (e.g. `port = 5433`).  
+           to use a different TCP port than 5432. Edit postgresql.conf (in
+           /path/to/user/db) to change the database port (e.g. `port = 5433`).
         3. Start this database `pg_ctl -D /path/to/user/db start`
 
-      (C) On Windows platforms the pgAdmin III utility may also be used as 
+      (C) On Windows platforms the pgAdmin III utility may also be used as
         a simple way to add superuser privileges to your database user.
 
     The TEST_RUNNER needs to be set in your settings like so:
@@ -148,10 +148,10 @@ def run_tests(test_labels, verbosity=1, interactive=True, extra_tests=[], suite=
       TEST_RUNNER='django.contrib.gis.tests.run_tests'
 
     Note: This test runner assumes that the PostGIS SQL files ('lwpostgis.sql'
-    and 'spatial_ref_sys.sql') are installed in the directory specified by 
+    and 'spatial_ref_sys.sql') are installed in the directory specified by
     `pg_config --sharedir` (and defaults to /usr/local/share if that fails).
     This behavior is overridden if POSTGIS_SQL_PATH is set in your settings.
-    
+
     Windows users should set POSTGIS_SQL_PATH manually because the output
     of `pg_config` uses paths like 'C:/PROGRA~1/POSTGR~1/..'.
 
@@ -173,8 +173,8 @@ def run_tests(test_labels, verbosity=1, interactive=True, extra_tests=[], suite=
     old_name = settings.DATABASE_NAME
 
     # The suite may be passed in manually, e.g., when we run the GeoDjango test,
-    # we want to build it and pass it in due to some customizations.  Otherwise, 
-    # the normal test suite creation process from `django.test.simple.run_tests` 
+    # we want to build it and pass it in due to some customizations.  Otherwise,
+    # the normal test suite creation process from `django.test.simple.run_tests`
     # is used to create the test suite.
     if suite is None:
         suite = unittest.TestSuite()
@@ -188,7 +188,7 @@ def run_tests(test_labels, verbosity=1, interactive=True, extra_tests=[], suite=
         else:
             for app in get_apps():
                 suite.addTest(build_suite(app))
-    
+
         for test in extra_tests:
             suite.addTest(test)
 

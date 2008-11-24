@@ -2,13 +2,13 @@ from django.db import models
 from zoo.utils import attrproperty
 
 class AnimalClass(models.Model):
-    name = models.CharField(max_length=255, blank=False, null=False, 
+    name = models.CharField(max_length=255, blank=False, null=False,
         unique=True
     )
-    
+
     class Meta:
         verbose_name_plural = 'animal classes'
-    
+
     def __unicode__(self):
         return self.name
 
@@ -31,4 +31,4 @@ class Animal(models.Model):
 
     def __unicode__(self):
         return '%s (%s) of class %s' % (self.common_name, self.latin_name, self.animal_class.name,)
-    
+

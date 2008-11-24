@@ -22,7 +22,7 @@ class Field(object):
         # Setting the feature pointer and index.
         self._feat = feat
         self._index = index
-        
+
         # Getting the pointer for this field.
         fld = get_feat_field_defn(feat, index)
         if not fld:
@@ -140,7 +140,7 @@ class OFTDateTime(Field):
         yy, mm, dd, hh, mn, ss, tz = self.as_datetime()
         # TODO: Adapt timezone information.
         #  See http://lists.maptools.org/pipermail/gdal-dev/2006-February/007990.html
-        #  The `tz` variable has values of: 0=unknown, 1=localtime (ambiguous), 
+        #  The `tz` variable has values of: 0=unknown, 1=localtime (ambiguous),
         #  100=GMT, 104=GMT+1, 80=GMT-5, etc.
         try:
             return datetime(yy.value, mm.value, dd.value, hh.value, mn.value, ss.value)

@@ -14,7 +14,7 @@ class BaseSpatialBackend(object):
         kwargs.setdefault('distance_functions', {})
         kwargs.setdefault('limited_where', {})
         for k, v in kwargs.iteritems(): setattr(self, k, v)
- 
+
     def __getattr__(self, name):
         """
         All attributes of the spatial backend return False by default.
@@ -23,7 +23,7 @@ class BaseSpatialBackend(object):
             return self.__dict__[name]
         except KeyError:
             return False
-            
-        
-        
-    
+
+
+
+

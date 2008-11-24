@@ -55,7 +55,7 @@ class OutputChecker(doctest.OutputChecker):
         """Tries to do a 'xml-comparision' of want and got.  Plain string
         comparision doesn't always work because, for example, attribute
         ordering should not be important.
-        
+
         Based on http://codespeak.net/svn/lxml/trunk/src/lxml/doctestcompare.py
         """
         _norm_whitespace_re = re.compile(r'[ \t\n][ \t\n]+')
@@ -102,7 +102,7 @@ class OutputChecker(doctest.OutputChecker):
             wrapper = '<root>%s</root>'
             want = wrapper % want
             got = wrapper % got
-            
+
         # Parse the want and got strings, and compare the parsings.
         try:
             want_root = parseString(want).firstChild
@@ -174,7 +174,7 @@ class TestCase(unittest.TestCase):
         """Performs any pre-test setup. This includes:
 
             * Flushing the database.
-            * If the Test Case class has a 'fixtures' member, installing the 
+            * If the Test Case class has a 'fixtures' member, installing the
               named fixtures.
             * If the Test Case class has a 'urls' member, replace the
               ROOT_URLCONF with it.

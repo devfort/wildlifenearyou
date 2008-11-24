@@ -20,15 +20,15 @@ from accounts import views as accounts
 urlpatterns = patterns('',
     # Example:
     # (r'^zoo/', include('zoo.foo.urls')),
-    
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
+
+    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    
+
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
-    
+
     # User accounts stuff
     url(r'^login/$', 'django.contrib.auth.views.login', {
         'template_name': 'accounts/login.html'
@@ -36,25 +36,25 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {
         'next_page': '/login/'
     }, name='accounts-logout'),
-    url(r'^register/$', accounts.register, 
+    url(r'^register/$', accounts.register,
         name='accounts-register'),
-    url(r'^welcome/$', accounts.welcome, 
+    url(r'^welcome/$', accounts.welcome,
         name='accounts-welcome'),
     url(r'^profile/$', accounts.profile_default,
-        name='accounts-default'),    
-    url(r'^profile/(\w+)/$', accounts.profile, 
+        name='accounts-default'),
+    url(r'^profile/(\w+)/$', accounts.profile,
         name='accounts-profile'),
-    url(r'^profile/(\w+)/edit/$', accounts.profile_edit, 
+    url(r'^profile/(\w+)/edit/$', accounts.profile_edit,
         name='accounts-profile-edit'),
-    
+
     # Dodo
-    (r'^animal/dodo/$', 
+    (r'^animal/dodo/$',
         lambda r: http.HttpResponseGone('410 Gone')
     ),
-    (r'^latin/raphus-cucullatus/$', 
+    (r'^latin/raphus-cucullatus/$',
         lambda r: http.HttpResponseRedirect('/animal/dodo/')
     ),
-    
+
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
 

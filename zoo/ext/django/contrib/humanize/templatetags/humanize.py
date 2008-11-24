@@ -80,7 +80,7 @@ def naturalday(value, arg=None):
     present day returns representing string. Otherwise, returns a string
     formatted according to settings.DATE_FORMAT.
     """
-    try: 
+    try:
         value = date(value.year, value.month, value.day)
     except AttributeError:
         # Passed value wasn't a date object

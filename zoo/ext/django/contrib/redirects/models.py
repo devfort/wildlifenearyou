@@ -15,6 +15,6 @@ class Redirect(models.Model):
         db_table = 'django_redirect'
         unique_together=(('site', 'old_path'),)
         ordering = ('old_path',)
-    
+
     def __unicode__(self):
         return "%s ---> %s" % (self.old_path, self.new_path)

@@ -38,7 +38,7 @@ from django.contrib.gis.gdal.prototypes.srs import *
 class SpatialReference(object):
     """
     A wrapper for the OGRSpatialReference object.  According to the GDAL website,
-    the SpatialReference object "provide[s] services to represent coordinate 
+    the SpatialReference object "provide[s] services to represent coordinate
     systems (projections and datums) and to transform between them."
     """
 
@@ -51,8 +51,8 @@ class SpatialReference(object):
     def __init__(self, srs_input='', srs_type='wkt'):
         """
         Creates a GDAL OSR Spatial Reference object from the given input.
-        The input may be string of OGC Well Known Text (WKT), an integer 
-        EPSG code, a PROJ.4 string, and/or a projection "well known" shorthand 
+        The input may be string of OGC Well Known Text (WKT), an integer
+        EPSG code, a PROJ.4 string, and/or a projection "well known" shorthand
         string (one of 'WGS84', 'WGS72', 'NAD27', 'NAD83').
         """
         # Intializing pointer and string buffer.
@@ -67,14 +67,14 @@ class SpatialReference(object):
             epsg_m = self._epsg_regex.match(srs_input)
             proj_m = self._proj_regex.match(srs_input)
             if epsg_m:
-                # Is this an EPSG well known name?    
+                # Is this an EPSG well known name?
                 srs_type = 'epsg'
                 srs_input = int(epsg_m.group('epsg'))
             elif proj_m:
                 # Is the string a PROJ.4 string?
                 srs_type = 'proj'
             elif srs_input in self._well_known:
-                # Is this a short-hand well known name?  
+                # Is this a short-hand well known name?
                 srs_type = 'epsg'
                 srs_input = self._well_known[srs_input]
             elif srs_type == 'proj':
@@ -113,8 +113,8 @@ class SpatialReference(object):
 
     def __getitem__(self, target):
         """
-        Returns the value of the given string attribute node, None if the node 
-        doesn't exist.  Can also take a tuple as a parameter, (target, child), 
+        Returns the value of the given string attribute node, None if the node
+        doesn't exist.  Can also take a tuple as a parameter, (target, child),
         where child is the index of the attribute in the WKT.  For example:
 
         >>> wkt = 'GEOGCS["WGS 84", DATUM["WGS_1984, ... AUTHORITY["EPSG","4326"]]')
@@ -156,7 +156,7 @@ class SpatialReference(object):
     def auth_name(self, target):
         "Returns the authority name for the given string target node."
         return get_auth_name(self._ptr, target)
-    
+
     def auth_code(self, target):
         "Returns the authority code for the given string target node."
         return get_auth_code(self._ptr, target)
@@ -183,7 +183,7 @@ class SpatialReference(object):
     def validate(self):
         "Checks to see if the given spatial reference is valid."
         srs_validate(self._ptr)
-    
+
     #### Name & SRID properties ####
     @property
     def name(self):
@@ -200,7 +200,7 @@ class SpatialReference(object):
             return int(self.attr_value('AUTHORITY', 1))
         except (TypeError, ValueError):
             return None
-        
+
     #### Unit Properties ####
     @property
     def linear_name(self):
@@ -229,7 +229,7 @@ class SpatialReference(object):
     @property
     def units(self):
         """
-        Returns a 2-tuple of the units value and the units name, 
+        Returns a 2-tuple of the units value and the units name,
         and will automatically determines whether to return the linear
         or angular units.
         """
@@ -268,7 +268,7 @@ class SpatialReference(object):
     @property
     def geographic(self):
         """
-        Returns True if this SpatialReference is geographic 
+        Returns True if this SpatialReference is geographic
          (root node is GEOGCS).
         """
         return bool(isgeographic(self._ptr))
@@ -281,7 +281,7 @@ class SpatialReference(object):
     @property
     def projected(self):
         """
-        Returns True if this SpatialReference is a projected coordinate system 
+        Returns True if this SpatialReference is a projected coordinate system
          (root node is PROJCS).
         """
         return bool(isprojected(self._ptr))
@@ -343,7 +343,7 @@ class CoordTransform(object):
 
     def __init__(self, source, target):
         "Initializes on a source and target SpatialReference objects."
-        self._ptr = None # Initially NULL 
+        self._ptr = None # Initially NULL
         if not isinstance(source, SpatialReference) or not isinstance(target, SpatialReference):
             raise SRSException('source and target must be of type SpatialReference')
         self._ptr = new_ct(source._ptr, target._ptr)

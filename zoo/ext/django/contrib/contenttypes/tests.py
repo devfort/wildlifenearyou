@@ -14,12 +14,12 @@ that queries get logged)::
 
     >>> from django import db
     >>> db.reset_queries()
-    
+
 At this point, a lookup for a ContentType should hit the DB::
 
     >>> ContentType.objects.get_for_model(ContentType)
     <ContentType: content type>
-    
+
     >>> len(db.connection.queries)
     1
 

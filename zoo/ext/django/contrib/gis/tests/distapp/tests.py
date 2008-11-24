@@ -34,7 +34,7 @@ class DistanceTest(unittest.TestCase):
             for name, x, y in data_tup:
                 c = city_model(name=name, point=Point(x, y, srid=4326))
                 c.save()
-        
+
         load_cities(SouthTexasCity, stx_cities)
         load_cities(SouthTexasCityFt, stx_cities)
         load_cities(AustraliaCity, au_cities)
@@ -42,7 +42,7 @@ class DistanceTest(unittest.TestCase):
         self.assertEqual(9, SouthTexasCity.objects.count())
         self.assertEqual(9, SouthTexasCityFt.objects.count())
         self.assertEqual(11, AustraliaCity.objects.count())
-        
+
         # Loading up the South Texas Zip Codes.
         for name, wkt in stx_zips:
             poly = GEOSGeometry(wkt, srid=4269)
@@ -63,7 +63,7 @@ class DistanceTest(unittest.TestCase):
         # approximate).
         tx_dists = [(7000, 22965.83), D(km=7), D(mi=4.349)]
         au_dists = [(0.5, 32000), D(km=32), D(mi=19.884)]
-        
+
         # Expected cities for Australia and Texas.
         tx_cities = ['Downtown Houston', 'Southside Place']
         au_cities = ['Mittagong', 'Shellharbour', 'Thirroul', 'Wollongong']
@@ -86,21 +86,21 @@ class DistanceTest(unittest.TestCase):
             if isinstance(dist, tuple):
                 if oracle: dist = dist[1]
                 else: dist = dist[0]
-                
+
             # Creating the query set.
             qs = AustraliaCity.objects.order_by('name')
             if type_error:
                 # A TypeError should be raised on PostGIS when trying to pass
-                # Distance objects into a DWithin query using a geodetic field.  
+                # Distance objects into a DWithin query using a geodetic field.
                 self.assertRaises(TypeError, AustraliaCity.objects.filter, point__dwithin=(self.au_pnt, dist))
             else:
                 self.assertEqual(au_cities, self.get_names(qs.filter(point__dwithin=(self.au_pnt, dist))))
-                                 
+
     def test03a_distance_method(self):
         "Testing the `distance` GeoQuerySet method on projected coordinate systems."
         # The point for La Grange, TX
         lagrange = GEOSGeometry('POINT(-96.876369 29.905320)', 4326)
-        # Reference distances in feet and in meters. Got these values from 
+        # Reference distances in feet and in meters. Got these values from
         # using the provided raw SQL statements.
         #  SELECT ST_Distance(point, ST_Transform(ST_GeomFromText('POINT(-96.876369 29.905320)', 4326), 32140)) FROM distapp_southtexascity;
         m_distances = [147075.069813, 139630.198056, 140888.552826,
@@ -164,7 +164,7 @@ class DistanceTest(unittest.TestCase):
         # Normally you can't compute distances from a geometry field
         # that is not a PointField (on PostGIS).
         self.assertRaises(TypeError, CensusZipcode.objects.distance, self.stx_pnt)
-        
+
         # We'll be using a Polygon (created by buffering the centroid
         # of 77005 to 100m) -- which aren't allowed in geographic distance
         # queries normally, however our field has been transformed to
@@ -206,7 +206,7 @@ class DistanceTest(unittest.TestCase):
         # If we add a little more distance 77002 should be included.
         qs = SouthTexasZipcode.objects.exclude(name='77005').filter(poly__distance_lte=(z.poly, D(m=300)))
         self.assertEqual(['77002', '77025', '77401'], self.get_names(qs))
-        
+
     def test05_geodetic_distance_lookups(self):
         "Testing distance lookups on geodetic coordinate systems."
         if not oracle:
@@ -216,7 +216,7 @@ class DistanceTest(unittest.TestCase):
             self.assertRaises(TypeError,
                               AustraliaCity.objects.filter(point__distance_lte=(mp, D(km=100))))
             # Too many params (4 in this case) should raise a ValueError.
-            self.assertRaises(ValueError, 
+            self.assertRaises(ValueError,
                               AustraliaCity.objects.filter, point__distance_lte=('POINT(5 23)', D(km=100), 'spheroid', '4'))
 
         # Not enough params should raise a ValueError.

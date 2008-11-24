@@ -67,7 +67,7 @@ def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_N
 # 4 views for password reset:
 # - password_reset sends the mail
 # - password_reset_done shows a success message for the above
-# - password_reset_confirm checks the link the user clicked and 
+# - password_reset_confirm checks the link the user clicked and
 #   prompts for a new password
 # - password_reset_complete shows a success message for the above
 
@@ -130,7 +130,7 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
     else:
         context_instance['validlink'] = False
         form = None
-    context_instance['form'] = form    
+    context_instance['form'] = form
     return render_to_response(template_name, context_instance=context_instance)
 
 def password_reset_complete(request, template_name='registration/password_reset_complete.html'):

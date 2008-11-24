@@ -28,16 +28,16 @@ def add_app(args, output):
     app_label = args[0]
     app = models.get_app(app_label)
     from django.core.management.sql import sql_create
-    
+
     up_sql = sql_create(app, no_style())
     down_sql = sql_delete(app, no_style())
-    
+
     app_name = app.__name__.replace('.', '_')
     migration_output = app_mtemplate % (
         clean_up_create_sql(up_sql), clean_up_create_sql(down_sql)
     )
     migration_output = migration_code(migration_output)
-    
+
     save_migration(output, migration_output, app_name)
 
 def add_table(args, output):
@@ -48,14 +48,14 @@ def add_table(args, output):
     app = models.get_app(app_label)
     app_name = app.__name__.replace('.', '_')
     model_to_add = models.get_model(app_label, model)
-    
+
     if not model_to_add:
         raise Exception("Model %s in app %s not found" % (model, app_label))
-    
-    # The following code is a bit of a mess. I copied it from 
-    # django.core.management.sql.sql_create without a full understanding of 
-    # how it all works. Ideally this needs to refactored in Django itself to 
-    # make it easier for libraries such as this one to reuse the table 
+
+    # The following code is a bit of a mess. I copied it from
+    # django.core.management.sql.sql_create without a full understanding of
+    # how it all works. Ideally this needs to refactored in Django itself to
+    # make it easier for libraries such as this one to reuse the table
     # creation logic.
     style = no_style()
     app_models = models.get_models(app)
@@ -93,21 +93,21 @@ def add_table(args, output):
     )
     if not up_sql:
         raise Exception("Model %s in app %s not found" % (model, app_label))
-    
+
     # Down sql just drops any tables we have created
     down_sql = []
     for sql in up_sql:
         if sql.startswith('CREATE TABLE'):
             down_sql.append('DROP TABLE %s;' % sql.split()[2])
-    
+
     # Reverse the order of down_sql
     down_sql = down_sql[::-1]
-    
+
     migration_output = app_mtemplate % (
         clean_up_create_sql(up_sql), clean_up_create_sql(down_sql)
     )
     migration_output = migration_code(migration_output)
-    
+
     save_migration(output, migration_output, app_name)
 
 def add_index(args, output):
@@ -117,7 +117,7 @@ def add_index(args, output):
             './manage.py migration addindex <app> <model> <column>'
         )
     app_label, model, column = args
-    
+
     migration_output = add_index_mtemplate % (app_label, model, column)
     migration_output = migration_code(migration_output)
     save_migration(output, migration_output, 'add_index_%s_%s_%s' % (
@@ -131,15 +131,15 @@ def add_column(args, output):
             './manage.py migration addcolumn <app> <model> <column> '
             '[<column2> ...]'
         )
-    
+
     app_label, model, columns = args[0], args[1], args[2:]
     actual_model = models.get_model(app_label, model)
-    
+
     style = no_style()
     sql, references = connection.creation.sql_create_model(
         actual_model, style, set()
     )
-    
+
     col_specs = []
     for column in columns:
         is_foreign_key = isinstance(
@@ -150,10 +150,10 @@ def add_column(args, output):
             extract_column_spec(sql[0], column, is_foreign_key),
             is_foreign_key
         ))
-         
+
     migration_defs = [
         add_column_mtemplate % (app_label, model, column, col_spec)
-        for (column, col_spec, is_foreign_key) in col_specs 
+        for (column, col_spec, is_foreign_key) in col_specs
         if not is_foreign_key
     ]
     migration_fk_defs = [
@@ -161,7 +161,7 @@ def add_column(args, output):
         app_label, model, column, col_spec,
         actual_model._meta.get_field_by_name(column)[0].rel.to._meta.db_table
       )
-      for (column, col_spec, is_foreign_key) in col_specs 
+      for (column, col_spec, is_foreign_key) in col_specs
       if is_foreign_key
     ]
     if migration_fk_defs:
@@ -170,10 +170,10 @@ You have added columns that are foreign keys (%s).
 These will be added as nullable. If you need them to be NOT NULL, then you
 have to write another migration to do that, after you've populated them
 with data.""" % ','.join([column for (column, x, fk) in col_specs if fk])
-    
+
     migration_defs += migration_fk_defs
     migration_output = migration_code(*migration_defs)
-    
+
     if len(columns) == 1:
         migration_name = 'add_column_%s_to_%s_%s' % (
             columns[0], app_label, model
@@ -182,16 +182,16 @@ with data.""" % ','.join([column for (column, x, fk) in col_specs if fk])
         migration_name = 'add_columns_%s_to_%s_%s' % (
             "_and_".join(columns), app_label, model
         )
-    
+
     save_migration(output, migration_output, migration_name)
 
 def add_new(args, output):
     " <description>: Create empty migration (uses description in filename)"
     if not args:
         raise CommandError('./manage.py migration new <description>')
-    
+
     db_engine = getattr(settings, 'DMIGRATIONS_DATABASE_BACKEND', 'mysql')
-    
+
     save_migration(
         output, skeleton_template % db_engine, '_'.join(args).lower()
     )
@@ -200,10 +200,10 @@ def add_insert(args, output):
     " <app> <model>: Create insert migration for data in table"
     if len(args) != 2:
         raise CommandError('./manage.py migration insert <app> <model>')
-    
+
     app_label, model = args
     table_name = '%s_%s' % (app_label, model)
-    
+
     def get_columns(table_name):
         "Returns columns for table"
         cursor = connection.cursor()
@@ -236,9 +236,9 @@ def add_insert(args, output):
             'columns': columns,
             'rows': rows,
         }
-    
+
     dump = get_dump(table_name)
-    
+
     migration_output = insert_mtemplate % {
         'table_name': dump['table_name'],
         'columns': repr(dump['columns']),
@@ -246,7 +246,7 @@ def add_insert(args, output):
         'delete_ids': ', '.join(map(str, [r[0] for r in dump['rows']])),
     }
     migration_output = migration_code(migration_output)
-    
+
     save_migration(output, migration_output, 'insert_into_%s_%s' % (
         app_label, model
     ))
@@ -254,18 +254,18 @@ def add_insert(args, output):
 def sql_delete(app, style):
     "Returns a list of the DROP TABLE SQL statements for the given app."
     # This is a modified version of the function in django.core.management.sql
-    # - the original only emits drop table statements for tables that 
+    # - the original only emits drop table statements for tables that
     # currently exist in the database, but we want them all regardless
     from django.db import connection, models
     from django.db.backends.util import truncate_name
     from django.contrib.contenttypes import generic
-    
+
     table_names = []
     output = []
-    
+
     # Output DROP TABLE statements for standard application tables.
     to_delete = set()
-    
+
     references_to_delete = {}
     app_models = models.get_models(app)
     for model in app_models:
@@ -275,16 +275,16 @@ def sql_delete(app, style):
                 references_to_delete.setdefault(f.rel.to, []).append(
                     (model, f)
                 )
-        
+
         to_delete.add(model)
-    
+
     for model in app_models:
         output.extend(
             connection.creation.sql_destroy_model(
                 model, references_to_delete, style
             )
         )
-    
+
     # Output DROP TABLE statements for many-to-many tables.
     for model in app_models:
         opts = model._meta
@@ -292,23 +292,23 @@ def sql_delete(app, style):
             output.extend(
                 connection.creation.sql_destroy_many_to_many(model, f, style)
             )
-    
+
     return output[::-1] # Reverse it, to deal with table dependencies.
 
 
 def clean_up_create_sql(sqls):
     "Ensures create table uses correct engine, cleans up whitespace"
-    
+
     engine = getattr(settings, 'DMIGRATIONS_MYSQL_ENGINE', 'InnoDB')
-    
+
     def neat_format(sql):
         def indent4(s):
             lines = s.split('\n')
             return '\n'.join(['    %s' % line for line in lines])
-        
+
         bits = ['"""\n%s\n"""' % indent4(bit) for bit in sql]
         return '[%s]' % ', '.join(bits)
-    
+
     def fix_create_table(sql):
         if sql.strip().startswith("CREATE TABLE"):
             # Find the last ')'
@@ -320,7 +320,7 @@ def clean_up_create_sql(sqls):
                 )
             sql = sql[:last_index] + tail
         return sql
-    
+
     return neat_format(map(fix_create_table, sqls))
 
 def extract_column_spec(sql, column, is_foreign_key=False):
@@ -352,13 +352,13 @@ def migration_code(*migration_defs):
         migration_body = migration_defs[0]
     else:
         migration_body = (
-            "m.Compound([\n" + 
+            "m.Compound([\n" +
             "".join([
                 "    %s,\n" % m for m in migration_defs
-            ]) + 
+            ]) +
             "])\n"
         )
-    
+
     return migration_template % {
         #'db_engine': db_engine,
         'migration_body': migration_body

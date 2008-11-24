@@ -87,7 +87,7 @@ class ExtendsNode(Node):
                         if isinstance(node, ExtendsNode):
                             node.nodelist.append(block_node)
                         # Extends must be the first non-text node, so once you find
-                        # the first non-text node you can stop looking. 
+                        # the first non-text node you can stop looking.
                         break
             else:
                 # Keep any existing parents and add a new one. Used by BlockNode.

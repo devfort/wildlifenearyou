@@ -22,14 +22,14 @@ class GeoWhereNode(WhereNode):
     """
     def add(self, data, connector):
         """
-        This is overridden from the regular WhereNode to handle the 
-        peculiarties of GeometryFields, because they need a special 
-        annotation object that contains the spatial metadata from the 
+        This is overridden from the regular WhereNode to handle the
+        peculiarties of GeometryFields, because they need a special
+        annotation object that contains the spatial metadata from the
         field to generate the spatial SQL.
         """
         if not isinstance(data, (list, tuple)):
             return super(WhereNode, self).add(data, connector)
-        alias, col, field, lookup_type, value = data     
+        alias, col, field, lookup_type, value = data
         if not hasattr(field, "_geom"):
             # Not a geographic field, so call `WhereNode.add`.
             return super(GeoWhereNode, self).add(data, connector)
@@ -48,7 +48,7 @@ class GeoWhereNode(WhereNode):
 
     def make_atom(self, child, qn):
         table_alias, name, db_type, lookup_type, value_annot, params = child
- 
+
         if isinstance(value_annot, GeoAnnotation):
             if lookup_type in SpatialBackend.gis_terms:
                 # Getting the geographic where clause; substitution parameters
@@ -59,6 +59,6 @@ class GeoWhereNode(WhereNode):
             else:
                 raise TypeError('Invalid lookup type: %r' % lookup_type)
         else:
-            # If not a GeometryField, call the `make_atom` from the 
+            # If not a GeometryField, call the `make_atom` from the
             # base class.
             return super(GeoWhereNode, self).make_atom(child, qn)

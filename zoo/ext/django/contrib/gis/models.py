@@ -24,10 +24,10 @@ class SpatialRefSysMixin(object):
 
     # For pulling out the units on platforms w/o GDAL installed.
     # TODO: Figure out how to pull out angular units of projected coordinate system and
-    # fix for LOCAL_CS types.  GDAL should be highly recommended for performing 
+    # fix for LOCAL_CS types.  GDAL should be highly recommended for performing
     # distance queries.
     units_regex = re.compile(r'.+UNIT ?\["(?P<unit_name>[\w \'\(\)]+)", ?(?P<unit>[\d\.]+)(,AUTHORITY\["(?P<unit_auth_name>[\w \'\(\)]+)","(?P<unit_auth_val>\d+)"\])?\]([\w ]+)?(,AUTHORITY\["(?P<auth_name>[\w \'\(\)]+)","(?P<auth_val>\d+)"\])?\]$')
-    
+
     def srs(self):
         """
         Returns a GDAL SpatialReference object, if GDAL is installed.
@@ -45,7 +45,7 @@ class SpatialRefSysMixin(object):
                     return self.srs
                 except Exception, msg:
                     pass
-                
+
                 raise Exception('Could not get OSR SpatialReference from WKT: %s\nError:\n%s' % (self.wkt, msg))
         else:
             raise Exception('GDAL is not installed.')
@@ -107,7 +107,7 @@ class SpatialRefSysMixin(object):
         "Returns the linear units name."
         if HAS_GDAL:
             return self.srs.linear_name
-        elif self.geographic: 
+        elif self.geographic:
             return None
         else:
             m = self.units_regex.match(self.wkt)
@@ -181,13 +181,13 @@ class SpatialRefSysMixin(object):
             sphere_name = srs['spheroid']
         else:
             m = cls.spheroid_regex.match(wkt)
-            if m: 
+            if m:
                 sphere_params = (float(m.group('major')), float(m.group('flattening')))
                 sphere_name = m.group('name')
-            else: 
+            else:
                 return None
-        
-        if not string: 
+
+        if not string:
             return sphere_name, sphere_params
         else:
             # `string` parameter used to place in format acceptable by PostGIS
@@ -195,7 +195,7 @@ class SpatialRefSysMixin(object):
                 radius, flattening = sphere_params[0], sphere_params[2]
             else:
                 radius, flattening = sphere_params
-            return 'SPHEROID["%s",%s,%s]' % (sphere_name, radius, flattening) 
+            return 'SPHEROID["%s",%s,%s]' % (sphere_name, radius, flattening)
     get_spheroid = classmethod(get_spheroid)
 
     def __unicode__(self):
@@ -211,9 +211,9 @@ class SpatialRefSysMixin(object):
 # The SpatialRefSys and GeometryColumns models
 _srid_info = True
 if not PYTHON23 and settings.DATABASE_ENGINE == 'postgresql_psycopg2':
-    # Because the PostGIS version is checked when initializing the spatial 
-    # backend a `ProgrammingError` will be raised if the PostGIS tables 
-    # and functions are not installed.  We catch here so it won't be raised when 
+    # Because the PostGIS version is checked when initializing the spatial
+    # backend a `ProgrammingError` will be raised if the PostGIS tables
+    # and functions are not installed.  We catch here so it won't be raised when
     # running the Django test suite.  `ImportError` is also possible if no ctypes.
     try:
         from django.contrib.gis.db.backend.postgis.models import GeometryColumns, SpatialRefSys
@@ -247,7 +247,7 @@ if _srid_info:
         # Getting the spatial reference WKT associated with the SRID from the
         # `spatial_ref_sys` (or equivalent) spatial database table. This query
         # cannot be executed using the ORM because this information is needed
-        # when the ORM cannot be used (e.g., during the initialization of 
+        # when the ORM cannot be used (e.g., during the initialization of
         # `GeometryField`).
         from django.db import connection
         cur = connection.cursor()
@@ -259,16 +259,16 @@ if _srid_info:
                        'srid' : srid,
                        }
         cur.execute(stmt)
-        
+
         # Fetching the WKT from the cursor; if the query failed raise an Exception.
         fetched = cur.fetchone()
         if not fetched:
-            raise ValueError('Failed to find spatial reference entry in "%s" corresponding to SRID=%s.' % 
+            raise ValueError('Failed to find spatial reference entry in "%s" corresponding to SRID=%s.' %
                              (SpatialRefSys._meta.db_table, srid))
         srs_wkt = fetched[0]
 
         # Getting metadata associated with the spatial reference system identifier.
-        # Specifically, getting the unit information and spheroid information 
+        # Specifically, getting the unit information and spheroid information
         # (both required for distance queries).
         unit, unit_name = SpatialRefSys.get_units(srs_wkt)
         spheroid = SpatialRefSys.get_spheroid(srs_wkt)
@@ -280,4 +280,4 @@ else:
         spatial metadata tables (like MySQL).
         """
         return None, None, None
-   
+

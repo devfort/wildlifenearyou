@@ -50,12 +50,12 @@ class GeoQuery(sql.Query):
         (without the table names) are given unique aliases. This is needed in
         some cases to avoid ambiguitity with nested queries.
 
-        This routine is overridden from Query to handle customized selection of 
+        This routine is overridden from Query to handle customized selection of
         geometry columns.
         """
         qn = self.quote_name_unless_alias
         qn2 = self.connection.ops.quote_name
-        result = ['(%s) AS %s' % (self.get_extra_select_format(alias) % col[0], qn2(alias)) 
+        result = ['(%s) AS %s' % (self.get_extra_select_format(alias) % col[0], qn2(alias))
                   for alias, col in self.extra_select.iteritems()]
         aliases = set(self.extra_select.keys())
         if with_aliases:
@@ -112,7 +112,7 @@ class GeoQuery(sql.Query):
         Returns a list of strings, quoted appropriately for use in SQL
         directly, as well as a set of aliases used in the select statement.
 
-        This routine is overridden from Query to handle customized selection of 
+        This routine is overridden from Query to handle customized selection of
         geometry columns.
         """
         result = []
@@ -167,7 +167,7 @@ class GeoQuery(sql.Query):
     def resolve_columns(self, row, fields=()):
         """
         This routine is necessary so that distances and geometries returned
-        from extra selection SQL get resolved appropriately into Python 
+        from extra selection SQL get resolved appropriately into Python
         objects.
         """
         values = []
@@ -183,7 +183,7 @@ class GeoQuery(sql.Query):
 
         # Converting any extra selection values (e.g., geometries and
         # distance objects added by GeoQuerySet methods).
-        values = [self.convert_values(v, self.extra_select_fields.get(a, None)) 
+        values = [self.convert_values(v, self.extra_select_fields.get(a, None))
                   for v, a in izip(row[rn_offset:index_start], aliases)]
         if SpatialBackend.oracle:
             # This is what happens normally in OracleQuery's `resolve_columns`.
@@ -222,9 +222,9 @@ class GeoQuery(sql.Query):
     def get_field_select(self, fld, alias=None):
         """
         Returns the SELECT SQL string for the given field.  Figures out
-        if any custom selection SQL is needed for the column  The `alias` 
-        keyword may be used to manually specify the database table where 
-        the column exists, if not in the model associated with this 
+        if any custom selection SQL is needed for the column  The `alias`
+        keyword may be used to manually specify the database table where
+        the column exists, if not in the model associated with this
         `GeoQuery`.
         """
         sel_fmt = self.get_select_format(fld)
@@ -263,15 +263,15 @@ class GeoQuery(sql.Query):
         """
         Recursive utility routine for checking the given name parameter
         on the given model.  Initially, the name parameter is a string,
-        of the field on the given model e.g., 'point', 'the_geom'. 
-        Related model field strings like 'address__point', may also be 
+        of the field on the given model e.g., 'point', 'the_geom'.
+        Related model field strings like 'address__point', may also be
         used.
 
-        If a GeometryField exists according to the given name parameter 
+        If a GeometryField exists according to the given name parameter
         it will be returned, otherwise returns False.
         """
         if isinstance(name_param, basestring):
-            # This takes into account the situation where the name is a 
+            # This takes into account the situation where the name is a
             # lookup to a related geographic field, e.g., 'address__point'.
             name_param = name_param.split(sql.constants.LOOKUP_SEP)
             name_param.reverse() # Reversing so list operates like a queue of related lookups.
@@ -284,7 +284,7 @@ class GeoQuery(sql.Query):
         except (FieldDoesNotExist, IndexError):
             return False
         # TODO: ManyToManyField?
-        if isinstance(fld, GeometryField): 
+        if isinstance(fld, GeometryField):
             return fld # A-OK.
         elif isinstance(fld, ForeignKey):
             # ForeignKey encountered, return the output of this utility called
@@ -297,12 +297,12 @@ class GeoQuery(sql.Query):
         """
         Helper function that returns the database column for the given field.
         The table and column are returned (quoted) in the proper format, e.g.,
-        `"geoapp_city"."point"`.  If `table_alias` is not specified, the 
+        `"geoapp_city"."point"`.  If `table_alias` is not specified, the
         database table associated with the model of this `GeoQuery` will be
         used.
         """
         if table_alias is None: table_alias = self.model._meta.db_table
-        return "%s.%s" % (self.quote_name_unless_alias(table_alias), 
+        return "%s.%s" % (self.quote_name_unless_alias(table_alias),
                           self.connection.ops.quote_name(field.column))
 
     def _geo_field(self, field_name=None):
@@ -333,5 +333,5 @@ class DistanceField(object):
 
 # Rather than use GeometryField (which requires a SQL query
 # upon instantiation), use this lighter weight class.
-class GeomField(object): 
+class GeomField(object):
     pass

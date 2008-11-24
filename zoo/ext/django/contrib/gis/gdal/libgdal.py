@@ -21,24 +21,24 @@ elif os.name == 'posix':
 else:
     raise OGRException('Unsupported OS "%s"' % os.name)
 
-# Using the ctypes `find_library` utility  to find the 
+# Using the ctypes `find_library` utility  to find the
 # path to the GDAL library from the list of library names.
 if lib_names:
     for lib_name in lib_names:
         lib_path = find_library(lib_name)
         if not lib_path is None: break
-        
+
 if lib_path is None:
     raise OGRException('Could not find the GDAL library (tried "%s"). '
-                       'Try setting GDAL_LIBRARY_PATH in your settings.' % 
+                       'Try setting GDAL_LIBRARY_PATH in your settings.' %
                        '", "'.join(lib_names))
 
 # This loads the GDAL/OGR C library
 lgdal = CDLL(lib_path)
 
-# On Windows, the GDAL binaries have some OSR routines exported with 
-# STDCALL, while others are not.  Thus, the library will also need to 
-# be loaded up as WinDLL for said OSR functions that require the 
+# On Windows, the GDAL binaries have some OSR routines exported with
+# STDCALL, while others are not.  Thus, the library will also need to
+# be loaded up as WinDLL for said OSR functions that require the
 # different calling convention.
 if os.name == 'nt':
     from ctypes import WinDLL
@@ -65,11 +65,11 @@ def gdal_version():
     "Returns only the GDAL version number information."
     return _version_info('RELEASE_NAME')
 
-def gdal_full_version(): 
+def gdal_full_version():
     "Returns the full GDAL version information."
     return _version_info('')
 
-def gdal_release_date(date=False): 
+def gdal_release_date(date=False):
     """
     Returns the release date in a string format, e.g, "2007/06/27".
     If the date keyword argument is set to True, a Python datetime object

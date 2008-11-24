@@ -113,7 +113,7 @@ class OGRGeomTest(unittest.TestCase):
             self.assertEqual(mgeom1, mgeom3)
             self.assertEqual(mp.points, mgeom2.tuple)
             self.assertEqual(mp.n_p, mgeom2.point_count)
-                                                                            
+
     def test04_linestring(self):
         "Testing LineString objects."
         prev = OGRGeometry('POINT(0 0)')
@@ -149,7 +149,7 @@ class OGRGeomTest(unittest.TestCase):
             for ls in mlinestr:
                 self.assertEqual(2, ls.geom_type)
                 self.assertEqual('LINESTRING', ls.geom_name)
-            self.assertRaises(OGRIndexError, mlinestr.__getitem__, len(mlinestr)) 
+            self.assertRaises(OGRIndexError, mlinestr.__getitem__, len(mlinestr))
 
     def test06_linearring(self):
         "Testing LinearRing objects."
@@ -182,13 +182,13 @@ class OGRGeomTest(unittest.TestCase):
             # Testing equivalence
             self.assertEqual(True, poly == OGRGeometry(p.wkt))
             self.assertEqual(True, poly != prev)
-            
+
             if p.ext_ring_cs:
                 ring = poly[0]
                 self.assertEqual(p.ext_ring_cs, ring.tuple)
                 self.assertEqual(p.ext_ring_cs, poly[0].tuple)
                 self.assertEqual(len(p.ext_ring_cs), ring.point_count)
-            
+
             for r in poly:
                 self.assertEqual('LINEARRING', r.geom_name)
 
@@ -240,11 +240,11 @@ class OGRGeomTest(unittest.TestCase):
             sr = SpatialReference('WGS84')
             mpoly = OGRGeometry(mp.wkt, sr)
             self.assertEqual(sr.wkt, mpoly.srs.wkt)
-          
+
             # Ensuring that SRS is propagated to clones.
             klone = mpoly.clone()
             self.assertEqual(sr.wkt, klone.srs.wkt)
-  
+
             # Ensuring all children geometries (polygons and their rings) all
             # return the assigned spatial reference as well.
             for poly in mpoly:
@@ -266,7 +266,7 @@ class OGRGeomTest(unittest.TestCase):
             mpoly.srs = SpatialReference(4269)
             self.assertEqual(4269, mpoly.srid)
             self.assertEqual('NAD83', mpoly.srs.name)
-          
+
             # Incrementing through the multipolyogn after the spatial reference
             # has been re-assigned.
             for poly in mpoly:
@@ -347,7 +347,7 @@ class OGRGeomTest(unittest.TestCase):
             self.assertEqual(d1, a ^ b) # __xor__ is symmetric difference operator
             a ^= b # testing __ixor__
             self.assertEqual(d1, a)
-            
+
     def test13_union(self):
         "Testing union()."
         for i in xrange(len(topology_geoms)):

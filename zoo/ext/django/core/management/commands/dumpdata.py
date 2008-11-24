@@ -9,7 +9,7 @@ class Command(BaseCommand):
             help='Specifies the output serialization format for fixtures.'),
         make_option('--indent', default=None, dest='indent', type='int',
             help='Specifies the indent level to use when pretty-printing output'),
-        make_option('-e', '--exclude', dest='exclude',action='append', default=[], 
+        make_option('-e', '--exclude', dest='exclude',action='append', default=[],
             help='App to exclude (use multiple --exclude to exclude multiple apps).'),
     )
     help = 'Output the contents of the database as a fixture of the given format.'

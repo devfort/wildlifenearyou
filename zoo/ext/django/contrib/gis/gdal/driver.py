@@ -1,4 +1,4 @@
-# prerequisites imports 
+# prerequisites imports
 from ctypes import c_void_p
 from django.contrib.gis.gdal.error import OGRException
 from django.contrib.gis.gdal.prototypes.ds import \
@@ -18,7 +18,7 @@ class Driver(object):
               'tiger' : 'TIGER',
               'tiger/line' : 'TIGER',
               }
-                
+
     def __init__(self, dr_input):
         "Initializes an OGR driver on either a string or integer input."
 
@@ -58,7 +58,7 @@ class Driver(object):
         # Only register all if the driver count is 0 (or else all drivers
         # will be registered over and over again)
         if not self.driver_count: register_all()
-                    
+
     # Driver properties
     @property
     def driver_count(self):

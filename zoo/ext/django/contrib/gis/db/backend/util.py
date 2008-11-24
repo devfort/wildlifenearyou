@@ -2,7 +2,7 @@ from types import UnicodeType
 
 def gqn(val):
     """
-    The geographic quote name function; used for quoting tables and 
+    The geographic quote name function; used for quoting tables and
     geometries (they use single rather than the double quotes of the
     backend quotename function).
     """

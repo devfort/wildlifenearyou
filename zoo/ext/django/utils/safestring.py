@@ -40,7 +40,7 @@ class SafeString(str, SafeData):
         elif isinstance(rhs, SafeString):
             return SafeString(t)
         return t
-        
+
     def _proxy_method(self, *args, **kwargs):
         """
         Wrap a call to a normal unicode method up so that we return safe
@@ -70,7 +70,7 @@ class SafeUnicode(unicode, SafeData):
         if isinstance(rhs, SafeData):
             return SafeUnicode(t)
         return t
-    
+
     def _proxy_method(self, *args, **kwargs):
         """
         Wrap a call to a normal unicode method up so that we return safe

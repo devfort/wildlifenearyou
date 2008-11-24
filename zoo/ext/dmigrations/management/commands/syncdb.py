@@ -9,7 +9,7 @@ class Command(Original):
         from django.conf import settings
         if getattr(settings, 'DISABLE_SYNCDB', False):
             sys.stderr.write(
-                'Use dmigrations, not syncdb - "%s help dmigrate" for help\n' 
+                'Use dmigrations, not syncdb - "%s help dmigrate" for help\n'
                 % sys.argv[0]
             )
             sys.exit(1)

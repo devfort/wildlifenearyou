@@ -44,7 +44,7 @@ class SkipFile(UploadFileException):
     This exception is raised by an upload handler that wants to skip a given file.
     """
     pass
-    
+
 class StopFutureHandlers(UploadFileException):
     """
     Upload handers that have handled a file and do not want future handlers to
