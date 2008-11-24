@@ -1,0 +1,1 @@
+﻿package com.supereveildevfort.nov2008.profilepicture.ui {	import flash.display.Sprite; 		/**	 * @class Selector.as	 * @namespace com.supereveildevfort.nov2008.profilepicture.ui	 * @author Niqui Merret	 * @version 1.0	 * @date Nov 24, 2008	 * @description	 * @usage	 * NOTE:	 * TODO:	 *	 */	public class Selector extends Sprite 	{	}}
