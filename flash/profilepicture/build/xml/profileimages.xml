@@ -2,7 +2,8 @@
 <profileImages>
 	<hair-accessories description="Choose your pigtails." name="Hair Accessory" plural="Hair Accessories">
 		<hair-accessory id="3" src="../../images/hair_accessories.png" title=""/>
-	</hair-accessories>
+		<hair-accessory id="10" src="../../images/hair_accessories2.png" title=""/>
+		<hair-accessory id="11" src="../../images/hair_accessories3.png" title=""/>	</hair-accessories>
 	<hairs description="" name="Hair" plural="Hairs">
 		<hair id="4" src="../../images/hair.png" title=""/>
 	</hairs>
