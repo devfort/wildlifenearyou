@@ -87,6 +87,8 @@ class MigrationState(object):
                 _execute_in_transaction(statement, [name])
             elif settings.DATABASE_ENGINE == 'sqlite3':
                 _execute(statement, [name])
+                cursor = connection.cursor()
+                cursor.cursor.connection.commit()
         if log:
             self.log('mark_as_applied', name)
     

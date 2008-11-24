@@ -1,4 +1,8 @@
-from dmigrations.mysql import migrations as m
+from django.conf import settings
+if settings.DATABASE_ENGINE == 'mysql':
+    from dmigrations.mysql import migrations as m
+elif settings.DATABASE_ENGINE == 'sqlite3':
+    from dmigrations.sqlite3 import migrations as m
 
 class CustomMigration(m.Migration):
     def __init__(self):

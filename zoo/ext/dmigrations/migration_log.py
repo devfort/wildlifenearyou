@@ -1,6 +1,7 @@
 import datetime
 from migration_state import _execute, _execute_in_transaction, table_present
 from django.conf import settings
+from django.db import connection
 
 if settings.DATABASE_ENGINE == 'mysql':
     MIGRATION_LOG_SQL = """
@@ -52,4 +53,6 @@ def log_action(action, migration, status, when=None):
         _execute_in_transaction(statement, params)
     elif settings.DATABASE_ENGINE == 'sqlite3':
         _execute(statement, params)
+        cursor = connection.cursor()
+        cursor.cursor.connection.commit()
 

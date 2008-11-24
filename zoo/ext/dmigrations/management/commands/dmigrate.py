@@ -61,7 +61,7 @@ class Command(BaseCommand):
         
         if not args or args[0] == 'help':
             # TODO: Do this without calling os.system
-            os.system('./manage.py help dmigrate')
+            os.system('python manage.py help dmigrate')
             return
         
         elif args[0] in 'all up down upto downto to apply unapply'.split():

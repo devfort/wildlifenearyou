@@ -379,7 +379,10 @@ insert_mtemplate = """m.InsertRows(
     delete_ids = [%(delete_ids)s]
 )"""
 
-skeleton_template = """from dmigrations.%s import migrations as m
+skeleton_template = """if settings.DATABASE_ENGINE == 'mysql':
+    from dmigrations.mysql import migrations as m
+elif settings.DATABASE_ENGINE == 'sqlite3':
+    from dmigrations.sqlite3 import migrations as m
 
 class CustomMigration(m.Migration):
     def __init__(self):
