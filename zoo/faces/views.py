@@ -21,6 +21,7 @@ def profile_images_xml(request):
             }
             partlist.append(p)
     return HttpResponse(
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
         ET.tostring(profileImages), 
         content_type = 'application/xml; charset=utf8'
     )
