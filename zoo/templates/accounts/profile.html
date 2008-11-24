@@ -12,19 +12,26 @@
 <p><a href="/photos/upload/">Upload a photo!</a></p>
 
 <div id="animal_passport">
-	<h2>Animal Passport</h2>
-	
+	<h2>Animal Passport</h2>	
 	<ol>
 	{% for species in profile.passport.seen_species %}
 		<li>{{ species.count }}&times; {{ species }}</li>
 	{% endfor %}
 	</ol>
-	
+</div>
+
+<div id="my_trips">
 	<h2>My Trips</h2>
-	
 	<ol>
 	{% for trip in profile.user.trips.all %}
-		<li>{{ trip }} on {{ trip.start|date:"jS F Y" }}</li>
+		<li>
+			<p>During {{ trip }} on {{ trip.start|date:"jS F Y" }} you saw</p>
+			<ul>
+			{% for species in trip.sightings.all %}
+				<li>{{ species.common_name }}</li>
+			{% endfor %}
+			</ul>
+		</li>
 	{% endfor %}
 	</ol>
 </div>
