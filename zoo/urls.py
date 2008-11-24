@@ -64,11 +64,11 @@ urlpatterns = patterns('',
 
 
     # Dodo etc.
-    (r'^animal/dodo/$', 'zoo.animals.views.extinct'),
+    (r'^animal/(dodo|woolly-mammoth)/$', 'zoo.animals.views.extinct'),
     (r'^latin/raphus-cucullatus/$',
         lambda r: http.HttpResponseRedirect('/animal/dodo/')
     ),
-    (r'^animal/(unicorn|dragon)/$', 'zoo.animals.views.imaginary'),
+    (r'^animal/(unicorn|dragon|chimera|gryphon)/$', 'zoo.animals.views.imaginary'),
 
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),

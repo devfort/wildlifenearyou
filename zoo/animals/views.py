@@ -35,13 +35,17 @@ def all_species_latin(request):
 def narwhals(request):
     return render(request, 'species/narwhals.html', {})
 
-def extinct(request):
+def extinct(request, animal):
     t = loader.get_template('species/extinct.html')
-    c = Context()
+    c = Context({
+        'animal': animal.replace('-', ' ')
+    })
     return HttpResponse(t.render(c), status=410) # Gone
 
 def imaginary(request, animal):
     t = loader.get_template('species/imaginary.html')
-    c = Context()
+    c = Context({
+        'animal': animal.replace('-', ' ')
+    })
     return HttpResponse(t.render(c), status=417) # Expectation failed
 
