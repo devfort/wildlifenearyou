@@ -3,6 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils import simplejson
 
+import dircache
 import os
 import re
 import shutil
@@ -152,18 +153,34 @@ def search(request, db_name):
        return.  This is exclusive, so the result with this rank will not be
        returned.  Defaults to 10.
 
-    Returns
+    Returns some JSON:
+
+     - `db`: database name:
+     - `items`:
+        list of search result items (in rank order, best first). Each item is
+        dict of:
+        - `rank`: rank of result - 0 is best
+        - `id`: id of result
+        - `data`: data of result, which is a dict, keyed by name, contents is a
+          list of values.
+     - `matches_lower_bound`: lower bound on number of matches.
+     - `matches_estimated`: estimated number of matches.
+     - `matches_upper_bound`: upper bound on number of matches.
+     - `doccount`: number of documents in database.
 
     """
     params = validate_params(request, {
-                             'q': (1, None, '^.*$', None),
+                             'q': (0, None, '^.*$', []),
                              'startrank': (1, 1, '^\d+$', ['0']),
                              'endrank': (1, 1, '^\d+$', ['10']),
                              })
 
     db = xappy.SearchConnection(get_db_path(db_name))
-    qs = [db.query_parse(subq) for subq in params['q']]
-    q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
+    if len(params['q']) == 0:
+        q = db.query_all()
+    else:
+        qs = [db.query_parse(subq) for subq in params['q']]
+        q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
     res = q.search(int(params['startrank'][0]),
                    int(params['endrank'][0]))
 
@@ -183,6 +200,14 @@ def search(request, db_name):
         'doccount': db.get_doccount(),
     }
     return retval
+
+@jsonreturning
+@errchecked
+def listdbs(request):
+    """Get a list of available databases.
+
+    """
+    return dircache.listdir(settings.XAPPY_DATABASE_DIR)
 
 @jsonreturning
 @errchecked
