@@ -9,17 +9,17 @@ from zoo.utils import attrproperty
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     country_code = models.CharField(max_length=2, null=False, blank=False, unique=True)
-    
+
     class Meta:
         verbose_name_plural = 'countries'
-    
+
     def __unicode__(self):
         return self.name
 
 class Place(models.Model):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
     known_as = models.CharField(max_length=500, null=False, blank=False)
-    slug = models.SlugField(max_length=255, null=False, blank=False,    
+    slug = models.SlugField(max_length=255, null=False, blank=False,
         unique=True
     )
     country = models.ForeignKey(Country, null=False, blank=False)
@@ -28,14 +28,14 @@ class Place(models.Model):
     created_by = models.ForeignKey(User, related_name='places_created')
     modified_at = models.DateTimeField(null=False, blank=False)
     modified_by = models.ForeignKey(User, related_name='places_modified')
-    
+
     # Address
     address_line_1 = models.CharField(max_length=250, null=True, blank=True)
     address_line_2 = models.CharField(max_length=250,  null=True, blank=True)
     town = models.CharField(max_length=250, null=True, blank=True)
     state = models.CharField(max_length=250, null=True, blank=True)
     zip = models.CharField(max_length=50, null=True, blank=True)
-    
+
     def address(self):
         bits = []
         for attr in (
@@ -46,11 +46,11 @@ class Place(models.Model):
             if val:
                 bits.append(val)
         return '\n'.join(bits)
-    
+
     # long and lot for mapping
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
-    
+
     @models.permalink
     def get_absolute_url(self):
         return ('place', (), {
@@ -62,21 +62,21 @@ class Place(models.Model):
     def urls(self, name):
         if name == 'absolute':
             return self.get_absolute_url()
-    
+
     def __unicode__(self):
         return self.known_as
 
-def create_place_callback(sender, instance, **kwargs):
+def create_place_callback(sender, instance, created, **kwargs):
     # Create default nameless enclosure when place is created.
-    Enclosure.objects.create(place=instance,
-                             name=None)
-post_save.connect(create_place_callback, sender=Place)    
+    if created:
+        Enclosure.objects.create(place=instance)
+post_save.connect(create_place_callback, sender=Place)
 
 class Webcam(models.Model):
     place = models.ForeignKey(Place, related_name = 'webcams')
     name = models.CharField(max_length=300, null=True, blank=True)
     url = models.URLField()
-    
+
     def __unicode__(self):
         return self.name
 
@@ -86,7 +86,8 @@ class Enclosure(models.Model):
     name = models.CharField(max_length=300, null=True, blank=True)
 
     def __unicode__(self):
-        if not self.name:
+        print "name:",self.name
+        if self.name is None:
             return "Nameless enclosure for %s" % self.place.known_as
         return "'%s' in %s" % (self.name, self.place.known_as)
 
