@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect as Redirect
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from zoo.accounts.models import Profile
 
 def welcome(request):
     # Just to show people that they are logged in, really
@@ -91,9 +92,11 @@ class RegistrationForm(forms.ModelForm):
             ))
         return password2
 
-    def save(self, commit=True):
+    def save(self):
         user = super(RegistrationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
+        user.save()
+        Profile.objects.create(user=user)
+        
         return user
+
