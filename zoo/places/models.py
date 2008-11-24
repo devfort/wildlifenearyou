@@ -72,6 +72,23 @@ def create_place_callback(sender, instance, created, **kwargs):
         Enclosure.objects.create(place=instance)
 post_save.connect(create_place_callback, sender=Place)
 
+class PlaceNews(models.Model):
+    place = models.ForeignKey(Place, related_name = 'news')
+    headline = models.CharField(max_length=300)
+    url = models.URLField(verify_exists=False)
+    story_date = models.DateField()
+    
+    created_at = models.DateTimeField(null=False, blank=False)
+    created_by = models.ForeignKey(User, related_name = 'placenews_created')
+    modified_at = models.DateTimeField(null=False, blank=False)
+    modified_by = models.ForeignKey(User, related_name = 'placenews_modified')
+    
+    class Meta:
+        verbose_name_plural = 'place news'
+    
+    def __unicode__(self):
+        return u'%s (%s on %s)' % (self.headline, self.place, self.story_date)
+
 class Webcam(models.Model):
     place = models.ForeignKey(Place, related_name = 'webcams')
     name = models.CharField(max_length=300, null=True, blank=True)

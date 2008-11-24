@@ -18,7 +18,17 @@
             {% endfor %}
         {% endfor %}
     {% endif %}
+{% endwith %}
 
+{% with place.news.all as news %}
+    {% if news %}
+    <h3>News about {{ place.known_as }}</h3>
+    <ul>
+    {% for story in news %}
+        <li>{{ story.story_date|date:"jS M Y" }}: <a href="{{ story.url }}">{{ story.headline }}</a></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
 {% endwith %}
 
 {% endblock %}

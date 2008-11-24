@@ -1,6 +1,6 @@
 from django.contrib import admin
 from zoo.places.models import Country, Place, Enclosure, EnclosureAnimal, \
-    Webcam
+    Webcam, PlaceNews
 
 excludees = ['created_at', 'created_by', 'modified_at', 'modified_by']
 
@@ -28,6 +28,7 @@ class PlaceInline(admin.TabularInline):
 #    list_display = ('country_code', 'name'),
 #)
 admin.site.register(Webcam)
+admin.site.register(PlaceNews, exclude = excludees)
 admin.site.register(Place,
     exclude = excludees,
     list_filter = ['country'],
