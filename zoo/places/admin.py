@@ -9,11 +9,16 @@ class EnclosureAnimalInline(admin.TabularInline):
     exclude = excludees
 
 class EnclosureAdmin(admin.ModelAdmin):
+    list_display = ('place', 'name') # XXX: Doesn't display foreign key, displays nowt?
     inlines = [
         EnclosureAnimalInline,
     ]
 
+class PlaceInline(admin.TabularInline):
+    model = Enclosure
+    exclude = excludees
+
 admin.site.register(Country)
 admin.site.register(Webcam)
-admin.site.register(Place, exclude=excludees, list_filter=['country', 'town'], search_fields=['known_as', 'legal_name'])
+admin.site.register(Place, exclude=excludees, list_filter=['country', 'town'], search_fields=['known_as', 'legal_name'], inlines=[ PlaceInline, ])
 admin.site.register(Enclosure, EnclosureAdmin)
