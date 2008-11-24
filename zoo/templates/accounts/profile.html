@@ -25,7 +25,7 @@
 	<ol>
 	{% for trip in profile.user.trips.all %}
 		<li>
-			<p>During {{ trip }} on {{ trip.start|date:"jS F Y" }} you saw</p>
+			<p>During {{ trip.title }} on {{ trip.start|date:"jS F Y" }} you saw</p>
 			<ul>
 			{% for species in trip.sightings.all %}
 				<li>{{ species.common_name }}</li>

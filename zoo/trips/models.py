@@ -41,6 +41,13 @@ class Trip(models.Model):
         o = Passport(species_list)
         return o
         
+    def title(self):
+        if self.name:
+            return self
+        else:
+            #FIX ME - Need I18N
+            return u'your trip to %s' % (self.place.known_as)
+        
     def __unicode__(self):
         return self.user.username + u'@' + self.place.known_as
 
