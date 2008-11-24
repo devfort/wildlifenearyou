@@ -18,6 +18,9 @@ class Species(models.Model):
     slug = models.SlugField(max_length=255, blank=False, null=False, unique=True)
     species_group = models.ForeignKey(SpeciesGroup)
 
+    class Meta:
+        verbose_name_plural = 'species'
+
     @models.permalink
     def get_absolute_url(self):
         return ('species', (), {'slug': self.slug})
