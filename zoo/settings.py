@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'zoo.accounts',
     'zoo.animals',
     'zoo.places',
+    'zoo.changerequests',
 )
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
