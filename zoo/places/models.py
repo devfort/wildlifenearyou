@@ -3,7 +3,7 @@ from django.template.defaultfilters import pluralize
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
-from zoo.animals.models import Animal
+from zoo.animals.models import Species
 from zoo.utils import attrproperty
 
 class Country(models.Model):
@@ -99,7 +99,7 @@ class Webcam(models.Model):
 
 class Enclosure(models.Model):
     place = models.ForeignKey(Place, related_name = 'enclosures')
-    animals = models.ManyToManyField(Animal, through='EnclosureAnimal')
+    species = models.ManyToManyField(Species, through='EnclosureSpecies')
     name = models.CharField(max_length=300, null=True, blank=True)
 
     def __unicode__(self):
@@ -107,15 +107,15 @@ class Enclosure(models.Model):
             return u"Nameless enclosure"
         return self.name
 
-class EnclosureAnimal(models.Model):
+class EnclosureSpecies(models.Model):
     enclosure = models.ForeignKey(Enclosure)
-    animal = models.ForeignKey(Animal)
+    species = models.ForeignKey(Species)
     number_of_inhabitants = models.IntegerField(null=True, blank=True)
     modified_at = models.DateTimeField(null=False, blank=False)
     modified_by = models.ForeignKey(User)
 
     def __unicode__(self):
-        retstr = self.animal.common_name
+        retstr = self.species.common_name
         if self.number_of_inhabitants!=None:
             retstr += ' (%i)' % self.number_of_inhabitants
         if self.enclosure.name:

@@ -1,28 +1,26 @@
 from django.db import models
 from zoo.utils import attrproperty
 
-class AnimalClass(models.Model):
+class SpeciesGroup(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False,
         unique=True
     )
 
     class Meta:
-        verbose_name_plural = 'animal classes'
+        verbose_name_plural = 'species groups'
 
     def __unicode__(self):
         return self.name
 
-class Animal(models.Model):
-    "An Animal isn't strictly an animal, it could be a plant maybe..."
-
+class Species(models.Model):
     common_name = models.CharField(max_length=500, blank=False, null=False)
     latin_name = models.CharField(max_length=500, blank=False, null=False)
     slug = models.SlugField(max_length=255, blank=False, null=False, unique=True)
-    animal_class = models.ForeignKey(AnimalClass)
+    species_group = models.ForeignKey(SpeciesGroup)
 
     @models.permalink
     def get_absolute_url(self):
-        return ('animal', (), {'slug': self.slug})
+        return ('species', (), {'slug': self.slug})
 
     @attrproperty
     def urls(self, name):
@@ -30,5 +28,5 @@ class Animal(models.Model):
             return self.get_absolute_url()
 
     def __unicode__(self):
-        return '%s (%s) of class %s' % (self.common_name, self.latin_name, self.animal_class.name,)
+        return '%s (%s)' % (self.common_name, self.latin_name,)
 

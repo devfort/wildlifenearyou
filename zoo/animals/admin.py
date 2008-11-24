@@ -1,13 +1,10 @@
 from django.contrib import admin
-from zoo.animals.models import Animal, AnimalClass
+from zoo.animals.models import Species, SpeciesGroup
 
-class AnimalClassAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(Animal, 
-    list_display = ('common_name', 'animal_class', 'latin_name', 'slug'),
-    list_filter = ['animal_class'],
+admin.site.register(Species,
+    list_display = ('common_name', 'species_group', 'latin_name', 'slug'),
+    list_filter = ['species_group'],
     search_fields = ['common_name', 'latin_name'],
     prepopulated_fields = {'slug': ('common_name',)},
 )
-admin.site.register(AnimalClass, AnimalClassAdmin)
+admin.site.register(SpeciesGroup)

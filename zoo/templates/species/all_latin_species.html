@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}All species (by latin name){% endblock %}
+
+{% block content %}
+
+<h1>All species, by latin name</h1>
+{% for species in all_species %}
+    <p><a href="{{ species.urls.absolute }}">{{ species.latin_name }}</a></p>
+{% endfor %}
+
+{% endblock %}

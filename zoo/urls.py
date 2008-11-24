@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
-    
+
     # Landing Page
     url(r'^$', 'zoo.homepage.views.landing',
         name='landing-page'),
@@ -66,16 +66,16 @@ urlpatterns = patterns('',
     (r'^databrowse/(.*)', databrowse.site.root),
 
 
-    url(r'^animal/$', 'zoo.animals.views.animals',
-        name='animals'),
-    url(r'^animal/all\.xml$', 'zoo.animals.views.animals_xml',
-        name='animals-xml'),
-    url(r'^animal/(?P<slug>[^/]+)/$', 'zoo.animals.views.animal',
-        name='animal'),
+    url(r'^animal/$', 'zoo.animals.views.all_species',
+        name='all-species'),
+    url(r'^animal/all\.xml$', 'zoo.animals.views.species_xml',
+        name='species-xml'),
+    url(r'^animal/(?P<slug>[^/]+)/$', 'zoo.animals.views.species',
+        name='species'),
 
-    url(r'^latin/$', 'zoo.animals.views.animals_latin',
-        name='animals-latin'),    
-    url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.animal_latin',),
+    url(r'^latin/$', 'zoo.animals.views.all_species_latin',
+        name='all-species-latin'),
+    url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.species_latin',),
 
     url(r'^(?P<country_code>\w{2})/(?P<slug>.*)/$', 'zoo.places.views.place',
         name='place'),

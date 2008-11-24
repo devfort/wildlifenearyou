@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}All species{% endblock %}
+
+{% block content %}
+
+<h1>All species</h1>
+{% for species in all_species %}
+    <p><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+{% endfor %}
+
+{% endblock %}

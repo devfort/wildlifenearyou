@@ -13,8 +13,8 @@
         <h2>Enclosures</h2>
         {% for enclosure in enclosures %}
             <h3>{{ enclosure }}</h3>
-            {% for inhabitant in enclosure.enclosureanimal_set.all %}
-                <p><a href="{{ inhabitant.animal.urls.absolute }}">{{ inhabitant.animal }}</a> - {{ inhabitant.number_of_inhabitants }}</p>
+            {% for inhabitant in enclosure.enclosurespecies_set.all %}
+                <p><a href="{{ inhabitant.species.urls.absolute }}">{{ inhabitant.species }}</a> - {{ inhabitant.number_of_inhabitants }}</p>
             {% endfor %}
         {% endfor %}
     {% endif %}

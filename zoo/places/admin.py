@@ -1,17 +1,17 @@
 from django.contrib import admin
-from zoo.places.models import Country, Place, Enclosure, EnclosureAnimal, \
+from zoo.places.models import Country, Place, Enclosure, EnclosureSpecies, \
     Webcam, PlaceNews
 
 excludees = ['created_at', 'created_by', 'modified_at', 'modified_by']
 
-class EnclosureAnimalInline(admin.TabularInline):
-    model = EnclosureAnimal
+class EnclosureSpeciesInline(admin.TabularInline):
+    model = EnclosureSpecies
     exclude = excludees
 
 class EnclosureAdmin(admin.ModelAdmin):
     list_display = ('name', 'place')
     inlines = [
-        EnclosureAnimalInline,
+        EnclosureSpeciesInline,
     ]
 
     def changelist_view(self, request):

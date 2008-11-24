@@ -18,8 +18,11 @@ from pygen import generate_string
 from pygen import StringTerminal as S
 from pygen import Alternation as A
 
-from zoo.animals.models import Animal, AnimalClass
-from zoo.places.models import Place, Enclosure, Animal, EnclosureAnimal, Country
+from django.contrib.auth.models import User
+from zoo.animals.models import Species, SpeciesGroup
+from zoo.places.models import Place, Enclosure, EnclosureSpecies, Country
+
+user = User.objects.get(username='sedf')
 
 from django.template.defaultfilters import slugify
 
@@ -37,20 +40,20 @@ def main():
     start = A("Dung", "Sea", "Land", "Air", "Amphibuous", "Snake", "Dwarf", "Lesser-spotted")
     ending = A("lion", "beetle", "bird", "dolphin", "fucking narwhal", "dwarf", "wolf")
     speshul_ending = A(*([""] * 19) + [" on a plane"])
-    g_animal = start, " ", ending, speshul_ending
+    g_species = start, " ", ending, speshul_ending
 
-    animal_classes = []
+    species_groups = []
     for name in ('Fish', 'Tigers', 'Cute things', 'Lolcats', 'Badass animals'):
-        animal_classes.append(AnimalClass.objects.create(name=name))
+        species_groups.append(SpeciesGroup.objects.create(name=name))
 
-    animals = []
+    species = []
     for a_idx in range(100):
-        name = generate_string(g_animal)
-        animals.append(Animal.objects.create(
+        name = generate_string(g_species)
+        species.append(Species.objects.create(
             common_name=name,
             latin_name=' '.join(["%sus" % x for x in name.split(' ')]),
             slug="%s%s" % (slugify(name), random.random()),
-            animal_class=random.choice(animal_classes),
+            species_group=random.choice(species_groups),
         ))
 
     for p_idx in range(100):
@@ -75,11 +78,12 @@ def main():
             )
 
             for ea_idx in range(random.randrange(0, 15)):
-                EnclosureAnimal.objects.create(
+                EnclosureSpecies.objects.create(
                     enclosure=enclosure,
-                    animal=random.choice(animals),
+                    species=random.choice(species),
                     number_of_inhabitants=random.randrange(0, 250),
                     modified_at=datetime.datetime.now(),
+                    modified_by=user,
                 )
 
     return 0
