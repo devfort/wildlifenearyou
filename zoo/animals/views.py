@@ -10,6 +10,11 @@ def animal(request, slug):
         'animal': animal,
     })
 
+def animals(request):
+    return render(request, 'animals/animals.html', {
+        'animals': Animal.objects.all(),
+    })
+
 def animal_latin(request, latin_name):
     animal = get_object_or_404(Animal, latin_name=latin_name)
     return HttpResponseRedirect(animal.urls.absolute)

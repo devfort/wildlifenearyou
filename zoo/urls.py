@@ -39,7 +39,7 @@ urlpatterns = patterns('',
         name='accounts-profile'),
     url(r'^profile/(\w+)/edit/$', accounts.profile_edit, 
         name='accounts-profile-edit'),
-   
+    
     # Dodo
     (r'^animal/dodo/$', 
         lambda r: http.HttpResponseGone('410 Gone')
@@ -55,6 +55,8 @@ urlpatterns = patterns('',
     (r'^databrowse/(.*)', databrowse.site.root),
 
 
+    url(r'^animal/$', 'zoo.animals.views.animals',
+        name='animals'),
     url(r'^animal/(?P<slug>[^/]+)/$', 'zoo.animals.views.animal',
         name='animal'),
 
