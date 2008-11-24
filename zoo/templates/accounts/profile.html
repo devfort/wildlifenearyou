@@ -1,3 +1,9 @@
-Profile page for {{ profile_user }}
+{% extends "base.html" %}
 
-<a href="/">Homepage?</a>
+{% block title %}{{ profile_user }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ profile_user }}</h1>
+
+{% endblock %}
