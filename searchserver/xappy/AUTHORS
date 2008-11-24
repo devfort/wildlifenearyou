@@ -1,0 +1,54 @@
+Authors
+=======
+
+The Xappy module and accompanying documentation and testsuite (excluding
+coverage.py) is Copyright (C) 2007-2008 Lemur Consulting Ltd.  It is released
+under the GPL license; see the file COPYING_GPL in this directory for details.
+
+Major code and design
+---------------------
+
+Richard Boulton (lead developer)
+Tom Mortimer (highlighting and summarisation)
+Tom Winch (facet heirarchy)
+Paul Rudin (range acceleration terms, difference search)
+
+
+Thanks are due to MyDeco (http://mydeco.com/) who have supported much of the
+development of Xappy.
+
+
+Bug reports and comments
+------------------------
+
+Thanks are due to the following individuals for helpful comments, bug reports
+and small patches:
+
+Michael Elsdörfer (sort by multiple values test and prototype)
+Bruno Rezende
+
+
+Third party code
+----------------
+
+The coverage.py file in the testsuite is Copyright 2001 Gareth Rees and
+Copyright 2004-2006 Ned Batchelder.  See the end of that file for details of
+its licensing.
+
+
+Sample data
+-----------
+
+The "testdata/query_sourcewords.txt" file contains a copy of
+/usr/share/dict/words from the "dictionaries-common" package in a
+Debian installation:
+
+Copyright (C) 1999-2003 Rafael Laboissiere <rafael@debian.org>
+Copyright (C) 2001-2004 Agustín Martín Domingo <agmartin@debian.org>
+Copyright (C) 2003-2004 René Engelhard <rene@debian.org>
+
+dictionaries-common is released under the terms of the GNU GPL, version 2,
+or at your option, any later version. (see /usr/share/common-licenses/GPL).
+
+"testdata/query_sourcewords.txt" also contains a copy of the text of John
+Milton's "Paradise Lost", taken from Project Gutenberg.
