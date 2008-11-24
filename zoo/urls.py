@@ -60,8 +60,8 @@ urlpatterns = patterns('',
 
     url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.animal_latin',),
 
-    url(r'^(?P<country_code>.*)/(?P<slug>.*)/$', 'zoo.places.views.place',
+    url(r'^(?P<country_code>\w{2})/(?P<slug>.*)/$', 'zoo.places.views.place',
         name='place'),
-    url(r'^(?P<country_code>.*)/$', 'zoo.places.views.country',
+    url(r'^(?P<country_code>\w{2})/$', 'zoo.places.views.country',
         name='country'),
 )
