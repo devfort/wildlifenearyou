@@ -4,17 +4,18 @@
 
 {% block content %}
 
-<p>Well hey there, you look new around here. Rrrooooaaaarrr!</p>
-<h2>Nav</h2>
-<ul>
-	<li><a href="/login">Login</a></li>
-	<li><a href="/profile">Profile</a></li>
-</ul>
+{% if user.is_authenticated %}
+	<p>Well hey {{ user.username }}, welcome back. View your <a href="/profile">profile</a> or <a href="/logout">logout</a>?</p>
+{% else %}
+	<p>Well hey there, you look new around here. If you're already registered you should <a href="/login">login</a>, otherwise you can <a href="/register">register</a>.</p>
+{% endif %}	
 
-<h2>Admin &amp; Dev</h2>
-<ul>
-	<li><a href="/admin">Admin</a></li>
-	<li><a href="/databrowse">Data Browser</a></li>
-</ul>
+{% if user.is_superuser %}
+	<h2>Admin &amp; Dev</h2>
+	<ul>
+		<li><a href="/admin">Admin</a></li>
+		<li><a href="/databrowse">Data Browser</a></li>
+	</ul>
+{% endif %}
 	
 {% endblock %}
