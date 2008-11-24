@@ -6,4 +6,9 @@
 
 <h1>{{ profile_user }}</h1>
 
+{% for photo in profile_user.photos.all %}
+<a href="{{ photo.photo.url }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
+{% endfor %}
+<p><a href="/photos/upload/">Upload a photo!</a></p>
+    
 {% endblock %}

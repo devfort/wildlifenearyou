@@ -17,6 +17,7 @@ for model in get_models():
 
 from accounts import views as accounts
 from faces import views as faces
+from photos import views as photos
 
 urlpatterns = patterns('',
     # Example:
@@ -55,6 +56,9 @@ urlpatterns = patterns('',
         name='accounts-all-profiles'),
     
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
+
+    (r'^photos/upload/$', photos.upload),
+
     
     # Dodo
     (r'^animal/dodo/$',
