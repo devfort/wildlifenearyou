@@ -17,7 +17,7 @@ def onanymodel_presave(sender, **kwargs):
         obj.modified_at = datetime.datetime.now()
     if hasattr(obj, 'modified_by_id'):
         obj.modified_by = current_user
-    if hasattr(obj, 'id'):
+    if not obj.pk:
         if hasattr(obj, 'created_at'):
             obj.created_at = datetime.datetime.now()
         if hasattr(obj, 'created_by_id'):
