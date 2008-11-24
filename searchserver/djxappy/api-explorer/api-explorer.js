@@ -90,7 +90,7 @@ jQuery(function($) {
 	
 	function hookupLinks() {
 		// Hook up links to the API to call Ajax instead
-		$('a[href*=/openout/]').not(
+		$('a[href*=/xapian/]').not(
 			'.no-modify'
 		).unbind('.explorer').bind('click.explorer', function(ev) {
 			ev.preventDefault();
