@@ -22,11 +22,6 @@ class PlaceInline(admin.TabularInline):
     model = Enclosure
     exclude = excludees
 
-#admin.site.register(Country,
-#    ordering = ['name'],
-#    list_per_page = 300,
-#    list_display = ('country_code', 'name'),
-#)
 admin.site.register(Webcam)
 admin.site.register(PlaceNews, exclude = excludees)
 admin.site.register(Place,

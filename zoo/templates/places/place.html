@@ -8,6 +8,13 @@
 <p class="sub-head">{{ place.legal_name }}</p>
 <address>{{ place.address|linebreaksbr }}</address>
 
+
+<h2>Species</h2>
+{% for species in species_list %}
+<h3><strong>{{ species.common_name }}</strong>, seen by {{ species.count }}{% if species.seen %} (seen){% endif %}</h3>
+{% endfor %}
+
+
 {% with place.enclosures.all as enclosures %}
     {% if enclosures %}
         <h2>Enclosures</h2>
