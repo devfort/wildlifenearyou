@@ -54,4 +54,8 @@
 <p><a href="upload/">Upload a photo you took here!</a></p>
 {% endif %}
 
+{% with place as object %}
+    {% include "_comments.html" %}
+{% endwith %}
+
 {% endblock %}

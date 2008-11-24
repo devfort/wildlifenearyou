@@ -73,6 +73,8 @@ urlpatterns = patterns('',
     ),
     (r'^animal/(unicorn|dragon|chimera|gryphon)/$', 'zoo.animals.views.imaginary'),
 
+    (r'^comments/', include('django.contrib.comments.urls')),
+
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
 

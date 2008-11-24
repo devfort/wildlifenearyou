@@ -10,13 +10,17 @@
 {% with species.enclosure_set.all as enclosures %}
     {% if enclosures %}
         <h2>See them here:</h2>
-		<ul>
+        <ul>
         {% for enclosure in enclosures %}
             <li>{{ enclosure }} at <a href="{{ enclosure.place.urls.absolute }}">{{ enclosure.place.known_as }}</a></li>
         {% endfor %}
-		</ul>
+        </ul>
     {% endif %}
 
+{% endwith %}
+
+{% with species as object %}
+    {% include "_comments.html" %}
 {% endwith %}
 
 {% endblock %}

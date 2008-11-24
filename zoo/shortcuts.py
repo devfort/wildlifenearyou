@@ -6,6 +6,7 @@ from django.utils import simplejson
 def render(request, template_name, context):
     # Do they have a current location cookie?
     context['current_location'] = request.COOKIES.get('current_location', '')
+    context['path'] = request.path
     return render_to_response(
         template_name, context, context_instance = RequestContext(request)
     )

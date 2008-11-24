@@ -81,6 +81,9 @@ TEMPLATE_DIRS = (
     os.path.join(OUR_ROOT, 'templates'),
     os.path.join(OUR_ROOT, 'ext/django/contrib/databrowse/templates'),
 )
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -100,6 +103,7 @@ INSTALLED_APPS = (
     'zoo.photos',
     'zoo.comments',
     'zoo.trips',
+    'django.contrib.comments',
 )
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
