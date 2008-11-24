@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import pluralize
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 from zoo.animals.models import Animal
 from zoo.utils import attrproperty
@@ -65,6 +66,12 @@ class Place(models.Model):
     def __unicode__(self):
         return self.known_as
 
+def create_place_callback(sender, instance, **kwargs):
+    # Create default nameless enclosure when place is created.
+    Enclosure.objects.create(place=instance,
+                             name=None)
+post_save.connect(create_place_callback, sender=Place)    
+
 class Webcam(models.Model):
     place = models.ForeignKey(Place, related_name = 'webcams')
     name = models.CharField(max_length=300, null=True, blank=True)
@@ -79,7 +86,9 @@ class Enclosure(models.Model):
     name = models.CharField(max_length=300, null=True, blank=True)
 
     def __unicode__(self):
-        return self.name
+        if not self.name:
+            return "Nameless enclosure for %s" % self.place.known_as
+        return "'%s' in %s" % (self.name, self.place.known_as)
 
 class EnclosureAnimal(models.Model):
     enclosure = models.ForeignKey(Enclosure)
