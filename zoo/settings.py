@@ -65,6 +65,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'zoo.middleware.OnlyLowercaseUrls',
+    'zoo.middleware.AutoCreatedAndModifiedFields',
 )
 
 ROOT_URLCONF = 'zoo.urls'

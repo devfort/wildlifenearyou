@@ -2,13 +2,13 @@ from django.contrib import admin
 from zoo.places.models import Country, Place, Enclosure, EnclosureAnimal, \
     Webcam
 
-class PlaceAdmin(admin.ModelAdmin):
-    exclude = ['created_at', 'modified_at']
+excludees = ['created_at', 'created_by', 'modified_at', 'modified_by']
     list_filter = ['country', 'town']
     search_fields = ['known_as', 'legal_name']
 
 class EnclosureAnimalInline(admin.TabularInline):
     model = EnclosureAnimal
+    exclude = excludees
 
 class EnclosureAdmin(admin.ModelAdmin):
     inlines = [
@@ -17,5 +17,5 @@ class EnclosureAdmin(admin.ModelAdmin):
 
 admin.site.register(Country)
 admin.site.register(Webcam)
-admin.site.register(Place, PlaceAdmin)
+admin.site.register(Place, **{'exclude': excludees})
 admin.site.register(Enclosure, EnclosureAdmin)

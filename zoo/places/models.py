@@ -1,7 +1,6 @@
-import datetime
-
 from django.db import models
 from django.template.defaultfilters import pluralize
+from django.contrib.auth.models import User
 
 from zoo.animals.models import Animal
 from zoo.utils import attrproperty
@@ -25,7 +24,9 @@ class Place(models.Model):
     country = models.ForeignKey(Country, null=False, blank=False)
 
     created_at = models.DateTimeField(null=False, blank=False)
+    created_by = models.ForeignKey(User, related_name='places_created')
     modified_at = models.DateTimeField(null=False, blank=False)
+    modified_by = models.ForeignKey(User, related_name='places_modified')
     
     # Address
     address_line_1 = models.CharField(max_length=250, null=True, blank=True)
@@ -83,11 +84,13 @@ class Enclosure(models.Model):
 class EnclosureAnimal(models.Model):
     enclosure = models.ForeignKey(Enclosure)
     animal = models.ForeignKey(Animal)
-    number_of_inhabitants = models.IntegerField(default=0, null=True, blank=True)
+    number_of_inhabitants = models.IntegerField(null=True, blank=True)
+    modified_at = models.DateTimeField(null=False, blank=False)
+    modified_by = models.ForeignKey(User)
 
     def __unicode__(self):
         retstr = self.animal.common_name
-        if self.number_of_inhabitants:
+        if self.number_of_inhabitants!=None:
             retstr += ' (%i)' % self.number_of_inhabitants
         if self.enclosure.name:
             retstr += ', %s' % self.enclosure.name
