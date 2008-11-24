@@ -1,5 +1,11 @@
 from django.contrib import admin
 from zoo.trips.models import Trip, TripSighting
 
-admin.site.register(Trip)
+class TripSightingInline(admin.TabularInline):
+    model = TripSighting
+
+
+admin.site.register(Trip,
+                    inlines = [TripSightingInline],
+                    )
 admin.site.register(TripSighting)
