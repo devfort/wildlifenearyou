@@ -9,11 +9,11 @@ class EnclosureAnimalInline(admin.TabularInline):
     exclude = excludees
 
 class EnclosureAdmin(admin.ModelAdmin):
-    list_display = ('name', 'place')
+    list_display = ('__unicode__', 'place')
     inlines = [
         EnclosureAnimalInline,
     ]
-    
+
     def changelist_view(self, request):
         #import pdb; pdb.set_trace()
         return super(EnclosureAdmin, self).changelist_view(request)
@@ -25,10 +25,10 @@ class PlaceInline(admin.TabularInline):
 #admin.site.register(Country,
 #    ordering = ['name'],
 #    list_per_page = 300,
-#    list_display = ('country_code', 'name'),   
+#    list_display = ('country_code', 'name'),
 #)
 admin.site.register(Webcam)
-admin.site.register(Place, 
+admin.site.register(Place,
     exclude = excludees,
     list_filter = ['country'],
     list_display = ('known_as', 'legal_name', 'town', 'country'),

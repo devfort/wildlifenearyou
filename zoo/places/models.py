@@ -86,10 +86,9 @@ class Enclosure(models.Model):
     name = models.CharField(max_length=300, null=True, blank=True)
 
     def __unicode__(self):
-        print "name:",self.name
         if self.name is None:
-            return "Nameless enclosure for %s" % self.place.known_as
-        return "'%s' in %s" % (self.name, self.place.known_as)
+            return u"Nameless enclosure for %s" % self.place.known_as
+        return u"'%s' in %s" % (self.name, self.place.known_as)
 
 class EnclosureAnimal(models.Model):
     enclosure = models.ForeignKey(Enclosure)
