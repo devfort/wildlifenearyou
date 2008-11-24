@@ -3,7 +3,7 @@ from zoo.places.models import Country, Place, Enclosure, EnclosureAnimal, \
     Webcam
 
 class PlaceAdmin(admin.ModelAdmin):
-    exclude = ['created_at', 'last_modified_at']
+    exclude = ['created_at', 'modified_at']
 
 class EnclosureAnimalInline(admin.TabularInline):
     model = EnclosureAnimal
