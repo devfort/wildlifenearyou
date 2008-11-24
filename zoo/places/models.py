@@ -13,7 +13,7 @@ class Country(models.Model):
         verbose_name_plural = 'countries'
     
     def __unicode__(self):
-        return '%s (%s)' % (self.name, self.country_code,)
+        return self.name
 
 class Place(models.Model):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
