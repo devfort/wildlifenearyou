@@ -5,8 +5,10 @@
 {% block content %}
 
 <h1>All species</h1>
+<ul>
 {% for species in all_species %}
-    <p><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+    <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></li>
 {% endfor %}
+</ul>
 
 {% endblock %}

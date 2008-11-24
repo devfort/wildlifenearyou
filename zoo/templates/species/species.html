@@ -10,9 +10,11 @@
 {% with species.enclosure_set.all as enclosures %}
     {% if enclosures %}
         <h2>See them here:</h2>
+		<ul>
         {% for enclosure in enclosures %}
-            <p>{{ enclosure }} at <a href="{{ enclosure.place.urls.absolute }}">{{ enclosure.place.known_as }}</a></p>
+            <li>{{ enclosure }} at <a href="{{ enclosure.place.urls.absolute }}">{{ enclosure.place.known_as }}</a></li>
         {% endfor %}
+		</ul>
     {% endif %}
 
 {% endwith %}
