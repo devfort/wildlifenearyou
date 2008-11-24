@@ -54,15 +54,15 @@ urlpatterns = patterns('',
         name='accounts-profile-edit'),
     url(r'^profiles/$', accounts.all_profiles,
         name='accounts-all-profiles'),
-    
+
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
 
     (r'^photos/upload/$', photos.upload),
-    
+
     (r'^set-location/$', 'zoo.geonames.views.set_location'),
     (r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete'),
 
-    
+
     # Dodo
     (r'^animal/dodo/$',
         lambda r: http.HttpResponseGone('410 Gone')
@@ -71,12 +71,15 @@ urlpatterns = patterns('',
         lambda r: http.HttpResponseRedirect('/animal/dodo/')
     ),
 
+
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
 
     # Databrowse
     (r'^databrowse/(.*)', databrowse.site.root),
 
+    url(r'^animal/narwhals/$', 'zoo.animals.views.narwhals',
+        name='narwhals'),
 
     url(r'^animal/$', 'zoo.animals.views.all_species',
         name='all-species'),

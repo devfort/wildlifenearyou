@@ -30,3 +30,6 @@ def all_species_latin(request):
     return render(request, 'species/all_species_latin.html', {
         'all_species': Species.objects.all().order_by('latin_name'),
     })
+
+def narwhals(request):
+    return render(request, 'species/narwhals.html', {})
