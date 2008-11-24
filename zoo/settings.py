@@ -98,6 +98,7 @@ INSTALLED_APPS = (
     'zoo.geonames',
     'sorl.thumbnail',
     'zoo.photos',
+    'zoo.comments',
 )
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
