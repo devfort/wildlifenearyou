@@ -71,13 +71,15 @@ def main():
             modified_at=datetime.datetime.now(),
         )
 
-        for e_idx in range(random.randrange(0, 15)):
+        for e_idx in range(random.randrange(0, 5)):
             enclosure = Enclosure.objects.create(
                 place=place,
                 name=generate_string(g_enclosure),
+                created_by=user,
+                modified_by=user,
             )
 
-            for ea_idx in range(random.randrange(0, 15)):
+            for ea_idx in range(random.randrange(0, 5)):
                 EnclosureSpecies.objects.create(
                     enclosure=enclosure,
                     species=random.choice(species),
