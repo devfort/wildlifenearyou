@@ -64,6 +64,35 @@ def jsonreturning(fn):
     def res(*args, **kwargs): return render_result_as_json(fn(*args, **kwargs))
     return res
 
+def validate_param(vals, minreps, maxreps, pattern, default):
+    """Validate a particular parameter.
+
+    """
+    l = len(vals)
+
+    # If not present, and there is a default, set vals to default
+    print l, vals, default
+    if l == 0 and default is not None:
+        vals = default
+
+    # Check we've got an acceptable number of values.
+    if l < minreps:
+        raise ValidationError("Too few instances of %r supplied "
+                              "(needed %d, got %d)" %
+                              (key, minreps, l))
+    if maxreps is not None and l > maxreps:
+        raise ValidationError("Too many instances of %r supplied "
+                              "(maximum %d, got %d)" %
+                              (key, maxreps, l))
+
+    # Check the regexp pattern matches
+    m = re.compile(pattern)
+    for val in vals:
+        if not m.match(val):
+            raise ValidationError("Invalid parameter value for %r" % key)
+
+    return vals
+
 def validate_params(request, constraints):
     """Validate parameters, raising ValidationError for problems.
 
@@ -71,17 +100,26 @@ def validate_params(request, constraints):
     raise an error.
 
     """
-    required_params = set()
-    for key, constraint in constraints.iteritems():
-        if constraint[0] != 0:
-            required_params.add(key)
-
     p = {}
 
-    for key in request.GET:
-        if key in required_params:
-            required_params.remove(key)
+    # Check for missing parameters - add if they have a default, otherwise give
+    # and error.
+    missing_params = set()
+    for key, constraint in constraints.iteritems():
+        if constraint[3] is not None:
+            if key not in request.GET:
+                p[key] = constraint[3]
+        else:
+            # check for missing params
+            if constraint[0] > 0 and key not in request.GET:
+                missing_params.add(key)
 
+    if len(missing_params) != 0:
+        # We trust the list of missing_params not to be trying to hack us.
+        raise ValidationError("Missing required parameters %s" %
+                              ', '.join("'%s'" % p for p in missing_params))
+
+    for key in request.GET:
         constraint = constraints.get(key, None)
         if constraint is None:
             if re.match('\w+$', key):
@@ -89,36 +127,7 @@ def validate_params(request, constraints):
                 raise ValidationError("Unknown parameter %r supplied" % key)
             else:
                 raise ValidationError("Unknown parameter supplied")
-        vals = request.GET.getlist(key)
-
-        # Check we've got an acceptable number of values.
-        l = len(vals)
-        if l < constraint[0]:
-            raise ValidationError("Too few instances of %r supplied "
-                                  "(needed %d, got %d)" %
-                                  (key, constraint[0], l))
-        if constraint[1] is not None and l > constraint[1]:
-            raise ValidationError("Too many instances of %r supplied "
-                                  "(maximum %d, got %d)" %
-                                  (key, constraint[1], l))
-
-        # If not present, set vals to default
-        if l == 0:
-            vals = constraint[3]
-
-        # Check the regexp pattern matches
-        m = re.compile(constraint[2])
-        for val in vals:
-            if not m.match(val):
-                raise ValidationError("Invalid parameter value for %r" % key)
-
-        # Store the parameter for return
-        p[key] = vals
-
-    if len(required_params) != 0:
-        # We trust the list of required_params not to be trying to hack us.
-        raise ValidationError("Missing required parameters %s" %
-                              ', '.join("'%s'" % p for p in required_params))
+        p[key] = validate_param(request.GET.getlist(key), *constraint)
 
     return p
 
@@ -147,21 +156,31 @@ def search(request):
     params = validate_params(request, {
                              'db': (1, 1, '^\w+$', None),
                              'q': (1, None, '^.*$', None),
-                             'startrank': (0, 1, '^\d+$', ['0']),
-                             'endrank': (0, 1, '^\d+$', ['10']),
+                             'startrank': (1, 1, '^\d+$', ['0']),
+                             'endrank': (1, 1, '^\d+$', ['10']),
                              })
 
     db = xappy.SearchConnection(get_db_path(params['db'][0]))
-    qs = [db.query_parse(subq) for subq in qparams['q']]
-    q = db.query_combine(qs)
-    search_results = q.search(params['startrank'][0],
-                              params['endrank'][0])
+    qs = [db.query_parse(subq) for subq in params['q']]
+    q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
+    res = q.search(int(params['startrank'][0]),
+                   int(params['endrank'][0]))
 
-    res = {
+    items = ({
+             'rank': (item.rank),
+             'id': (item.id),
+             'data': (item.data),
+             }
+             for item in res)
+
+    retval = {
         'db': params['db'][0],
+        'items': list(items),
+        'matches_lower_bound': res.matches_lower_bound,
         'matches_estimated': res.matches_estimated,
+        'matches_upper_bound': res.matches_upper_bound,
     }
-    return res
+    return retval
 
 @jsonreturning
 @errchecked

@@ -1,6 +1,8 @@
 #!/usr/bin/python
+from os.path import dirname as up
 import os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'ext', 'xappy'))
+sys.path.insert(0, os.path.join(up(__file__), 'ext', 'xappy'))
+sys.path.insert(0, os.path.join(up(up(up(os.path.abspath(__file__)))), 'zoo', 'ext'))
 
 from django.core.management import execute_manager
 try:
