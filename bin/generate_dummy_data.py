@@ -79,6 +79,7 @@ def main():
                     enclosure=enclosure,
                     animal=random.choice(animals),
                     number_of_inhabitants=random.randrange(0, 250),
+                    modified_at=datetime.datetime.now(),
                 )
 
     return 0
