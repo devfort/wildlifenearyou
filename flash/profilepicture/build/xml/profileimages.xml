@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<profileImages>
+	<faces>
+		<face src="face1.png" title="pale skin" />
+		<face src="face2.png" title="pale skin" />
+		<face src="face3.png" title="pale skin" />
+		<face src="face4.png" title="pale skin" />
+		<face src="face5.png" title="pale skin" />
+		<face src="face6.png" title="pale skin" />
+		<face src="face7.png" title="pale skin" />
+	</faces>
+	<eyes>
+		<eye src="eye1.png" title="blue eyes" />
+		<eye src="eye2.png" title="blue eyes" />
+		<eye src="eye3.png" title="blue eyes" />		
+		<eye src="eye4.png" title="blue eyes" />
+		<eye src="eye5.png" title="blue eyes" />
+	</eyes>
+	<noses>
+		<nose src="nose1.png" title="nose 1" />
+		<nose src="nose2.png" title="nose 1" />
+		<nose src="nose3.png" title="nose 1" />
+	</noses>
+	<mouths>
+		<mouth src="mouth1.png" title="mouth 1" />
+		<mouth src="mouth2.png" title="mouth 1" />
+		<mouth src="mouth3.png" title="mouth 1" />
+	</mouths>
+	<cheeks>
+		<cheek src="cheeck1.png" title="cheek 1" />
+		<cheek src="cheeck2.png" title="cheek 1" />
+		<cheek src="cheeck3.png" title="cheek 1" />
+	</cheeks>
+	<facialHairs>
+		<facialHair src="facialHair1.png" title="facial Hair  1" />
+		<facialHair src="facialHair2.png" title="facial Hair  1" />
+		<facialHair src="facialHair3.png" title="facial Hair  1" />
+	</facialHairs>
+	<hairs>
+		<hair src="hair1.png" title="Hair  1" />
+		<hair src="hair1.png" title="Hair  1" />
+	</hairs>
+	<hairAccessories>
+		<hairAccessorie src="hairaccessory1.png" title="Hair Accessorie 1" />
+		<hairAccessorie src="hairaccessory1.png" title="Hair Accessorie 1" />
+		<hairAccessorie src="hairaccessory1.png" title="Hair Accessorie 1" />
+		<hairAccessorie src="hairaccessory1.png" title="Hair Accessorie 1" />
+	</hairAccessories>
+</profileImages>

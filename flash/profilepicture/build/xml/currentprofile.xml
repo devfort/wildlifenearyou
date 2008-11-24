@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<profile>
+	<userData id="UID">
+		<userName><![CDATA[Niqui]]></userName>
+	</userData>
+	<savedFaceData>
+		<face src="face1.png" id="uid" title="pale skin" />
+		<eye src="eye5.png" id="uid" title="blue eyes" />
+		<nose src="nose3.png" id="uid" title="nose 1" />
+		<mouth src="mouth1.png" id="uid" title="mouth 1" />
+		<cheek src="cheeck1.png" id="uid" title="cheek 1" />
+		<facialHair src="facialHair1.png" id="uid" title="facial Hair  1" />
+		<hair src="hair1.png" id="uid" title="Hair  1" />
+		<hairAccessorie src="hairaccessory1.png" id="uid" title="Hair Accessorie 1" />
+	</savedFaceData>
+</profile>

@@ -33,7 +33,8 @@
 		<script type="text/javascript">
 			var so = new SWFObject("swf/profilepicture.swf", "flashMovie", 470, 560, 9, "#ffffff");
 			so.addParam("quality", "high");
-			so.addVariable("xmlToLoad", "xml/profilepicture.xml");
+			so.addVariable("imagesdata", "xml/profileimages.xml");
+			so.addVariable("currentprofile", "xml/currentprofile.xml");
 			so.useExpressInstall("swfobject/expressinstall.swf");
 			so.write("flashMovie");
 		</script>
