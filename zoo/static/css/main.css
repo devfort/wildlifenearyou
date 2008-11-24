@@ -7,3 +7,10 @@ body {
 	font-size: 0.85em;
 	margin-bottom: 2em;
 }
+
+/* Cloud on place page */
+
+.seen {
+    color: #cc0000;
+    background-color: #ffffff;
+}

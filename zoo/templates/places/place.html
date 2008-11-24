@@ -9,10 +9,15 @@
 <address>{{ place.address|linebreaksbr }}</address>
 
 
-<h2>Species</h2>
+<h2>Species seen (<span class="seen">by you</span>)</h2>
+{% if species_list %}
+<ul>
 {% for species in species_list %}
-<h3><strong>{{ species.common_name }}</strong>, seen by {{ species.count }}{% if species.seen %} (seen){% endif %}</h3>
+<li><span {% if species.seen %}class="seen" {% endif %}title="{{ species.count }} seen">{{ species.common_name }}</span></li>
 {% endfor %}
+</ul>
+{% endif %}
+
 <a href="{% url place-species place.country.country_code,place.slug %}">All species</a>
 
 
