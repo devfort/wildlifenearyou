@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     }),
     
     # Landing Page
-    url(r'^$', 'zoo.homepage.views.landing', 
+    url(r'^$', 'zoo.homepage.views.landing',
         name='landing-page'),
 
     # User accounts stuff
