@@ -1,4 +1,4 @@
-from zoo.shortcuts import render, Redirect
+from zoo.shortcuts import render, Redirect, render_json
 from utils import search_location
 
 def set_location(request):
@@ -13,3 +13,13 @@ def set_location(request):
                 path = '/',
             )
     return response
+
+def autocomplete(request):
+    q = request.GET.get('q')
+    results = search_location(q)
+    return render_json(request, {
+        'results': [{
+            'id': r.id,
+            'name': r.place_name
+        } for r in results]
+    })

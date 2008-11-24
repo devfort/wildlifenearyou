@@ -2,36 +2,62 @@
 
 {% block title %}Welcome to SEDF App{% endblock %}
 
+{% block extra_head %}
+<script type="text/javascript" 
+    src="/static/js/jquery-autocomplete/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" 
+    href="/static/js/jquery-autocomplete/jquery.autocomplete.css">
+
+<script type="text/javascript">
+jQuery(function($) {
+    $("#id_location").autocomplete('/geonames/autocomplete/', {
+        parse: function(data) {
+            return $.map(eval('(' + data + ')')['results'], function(row) {
+                return {
+                    data: row,
+                    value: row.name,
+                    result: row.name
+                }
+            });
+        },
+        formatItem: function(item) {
+            return item.name;
+        }
+    });
+});
+
+</script>
+{% endblock %}
+
 {% block content %}
 
 {% if user.is_authenticated %}
-	<p>Well hey {{ user.username }}, welcome back. View your <a href="/profile/">profile</a> or <a href="/logout/">logout</a>?</p>
+    <p>Well hey {{ user.username }}, welcome back. View your <a href="/profile/">profile</a> or <a href="/logout/">logout</a>?</p>
 {% else %}
-	<p>Well hey there, you look new around here. If you're already registered you should <a href="/login/">login</a>, otherwise you can <a href="/register/">register</a>.</p>
-{% endif %}	
+    <p>Well hey there, you look new around here. If you're already registered you should <a href="/login/">login</a>, otherwise you can <a href="/register/">register</a>.</p>
+{% endif %}    
 
 {% if current_location %}
     <p>Your location: {{ current_location }}</p>
-{% else %}
+{% endif %}
     <form action="/set-location/" method="POST">
         <p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location"> <input type="submit" value="Go"></p>
     </form>
-{% endif %}
 
-	<h2>Look Around</h2>
-	<ul>
-		<li><a href="/latin/">Our menagerie of animals by latin name</a></li>
-		<li><a href="/animal/">Our menagerie of animals by the name you're most likely to know them by</a></li>
-		<li><a href="/profiles">All User Profiles</a></li>
-		<li><a href="/countries">All countries in our database</a></li>
-	</ul>
+    <h2>Look Around</h2>
+    <ul>
+        <li><a href="/latin/">Our menagerie of animals by latin name</a></li>
+        <li><a href="/animal/">Our menagerie of animals by the name you're most likely to know them by</a></li>
+        <li><a href="/profiles">All User Profiles</a></li>
+        <li><a href="/countries">All countries in our database</a></li>
+    </ul>
 
 {% if user.is_superuser %}
-	<h2>Admin &amp; Dev</h2>
-	<ul>
-		<li><a href="/admin/">Admin</a></li>
-		<li><a href="/databrowse/">Data Browser</a></li>
-	</ul>
+    <h2>Admin &amp; Dev</h2>
+    <ul>
+        <li><a href="/admin/">Admin</a></li>
+        <li><a href="/databrowse/">Data Browser</a></li>
+    </ul>
 {% endif %}
-	
+
 {% endblock %}

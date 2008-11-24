@@ -60,6 +60,8 @@ urlpatterns = patterns('',
     (r'^photos/upload/$', photos.upload),
     
     (r'^set-location/$', 'zoo.geonames.views.set_location'),
+    (r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete'),
+
     
     # Dodo
     (r'^animal/dodo/$',
