@@ -14,7 +14,6 @@ class Trip(models.Model):
     name = models.CharField(null=True, blank=True, max_length=100)
     sightings = models.ManyToManyField(Species, through='TripSighting')
 
-
     class Meta:
         ordering = ['-start']
     
