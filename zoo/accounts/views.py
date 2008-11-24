@@ -41,6 +41,11 @@ def profile(request, username):
 
 def profile_edit(request, username):
     pass
+    
+def all_profiles(request):
+    return render(request, 'accounts/all_profiles.html', {
+        'all_users': User.objects.all(),
+    })
 
 from django import forms
 

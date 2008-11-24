@@ -23,7 +23,9 @@ class Species(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('species', (), {'slug': self.slug})
+        return ('species', (), {
+            'slug': self.slug
+        })
 
     @attrproperty
     def urls(self, name):

@@ -21,5 +21,11 @@ def country(request, country_code):
         'country': country,
         'places': places,
     })
+    
+def all_countries(request):
+    return render(request, 'places/all_countries.html', {
+        'all_countries': Country.objects.all().order_by('name'),
+    })
+    
 
 

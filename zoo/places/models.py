@@ -12,6 +12,17 @@ class Country(models.Model):
 
     class Meta:
         verbose_name_plural = 'countries'
+        
+    @models.permalink
+    def get_absolute_url(self):
+        return ('country', (), {
+            'country_code': self.country_code.lower()
+        })
+
+    @attrproperty
+    def urls(self, name):
+        if name == 'absolute':
+            return self.get_absolute_url()
 
     def __unicode__(self):
         return self.name
