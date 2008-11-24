@@ -33,6 +33,9 @@ urlpatterns = patterns('',
     url(r'^login/$', 'django.contrib.auth.views.login', {
         'template_name': 'accounts/login.html'
     }, name='accounts-login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {
+        'next_page': '/login/'
+    }, name='accounts-logout'),
     url(r'^register/$', accounts.register, 
         name='accounts-register'),
     url(r'^welcome/$', accounts.welcome, 
