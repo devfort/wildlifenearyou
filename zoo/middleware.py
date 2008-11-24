@@ -8,7 +8,10 @@ class OnlyLowercaseUrls:
             return HttpResponseRedirect(request.path.lower())
 
 stash = threading.local()
-stash.current_user = None
+def set_current_user(user):
+    stash.current_user = user
+
+set_current_user(None)
 
 def onanymodel_presave(sender, **kwargs):
     current_user = stash.current_user
@@ -30,4 +33,4 @@ pre_save.connect(onanymodel_presave)
 
 class AutoCreatedAndModifiedFields:
     def process_request(self, request):
-        stash.current_user = request.user
+        set_current_user(request.user)

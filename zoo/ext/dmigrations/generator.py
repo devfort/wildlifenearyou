@@ -134,6 +134,7 @@ def add_column(args, output):
 
     app_label, model, columns = args[0], args[1], args[2:]
     actual_model = models.get_model(app_label, model)
+    assert actual_model, 'model %s does not exist' % model
 
     style = no_style()
     sql, references = connection.creation.sql_create_model(

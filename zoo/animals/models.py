@@ -1,7 +1,8 @@
 from django.db import models
 from zoo.utils import attrproperty
+from zoo.models import AuditedModel
 
-class SpeciesGroup(models.Model):
+class SpeciesGroup(AuditedModel):
     name = models.CharField(max_length=255, blank=False, null=False,
         unique=True
     )
@@ -12,7 +13,7 @@ class SpeciesGroup(models.Model):
     def __unicode__(self):
         return self.name
 
-class Species(models.Model):
+class Species(AuditedModel):
     common_name = models.CharField(max_length=500, blank=False, null=False)
     latin_name = models.CharField(max_length=500, blank=False, null=False)
     slug = models.SlugField(max_length=255, blank=False, null=False, unique=True)

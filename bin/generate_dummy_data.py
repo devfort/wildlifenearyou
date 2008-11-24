@@ -21,8 +21,10 @@ from pygen import Alternation as A
 from django.contrib.auth.models import User
 from zoo.animals.models import Species, SpeciesGroup
 from zoo.places.models import Place, Enclosure, EnclosureSpecies, Country
+from zoo.middleware import set_current_user
 
 user = User.objects.get(username='sedf')
+set_current_user(user)
 
 from django.template.defaultfilters import slugify
 
@@ -44,7 +46,7 @@ def main():
 
     species_groups = []
     for name in ('Fish', 'Tigers', 'Cute things', 'Lolcats', 'Badass animals'):
-        species_groups.append(SpeciesGroup.objects.create(name=name))
+        species_groups.append(SpeciesGroup.objects.get_or_create(name=name)[0])
 
     species = []
     for a_idx in range(100):
@@ -67,16 +69,12 @@ def main():
             country=random.choice(Country.objects.all()),
             town='Town',
             zip='Zip',
-            created_at=datetime.datetime.now(),
-            modified_at=datetime.datetime.now(),
         )
 
         for e_idx in range(random.randrange(0, 5)):
             enclosure = Enclosure.objects.create(
                 place=place,
                 name=generate_string(g_enclosure),
-                created_by=user,
-                modified_by=user,
             )
 
             for ea_idx in range(random.randrange(0, 5)):
@@ -84,8 +82,6 @@ def main():
                     enclosure=enclosure,
                     species=random.choice(species),
                     number_of_inhabitants=random.randrange(0, 250),
-                    modified_at=datetime.datetime.now(),
-                    modified_by=user,
                 )
 
     return 0

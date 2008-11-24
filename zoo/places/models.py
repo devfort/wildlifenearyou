@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 
 from zoo.animals.models import Species
 from zoo.utils import attrproperty
+from zoo.models import AuditedModel
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -27,18 +28,13 @@ class Country(models.Model):
     def __unicode__(self):
         return self.name
 
-class Place(models.Model):
+class Place(AuditedModel):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
     known_as = models.CharField(max_length=500, null=False, blank=False)
     slug = models.SlugField(max_length=255, null=False, blank=False,
         unique=True
     )
     country = models.ForeignKey(Country, null=False, blank=False)
-
-    created_at = models.DateTimeField(null=False, blank=False)
-    created_by = models.ForeignKey(User, related_name='places_created')
-    modified_at = models.DateTimeField(null=False, blank=False)
-    modified_by = models.ForeignKey(User, related_name='places_modified')
 
     # Address
     address_line_1 = models.CharField(max_length=250, null=True, blank=True)
@@ -83,16 +79,11 @@ def create_place_callback(sender, instance, created, **kwargs):
         Enclosure.objects.create(place=instance)
 post_save.connect(create_place_callback, sender=Place)
 
-class PlaceNews(models.Model):
+class PlaceNews(AuditedModel):
     place = models.ForeignKey(Place, related_name = 'news')
     headline = models.CharField(max_length=300)
     url = models.URLField(verify_exists=False)
     story_date = models.DateField()
-    
-    created_at = models.DateTimeField(null=False, blank=False)
-    created_by = models.ForeignKey(User, related_name = 'placenews_created')
-    modified_at = models.DateTimeField(null=False, blank=False)
-    modified_by = models.ForeignKey(User, related_name = 'placenews_modified')
     
     class Meta:
         verbose_name_plural = 'place news'
@@ -100,7 +91,7 @@ class PlaceNews(models.Model):
     def __unicode__(self):
         return u'%s (%s on %s)' % (self.headline, self.place, self.story_date)
 
-class Webcam(models.Model):
+class Webcam(AuditedModel):
     place = models.ForeignKey(Place, related_name = 'webcams')
     name = models.CharField(max_length=300, null=True, blank=True)
     url = models.URLField()
@@ -108,7 +99,7 @@ class Webcam(models.Model):
     def __unicode__(self):
         return self.name
 
-class Enclosure(models.Model):
+class Enclosure(AuditedModel):
     place = models.ForeignKey(Place, related_name = 'enclosures')
     species = models.ManyToManyField(Species, through='EnclosureSpecies')
     name = models.CharField(max_length=300, null=True, blank=True)
@@ -118,12 +109,10 @@ class Enclosure(models.Model):
             return u"Nameless enclosure"
         return self.name
 
-class EnclosureSpecies(models.Model):
+class EnclosureSpecies(AuditedModel):
     enclosure = models.ForeignKey(Enclosure)
     species = models.ForeignKey(Species)
     number_of_inhabitants = models.IntegerField(null=True, blank=True)
-    modified_at = models.DateTimeField(null=False, blank=False)
-    modified_by = models.ForeignKey(User)
 
     def __unicode__(self):
         retstr = self.species.common_name
