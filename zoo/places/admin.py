@@ -4,6 +4,8 @@ from zoo.places.models import Country, Place, Enclosure, EnclosureAnimal, \
 
 class PlaceAdmin(admin.ModelAdmin):
     exclude = ['created_at', 'modified_at']
+    list_filter = ['country', 'town']
+    search_fields = ['known_as', 'legal_name']
 
 class EnclosureAnimalInline(admin.TabularInline):
     model = EnclosureAnimal
