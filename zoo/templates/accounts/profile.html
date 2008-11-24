@@ -15,7 +15,7 @@
 	<h2>Animal Passport</h2>	
 	<ol>
 	{% for species in profile.passport.seen_species %}
-		<li>{{ species.count }}&times; {{ species }}</li>
+		<li>{{ species.count }}&times; <a href="{{ species.urls.absolute }}">{{ species }}</a></li>
 	{% endfor %}
 	</ol>
 </div>
@@ -25,10 +25,10 @@
 	<ol>
 	{% for trip in profile.user.trips.all %}
 		<li>
-			<p>During {{ trip.title }} on {{ trip.start|date:"jS F Y" }} you saw</p>
+			<p>During your trip to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a> on {{ trip.start|date:"jS F Y" }} you saw</p>
 			<ul>
 			{% for species in trip.sightings.all %}
-				<li>{{ species.common_name }}</li>
+				<li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></li>
 			{% endfor %}
 			</ul>
 		</li>

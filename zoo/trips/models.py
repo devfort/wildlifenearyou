@@ -16,7 +16,7 @@ class Trip(models.Model):
 
     class Meta:
         ordering = ['-start']
-    
+        
     def save(self, *args, **kwargs):
         if self.end==None:
             self.end = self.start + datetime.timedelta(1)
