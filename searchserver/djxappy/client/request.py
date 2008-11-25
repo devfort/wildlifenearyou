@@ -170,9 +170,17 @@ class SearchClient(object):
                 vals = filter(None, vals)
                 args.append((field, vals))
             path += '?' + urllib.urlencode(args, doseq=1)
-        fd = urllib2.urlopen(self.base_url + path)
+
+        if data is None:
+            fd = urllib2.urlopen(self.base_url + path)
+        else:
+            print data
+            data = urllib.urlencode(data, doseq=1)
+            print (self.base_url + path, data)
+            fd = urllib2.urlopen(self.base_url + path, data)
         res = fd.read()
         fd.close()
+
         res = simplejson.loads(res)
         if 'elapsed' in res:
             self.last_elapsed_time = res['elapsed']
@@ -196,7 +204,7 @@ class SearchClient(object):
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise SearchClientError('Missing db_name')
+            raise Invalid('Missing db_name')
 
         req = {
             'q': query.query_string,
@@ -292,7 +300,7 @@ class SearchClient(object):
         return self._doreq('deldb', data=req)
 
     def add(self, doc, db_name=None):
-        """Add a document tothe database.
+        """Add a document to the database.
 
         `doc` the document (as a Document object).
 
@@ -302,7 +310,7 @@ class SearchClient(object):
         if db_name is None:
             raise SearchClientError('Missing db_name')
 
-        return self._doreq('add', data={'doc': [doc.as_json()]})
+        return self._doreq('add/' + db_name, data={'doc': [doc.as_json()]})
 
     def bulkadd(self, docs, db_name=None):
         """Add a load of documents tothe database.
@@ -315,5 +323,5 @@ class SearchClient(object):
         if db_name is None:
             raise SearchClientError('Missing db_name')
 
-        return self._doreq('add', data={'doc': [doc.as_json() for doc in docs]})
+        return self._doreq('add/' + db_name, data={'doc': [doc.as_json() for doc in docs]})
 

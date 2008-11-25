@@ -60,6 +60,11 @@ def errchecked(fn):
             return {"error": str(e), "type": e.errtype}
         except xappy.SearchEngineError, e:
             return {"error": str(e), "type": "xappy.%s" % e.__class__.__name__}
+        except:
+            # FIXME - log this (and other errors) better
+            import traceback
+            traceback.print_exc()
+            traceback.print_last()
     return res
 
 def jsonreturning(fn):
@@ -87,7 +92,6 @@ def validate_param(key, vals, minreps, maxreps, pattern, default):
     l = len(vals)
 
     # If not present, and there is a default, set vals to default
-    print l, vals, default
     if l == 0 and default is not None:
         vals = default
 
@@ -314,7 +318,8 @@ def deldb(request):
 
 def doc_from_params(params):
     doc = xappy.UnprocessedDocument()
-    for val in params['text']:
+    print params
+    for val in params['data']:
         doc.append('text', val)
     if len(params['id']) > 0:
         doc.id = params['id'][0]
@@ -351,14 +356,17 @@ def add(request, db_name):
  
     """
     params = validate_params(request.POST, {
-                             'doc': (1, -1, None, None),
+                             'doc': (1, None, None, None),
                              })
 
     db = xappy.IndexerConnection(get_db_path(db_name))
-    newids = []
-    for doc in params['doc']:
-        doc = simplejson.loads(doc)
-        ids.append = db.add(doc_from_params(doc))
-    db.flush()
-    return {'ok': 1, 'ids': newids, 'doccount': db.get_doccount()}
+    try:
+        newids = []
+        for doc in params['doc']:
+            doc = simplejson.loads(doc)
+            ids.append = db.add(doc_from_params(doc))
+        db.flush()
+        return {'ok': 1, 'ids': newids, 'doccount': db.get_doccount()}
+    finally:
+        db.close()
 
