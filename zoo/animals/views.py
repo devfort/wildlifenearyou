@@ -1,10 +1,10 @@
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseServerError
 from django.core import serializers
 from django.template import loader, Context
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 
-from zoo.animals.models import Species, SuperSpecies
 from zoo.shortcuts import render
+from zoo.animals.models import Species, SuperSpecies
 
 def species(request, slug):
     try:

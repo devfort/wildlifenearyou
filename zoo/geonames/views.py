@@ -1,4 +1,4 @@
-from zoo.shortcuts import render, Redirect, render_json
+from zoo.shortcuts import Redirect, render_json
 from utils import search_location
 
 def set_location(request):

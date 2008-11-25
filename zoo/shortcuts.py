@@ -1,7 +1,7 @@
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.http import HttpResponseRedirect as Redirect, HttpResponse
 from django.utils import simplejson
+from django.http import HttpResponse
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 def render(request, template_name, context):
     # Do they have a current location cookie?
