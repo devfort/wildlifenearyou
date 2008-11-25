@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1>{{ species }}</h1>
-<p class="sub-head">{{ species.latin_name }}</p>
+<p class="sub-head"><i class="scientific">{{ species.latin_name }}</i></p>
 
 {% with species.enclosure_set.all as enclosures %}
     {% if enclosures %}

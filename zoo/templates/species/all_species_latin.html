@@ -7,7 +7,7 @@
 <h1>All species, by latin name</h1>
 <ul>
 {% for species in all_species %}
-    <li><a href="{{ species.urls.absolute }}">{{ species.latin_name }}</a></li>
+    <li><a href="{{ species.urls.absolute }}"><i class="scientific">{{ species.latin_name }}</i></a></li>
 {% endfor %}
 </ul>
 
