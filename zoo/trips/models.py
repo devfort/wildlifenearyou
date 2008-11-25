@@ -45,7 +45,7 @@ class Trip(AuditedModel):
 
         o = Passport(species_list)
         return o
-
+        
     def title(self):
         if self.name:
             return self

@@ -11,20 +11,28 @@
 {% for photo in profile.user.photos.all %}
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
 {% endfor %}
-<p><a href="{% url upload-photos %}">Upload a photo!</a></p>
-<p><a href="{% url logbook-default %}">My Logbook</a></p>
+{% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
+<p><a href="{% url logbook-default %}">{% ifequal profile.user user %}My{% else %}{{profile.user}}'s{% endifequal %} Logbook</a></p>
 
 <div id="animal_passport">
 	<h2>Animal Passport</h2>
+	{% if profile.passport.seen_species %}
 	<ol>
 	{% for species in profile.passport.seen_species %}
 		<li>{{ species.count }}&times; <a href="{{ species.urls.absolute }}">{{ species }}</a></li>
 	{% endfor %}
 	</ol>
+	{% else %}
+	<p>
+		{% ifequal profile.user user %}You apparently haven't{% else %}This user hasn't{% endifequal %} spotted any animals yet. 
+		{% ifequal profile.user user %}Spot now?{% endifequal %}		
+	</p>
+	{% endif %}
 </div>
 
 <div id="my_trips">
 	<h2>My Trips</h2>
+	{% if profile.user.created_trip_set.all %}
 	<ol>
 	{% for trip in profile.user.created_trip_set.all %}
 		<li>
@@ -37,22 +45,35 @@
 		</li>
 	{% endfor %}
 	</ol>
+	{% else %}
+	<p>
+		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been anywhere yet. 
+		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}		
+	</p>
+	{% endif %}
 </div>
 
 <div id="favourite_species">
-  <h2>Favourite Animals</h2>
-  <ol>
+	<h2>Favourite Animals</h2>
+	{% if request.user.favourite_species.all %}
+	<ol>
     {% for favourite in request.user.favourite_species.all %}
-    <li><a href="{{ favourite.species.urls.absolute }}">{{ favourite.species }}</a>
-      {% favourite_toggler "remove" favourite.species.slug request.path  %}
-    </li>
-    {% endfor %}
-  </ol>
+	<li><a href="{{ favourite.species.urls.absolute }}">{{ favourite.species }}</a>
+		{% favourite_toggler "remove" favourite.species.slug request.path  %}
+	</li>
+	{% endfor %}
+	</ol>
+	{% else %}
+	<p>
+		{% ifequal profile.user user %}You don't{% else %}This user doesn't{% endifequal %} have any favourite animals yet. 
+		{% ifequal profile.user user %}Pick some?{% else %}Suggest some?{% endifequal %}
+	</p>
+	{% endif %}
 </div>
 
 
 {% if user.comment_comments.all %}
-<h2>Comments I have posted:</h2>
+<h2>My Comments:</h2>
 {% for comment in user.comment_comments.all %}
 <div class="comment">
 {{ comment.comment|linebreaks }}

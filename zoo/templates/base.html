@@ -17,7 +17,7 @@
 	{% if user.is_authenticated %}
 	<a href="{% url accounts-profile user %}">My Profile</a> |
 	<a href="{% url logbook user %}">My Logbook</a> |
-	<a href="{% url accounts-logout %}">Logout</a>	
+	<a href="{% url accounts-logout %}">Logout</a> |
 	{% else %}
 	<a href="{% url accounts-register %}">Signup</a> |
 	<a href="{% url accounts-login %}">Login</a> |	
