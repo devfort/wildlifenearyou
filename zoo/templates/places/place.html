@@ -12,15 +12,19 @@
 {% for date_range, days in opening_times.items %}
 	<h3>{{ date_range|safe }}</h3>
 
+	<dl>
 	{% for day in days %}
 		{% if day %}
-		<li>
-			{% if day.name  %}{{ day.name }}:{% endif %}
-			{% if day.closed %}Closed{% endif %}
-			{{ day.times }}
-		</li>
+			{% if day.name %}
+				<dt>{{ day.name }}</dt>
+			{% endif %}
+			<dd>
+				{% if day.closed %}Closed{% endif %}
+				{{ day.times }}
+			</dd>
 		{% endif %}
 	{% endfor %}
+	</dl>
 {% endfor %}
 
 <h2>Species seen (<span class="seen">by you</span>)</h2>
