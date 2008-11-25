@@ -86,7 +86,7 @@ def create_place_callback(sender, instance, created, **kwargs):
 post_save.connect(create_place_callback, sender=Place)
 
 class PlaceNews(AuditedModel):
-    place = models.ForeignKey(Place, related_name = 'news')
+    place = models.ForeignKey(Place, related_name='news')
     headline = models.CharField(max_length=300)
     url = models.URLField(verify_exists=False)
     story_date = models.DateField()
@@ -98,7 +98,7 @@ class PlaceNews(AuditedModel):
         return u'%s (%s on %s)' % (self.headline, self.place, self.story_date)
 
 class Webcam(AuditedModel):
-    place = models.ForeignKey(Place, related_name = 'webcams')
+    place = models.ForeignKey(Place, related_name='webcams')
     name = models.CharField(max_length=300, null=True, blank=True)
     url = models.URLField()
 
@@ -106,7 +106,7 @@ class Webcam(AuditedModel):
         return self.name
 
 class Enclosure(AuditedModel):
-    place = models.ForeignKey(Place, related_name = 'enclosures')
+    place = models.ForeignKey(Place, related_name='enclosures')
     species = models.ManyToManyField('animals.Species', through='EnclosureSpecies')
     name = models.CharField(max_length=300, null=True, blank=True)
 
@@ -144,9 +144,8 @@ class PlaceOpening(models.Model):
         if self.days_of_week:
             days_of_week = self.days_of_week.split(',')
             days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-            days_of_week = '/'.join([ days[int(d)] for d in days_of_week ])
+            days_of_week = '/'.join([days[int(d)] for d in days_of_week])
         else:
             days_of_week = 'all days'
         times = self.times and self.times or 'All day'
         return "%s, %s %s %s-%s %s" % (self.place, closed, days_of_week, start_date, end_date, times)
-

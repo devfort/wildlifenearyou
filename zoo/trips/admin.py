@@ -13,4 +13,3 @@ admin.site.register(Trip,
 admin.site.register(Sighting,
     exclude = exclude,
 )
-

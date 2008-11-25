@@ -28,8 +28,8 @@ class UploadPhotoForm(forms.ModelForm):
 
 @login_required
 def upload_place(request, country_code, slug):
-    place = get_object_or_404(Place, 
-        slug=slug, 
+    place = get_object_or_404(Place,
+        slug=slug,
         country__country_code=country_code
     )
     if request.method == 'POST':
@@ -55,9 +55,9 @@ class PhotoLocationForm(forms.Form):
 
 def photo(request, username, photo_id):
     photo = get_object_or_404(
-        Photo, created_by__username = username, pk = photo_id
+        Photo, created_by__username=username, pk=photo_id
     )
-    
+
     if request.method == 'POST':
         form = PhotoLocationForm(request.POST)
         if form.is_valid():
@@ -66,7 +66,7 @@ def photo(request, username, photo_id):
     else:
         from zoo.geonames.models import Geoname
         location = Geoname.objects.all()[0]
-        
+
         form = PhotoLocationForm(initial={'location': location})
 
     return render(request, 'photos/photo.html', {

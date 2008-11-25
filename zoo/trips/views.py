@@ -20,4 +20,3 @@ def logbook(request, username):
 
 def logbook_edit(request, username):
     pass
-

@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from zoo.faces.models import FaceArea, FacePart
 
 class FacePartAdmin(admin.ModelAdmin):

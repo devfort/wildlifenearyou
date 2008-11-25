@@ -11,7 +11,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if len(args) != 0:
             raise CommandError("Command doesn't accept any arguments")
-        
+
         from zoo.faces.importer import import_faceparts
         import_faceparts()
-
