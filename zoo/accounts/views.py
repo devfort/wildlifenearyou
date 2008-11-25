@@ -42,7 +42,7 @@ def profile(request, username):
 
 def profile_edit(request, username):
     pass
-    
+
 def all_profiles(request):
     return render(request, 'accounts/all_profiles.html', {
         'all_users': User.objects.all(),
@@ -63,11 +63,11 @@ class RegistrationForm(forms.ModelForm):
     )
     password1 = forms.CharField(
         label = _("Password"),
-        widget = forms.PasswordInput
+        widget = forms.PasswordInput,
     )
     password2 = forms.CharField(
         label= _ ("Password confirmation"),
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput,
     )
     class Meta:
         model = User
@@ -97,6 +97,4 @@ class RegistrationForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         user.save()
         Profile.objects.create(user=user)
-        
         return user
-

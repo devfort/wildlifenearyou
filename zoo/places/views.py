@@ -23,7 +23,7 @@ def get_place_species(place, user, limit=None):
         if species in passport.seen_species:
             species.seen = True
 
-    species_list.sort(key=lambda s:s.count, reverse=True)
+    species_list.sort(key=lambda s: s.count, reverse=True)
 
     if limit:
         species_list = species_list[:limit]
@@ -71,7 +71,7 @@ def place_species(request, country_code, slug):
         'place': place,
         'species_list': species_list,
     })
-    
+
 def all_places(request):
     return render(request, 'places/all_places.html', {
         'all_places': Place.objects.all().order_by('known_as'),
@@ -91,6 +91,3 @@ def all_countries(request):
     return render(request, 'places/all_countries.html', {
         'all_countries': Country.objects.all().order_by('name'),
     })
-
-
-

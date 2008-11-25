@@ -16,7 +16,7 @@ def upload(request):
             return Redirect('/profile/%s/' % request.user.username)
     else:
         form = UploadPhotoForm()
-    
+
     return render(request, 'photos/upload.html', {
         'form': form,
     })
@@ -42,7 +42,7 @@ def upload_place(request, country_code, slug):
             return Redirect(place.get_absolute_url())
     else:
         form = UploadPhotoForm()
-    
+
     return render(request, 'photos/upload.html', {
         'form': form,
         'attach_to': place,

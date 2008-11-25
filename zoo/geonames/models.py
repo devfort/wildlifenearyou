@@ -12,16 +12,16 @@ class Geoname(models.Model):
     latitude = models.CharField(max_length=20)
     longitude = models.CharField(max_length=20)
     accuracy = models.CharField(max_length=10, blank=True)
-    
+
     def __unicode__(self):
         return u'%s (%s)' % (self.place_name, self.country_code)
-    
+
     def summary(self):
         "Used in a cookie"
         return u'%s: %s, %s' % (
             self.place_name, self.latitude, self.longitude
         )
-    
+
     def for_xapian(self):
         bits = []
         for field in (
@@ -30,7 +30,7 @@ class Geoname(models.Model):
             if getattr(self, field):
                 bits.append(unicode(getattr(self, field)))
         return ', '.join(bits)
-    
+
 def load_geonames():
     import os
     lines = open(

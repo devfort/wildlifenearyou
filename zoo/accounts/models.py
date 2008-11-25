@@ -6,11 +6,11 @@ from zoo.trips.models import Trip
 
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
-    
+
     @models.permalink
     def get_absolute_url(self):
         return ('accounts-profile', (), {
-            'username': self.user.username
+            'username': self.user.username,
         })
 
     @attrproperty
@@ -19,8 +19,7 @@ class Profile(models.Model):
             return self.get_absolute_url()
 
     def __unicode__(self):
-        return u'Profile for %s' % (self.user)
-        
+        return u'Profile for %s' % self.user
+
     def passport(self):
         return Trip.get_passport(self.user)
-        

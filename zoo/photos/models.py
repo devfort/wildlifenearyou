@@ -18,21 +18,21 @@ class Photo(models.Model):
             'admin': {'size': (70, 50), 'options': ('sharpen',)},
         }
     )
-    
+
     # Photos can optionally relate to a trip and/or a place
-    trip = models.ForeignKey(Trip, null = True, blank = True, 
-        related_name = 'photos'
+    trip = models.ForeignKey(Trip, null=True, blank=True,
+        related_name='photos'
     )
-    place = models.ForeignKey(Place, null = True, blank = True, 
-        related_name = 'photos'
+    place = models.ForeignKey(Place, null = True, blank = True,
+        related_name='photos'
     )
-    
+
     # There may be several species in a single photo
     contained_species = models.ManyToManyField(Species, blank=True)
-    
+
     def __unicode__(self):
         return self.title or unicode(self.photo)
-    
+
     @models.permalink
     def get_absolute_url(self):
         return ('photo', (), {

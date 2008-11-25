@@ -4,4 +4,3 @@ from zoo.shortcuts import render
 def landing(request):
     return render(request, 'homepage/landing.html', {
     })
-    

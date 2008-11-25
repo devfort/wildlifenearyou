@@ -13,7 +13,7 @@ def species(request, slug):
         # eggs
         species = get_object_or_404(SuperSpecies, slug=slug)
         t = loader.get_template('species/%s.html' % species.type)
-        c = Context({'species': species,})
+        c = Context({'species': species})
         return HttpResponse(t.render(c), status=species.status)
 
     return render(request, 'species/species.html', {

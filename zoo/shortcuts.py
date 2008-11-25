@@ -14,6 +14,6 @@ def render(request, template_name, context):
 def render_json(request, obj):
     # TODO: Check request for &callback= param, validate it, use as callback
     return HttpResponse(
-        simplejson.dumps(obj, indent=2), 
+        simplejson.dumps(obj, indent=2),
         content_type = 'application/javascript; charset=utf8'
     )

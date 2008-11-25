@@ -16,7 +16,7 @@ class Trip(models.Model):
 
     class Meta:
         ordering = ['-start']
-        
+
     def save(self, *args, **kwargs):
         if self.end==None:
             self.end = self.start + datetime.timedelta(1)
@@ -42,7 +42,7 @@ class Trip(models.Model):
         for species in species_list:
             species.count = by_count[species]
 
-        species_list.sort(key=lambda s:s.count, reverse=True)
+        species_list.sort(key=lambda s: s.count, reverse=True)
 
         o = Passport(species_list)
         return o

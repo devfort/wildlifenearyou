@@ -56,10 +56,11 @@ class SuperSpecies(AbstractSpecies):
 
     @property
     def status(self):
-        type_status_map = {'imaginary': 501,
-                           'extinct': 410,
-                           'narwhals': 200}
-        return type_status_map[self.type]
+        return {
+            'imaginary': 501,
+            'extinct': 410,
+            'narwhals': 200,
+        }[self.type]
 
     @property
     def plural(self):

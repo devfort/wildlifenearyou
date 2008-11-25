@@ -103,7 +103,7 @@ urlpatterns = patterns('',
         name='places'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+?)/species$', 'zoo.places.views.place_species',
         name='place-species'),
-        
+
     url(r'^(?P<country_code>\w{2})/$', 'zoo.places.views.country',
         name='country'),
     url(r'^countries/$', 'zoo.places.views.all_countries',
