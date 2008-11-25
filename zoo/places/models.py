@@ -124,3 +124,25 @@ class EnclosureSpecies(AuditedModel):
             retstr += ', %s' % self.enclosure.name
         retstr += ', %s' % self.enclosure.place.known_as
         return retstr
+
+class PlaceOpening(models.Model):
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    days_of_week = models.CharField(max_length=100, blank=True)
+    times = models.CharField(max_length=100, blank=True)
+    closed = models.BooleanField()
+    place = models.ForeignKey(Place, null=False)
+
+    def __unicode__(self):
+        closed = self.closed and 'closed ' or 'open'
+        start_date = self.start_date and self.start_date or '*'
+        end_date = self.end_date and self.end_date or '*'
+        if self.days_of_week:
+            days_of_week = self.days_of_week.split(',')
+            days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            days_of_week = '/'.join([ days[int(d)] for d in days_of_week ])
+        else:
+            days_of_week = 'all days'
+        times = self.times and self.times or 'All day'
+        return "%s, %s %s %s-%s %s" % (self.place, closed, days_of_week, start_date, end_date, times)
+

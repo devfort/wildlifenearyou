@@ -37,9 +37,29 @@ def place(request, country_code, slug):
 
     species_list = get_place_species(place, request.user, SPECIES_ON_PLACE_PAGE)
 
+    opening_times = {}
+    place_openings = place.placeopening_set.all()
+    for opening in place_openings:
+        start_date = opening.start_date and opening.start_date or ''
+        end_date = opening.end_date and opening.end_date or ''
+        if start_date == end_date:
+            date_range = "%s" % start_date
+        else:
+            date_range = "%s-%s" % (start_date, end_date)
+        if not opening.days_of_week:
+            arr = opening_times.setdefault(date_range, [None for i in range(8)])
+            arr[0] = { 'times': opening.times, 'closed':opening.closed }
+        else:
+            days_of_week = opening.days_of_week.split(',')
+            days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            for d in days_of_week:
+                arr = opening_times.setdefault(date_range, [None for i in range(8)])
+                arr[int(d)+1] = { 'name':"%s:" % days[int(d)], 'times':opening.times, 'closed':opening.closed }
+
     return render(request, 'places/place.html', {
         'place': place,
         'species_list': species_list,
+        'opening_times': opening_times,
     })
 
 def place_species(request, country_code, slug):

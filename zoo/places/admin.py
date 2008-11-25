@@ -1,6 +1,6 @@
 from django.contrib import admin
 from zoo.places.models import Country, Place, Enclosure, EnclosureSpecies, \
-    Webcam, PlaceNews
+    Webcam, PlaceNews, PlaceOpening
 
 excludees = ['created_at', 'created_by', 'modified_at', 'modified_by']
 
@@ -33,3 +33,4 @@ admin.site.register(Place,
     prepopulated_fields = {'slug': ('known_as',)},
 )
 admin.site.register(Enclosure, EnclosureAdmin)
+admin.site.register(PlaceOpening)
