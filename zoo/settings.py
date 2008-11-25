@@ -83,6 +83,7 @@ TEMPLATE_DIRS = (
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
+    'django.core.context_processors.auth',
 )
 
 INSTALLED_APPS = (
