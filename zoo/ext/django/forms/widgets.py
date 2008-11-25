@@ -611,6 +611,7 @@ class MultiWidget(Widget):
         return id_
     id_for_label = classmethod(id_for_label)
 
+
     def value_from_datadict(self, data, files, name):
         return [widget.value_from_datadict(data, files, name + '_%s' % i) for i, widget in enumerate(self.widgets)]
 

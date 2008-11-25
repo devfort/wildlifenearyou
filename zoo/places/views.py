@@ -136,44 +136,68 @@ def edit_enc_species(request, ea_id):
         'form': form,
         })
 
-def get_forms_from_instance(instance, data=None, prefix=""):
-    forms = []
+from pprint import pprint
 
-    if prefix != "":
-        prefix += "__"
-    prefix += '%s-%s' % (instance.__class__.__name__, instance.pk)
+class UberForm(object):
+    def __init__(self, instance, data=None, prefix=""):
+        if prefix != "":
+            prefix += "__"
+        prefix += '%s-%s' % (type(instance).__name__, instance.pk)
 
-    form_klass, subobject_fns = {
-        Enclosure: (EnclosureEditForm, (
-            lambda instance: instance.enclosurespecies_set.all(),
-            )),
-        EnclosureSpecies: (EnclosureSpeciesEditForm, ()),
-    }[type(instance)]
+        kwargs = {
+            'instance': instance,
+            'prefix': prefix,
+        }
 
-    kwargs = {
-        'instance': instance,
-        'prefix': prefix,
-    }
+        if data:
+            kwargs['data'] = data
 
-    if data:
-        kwargs['data'] = data
+        from django import forms
 
-    forms.append(form_klass(**kwargs))
+        form_list = []
 
-    for subobject_fn in subobject_fns:
-        for subobject in subobject_fn(instance):
-            forms.extend(get_forms_from_instance(subobject, data, prefix))
+        for part in self.parts:
+            if isinstance(part, type) and issubclass(part, forms.BaseForm):
+                form_list.append(part(**kwargs))
+            else:
+                objects = part(instance)
+                for obj in objects:
+                    sub_uber_form_klass = UF_DEFS[type(obj)]
 
-    return forms
+                    suf = sub_uber_form_klass(obj, data, prefix)
+                    form_list.extend(suf.forms)
+
+        self.forms = form_list
+        
+    model = None
+    parts = []
+
+class EnclosureUberForm(UberForm):
+    model = Enclosure
+    parts = [
+        EnclosureEditForm,
+        lambda instance: instance.enclosurespecies_set.all(),
+        ]
+
+class EnclosureSpeciesUberForm(UberForm):
+    model = EnclosureSpecies
+    parts = [
+        EnclosureSpeciesEditForm,
+        ]
+
+UF_DEFS = {}
+for uf in EnclosureUberForm, EnclosureSpeciesUberForm:
+    UF_DEFS[uf.model] = uf
 
 def edit_enc(request, enc_id):
+
     enclosure = get_object_or_404(Enclosure, pk=enc_id)
 
     if request.method == 'POST':
-        forms = get_forms_from_instance(enclosure, request.POST)
+        uf = EnclosureUberForm(enclosure, request.POST)
 
         is_valid = True
-        for form in forms:
+        for form in uf.forms:
             if not form.is_valid():
                 is_valid = false
                 break
@@ -182,8 +206,8 @@ def edit_enc(request, enc_id):
             print "all valid" 
 
     else:
-        forms = get_forms_from_instance(enclosure)
+        uf = EnclosureUberForm(enclosure)
 
     return render(request, "edit/enc.html", {
-        'forms': forms,
+        'forms': uf.forms,
     })

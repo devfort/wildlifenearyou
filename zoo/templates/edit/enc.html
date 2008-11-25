@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="{{ request.path }}" method="post">
+{% for f in forms %}
+{{ f.as_p }}
+{% endfor %}
+<input type="submit" name="submit" value="Submit that shit" />
+</form>
+{% endblock content %}
