@@ -1,3 +1,4 @@
 *.pyc
 zoo/local_settings.py
 *~
+zoo/static/uploaded
