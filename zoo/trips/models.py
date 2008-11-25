@@ -43,9 +43,8 @@ class Trip(AuditedModel):
 
         species_list.sort(key=lambda s: s.count, reverse=True)
 
-        o = Passport(species_list)
-        return o
-        
+        return Passport(species_list)
+
     def title(self):
         if self.name:
             return self
