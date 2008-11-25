@@ -10,10 +10,10 @@ from zoo.accounts.models import Profile
 
 @login_required
 def logbook_default(request):
-    return Redirect(u'/profile/%s/logbook/' % (request.user,))
+    return Redirect(reverse('logbook', args=(request.user,)))
 
 def logbook(request, username):
-    user = get_object_or_404(User, username = username)
+    user = get_object_or_404(User, username=username)
     return render(request, 'trips/logbook.html', {
         'logbook': user.created_trip_set.all(),
         'profile': user.get_profile(),
