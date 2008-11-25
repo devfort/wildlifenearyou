@@ -2,17 +2,17 @@
 
 {% load favourites_extras %}
 
-{% block title %}{{ profile.user }}{% endblock %}
+{% block title %}{{ profile.user|title }}{% endblock %}
 
 {% block content %}
 
-<h1>{{ profile.user }}</h1>
+<h1>{{ profile.user|title }}</h1>
 
 {% for photo in profile.user.photos.all %}
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
 {% endfor %}
 {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
-<p><a href="{% url logbook-default %}">{% ifequal profile.user user %}My{% else %}{{profile.user}}'s{% endifequal %} Logbook</a></p>
+<p><a href="{% url logbook-default %}">{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Logbook</a></p>
 
 <div id="animal_passport">
 	<h2>Animal Passport</h2>
@@ -31,7 +31,7 @@
 </div>
 
 <div id="my_trips">
-	<h2>My Trips</h2>
+	<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Trips</h2>
 	{% if profile.user.created_trip_set.all %}
 	<ol>
 	{% for trip in profile.user.created_trip_set.all %}
@@ -73,7 +73,7 @@
 
 
 {% if user.comment_comments.all %}
-<h2>My Comments:</h2>
+<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Comments:</h2>
 {% for comment in user.comment_comments.all %}
 <div class="comment">
 {{ comment.comment|linebreaks }}
