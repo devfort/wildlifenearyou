@@ -9,7 +9,7 @@ from zoo.accounts.models import Profile
 
 @login_required
 def logbook_default(request):
-    return Redirect(u'/logbook/%s' % (request.user,))
+    return Redirect(u'/profile/%s/logbook/' % (request.user,))
 
 def logbook(request, username):
     user = get_object_or_404(User, username = username)

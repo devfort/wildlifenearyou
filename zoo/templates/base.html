@@ -12,7 +12,17 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-<div id="hd"><a href="/">Homepage</a></div>
+<div id="hd">
+	<a href="/">Homepage</a> |
+	{% if user.is_authenticated %}
+	<a href="{% url accounts-profile user %}">My Profile</a> |
+	<a href="{% url logbook user %}">My Logbook</a> |
+	<a href="{% url accounts-logout %}">Logout</a>	
+	{% else %}
+	<a href="{% url accounts-login %}">Login</a> |
+	<a href="{% url accounts-register %}">Register</a>
+	{% endif %}
+</div>
 {% block content %}
 
 {% endblock %}
