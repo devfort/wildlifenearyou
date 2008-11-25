@@ -45,7 +45,7 @@ def place(request, country_code, slug):
         if start_date == end_date:
             date_range = "%s" % start_date
         else:
-            date_range = "%s - %s" % (start_date, end_date)
+            date_range = "%s &mdash; %s" % (start_date, end_date)
 
         arr = opening_times.setdefault(date_range, [None] * 7)
 
