@@ -7,10 +7,14 @@ elif settings.DATABASE_ENGINE == 'sqlite3':
 class CustomMigration(m.Migration):
     def __init__(self):
         sql_up = [
-            "UPDATE animals_species SET created_by_id=1, modified_by_id=1",
-            "UPDATE animals_speciesgroup SET created_by_id=1, modified_by_id=1",
-            "UPDATE places_enclosure SET created_by_id=1, modified_by_id=1",
-            "UPDATE places_webcam SET created_by_id=1, modified_by_id=1",
+            "UPDATE animals_species SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
+            "UPDATE animals_speciesgroup SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
+            "UPDATE places_enclosure SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
+            "UPDATE places_webcam SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
+            "UPDATE places_place SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
+            "UPDATE places_placenews SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
+            "UPDATE places_enclosure SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
+            "UPDATE places_enclosurespecies SET created_by_id=1, modified_by_id=1 where created_by_id is NULL",
             ]
         sql_down = []
         super(CustomMigration, self).__init__(
