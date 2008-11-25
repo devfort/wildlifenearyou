@@ -61,6 +61,7 @@ urlpatterns = patterns('',
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
 
     (r'^photos/upload/$', photos.upload),
+    (r'^photos/$', photos.all),
 
     (r'^set-location/$', 'zoo.geonames.views.set_location'),
     (r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete'),

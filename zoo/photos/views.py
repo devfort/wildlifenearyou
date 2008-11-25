@@ -55,3 +55,8 @@ def photo(request, username, photo_id):
     return render(request, 'photos/photo.html', {
         'photo': photo,
     })
+
+def all(request):
+    return render(request, 'photos/all.html', {
+        'photos': Photo.objects.all().order_by('-created_at'),
+    })

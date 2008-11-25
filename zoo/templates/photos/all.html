@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}All photos{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+div.all-photos {
+    overflow: auto;
+}
+div.all-photos img {
+    float: left;
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<h1>All photos</h1>
+
+<div class="all-photos">
+{% for photo in photos %}
+<a href="{{ photo.urls.absolute }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{% thumbnail photo.photo 100x100 crop %}"></a>
+{% endfor %}
+</div>
+
+{% endblock %}
