@@ -2,7 +2,7 @@ from django.contrib import admin
 from zoo.faces.models import FaceArea, FacePart
 
 class FacePartAdmin(admin.ModelAdmin):
-    list_display = ('image', 'area', 'preview')
+    list_display = ('image', 'description', 'area', 'preview')
 
     def preview(self, obj):
         return u'<img src="%s" width="150">' % obj.image.url
