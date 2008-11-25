@@ -24,7 +24,7 @@
 {% if species_list %}
 <ul>
 {% for species in species_list %}
-<li><span {% if species.seen %}class="seen" {% endif %}title="{{ species.count }} seen">{{ species.common_name }}</span></li>
+	<li><span {% if species.seen %}class="seen" {% endif %}title="{{ species.count }} seen">{{ species.common_name }}</span></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -37,9 +37,15 @@
         <h2>Enclosures</h2>
         {% for enclosure in enclosures %}
             <h3>{{ enclosure }}</h3>
+			{% if enclosure.enclosurespecies_set.all %}
+			<ul>
             {% for inhabitant in enclosure.enclosurespecies_set.all %}
-                <p>{{ inhabitant.number_of_inhabitants }} &times; <a href="{{ inhabitant.species.urls.absolute }}">{{ inhabitant.species }}</a></p>
+                <li>{{ inhabitant.number_of_inhabitants }} &times; <a href="{{ inhabitant.species.urls.absolute }}">{{ inhabitant.species }}</a></li>
             {% endfor %}
+			</ul>
+			{% else %}
+			<p>We don't know which animals live in this enclosure, do you?</p>
+			{% endif %}
         {% endfor %}
     {% endif %}
 {% endwith %}
