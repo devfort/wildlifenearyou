@@ -48,10 +48,10 @@ def upload_place(request, country_code, slug):
         'attach_to': place,
     })
 
-from zoo.search_picker import LocationPickerInput
+from zoo.search_picker import LocationPickerField
 from django import forms
 class PhotoLocationForm(forms.Form):
-    location = LocationPickerInput()
+    location = LocationPickerField()
 
 def photo(request, username, photo_id):
     photo = get_object_or_404(
@@ -59,12 +59,14 @@ def photo(request, username, photo_id):
     )
     
     if request.method == 'POST':
+        print request.POST
         form = PhotoLocationForm(request.POST)
         if form.is_valid():
-            assert False, form.cleaned_data
+            print "OK", form.cleaned_data
+            print "ERR", form.errors
     else:
         form = PhotoLocationForm()
-    
+
     return render(request, 'photos/photo.html', {
         'photo': photo,
         'form': form,
