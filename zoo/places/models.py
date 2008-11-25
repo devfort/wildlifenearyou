@@ -3,8 +3,6 @@ from django.template.defaultfilters import pluralize
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
-from zoo.animals.models import Species
-from zoo.trips.models import Sighting
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
 #from zoo.trips.models import Trip
@@ -109,7 +107,7 @@ class Webcam(AuditedModel):
 
 class Enclosure(AuditedModel):
     place = models.ForeignKey(Place, related_name = 'enclosures')
-    species = models.ManyToManyField(Species, through='EnclosureSpecies')
+    species = models.ManyToManyField('animals.Species', through='EnclosureSpecies')
     name = models.CharField(max_length=300, null=True, blank=True)
 
     def __unicode__(self):
@@ -119,7 +117,7 @@ class Enclosure(AuditedModel):
 
 class EnclosureSpecies(AuditedModel):
     enclosure = models.ForeignKey(Enclosure)
-    species = models.ForeignKey(Species)
+    species = models.ForeignKey('animals.Species')
     number_of_inhabitants = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):

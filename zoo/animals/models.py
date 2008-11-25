@@ -1,6 +1,7 @@
 from django.db import models
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
+from zoo.places.models import Place
 
 class SpeciesGroup(AuditedModel):
     name = models.CharField(max_length=255, blank=False, null=False,
@@ -35,10 +36,7 @@ class AbstractSpecies(AuditedModel):
         return '%s (%s)' % (self.common_name, self.latin_name,)
 
     def seen_at(self):
-        from zoo.places.models import Place
-        return Place.objects.filter(
-            trip__tripsighting__species = self
-        ).distinct()
+        return Place.objects.filter(sighting__species=self).distinct()
 
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
