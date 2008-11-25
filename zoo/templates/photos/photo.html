@@ -20,5 +20,12 @@
     {% include "comments/_comments.html" %}
 {% endwith %}
 
+Set the location:
+
+<form method="POST" action=".">
+{{ form.as_p }}
+<p><input type="submit">
+</form>
+
 {% endblock %}
 
