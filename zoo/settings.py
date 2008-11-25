@@ -66,6 +66,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'zoo.middleware.OnlyLowercaseUrls',
     'zoo.middleware.AutoCreatedAndModifiedFields',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'zoo.urls'
@@ -91,6 +92,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.flatpages',
     'django.contrib.admin',
     'dmigrations',
     'zoo.accounts',
