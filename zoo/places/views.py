@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from zoo.shortcuts import render
 
-from zoo.places.models import Place, Country, EnclosureAnimal
+from zoo.places.models import Place, Country, EnclosureSpecies, Enclosure
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
 
@@ -136,19 +136,54 @@ def edit_enc_species(request, ea_id):
         'form': form,
         })
 
+def get_forms_from_instance(instance, data=None, prefix=""):
+    forms = []
+
+    if prefix != "":
+        prefix += "__"
+    prefix += '%s-%s' % (instance.__class__.__name__, instance.pk)
+
+    form_klass, subobject_fns = {
+        Enclosure: (EnclosureEditForm, (
+            lambda instance: instance.enclosurespecies_set.all(),
+            )),
+        EnclosureSpecies: (EnclosureSpeciesEditForm, ()),
+    }[type(instance)]
+
+    kwargs = {
+        'instance': instance,
+        'prefix': prefix,
+    }
+
+    if data:
+        kwargs['data'] = data
+
+    forms.append(form_klass(**kwargs))
+
+    for subobject_fn in subobject_fns:
+        for subobject in subobject_fn(instance):
+            forms.extend(get_forms_from_instance(subobject, data, prefix))
+
+    return forms
+
 def edit_enc(request, enc_id):
-    enc = Enclosure.objects.get(pk=enc_id)
+    enclosure = get_object_or_404(Enclosure, pk=enc_id)
 
-    eas = enc.enclosurespecies_set.all()
+    if request.method == 'POST':
+        forms = get_forms_from_instance(enclosure, request.POST)
 
-    data = [
-        ('form': 
+        is_valid = True
+        for form in forms:
+            if not form.is_valid():
+                is_valid = false
+                break
 
-        ]
+        if is_valid:
+            print "all valid" 
 
-    form = EnclosureEditForm(instance=enc)
+    else:
+        forms = get_forms_from_instance(enclosure)
 
-    return render(request, "edit/ea.html", {
-        'form': form,
-        })
-
+    return render(request, "edit/enc.html", {
+        'forms': forms,
+    })

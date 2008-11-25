@@ -39,9 +39,12 @@ def main():
 
     g_enclosure = A("Pen", "Cage", "Plains", "Tunnel", "Nest", "Enclosure", "Aquarium", "Pocket")
 
-    start = A("Dung", "Sea", "Land", "Air", "Amphibuous", "Snake", "Dwarf", "Lesser-spotted")
-    ending = A("lion", "beetle", "bird", "dolphin", "fucking narwhal", "dwarf", "wolf")
-    speshul_ending = A(*([""] * 19) + [" on a plane"])
+    start = A("dung", "sea", "land", "air", "amphibuous", "flying", "dwarf", "lesser-spotted",
+              "hopping", "horned", "tasty", "mediocre", "boring", "psycho", "bizarro")
+    ending = A("lion", "beetle", "BITCH ASS DOLPHIN", "FUCKING NARWHAL YEAAH", "dwarf",
+               "wolf", "squirrel", "rooster", "booby", "buffalo", "sloth", "snake",
+               "wizard", "chipmunk", "mite")
+    speshul_ending = A(*([""] * 19) + [" on a plane", " oh no IT'S RIGHT BEHIND YOU!!!"])
     g_species = start, " ", ending, speshul_ending
 
     species_groups = []
@@ -50,10 +53,11 @@ def main():
 
     species = []
     for a_idx in range(100):
-        name = generate_string(g_species)
+        name = generate_string(g_species).capitalize()
+        latin_name = ' '.join(["%sus" % x for x in name.split(' ')])
         species.append(Species.objects.create(
             common_name=name,
-            latin_name=' '.join(["%sus" % x for x in name.split(' ')]),
+            latin_name=latin_name,
             slug="%s%s" % (slugify(name), random.random()),
             species_group=random.choice(species_groups),
         ))
