@@ -58,32 +58,31 @@ body {
 	margin: 0 auto;
 	background: #fff;
 	color:#000;
-	font-family: "helvetica neue", arial, helvetica, sans-serif;    font-size:16px;    line-height:1.125em; /* Baseline grid of 18px */}
+	font-family: "helvetica neue", arial, helvetica, sans-serif;
+    font-size:16px;
+    line-height:1.125em; /* Baseline grid of 18px */
+}
 
 a:link, button.link span {
 	color: #0063DC;
 	text-decoration: underline;
-}a:visited {
+}
+a:visited {
 	color: #1057ae;
 	text-decoration: underline;
-}a:hover, button.link:hover {
+}
+a:hover, button.link:hover {
 	color: #FFFFFF; 
 	text-decoration: none;
 	background-color: #0063DC;
-}a:active, a:focus, button.link:focus span, button.link:hover span {
+}
+a:active, a:focus, button.link:focus span, button.link:hover span {
 	color: #FFFFFF; 
 	text-decoration: none; 
 	background-color: #0259C4; 
 }
 
 /* @group Font sizes */
-
-/* basic font sizes */
-p, ul, ol, dl, table, address, blockquote, fieldset, pre, form div {
-	font-size: 0.8125em;  /* 13px */
-}
-
-/* deal with likely (but certainly not all) inherited shrinkage */
 
 ul p, ol p, table p, dl p, ul ul, ol ol, ul ol, ol ul, address p, li blockquote, blockquote p, form div div, form div p, fieldset div, table form div {
 	font-size: 1em;
