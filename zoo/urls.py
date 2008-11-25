@@ -65,14 +65,6 @@ urlpatterns = patterns('',
     (r'^set-location/$', 'zoo.geonames.views.set_location'),
     (r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete'),
 
-
-    # Dodo etc.
-    (r'^animal/(dodo|woolly-mammoth)/$', 'zoo.animals.views.extinct'),
-    (r'^latin/raphus-cucullatus/$',
-        lambda r: http.HttpResponseRedirect('/animal/dodo/')
-    ),
-    (r'^animal/(unicorn|dragon|werewolf|chimera|gryphon)/$', 'zoo.animals.views.imaginary'),
-
     (r'^comments/', include('django.contrib.comments.urls')),
 
     # Django built-in admin
@@ -80,9 +72,6 @@ urlpatterns = patterns('',
 
     # Databrowse
     (r'^databrowse/(.*)', databrowse.site.root),
-
-    url(r'^animal/narwhals/$', 'zoo.animals.views.narwhals',
-        name='narwhals'),
 
     url(r'^animal/$', 'zoo.animals.views.all_species',
         name='all-species'),

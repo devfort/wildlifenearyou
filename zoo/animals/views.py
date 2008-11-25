@@ -3,11 +3,19 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpRespons
 from django.core import serializers
 from django.template import loader, Context
 
-from zoo.animals.models import Species
+from zoo.animals.models import Species, SuperSpecies
 from zoo.shortcuts import render
 
 def species(request, slug):
-    species = get_object_or_404(Species, slug=slug)
+    try:
+        species = Species.objects.get(slug=slug)
+    except Species.DoesNotExist:
+        # eggs
+        species = get_object_or_404(SuperSpecies, slug=slug)
+        t = loader.get_template('species/%s.html' % species.type)
+        c = Context({'species': species,})
+        return HttpResponse(t.render(c), status=species.status)
+
     return render(request, 'species/species.html', {
         'species': species,
     })
@@ -24,34 +32,15 @@ def species_xml(request):
     )
 
 def species_latin(request, latin_name):
-    species = get_object_or_404(Species, latin_name=latin_name)
+    try:
+        species = Species.objects.get(latin_name=latin_name)
+    except Species.DoesNotExist:
+        # eggs
+        species = get_object_or_404(SuperSpecies, latin_name=latin_name)
+
     return HttpResponseRedirect(species.urls.absolute)
 
 def all_species_latin(request):
     return render(request, 'species/all_species_latin.html', {
         'all_species': Species.objects.all().order_by('latin_name'),
     })
-
-def narwhals(request):
-    return render(request, 'species/narwhals.html', {})
-
-def extinct(request, animal):
-    t = loader.get_template('species/extinct.html')
-    c = Context({
-        'animal': animal.replace('-', ' ')
-    })
-    return HttpResponse(t.render(c), status=410) # Gone
-
-def imaginary(request, animal):
-    t = loader.get_template('species/imaginary.html')
-    animal = animal.replace('-', ' ')
-    if animal == 'werewolf':
-        plural = 'werewolves'
-    else:
-        plural = '%ss' % animal
-    c = Context({
-        'animal': animal,
-        'animal_plural': plural,
-    })
-    return HttpResponse(t.render(c), status=501) # Not implemented
-

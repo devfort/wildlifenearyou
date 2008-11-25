@@ -7,11 +7,11 @@
 <img align="left" hspace=81 src="/static/img/unicorn.jpeg" alt="" width=250 height=250>
 <h1>501 Not implemented</h1>
 
-<p>I'm afraid that {{ animal_plural }} have not been implemented in this universe.</p>
+<p>I'm afraid that {{ species.plural }} have not been implemented in this universe.</p>
 
 <p>Although, if you wish really, <em>really</em>, hard&hellip;</p>
 
-{% ifequal animal 'werewolf' %}
+{% ifequal species.slug 'werewolf' %}
 <p><strong>I am not a werewolf.</strong></p>
 {% endifequal %}
 
