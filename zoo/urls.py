@@ -71,7 +71,7 @@ urlpatterns = patterns('',
 
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
 
-    (r'^photos/upload/$', photos.upload),
+    url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),
 
     (r'^set-location/$', 'zoo.geonames.views.set_location'),
