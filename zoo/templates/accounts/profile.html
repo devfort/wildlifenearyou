@@ -43,7 +43,7 @@
   <h2>Favourite Animals</h2>
   <ol>
     {% for favourite in request.user.favourite_species.all %}
-    <li><a href="{{ species.urls.absolute }}">{{ favourite.species }}</a>
+    <li><a href="{{ favourite.species.urls.absolute }}">{{ favourite.species }}</a>
       {% favourite_toggler "remove" favourite.species.slug request.path  %}
     </li>
     {% endfor %}
