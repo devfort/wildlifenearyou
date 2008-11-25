@@ -14,7 +14,7 @@ def logbook_default(request):
 def logbook(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'trips/logbook.html', {
-        'logbook': user.trips.all(),
+        'logbook': user.created_trip_set.all(),
         'profile': user.get_profile(),
     })
 

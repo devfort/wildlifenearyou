@@ -24,7 +24,7 @@
 <div id="my_trips">
 	<h2>My Trips</h2>
 	<ol>
-	{% for trip in profile.user.trips.all %}
+	{% for trip in profile.user.created_trip_set.all %}
 		<li>
 			<p>During your trip to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a> on {{ trip.start|date:"jS F Y" }} you saw</p>
 			<ul>

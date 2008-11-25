@@ -2,17 +2,16 @@ from django.db import models
 import datetime
 
 from django.contrib.auth.models import User
-from zoo.places.models import Place
 from zoo.animals.models import Species
 from zoo.utils import attrproperty
+from zoo.models import AuditedModel
+#from zoo.places.models import Place
 
-class Trip(models.Model):
-    start = models.DateTimeField(null=False, blank=False)
+class Trip(AuditedModel):
+    start = models.DateTimeField(null=False, blank=True)
     end = models.DateTimeField(null=False, blank=True)
-    place = models.ForeignKey(Place)
-    user = models.ForeignKey(User, related_name='trips')
     name = models.CharField(null=True, blank=True, max_length=100)
-    sightings = models.ManyToManyField(Species, through='TripSighting')
+    sightings = models.ManyToManyField(Species, through='Sighting')
 
     class Meta:
         ordering = ['-start']
@@ -34,7 +33,7 @@ class Trip(models.Model):
             return Passport([])
 
         by_count = {}
-        for species in Species.objects.filter(trip__user=user):
+        for species in Species.objects.filter(trip__created_by=user):
             by_count[species] = by_count.get(species, 0) + 1
 
         species_list = by_count.keys()
@@ -55,11 +54,15 @@ class Trip(models.Model):
         return u'your trip to %s' % (self.place.known_as)
 
     def __unicode__(self):
-        return self.user.username + u'@' + self.place.known_as
+        return self.created_by.username + u', ' + self.name
 
-class TripSighting(models.Model):
-    trip = models.ForeignKey(Trip)
+class Sighting(AuditedModel):
+    place = models.ForeignKey('places.Place')
     species = models.ForeignKey(Species)
+    trip = models.ForeignKey(Trip, null=True, blank=True)
 
     def __unicode__(self):
-        return u'' + unicode(self.trip) + u': ' + self.species.common_name
+        str = 'Sighting of ' + self.species.common_name + ' at ' + unicode(self.place)
+        if self.trip:
+            str += ' during trip ' + unicode(self.trip)
+        return str

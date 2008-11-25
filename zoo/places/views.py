@@ -5,7 +5,7 @@ from zoo.shortcuts import render
 
 from zoo.places.models import Place, Country
 from zoo.animals.models import Species
-from zoo.trips.models import Trip
+from zoo.trips.models import Trip, Sighting
 
 SPECIES_ON_PLACE_PAGE = 10
 
@@ -13,7 +13,8 @@ def get_place_species(place, user, limit=None):
     passport = Trip.get_passport(user)
 
     by_count = {}
-    for species in Species.objects.filter(trip__place=place):
+    for sighting in Sighting.objects.filter(place=place):
+        species = sighting.species
         by_count[species] = by_count.get(species, 0) + 1
 
     species_list = by_count.keys()

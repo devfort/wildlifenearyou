@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 from zoo.animals.models import Species
+from zoo.trips.models import Sighting
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
+#from zoo.trips.models import Trip
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -35,6 +37,10 @@ class Place(AuditedModel):
         unique=True
     )
     country = models.ForeignKey(Country, null=False, blank=False)
+
+    # XXX Would this now work?
+    #animals = models.ManyToManyField(Species, through='Sighting')
+    #trips = models.ManyToManyField('trips.Trip', through='Sighting')
 
     opening_times = models.TextField()
 
