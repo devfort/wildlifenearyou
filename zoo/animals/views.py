@@ -44,8 +44,14 @@ def extinct(request, animal):
 
 def imaginary(request, animal):
     t = loader.get_template('species/imaginary.html')
+    animal = animal.replace('-', ' ')
+    if animal == 'werewolf':
+        plural = 'werewolves'
+    else:
+        plural = '%ss' % animal
     c = Context({
-        'animal': animal.replace('-', ' ')
+        'animal': animal,
+        'animal_plural': plural,
     })
     return HttpResponse(t.render(c), status=501) # Not implemented
 
