@@ -19,9 +19,12 @@
 	<a href="{% url logbook user %}">My Logbook</a> |
 	<a href="{% url accounts-logout %}">Logout</a>	
 	{% else %}
-	<a href="{% url accounts-login %}">Login</a> |
-	<a href="{% url accounts-register %}">Register</a>
+	<a href="{% url accounts-register %}">Signup</a> |
+	<a href="{% url accounts-login %}">Login</a> |	
 	{% endif %}
+    <form action="/search/" method="GET" accept-charset="utf-8">
+        <p><label for="search_term">Search</label> <input type="text" name="search" id="search_term" value="NOT WIRED UP" /> <input type="submit" value="Go" /></p>
+    </form>
 </div>
 {% block content %}
 

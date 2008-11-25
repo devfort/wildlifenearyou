@@ -6,6 +6,10 @@ body {
 	border-bottom: 1px solid black;
 	font-size: 0.85em;
 	margin-bottom: 2em;
+    text-align: right;
+}
+#hd form, #hd form p {
+    display: inline;
 }
 
 /* Cloud on place page */
