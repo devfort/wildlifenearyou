@@ -17,10 +17,11 @@ set_current_user(None)
 
 def onanymodel_presave(sender, **kwargs):
     current_user = stash.current_user
-    if current_user==None or not current_user.is_authenticated():
-        # this will throw an exception if there's no sedf user AND THIS IS A GOOD THING
+    if current_user is None or not current_user.is_authenticated():
+        # this will throw an exception if there's no sedf user AND THIS IS A
+        # GOOD THING
         current_user = User.objects.get(username='sedf')
-    
+
     obj = kwargs['instance']
     if hasattr(obj, 'modified_at'):
         obj.modified_at = datetime.datetime.now()

@@ -22,7 +22,8 @@ class Trip(models.Model):
             self.end = self.start + datetime.timedelta(1)
         super(Trip,self).save(args, kwargs)
 
-    #THIS MUST BE static.  It does not act on an instance and is called from the profile model
+    # THIS MUST BE static. It does not act on an instance and is called from
+    # the profile model
     @staticmethod
     def get_passport(user):
         class Passport:
