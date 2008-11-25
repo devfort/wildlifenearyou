@@ -48,7 +48,7 @@ class Species(AbstractSpecies):
         verbose_name_plural = 'species'
 
 class SuperSpecies(AbstractSpecies):
-    TYPE_CHOICES = ((t, t) for t in ['imaginary', 'extinct', 'alive', 'narwhals'])
+    TYPE_CHOICES = [(t, t) for t in ['imaginary', 'extinct', 'alive', 'narwhals']]
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=False, blank=False)
 
     latin_name = models.CharField(max_length=500, blank=True, null=True)
