@@ -43,7 +43,7 @@ class Species(AbstractSpecies):
     species_group = models.ForeignKey(SpeciesGroup, blank=False, null=False)
 
     def has_favourited(self, user):
-        return self in [f.species for f in user.favourite_species.all()]
+        return user.favourite_species.filter(species=self).count() != 0
 
     class Meta:
         verbose_name_plural = 'species'
