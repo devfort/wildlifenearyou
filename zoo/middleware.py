@@ -2,6 +2,8 @@ from django.http import HttpResponseRedirect
 from django.db.models.signals import pre_save
 import datetime, threading
 
+from django.contrib.auth.models import User
+
 class OnlyLowercaseUrls:
     def process_request(self, request):
         if request.path.lower() != request.path:
@@ -16,7 +18,8 @@ set_current_user(None)
 def onanymodel_presave(sender, **kwargs):
     current_user = stash.current_user
     if current_user==None or not current_user.is_authenticated():
-        current_user = None
+        # this will throw an exception if there's no sedf user AND THIS IS A GOOD THING
+        current_user = User.objects.get(username='sedf')
     
     obj = kwargs['instance']
     if hasattr(obj, 'modified_at'):
