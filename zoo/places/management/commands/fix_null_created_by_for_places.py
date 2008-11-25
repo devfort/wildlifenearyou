@@ -1,5 +1,6 @@
-from zoo.places.models import Place
 from django.core.management.base import BaseCommand, CommandError
+
+from zoo.places.models import Place
 
 class Command(BaseCommand):
     help = """

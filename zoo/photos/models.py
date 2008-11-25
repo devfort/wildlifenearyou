@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-from zoo.animals.models import Species
-from zoo.places.models import Place
-from zoo.trips.models import Trip
-from zoo.utils import attrproperty
 
 from sorl.thumbnail.fields import ImageWithThumbnailsField
+
+from zoo.trips.models import Trip
+from zoo.utils import attrproperty
+from zoo.places.models import Place
+from zoo.animals.models import Species
 
 class Photo(models.Model):
     created_by = models.ForeignKey(User, related_name = 'photos')

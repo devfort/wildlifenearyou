@@ -1,9 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from django import forms
-from django.http import HttpResponseRedirect as Redirect
-from zoo.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect as Redirect
+from django.contrib.auth.decorators import login_required
+
 from models import Photo
+from zoo.shortcuts import render
 from zoo.places.models import Place
 
 @login_required

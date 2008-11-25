@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from zoo.photos.models import Photo
 
 class PhotoAdmin(admin.ModelAdmin):

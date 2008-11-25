@@ -1,11 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 import datetime
 
-from django.contrib.auth.models import User
-from zoo.animals.models import Species
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
-#from zoo.places.models import Place
+from zoo.animals.models import Species
 
 class Trip(AuditedModel):
     start = models.DateTimeField(null=False, blank=True)
