@@ -6,10 +6,10 @@ from django import forms
 class SearchPickerWidget(MultiWidget):
     def __init__(self, widgets, attrs=None):
         super(SearchPickerWidget, self).__init__(widgets, attrs)
-    
+
     def decompress(self, value):
-        #if value:
-        #    return [value.date(), value.time().replace(microsecond=0)]
+        if value:
+            return [str(value), value.pk]
         return [None, None]
 
 # TODO: we need a way to clear the search field and preselect

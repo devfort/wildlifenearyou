@@ -59,13 +59,15 @@ def photo(request, username, photo_id):
     )
     
     if request.method == 'POST':
-        print request.POST
         form = PhotoLocationForm(request.POST)
         if form.is_valid():
             print "OK", form.cleaned_data
             print "ERR", form.errors
     else:
-        form = PhotoLocationForm()
+        from zoo.geonames.models import Geoname
+        location = Geoname.objects.all()[0]
+        
+        form = PhotoLocationForm(initial={'location': location})
 
     return render(request, 'photos/photo.html', {
         'photo': photo,
