@@ -102,7 +102,6 @@ INSTALLED_APPS = (
     'zoo.geonames',
     'sorl.thumbnail',
     'zoo.photos',
-    'zoo.comments',
     'zoo.trips',
     'django.contrib.comments',
 )
