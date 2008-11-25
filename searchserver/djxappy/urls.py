@@ -15,10 +15,11 @@ urlpatterns = patterns('',
     # Database admin stuff
     ('^' + settings.BASEURL + r'listdbs', "search.listdbs"),
     ('^' + settings.BASEURL + r'newdb', "search.newdb"),
-    ('^' + settings.BASEURL + r'deldb/(?P<db_name>\w+)', "search.deldb"),
+    ('^' + settings.BASEURL + r'deldb', "search.deldb"),
 
     # Adding documents
     ('^' + settings.BASEURL + r'add/(?P<db_name>\w+)', "search.add"),
+    ('^' + settings.BASEURL + r'bulkadd/(?P<db_name>\w+)', "search.bulkadd"),
     
     # API explorer
     ('^' + settings.BASEURL + r'api-explorer/(?P<path>.*)$', 

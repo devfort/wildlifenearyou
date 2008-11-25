@@ -1,8 +1,15 @@
 
+import simplejson
+import urllib
 import urllib2
 
-class ClientError(Exception):
-    pass
+class SearchClientError(Exception):
+    def __init__(self, msg, errtype):
+        self.msg = msg
+        self.errtype = errtype
+
+    def __str__(self):
+        return "%s: %s" % (self.errtype, self.msg)
 
 class Query(object):
     """A query object.
@@ -22,7 +29,102 @@ class Query(object):
 
     # FIXME - implement more factory methods!
 
-class XappyServiceClient(object):
+class Field(object):
+    """An instance of a Field in a document.
+
+    """
+
+    # Use __slots__ because we're going to have very many Field objects in
+    # typical usage.
+    __slots__ = 'name', 'value'
+
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    def __repr__(self):
+        return 'Field(%r, %r)' % (self.name, self.value)
+
+class Document(object):
+    """A document to be passed to the indexer.
+
+    This represents an item to be stored in the search engine.
+
+    Note that some information in a Document will not be represented in the
+    index: therefore, it is not possible to retrieve a full Document from the
+    search engine index.
+
+    A document is a simple container with two attributes:
+
+     - `fields` is a list of Field objects, or an iterator returning Field
+       objects.
+     - `id` is a string holding a unique identifier for the document (or
+       None to get the database to allocate a unique identifier automatically
+       when the document is added).
+
+    It also has some convenience methods to assist in building up the contents.
+
+    """
+
+    __slots__ = 'id', 'fields',
+    def __init__(self, id=None, fields=None):
+        self.id = id
+        if fields is None:
+            self.fields = []
+        else:
+            self.fields = fields
+
+    def __repr__(self):
+        return 'Document(%r, %r)' % (self.id, self.fields)
+
+    def append(self, *args, **kwargs):
+        """Append a field to the document.
+
+        This may be called with a Field object, in which case it is the same as
+        calling append on the "fields" member of the Document.
+        
+        Alternatively. it may be called with a set of parameters for creating a
+        Field object, in which case such a Field object is created (using the
+        supplied parameters), and appended to the list of fields.
+
+        """
+        if len(args) == 1 and len(kwargs) == 0:
+            if isinstance(args[0], Field):
+                self.fields.append(args[0])
+                return
+        # We assume we just had some arguments for appending a Field.
+        self.fields.append(Field(*args, **kwargs))
+
+    def extend(self, fields):
+        """Append a sequence or iterable of fields or groups to the document.
+
+        This is simply a shortcut for adding several Field objects to the
+        document, by calling `append` with each item in the list of fields
+        supplied.
+
+        `fields` should be a sequence containing items which are either Field
+        objects, or sequences of parameters for creating Field objects.
+
+        """
+        for field in fields:
+            if isinstance(field, Field):
+                self.fields.append(field)
+            else:
+                self.fields.append(Field(*field))
+
+    def as_json(self):
+        """Return a JSON represenation of the document.
+
+        Probably not the best implementation currently - lots of copying.
+
+        """
+        req = {
+            'id': self.id,
+            'data': [[field.name, field.value] for field in self.fields],
+        }
+        return simplejson.dumps(req)
+
+class SearchClient(object):
     """A client for the Xappy webservice.
 
     """
@@ -38,21 +140,87 @@ class XappyServiceClient(object):
            merely a convenience - this may be used instead of supplying the
            name to every call.)
 
+        The time taken for the last call made is available in the
+        `last_elapsed_time` member (this is set to None if not available).
+
         """
         self.base_url = base_url
         self.default_db_name = default_db_name
 
-    def _doreq(self, path, qs=None, data=None):
-        try:
-            urllib2.urlopen(self.base_url + path)
-        except 
+        self.last_elapsed_time = None
 
-    def newdb(self, format, db_name=None):
+    def _doreq(self, path, qs=None, data=None):
+        """Perform a request to path.
+
+        If qs is supplied, format as a querystring, and append to the path
+        used.  qs should be a dictionary of parameters.  parameter values may
+        be strings, or lists (in which latter case, multiple instances will be
+        sent).
+
+        If data is supplied it is a dictionary of fields which are sent as a POST request.
+
+        """
+        if qs is not None:
+            args = []
+            for field, vals in qs.iteritems():
+                if vals is None:
+                    continue
+                if isinstance(vals, basestring):
+                    vals = [vals]
+                vals = filter(None, vals)
+                args.append((field, vals))
+            path += '?' + urllib.urlencode(args, doseq=1)
+        fd = urllib2.urlopen(self.base_url + path)
+        res = fd.read()
+        fd.close()
+        res = simplejson.loads(res)
+        if 'elapsed' in res:
+            self.last_elapsed_time = res['elapsed']
+        else:
+            self.last_elapsed_time = None
+        if 'error' in res:
+            raise SearchClientError(res['error'], res.get('type', 'Search error'))
+            
+        return res
+
+    def search(self, query, start_rank=None, end_rank=None, db_name=None):
+        """Perform a search.
+
+         - `query`: A Query object, containing the query to perform.
+         - `start_rank`: The start rank; defaults to the server default (usually 0).
+         - `end_rank`: The end rank; defaults to the server default (usually 10).
+
+        FIXME: document return type - perhaps wrap in an object
+
+        """
+        if db_name is None:
+            db_name = self.default_db_name
+        if db_name is None:
+            raise SearchClientError('Missing db_name')
+
+        req = {
+            'q': query.query_string,
+            'start_rank': start_rank,
+            'end_rank': end_rank,
+        }
+
+        return self._doreq('search/' + db_name, qs=req)
+
+    def listdbs(self):
+        """Get a list of the available databases.
+
+        Returns a list of strings, representing the database names.
+
+        """
+        res = self._doreq('listdbs')
+        return res['db_names']
+
+    def newdb(self, fields, db_name=None):
         """Create a new database.
         
         Returns an error if the database already exists.
 
-         - `format` is a list of parameters for the database configuration.
+         - `fields` is a list of parameters for the database configuration.
            Each item in the list is a dictionary containing details about the
            configuration for that field in xappy.  The field_name specified in
            each dictionary must be unique (ie, can't appear in multiple entries
@@ -96,23 +264,56 @@ class XappyServiceClient(object):
         }
 
         """
-        pass
+        if db_name is None:
+            db_name = self.default_db_name
+        if db_name is None:
+            raise SearchClientError('Missing db_name')
 
-    def search(self, query, start_rank=None, end_rank=None, db_name=None):
-        """Perform a search.
+        req = {
+            'db_name': db_name,
+            'fields': simplejson.dumps(list(fields)),
+        }
 
-         - `query`: A Query object, containing the query to perform.
-         - `start_rank`: The start rank; defaults to the server default (usually 0).
-         - `end_rank`: The end rank; defaults to the server default (usually 10).
+        return self._doreq('newdb', data=req)
+
+    def deldb(self, db_name=None):
+        """Delete the database.
 
         """
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise ClientError('Missing db_name')
+            raise SearchClientError('Missing db_name')
 
-        req['q'] = query.query_string
-        req['start_rank'] = start_rank
-        req['end_rank'] = end_rank
+        req = {
+            'db_name': db_name,
+        }
 
-        retval = self._doreq('search/' + db_name, 
+        return self._doreq('deldb', data=req)
+
+    def add(self, doc, db_name=None):
+        """Add a document tothe database.
+
+        `doc` the document (as a Document object).
+
+        """
+        if db_name is None:
+            db_name = self.default_db_name
+        if db_name is None:
+            raise SearchClientError('Missing db_name')
+
+        return self._doreq('add', data={'doc': [doc.as_json()]})
+
+    def bulkadd(self, docs, db_name=None):
+        """Add a load of documents tothe database.
+
+        `doc` the document (as a Document object).
+
+        """
+        if db_name is None:
+            db_name = self.default_db_name
+        if db_name is None:
+            raise SearchClientError('Missing db_name')
+
+        return self._doreq('add', data={'doc': [doc.as_json() for doc in docs]})
+
