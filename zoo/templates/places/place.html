@@ -10,14 +10,17 @@
 
 <h2>Opening times</h2>
 {% for date_range, days in opening_times.items %}
-    <h3>{{ date_range }}</h3>
-    {% for day in days %}{% if day %}
-        <li>
-			{{ day.name }} 
+	<h3>{{ date_range }}</h3>
+
+	{% for day in days %}
+		{% if day %}
+		<li>
+			{% if day.name  %}{{ day.name }}:{% endif %}
 			{% if day.closed %}Closed{% endif %}
 			{{ day.times }}
 		</li>
-	{% endif %}{% endfor %}
+		{% endif %}
+	{% endfor %}
 {% endfor %}
 
 <h2>Species seen (<span class="seen">by you</span>)</h2>
