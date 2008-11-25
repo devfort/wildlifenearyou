@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load favourites_extras %}
+
 {% block title %}{{ profile.user }}{% endblock %}
 
 {% block content %}
@@ -13,7 +15,7 @@
 <p><a href="{% url logbook-default %}">My Logbook</a></p>
 
 <div id="animal_passport">
-	<h2>Animal Passport</h2>	
+	<h2>Animal Passport</h2>
 	<ol>
 	{% for species in profile.passport.seen_species %}
 		<li>{{ species.count }}&times; <a href="{{ species.urls.absolute }}">{{ species }}</a></li>
@@ -36,6 +38,18 @@
 	{% endfor %}
 	</ol>
 </div>
+
+<div id="favourite_species">
+  <h2>Favourite Animals</h2>
+  <ol>
+    {% for favourite in request.user.favourite_species.all %}
+    <li><a href="{{ species.urls.absolute }}">{{ favourite.species }}</a>
+      {% favourite_toggler "remove" favourite.species.slug request.path  %}
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+
 
 {% if user.comment_comments.all %}
 <h2>Comments I have posted:</h2>

@@ -18,6 +18,7 @@ def species(request, slug):
 
     return render(request, 'species/species.html', {
         'species': species,
+        'favourited': species.has_favourited(request.user),
     })
 
 def all_species(request):

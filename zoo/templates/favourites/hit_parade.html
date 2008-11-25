@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}The Animal Hit Parade{% endblock %}
+
+{% block content %}
+
+<h1>The Animal Hit Parade</h1>
+
+<ol>
+  {% for species in species_list %}
+  <li>{{ species.common_name }} ({{ species.count }})</li>
+  {% endfor %}
+</ol>
+
+
+{% endblock %}

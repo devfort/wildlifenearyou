@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from zoo.utils import attrproperty
 from zoo.trips.models import Trip
+from zoo.animals.models import Species
 
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
@@ -19,7 +20,7 @@ class Profile(models.Model):
             return self.get_absolute_url()
 
     def __unicode__(self):
-        return u'Profile for %s' % self.user
+        return u'Profile for %s' % (self.user,)
 
     def passport(self):
         return Trip.get_passport(self.user)

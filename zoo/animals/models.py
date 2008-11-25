@@ -42,6 +42,9 @@ class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
     species_group = models.ForeignKey(SpeciesGroup, blank=False, null=False)
 
+    def has_favourited(self, user):
+        return self in [f.species for f in user.favourite_species.all()]
+
     class Meta:
         verbose_name_plural = 'species'
 

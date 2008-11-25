@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'zoo.photos',
     'zoo.trips',
+    'zoo.favourites',
     'django.contrib.comments',
 )
 

@@ -63,8 +63,8 @@ urlpatterns = patterns('',
         name='logbook'),
     url(r'^profile/(?P<username>\w+)/logbook/edit/$', 'zoo.trips.views.logbook_edit',
         name='logbook-edit'),
-        
-        
+
+
 
     url(r'^profiles/$', accounts.all_profiles,
         name='accounts-all-profiles'),
@@ -93,9 +93,15 @@ urlpatterns = patterns('',
     url(r'^animal/(?P<slug>[^/]+)/$', 'zoo.animals.views.species',
         name='species'),
 
+    url(r'^favourite/(?P<action>[^/]+)/$', 'zoo.favourites.views.handle_favourite',
+        name='favourite-species'),
+
     url(r'^latin/$', 'zoo.animals.views.all_species_latin',
         name='all-species-latin'),
     url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.species_latin',),
+
+    url(r'^hit_parade/$', 'zoo.favourites.views.hit_parade',
+        name='hit-parade'),
 
     url(r'^(?P<country_code>\w{2})/(?P<slug>.*?)/upload/$',
         'zoo.photos.views.upload_place',
