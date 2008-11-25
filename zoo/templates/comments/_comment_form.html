@@ -1,14 +1,3 @@
-{% load comments %}
-<h3 id="comments">Comments</h3>
-{% get_comment_list for object as comment_list %}
-{% for comment in comment_list %}
-<div>
-    {{ comment }}
-</div>
-{% endfor %}
-
-{% if request.user and not request.user.is_anonymous %}
-{% get_comment_form for object as form %}
 {% load comments i18n %}
 <form action="{% comment_form_target %}" method="post">
     <p{% if form.comment.errors %} class="error"{% endif %}>
@@ -29,6 +18,3 @@
         <input type="submit" value="Add comment">
     </p>
 </form>
-{% else %}
-<p>You need to <a href="/login/">log in</a> to post comments.</p>
-{% endif %}

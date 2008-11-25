@@ -1,0 +1,15 @@
+{% load comments %}
+<h3 id="comments">Comments</h3>
+{% get_comment_list for object as comment_list %}
+{% for comment in comment_list %}
+<div>
+    {{ comment }}
+</div>
+{% endfor %}
+
+{% if user and not user.is_anonymous %}
+{% get_comment_form for object as form %}
+{% include "comments/_comment_form.html" %}
+{% else %}
+<p>You need to <a href="/login/?next={{ request.path }}">log in</a> to post comments.</p>
+{% endif %}
