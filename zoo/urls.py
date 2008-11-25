@@ -118,12 +118,13 @@ urlpatterns = patterns('',
     url(r'^countries/$', 'zoo.places.views.all_countries',
         name='countries'),
 
-
-
-    url(r'atl/editea/(?P<ea_id>\d+)', 'zoo.places.views.edit_enc_species',
-        name='edit-enclosure-species'),
-    url(r'atl/editenc/(?P<enc_id>\d+)', 'zoo.places.views.edit_enc',
-        name='edit-enclosure'),
 )
 
 
+# research and development -- ATL = animal testing laboratory
+urlpatterns = patterns('zoo.places.views',
+    url(r'atl/editea/(?P<ea_id>\d+)', 'edit_enc_species',
+        name='edit-enclosure-species'),
+    url(r'atl/editenc/(?P<enc_id>\d+)', 'edit_enc',
+        name='edit-enclosure'),
+)
