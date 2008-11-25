@@ -6,6 +6,19 @@ from django.utils import simplejson
 
 import datetime
 
+
+class ChangeRequestGroup(models.Model):
+    """
+    A group of ChangeRequests that cannot sensibly be applied individually.
+    """
+
+    created_at = models.DateTimeField(default=datetime.datetime.now)
+    # Can be created by an anonymous user
+    created_by = models.ForeignKey(
+        User, null=True, blank=True, related_name = 'created_changerequests'
+    )
+
+
 class ChangeRequest(models.Model):
     """
     A change request is a request by an unprivelidged user to change
@@ -22,11 +35,8 @@ class ChangeRequest(models.Model):
     apply() method which carries out the actual work. This may or may not
     turn out to be a good idea...
     """
-    created_at = models.DateTimeField(default=datetime.datetime.now)
-    # Can be created by an anonymous user
-    created_by = models.ForeignKey(
-        User, null=True, blank=True, related_name = 'created_changerequests'
-    )
+    group = models.ForeignKey(ChangeRequestGroup)
+
     # Track if and when this change request was applied
     applied_at = models.DateTimeField(null=True, blank=True)
     applied_by = models.ForeignKey(
@@ -118,3 +128,37 @@ class DeleteObjectRequest(ChangeRequest):
 
     def request_description(self):
         return u'Delete %s' % self.content_object
+
+
+
+#Enclosure.list_of_sub_enclosures.append(Enclosure(name="the other bat cave"))
+#
+#Enclosure: <The Zoo>
+#   Enclosure: <the bat hole> *modified*
+#   Enclosure: <the bat cave 2> *new*
+#
+#<submit name="enc-id-1-enc-create" value='1'>
+#
+#enc-id-1-name = 'narwhals'
+#enc-id-1-enc-id-3-name = 'loldongs'
+#enc-id-1-enc-create = '1'
+#
+#enc-id-1-enc-id-3-name = 'loldongs'
+#enc-id-1-enc-id-new1-name = 'uaobeuoe'
+#enc-id-1-enc-id-new1-enc-id-new3-name = 'foobar'
+#enc-id-1-enc-id-new2-name = 'test'
+#
+#
+#{(Enclosure, 1):
+# 
+#    'form': Form(data),
+#    (Enclosure, 3): {'name': 'loldongs'}
+#    (Enclosure, None): {'name': 'uaobeuoe',
+#                        (Enclosure, None): {'name': 'foobar'}}
+#    (Enclosure, None): {'name': 'test'}}}
+#
+#
+#enc = Enclosure.objects.get(pk=1)
+#
+#
+#

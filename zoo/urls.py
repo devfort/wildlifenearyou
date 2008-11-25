@@ -117,4 +117,13 @@ urlpatterns = patterns('',
         name='country'),
     url(r'^countries/$', 'zoo.places.views.all_countries',
         name='countries'),
+
+
+
+    url(r'atl/editea/(?P<ea_id>\d+)', 'zoo.places.views.edit_enc_species',
+        name='edit-enclosure-species'),
+    url(r'atl/editenc/(?P<enc_id>\d+)', 'zoo.places.views.edit_enc',
+        name='edit-enclosure'),
 )
+
+

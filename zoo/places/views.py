@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from zoo.shortcuts import render
 
-from zoo.places.models import Place, Country
+from zoo.places.models import Place, Country, EnclosureAnimal
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
 
@@ -103,3 +103,52 @@ def all_countries(request):
     return render(request, 'places/all_countries.html', {
         'all_countries': Country.objects.all().order_by('name'),
     })
+
+from zoo.places.forms import EnclosureSpeciesEditForm, EnclosureEditForm
+
+def edit_enc_species(request, ea_id):
+    ea = EnclosureSpecies.objects.get(pk=ea_id)
+
+    from zoo.changerequests.models import ChangeAttributeRequest, ChangeRequestGroup
+
+    if request.method == 'POST':
+        form = EnclosureSpeciesEditForm(instance=ea,
+                                       data=request.POST)
+        if form.is_valid():
+            changes = []
+            
+            for name, val in form.cleaned_data.items():
+                oldval = getattr(form.instance, name)
+                if oldval != val:
+                    changes.append(ChangeAttributeRequest(content_object=ea,
+                                                          attribute=name,
+                                                          value=val))
+
+            if changes:
+                crg = ChangeRequestGroup.objects.create()
+                for c in changes:
+                    c.group = crg
+                    c.save()
+    else:
+        form = EnclosureSpeciesEditForm(instance=ea)
+
+    return render(request, "edit/ea.html", {
+        'form': form,
+        })
+
+def edit_enc(request, enc_id):
+    enc = Enclosure.objects.get(pk=enc_id)
+
+    eas = enc.enclosurespecies_set.all()
+
+    data = [
+        ('form': 
+
+        ]
+
+    form = EnclosureEditForm(instance=enc)
+
+    return render(request, "edit/ea.html", {
+        'form': form,
+        })
+
