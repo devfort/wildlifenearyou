@@ -15,6 +15,7 @@ def set_current_user(user):
 
 set_current_user(None)
 
+
 def onanymodel_presave(sender, **kwargs):
     current_user = stash.current_user
     if current_user is None or not current_user.is_authenticated():
