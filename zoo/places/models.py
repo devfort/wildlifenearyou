@@ -63,7 +63,7 @@ class Place(AuditedModel):
     @models.permalink
     def get_absolute_url(self):
         return ('place', (), {
-            'country_code': self.country.country_code,
+            'country_code': self.country.country_code.lower(),
             'slug': self.slug,
         })
 

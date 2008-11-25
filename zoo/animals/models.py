@@ -35,4 +35,9 @@ class Species(AuditedModel):
 
     def __unicode__(self):
         return '%s (%s)' % (self.common_name, self.latin_name,)
-
+    
+    def seen_at(self):
+        from zoo.places.models import Place
+        return Place.objects.filter(
+            trip__tripsighting__species = self
+        ).distinct()

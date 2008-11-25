@@ -36,4 +36,15 @@
 	</ol>
 </div>
 
+{% if user.comment_comments.all %}
+<h2>Comments I have posted:</h2>
+{% for comment in user.comment_comments.all %}
+<div class="comment">
+{{ comment.comment|linebreaks }}
+<div class="posted-by">Posted on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a> at {{ comment.submit_date|date:"jS F Y H:i" }}</div>
+</div>
+{% endfor %}
+{% endif %}
+
+
 {% endblock %}

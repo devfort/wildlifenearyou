@@ -16,8 +16,18 @@
         {% endfor %}
         </ul>
     {% endif %}
-
 {% endwith %}
+
+{% if species.seen_at %}
+<h2>Our users have seen them here:</h2>
+<ul>
+    {% for place in species.seen_at %}
+    <li><a href="{{ place.urls.absolute }}">{{ place }}</a></li>
+    {% endfor %}
+</ul>
+
+
+{% endif %}
 
 {% with species as object %}
     {% include "comments/_comments.html" %}
