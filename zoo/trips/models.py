@@ -32,9 +32,8 @@ class Trip(models.Model):
         if not user.is_authenticated():
             return Passport([])
 
-        species_list = list(Species.objects.filter(trip__user=user))
         by_count = {}
-        for species in species_list:
+        for species in Species.objects.filter(trip__user=user):
             by_count[species] = by_count.get(species, 0) + 1
 
         species_list = by_count.keys()

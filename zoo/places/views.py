@@ -11,10 +11,9 @@ SPECIES_ON_PLACE_PAGE = 10
 
 def get_place_species(place, user, limit=None):
     passport = Trip.get_passport(user)
-    species_list = list(Species.objects.filter(trip__place=place))
 
     by_count = {}
-    for species in species_list:
+    for species in Species.objects.filter(trip__place=place):
         by_count[species] = by_count.get(species, 0) + 1
 
     species_list = by_count.keys()
