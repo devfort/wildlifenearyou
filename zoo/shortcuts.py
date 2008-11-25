@@ -1,5 +1,6 @@
 from django.utils import simplejson
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect as Redirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
