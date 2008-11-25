@@ -10,9 +10,11 @@
 <p>Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></p>
 {% endif %}
 
-<img src="{{ photo.photo.url }}">
+{% load thumbnail %}
+<img src="{% thumbnail photo.photo 600x600 %}">
+<!-- ><img src="{{ photo.photo.url }}"> -->
 
-<p>By <a href="/profile/{{ photo.created_by.username }}/">{{ photo.created_by }}</a>, uploaded {{ photo.created_at|date:"jS F Y"}}</p>
+<p>By <a href="/profile/{{ photo.created_by.username }}/">{{ photo.created_by }}</a>, uploaded {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.photo.url }}">original</a>)</p>
 
 {% with photo as object %}
     {% include "comments/_comments.html" %}
