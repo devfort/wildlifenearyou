@@ -3,7 +3,8 @@
 	<hair-accessories description="Choose your pigtails." name="Hair Accessory" plural="Hair Accessories">
 		<hair-accessory id="3" src="../../images/hair_accessories.png" title=""/>
 		<hair-accessory id="10" src="../../images/hair_accessories2.png" title=""/>
-		<hair-accessory id="11" src="../../images/hair_accessories3.png" title=""/>	</hair-accessories>
+		<hair-accessory id="11" src="../../images/hair_accessories3.png" title=""/>	
+	</hair-accessories>
 	<hairs description="" name="Hair" plural="Hairs">
 		<hair id="4" src="../../images/hair.png" title=""/>
 	</hairs>
@@ -22,6 +23,14 @@
 		<mouth id="8" src="../../images/mouth.png" title=""/>
 	</mouths>
 	<faces description="" name="Face" plural="Faces">
-		<face id="9" src="../../images/face.png" title=""/>
+		<face id="9" src="../../images/face1.png" title=""/>
+		<face id="15" src="../../images/face2.png" title=""/>
+		<face id="16" src="../../images/face3.png" title=""/>
+		<face id="17" src="../../images/face4.png" title=""/>
+		<face id="18" src="../../images/face5.png" title=""/>
+		<face id="19" src="../../images/face6.png" title=""/>
+		<face id="20" src="../../images/face7.png" title=""/>
+		<face id="21" src="../../images/face8.png" title=""/>
+		<face id="22" src="../../images/face9.png" title=""/>
 	</faces>
 </profileImages>
