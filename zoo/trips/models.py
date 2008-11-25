@@ -51,10 +51,10 @@ class Trip(AuditedModel):
             return self
 
         # FIXME - Need I18N
-        return u'your trip to %s' % (self.place.known_as)
+        return u'your trip to %s' % self.place.known_as
 
     def __unicode__(self):
-        return self.created_by.username + u', ' + self.name
+        return u"%s, %s" % (self.created_by.username, self.name)
 
 class Sighting(AuditedModel):
     place = models.ForeignKey('places.Place')
@@ -62,7 +62,7 @@ class Sighting(AuditedModel):
     trip = models.ForeignKey(Trip, null=True, blank=True)
 
     def __unicode__(self):
-        str = 'Sighting of ' + self.species.common_name + ' at ' + unicode(self.place)
+        ret = u'Sighting of %s at %s' % (self.species.common_name, self.place)
         if self.trip:
-            str += ' during trip ' + unicode(self.trip)
-        return str
+            ret += ' during trip %s' % self.trip
+        return ret

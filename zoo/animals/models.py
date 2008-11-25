@@ -33,7 +33,7 @@ class AbstractSpecies(AuditedModel):
             return self.get_absolute_url()
 
     def __unicode__(self):
-        return '%s (%s)' % (self.common_name, self.latin_name,)
+        return '%s (%s)' % (self.common_name, self.latin_name)
 
     def seen_at(self):
         return Place.objects.filter(sighting__species=self).distinct()
@@ -67,10 +67,8 @@ class SuperSpecies(AbstractSpecies):
     def plural(self):
         name = self.common_name.lower()
         if name == 'werewolf':
-            plural = 'werewolves'
-        else:
-            plural = '%ss' % name
-        return plural
+            return 'werewolves'
+        return '%ss' % name
 
     class Meta:
         verbose_name_plural = 'super species'
