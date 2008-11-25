@@ -25,4 +25,20 @@ migration = m.Migration(sql_up=["""
 """, """
     ALTER TABLE `trips_trip` DROP `user_id`;
 """
-], sql_down=[])
+], sql_down=["""
+    DROP TABLE `trips_sighting`;
+""", """
+    CREATE TABLE `trips_tripsighting` (
+        `id` integer NOT NULL PRIMARY KEY,
+        `created_at` datetime NOT NULL,
+        `created_by_id` integer NOT NULL REFERENCES `auth_user` (`id`),
+        `modified_at` datetime NOT NULL,
+        `modified_by_id` integer NOT NULL REFERENCES `auth_user` (`id`),
+        `species_id` integer NOT NULL REFERENCES `animals_species` (`id`),
+        `trip_id` integer NOT NULL REFERENCES `trips_trip` (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    ;
+""", """
+    ALTER TABLE `trips_trip` ADD `user_id` integer NOT NULL REFERENCES `auth_user` (`id`)
+"""
+])
