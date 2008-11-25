@@ -61,7 +61,7 @@ class DistanceSearchTest(TestCase):
         q = self.sconn.query_all()
         geosort = self.sconn.SortByGeolocation('location', '0, 0')
         res = list(self.sconn.search(q, 0, 10, sortby=geosort))
-        self.assertEqual([item.id for item in res], [0, 1, 2])
+        self.assertEqual([int(item.id) for item in res], [0, 1, 2])
 
         q = self.sconn.query_distance('location', '0, 0')
         res = list(self.sconn.search(q, 0, 10))

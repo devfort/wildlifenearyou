@@ -47,7 +47,7 @@ archives = (
     ('Xapian core',
      'http://xappy.googlecode.com/files/xapian-core-11600.tgz',
      'xapian-core.tgz',
-     'c79269e10468ad0fa92aae369b08a2298e6d4108',
+     '9c4eef7a71359e7c9022312be7c004f813a93534',
      '',
     ),
     ('Xapian bindings',
