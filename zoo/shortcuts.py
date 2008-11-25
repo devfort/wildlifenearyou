@@ -1,8 +1,10 @@
 from django.utils import simplejson
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect as Redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+
+# Explicit shadowing of HttpResponseRedirect
+Redirect = HttpResponseRedirect
 
 def render(request, template_name, context):
     # Do they have a current location cookie?
