@@ -23,7 +23,9 @@ migration = m.Migration(sql_up=["""
         created_by_id  = user_id, created_at  = current_timestamp,
         modified_by_id = user_id, modified_at = current_timestamp
 """, """
-    ALTER TABLE `trips_trip` DROP `user_id`;
+    ALTER TABLE `trips_trip` DROP CONSTRAINT `user_id_refs_id_2b6daa0c`;
+""", """
+    ALTER TABLE `trips_trip` DROP COLUMN `user_id`;
 """
 ], sql_down=["""
     DROP TABLE `trips_sighting`;
@@ -40,5 +42,7 @@ migration = m.Migration(sql_up=["""
     ;
 """, """
     ALTER TABLE `trips_trip` ADD `user_id` integer NOT NULL REFERENCES `auth_user` (`id`)
+""", """
+    ALTER TABLE `trips_trip` ADD CONSTRAINT user_id_refs_id_2b6daa0c FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 """
 ])
