@@ -75,7 +75,8 @@ urlpatterns = patterns('',
     (r'^photos/$', photos.all),
 
     (r'^set-location/$', 'zoo.geonames.views.set_location'),
-    (r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete'),
+    url(r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete',
+        name="geonames-autocomplete"),
 
     (r'^comments/', include('django.contrib.comments.urls')),
 
