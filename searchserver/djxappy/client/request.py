@@ -48,12 +48,20 @@ class XappyServiceClient(object):
         except 
 
     def newdb(self, format, db_name=None):
-        """Format 
+        """Create a new database.
+        
+        Returns an error if the database already exists.
 
-{
-    'db_name': <dbname>,
-    'fields': {
-        <xappy fieldname>: {
+         - `format` is a list of parameters for the database configuration.
+           Each item in the list is a dictionary containing details about the
+           configuration for that field in xappy.  The field_name specified in
+           each dictionary must be unique (ie, can't appear in multiple entries
+           in the list).
+
+        The dictionaries contain the following:
+
+        {
+            'field_name': # fieldname (required)
             'type':  # One of 'text', 'date', 'geo', 'float' (default=text)
             'store': # boolean (default=False), whether to store in document data (for 'display')
             'spelling_word_source': # boolean (default=False), whether to use for build the spelling dictionary
@@ -85,9 +93,7 @@ class XappyServiceClient(object):
             },
 
             # Note - only one of "freetext" and "exact" may be supplied
-        },
-    },
-}
+        }
 
         """
         pass
