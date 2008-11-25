@@ -46,6 +46,14 @@ urlpatterns = patterns('',
         name='accounts-register'),
     url(r'^welcome/$', accounts.welcome,
         name='accounts-welcome'),
+
+    url(r'^logbook/$', 'zoo.trips.views.logbook_default',
+        name='logbook-default'),
+    url(r'^logbook/(?P<username>\w+)/$', 'zoo.trips.views.logbook',
+        name='logbook'),
+    url(r'^logbook/(?P<username>\w+)/edit/$', 'zoo.trips.views.logbook_edit',
+        name='logbook-edit'),
+
     url(r'^profile/$', accounts.profile_default,
         name='accounts-default'),
     url(r'^profile/(?P<username>\w+)/$', accounts.profile,
@@ -55,6 +63,7 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<username>\w+)/photos/(?P<photo_id>\d+)/$',
         'zoo.photos.views.photo',
         name='photo'),
+
     url(r'^profiles/$', accounts.all_profiles,
         name='accounts-all-profiles'),
 
