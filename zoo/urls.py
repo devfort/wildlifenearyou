@@ -71,7 +71,7 @@ urlpatterns = patterns('',
     (r'^latin/raphus-cucullatus/$',
         lambda r: http.HttpResponseRedirect('/animal/dodo/')
     ),
-    (r'^animal/(unicorn|dragon|chimera|gryphon)/$', 'zoo.animals.views.imaginary'),
+    (r'^animal/(unicorn|dragon|werewolf|chimera|gryphon)/$', 'zoo.animals.views.imaginary'),
 
     (r'^comments/', include('django.contrib.comments.urls')),
 
