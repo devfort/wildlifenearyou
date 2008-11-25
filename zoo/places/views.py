@@ -72,6 +72,11 @@ def place_species(request, country_code, slug):
         'place': place,
         'species_list': species_list,
     })
+    
+def all_places(request):
+    return render(request, 'places/all_places.html', {
+        'all_places': Place.objects.all().order_by('known_as'),
+    })
 
 
 def country(request, country_code):
