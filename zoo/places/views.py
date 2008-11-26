@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
+from django.utils import dateformat
+    
 from zoo.shortcuts import render
-
 from zoo.places.models import Place, Country, PlaceOpening
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
@@ -45,10 +46,25 @@ def place(request, country_code, slug):
 
         start_date = opening.start_date or ''
         end_date = opening.end_date or ''
-        if start_date == end_date:
-            date_range = "%s" % start_date
+
+        if start_date and end_date:
+            # now see if we need to add the end date
+            if end_date > start_date:
+                # now check if month and year are the same
+                if dateformat.format(start_date, 'mY') == dateformat.format(end_date, 'mY'):
+                    date_range = u'%s &mdash; %s' % (dateformat.format(start_date, 'jS'), dateformat.format(end_date, 'jS F Y'))
+                elif start_date.year == end_date.year:
+                    date_range = u'%s &mdash; %s' % (dateformat.format(start_date, 'jS F'), dateformat.format(end_date, 'jS F Y'))
+                else:
+                    date_range = u'%s &mdash; %s' % (date, dateformat.format(end_date, 'jS F Y'))
+            else:
+                date_range = u'%s' % start_date
+        elif start_date:
+            date_range = u'%s &mdash;' % dateformat.format(start_date, 'jS F Y')
+        elif end_date:
+            date_range = u'&mdash; %s' % dateformat.format(end_date, 'jS F Y')
         else:
-            date_range = "%s &mdash; %s" % (start_date, end_date)
+            date_range = '';
 
         arr = opening_times.setdefault(date_range, {}).setdefault(opening.section, [None] * 8)
 

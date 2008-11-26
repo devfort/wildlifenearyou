@@ -115,6 +115,8 @@ jQuery(function($) {
 		{% if day %}
 			{% if day.name %}
 				<dt>{{ day.name }}</dt>
+			{% else %}
+				<dt>Every day</dt>
 			{% endif %}
 			<dd>
 				{% if day.closed %}Closed{% endif %}
@@ -221,9 +223,11 @@ ${% endifequal %}{{ price.value }}
     {% include "comments/_comments.html" %}
 {% endwith %}
 
+<!--
 <p class="suggest-changes">
 Found incorrect information on this page?
 <a href="{{ place.urls.suggest_changes }}">Let us know</a>
 </p>
+-->
 
 {% endblock %}

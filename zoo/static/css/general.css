@@ -67,9 +67,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2 {
-    font-variant: small-caps;
+    text-transform: uppercase;
 }
-
 
 a:link, button.link span {
 	color: #0063DC;
@@ -131,10 +130,12 @@ h4 {
 	margin-bottom: 0.5625em; /* 9px */	
 	margin-top:1.286em;	   /* 18px */
 	margin-bottom: 0.643em; /* 9px */
+	font-size: 1em;
 }
 h5, 
 h6 {
 	 font-size: 0.8125em;  /* 13px */ 
+	 font-size: 1em;
 }
 
 /* @end */

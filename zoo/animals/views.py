@@ -18,7 +18,11 @@ def species(request, slug):
         return HttpResponse(t.render(c), status=species.status)
 
     favourites = species.favourited.count()
-    hit_parade = FavouriteSpecies.hit_parade().index(species) + 1
+    hit_parade = 0
+    try:
+        hit_parade = FavouriteSpecies.hit_parade().index(species) + 1
+    except ValueError, e:
+        pass
 
     return render(request, 'species/species.html', {
         'species': species,

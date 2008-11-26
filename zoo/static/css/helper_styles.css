@@ -160,6 +160,7 @@ h2 .meta {
     font-style: italic;
     font-weight: normal;
     font-variant: normal;
+    text-transform: lowercase;
 	font-family: Calibri, "Helvetica Neue", sans-serif;
     color: #666666;
 }
@@ -172,5 +173,4 @@ h1 i.scientific {
 
 .notusing {
 	background-color: #E185E9;	
-}
 }
