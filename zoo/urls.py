@@ -15,6 +15,9 @@ for model in get_models():
     if table_present(model._meta.db_table):
         databrowse.site.register(model)
 
+from django.template import add_to_builtins
+add_to_builtins('zoo.templatetags.switch')
+
 from accounts import views as accounts
 from faces import views as faces
 from photos import views as photos
