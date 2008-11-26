@@ -521,7 +521,7 @@ def add(request, db_name):
         newids = []
         for doc in params['doc']:
             doc = simplejson.loads(doc)
-            newids.append(db.add(doc_from_params(doc)))
+            newids.append(db.replace(doc_from_params(doc)))
         db.flush()
         return {'ok': 1, 'ids': newids, 'doccount': db.get_doccount()}
     finally:
