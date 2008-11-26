@@ -14,6 +14,10 @@
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
 <p><address>{{ place.address }}</address></p>
 
+{% if place.phone %}
+<p>Phone: {{ place.phone }}</p>
+{% endif %}
+
 {% if place.description %}
 <p>{{ place.description }}</p>
 {% endif %}
