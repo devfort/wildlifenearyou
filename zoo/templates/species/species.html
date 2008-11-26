@@ -9,10 +9,14 @@
 <h1>{{ species }}</h1>
 <p class="sub-head"><i class="scientific">{{ species.latin_name }}</i></p>
 
-{% if favourited %}
-<p>This is one of your favourite animals! {% favourite_toggler "remove" species.slug request.path %}</a></p>
+{% if request.user.is_authenticated %}
+	{% if favourited %}
+	<p>This is one of your favourite animals! {% favourite_toggler "remove" species.slug request.path %}</a></p>
+	{% else %}
+	<p>{% favourite_toggler "add" species.slug request.path %}</p>
+	{% endif %}
 {% else %}
-<p>{% favourite_toggler "add" species.slug request.path %}</p>
+	<p><a href="{% url accounts-login %}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this as one of your favourite animals.</p>
 {% endif %}
 
 {% with species.enclosure_set.all as enclosures %}
