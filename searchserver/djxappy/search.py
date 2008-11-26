@@ -526,7 +526,7 @@ def add(request, db_name):
             if doc.id is None:
                 newids.append(db.add(doc))
             else:
-                newids.append(db.replace(doc))
+                newids.append(doc.id)
         db.flush()
         return {'ok': 1, 'ids': newids, 'doccount': db.get_doccount()}
     finally:
