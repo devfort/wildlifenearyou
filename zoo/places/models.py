@@ -64,8 +64,7 @@ class Place(AuditedModel):
     def address(self):
         bits = []
         for attr in (
-            'address_line_1', 'address_line_2', 'town', 'state', 'zip',
-            'country'
+            'address_line_1', 'address_line_2', 'town', 'state', 'zip'
             ):
             val = unicode(getattr(self, attr, None))
             if val:
