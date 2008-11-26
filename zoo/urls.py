@@ -124,6 +124,11 @@ urlpatterns = patterns('',
 
 )
 
+urlpatterns += patterns('zoo.changerequests.views',
+    url(r'moderation/', 'moderation_index',
+        name='admin-moderation'),
+)
+
 # research and development -- ATL = animal testing laboratory
 urlpatterns += patterns('zoo.places.views',
     url(r'atl/editea/(?P<ea_id>\d+)', 'edit_enc_species',
