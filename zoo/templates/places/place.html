@@ -8,10 +8,23 @@
 <p class="sub-head">{{ place.legal_name }}</p>
 <address>{{ place.address|linebreaksbr }}</address>
 
-<h2>Opening times</h2>
-{% for date_range, days in opening_times.items %}
-	<h3>{{ date_range|safe }}</h3>
+<h2>Species seen (<span class="seen">by you</span>)</h2>
+{% if species_list %}
+<ul>
+{% for species in species_list %}
+	<li><span {% if species.seen %}class="seen" {% endif %}title="{{ species.count }} seen">{{ species.common_name }}</span></li>
+{% endfor %}
+</ul>
+{% endif %}
 
+<h2>Opening times</h2>
+{% for date_ranges in opening_times %}
+	<h3>{{ date_ranges.0|safe }}</h3>
+
+{% for section_title, days in date_ranges.1.items %}
+{% if section_title %}
+<h4>{{ section_title }}</h4>
+{% endif %}
 	<dl>
 	{% for day in days %}
 		{% if day %}
@@ -25,16 +38,8 @@
 		{% endif %}
 	{% endfor %}
 	</dl>
+	{% endfor %}
 {% endfor %}
-
-<h2>Species seen (<span class="seen">by you</span>)</h2>
-{% if species_list %}
-<ul>
-{% for species in species_list %}
-	<li><span {% if species.seen %}class="seen" {% endif %}title="{{ species.count }} seen">{{ species.common_name }}</span></li>
-{% endfor %}
-</ul>
-{% endif %}
 
 <a href="{% url place-species place.country.country_code,place.slug %}">All species</a>
 

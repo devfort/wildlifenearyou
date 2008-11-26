@@ -47,7 +47,7 @@ def place(request, country_code, slug):
         else:
             date_range = "%s &mdash; %s" % (start_date, end_date)
 
-        arr = opening_times.setdefault(date_range, [None] * 8)
+        arr = opening_times.setdefault(date_range, {}).setdefault(opening.section, [None] * 8)
 
         def gen_day_dict(day_of_week=None):
             name = None
@@ -67,10 +67,12 @@ def place(request, country_code, slug):
         else:
             arr[0] = gen_day_dict()
 
+    times_sorted = [ (key, opening_times[key]) for key in sorted(opening_times.keys()) ]
+
     return render(request, 'places/place.html', {
         'place': place,
         'species_list': species_list,
-        'opening_times': opening_times,
+        'opening_times': times_sorted,
     })
 
 def place_species(request, country_code, slug):
