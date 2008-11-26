@@ -518,10 +518,15 @@ def add(request, db_name):
 
     db = xappy.IndexerConnection(get_db_path(db_name))
     try:
+        origdoccount = db.get_doccount()
         newids = []
         for doc in params['doc']:
             doc = simplejson.loads(doc)
-            newids.append(db.replace(doc_from_params(doc)))
+            doc = doc_from_params(doc)
+            if doc.id is None:
+                newids.append(db.add(doc))
+            else:
+                newids.append(db.replace(doc))
         db.flush()
         return {'ok': 1, 'ids': newids, 'doccount': db.get_doccount()}
     finally:
