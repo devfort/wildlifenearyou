@@ -61,7 +61,7 @@ class Place(AuditedModel):
             val = unicode(getattr(self, attr, None))
             if val:
                 bits.append(val)
-        return '\n'.join(bits)
+        return ', '.join(bits)
 
     # long and lot for mapping
     longitude = models.FloatField(null=True, blank=True)

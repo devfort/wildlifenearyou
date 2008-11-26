@@ -7,8 +7,16 @@
 <div id="main_stuff">
 
 <h1>{{ place.known_as }}</h1>
-<p class="sub-head">{{ place.legal_name }}</p>
-<address>{{ place.address|linebreaksbr }}</address>
+{% if place.url %}
+<a href="{{ place.url }}">&raquo; Visit their official website</a>
+{% endif %}
+
+<!-- <p class="sub-head">{{ place.legal_name }}</p> -->
+<p><address>{{ place.address }}</address></p>
+
+{% if place.description %}
+<p>{{ place.description }}</p>
+{% endif %}
 
 <h2>Species seen (<span class="seen">by you</span>)</h2>
 {% if species_list %}
