@@ -1,5 +1,5 @@
 import os
-from djxappy_client import XappyClient, Document
+from djape.client import Client, Document
 from django.conf import settings
 
 FILEPATH = os.path.join(
@@ -14,7 +14,7 @@ def import_from_file(filepath = FILEPATH):
         yield dict(zip(fields, vals))
 
 def import_into_xapian():
-    client = XappyClient(settings.XAPIAN_BASE_URL, settings.XAPIAN_SPECIES_DB)
+    client = Client(settings.XAPIAN_BASE_URL, settings.XAPIAN_SPECIES_DB)
     client.deldb() #if we want to delete it first
     client.newdb([{
         'field_name': 'common_name',
@@ -31,20 +31,21 @@ def import_into_xapian():
     queue = []
     count = 0
     for row in import_from_file():
+        if not row['scientific_name']:
+            continue
         count += 1
         doc = Document()
+        # doc.id = 'X' will over-ride auto ID /AND/ cause replace if exists
         doc.extend([
             ('common_name', row['name']),
             ('scientific_name', row['scientific_name']),
         ])
         # client.add(doc) - would work here
         queue.append(doc)
-        if len(queue) >= 1000:
+        if len(queue) >= 10000:
             client.bulkadd(queue)
             queue = []
             print "Imported %d" % count
     # Catch the remainder
     if queue:
         client.bulkadd(queue)
-
-        
