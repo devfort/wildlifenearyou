@@ -75,7 +75,9 @@ form .help {
 
 /* @group Form controls */
 
-input, textarea, select, button {
+input, 
+textarea, 
+select, button {
 	font-family: inherit;
 	font-size: 1em;
 }
@@ -139,6 +141,16 @@ button.link {
 	height: 1em;
 }
 
+input[type=submit],
+input.submit {
+	color: #ffffff;
+	background-color: #519ff1;
+	background-image: url(/static/img/bg/button.png);
+	background-position: bottom left;
+	background-repeat: repeat-x;
+	border: solid 1px #2356d6;
+    padding: 0.18em 0.7em;
+}
 /* @end */
 
 /* @end */

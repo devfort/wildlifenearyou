@@ -1,3 +1,9 @@
+.content {
+	background-color: #ffffff;
+	width: 100%;
+	overflow: hidden;
+}
+
 .primary {
     float: left;
     width: 64%;
@@ -15,11 +21,17 @@
 }
 
 .footer {
+	padding-top: 312px;
+	background-image: url(/static/img/bg/animals.png);
+	background-repeat: no-repeat;
+	background-position: top 98%;
+    background-color: #ffffff;
+    border-top: solid 1em #ffffff;
+}
+.footer p {
     text-align: center;
-    color: #000000;
+    color: #534741;
     background-color: #c6ddab;
     padding: 1em;
-    border-top: solid 1em white;
-    margin: 1em 0 0 0;
-    clear: both;
+    margin: 0;
 }
