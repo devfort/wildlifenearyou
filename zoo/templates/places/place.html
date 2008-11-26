@@ -152,10 +152,9 @@ ${% endifequal %}{{ price.value }}
 {% endfor %}
 </ul>
 
-<h2>Directions</h2>
-
 {% with place.direction.all as directions %}
     {% if directions %}
+	<h2>Directions</h2>
 	{% for direction in directions %}
     	<h3>By {{ direction.mode }}</h3>
 		<p>{{ direction.route }}</p>
@@ -167,10 +166,9 @@ ${% endifequal %}{{ price.value }}
 <h2>Events</h2>
 -->
 
-<h2>News</h2>
-
 {% with place.news.all as news %}
     {% if news %}
+	<h2>News</h2>
     <h3>News about {{ place.known_as }}</h3>
     <ul>
     {% for story in news %}
@@ -223,11 +221,9 @@ ${% endifequal %}{{ price.value }}
     {% include "comments/_comments.html" %}
 {% endwith %}
 
-<!--
 <p class="suggest-changes">
-Found incorrect information on this page?
-<a href="{{ place.urls.suggest_changes }}">Let us know</a>
+	Found incorrect information on the page?
+	<a href="{{ place.urls.suggest_changes }}">Let us know! You won’t hurt our feelings.</a>
 </p>
--->
 
 {% endblock %}

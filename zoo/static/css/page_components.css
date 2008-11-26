@@ -54,6 +54,8 @@ div.comment .posted-by {
 
 /* @end */
 
+/* @group Currencies */
+
 ul.currency {
 	list-style-type: none;
 	margin-left: 0;
@@ -77,6 +79,10 @@ ul.currency li {
 	background-image: url(/static/img/icons/price_YEN.png);		
 }
 
+/* @end */
+
+/* @group Facilities */
+
 .facilities {
 	list-style-type: none;
 	margin-left: 0;
@@ -88,4 +94,18 @@ ul.currency li {
 }
 .facilities li {
 	margin-bottom: 0.5em;
+}
+
+/* @end */
+
+.suggest-changes {
+	background-color: #e2f1f9;
+	border: solid 1px #d8e7ef;
+	padding: 8px 8px 10px 30px;
+	background-image: url(/static/img/icons/suggest.png);
+	background-repeat: no-repeat;
+	background-position: 5px 9px;
+}
+.suggest-changes a {
+	display: block;
 }
