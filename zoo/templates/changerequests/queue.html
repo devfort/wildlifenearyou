@@ -33,10 +33,28 @@
 								on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
 								from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
 
-							<form action="." method="post">
-								<input type="hidden" name="changerequest_id" value="{{ cr.pk }}"/>
-								<input type="submit" name="action" value="Apply"/>
-								<input type="submit" name="action" value="Delete"/>
+								{% if crs.is_conflict %}
+									<strong>(change conflicts)</strong>
+								{% endif %}
+
+							{% if crs.is_conflict %}
+								<form action="{% url admin-moderation %}" method="post">
+									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+									<input type="hidden" name="action" value="force"/>
+									<input type="submit" value="Force change"/>
+								</form>
+							{% else %}
+								<form action="{% url admin-moderation %}" method="post">
+									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+									<input type="hidden" name="action" value="apply"/>
+									<input type="submit" value="Apply change"/>
+								</form>
+							{% endif %}
+
+							<form action="{% url admin-moderation %}" method="post">
+								<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+								<input type="hidden" name="action" value="delete"/>
+								<input type="submit" value="Delete change request"/>
 							</form>
 						{% endcase %}
 
@@ -46,9 +64,6 @@
 
 					{% endswitch %}
 
-					{% if crs.is_conflict %}
-						<strong>(conflicts)</strong>
-					{% endif %}
 				</li>
 
 			{% endwith %}
