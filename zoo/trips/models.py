@@ -11,7 +11,9 @@ from zoo.animals.models import Species
 class Trip(AuditedModel):
     start = models.DateField(null=True, blank=True)
     end = models.DateField(null=True, blank=True)
-    name = models.CharField(null=True, blank=True, max_length=100)
+    name = models.CharField(null=True, blank=True, max_length=100,
+        help_text="A title for this trip. At least one of name or date must be provided."
+    )
     description = models.TextField(blank=True)
     species = models.ManyToManyField(Species, through='Sighting')
 
@@ -19,7 +21,9 @@ class Trip(AuditedModel):
         ordering = ['-start']
 
     def save(self, *args, **kwargs):
-        if self.end is None and self.start:
+        if self.name == '' and self.start is None and self.end is None:
+            self.name = 'Unnamed trip'
+        elif self.end is None and self.start:
             self.end = self.start
         return super(Trip,self).save(args, kwargs)
 
