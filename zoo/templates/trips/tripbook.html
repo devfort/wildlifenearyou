@@ -17,7 +17,7 @@
 		
 		{% for place in sightings_by_place %}
 		<h2>{{ place.grouper }}</h2>
-		<p>({{ place.list.all.count }} sighting{{ place.list.species.count|pluralize }})</p>
+		<p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
 		
 		<ul>
 			{% for sighting in place.list %}
