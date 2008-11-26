@@ -1,4 +1,49 @@
+.header {
+	text-align: right;
+	background-image: url(/static/img/bg/header.png);
+	background-repeat: repeat-x;
+	background-position: bottom left;
+	padding: 0.8em;
+}
+.header p.heading {
+	float: left;
+	width: 15em;
+	margin: 0;
+}
+.header span {
+	
+}
+.header ul {
+	display: inline;
+	text-transform: uppercase;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+.header ul li {
+	display: inline;
+	padding-right: 0.6em;
+	margin-right: 0.6em;
+	border-right: solid 1px #7d965f;
+}
+.header ul li a:link, 
+.header ul li a:visited, 
+.header ul li a:active, 
+.header ul li a:focus, 
+.header ul li a:hover {
+	text-decoration: none;
+}
+.header form {
+	display: inline;
+	text-transform: uppercase;
+	font-size: 0.9em;
+    font-weight: bold;
+}
+.header form div {
+	display: inline;
+}
+
 .content {
+	clear: both;
 	background-color: #ffffff;
 	width: 100%;
 	overflow: hidden;
