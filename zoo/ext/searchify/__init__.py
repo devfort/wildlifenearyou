@@ -81,7 +81,7 @@ class TestClient:
         print 'delete ' + uid
 
 xappy_client = None
-def initialise(xc, dbname):
+def initialise(xc):
     global xappy_client
     xappy_client = xc
     fields = []
@@ -91,7 +91,7 @@ def initialise(xc, dbname):
         fields = fields + get_configuration(model)
     if len(fields)==0:
         return
-    xappy_client.newdb(fields, dbname)
+    xappy_client.newdb(fields)
     post_save.connect(index_hook)
     pre_delete.connect(delete_hook)
 
@@ -252,7 +252,7 @@ def get_index_data(instance):
     fields = instance.Searchable.fields
     
     # ``_TYPE`` field based on model name (so we can search just a particular model)
-    outfields = { '_TYPE': instance._meta.module_name }
+    outfields = { '_TYPE': [instance._meta.module_name] }
         
     for field in fields:
         (django_field_list, xappy_fieldname, xappy_config) = get_details(instance, field)
