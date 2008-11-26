@@ -393,19 +393,19 @@ def newdb(request):
        now: major FAIL, FIXME)
      - `overwrite`: if 1, the database already exists, instead of returning an
        error, remove it and create it anew. (doesn't affect behaviour if
-       database doesn't exist).
+       database doesn't exist).  defaults to 0.
  
     """
     params = validate_params(request.POST, {
                              'db_name': (1, 1, '^\w+$', None),
                              'fields': (1, 1, None, None),
-                             'overwrite': (0, 1, '^[01]$', [0]),
+                             'overwrite': (1, 1, '^[01]$', [0]),
                              })
     db_name = params['db_name'][0]
     db_path = os.path.realpath(get_db_path(db_name))
 
     if os.path.exists(db_path):
-        if not params['overwrite']:
+        if params['overwrite'][0] != '1':
             raise DatabaseExistsError("The path for '%s' is already in use" % db_path)
         else:
             shutil.rmtree(db_path)
