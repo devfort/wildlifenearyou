@@ -185,7 +185,9 @@ div#see-more-animals p {
     {% endif %}
 {% endwith %}
 
+<!-- 
 <h2>Events</h2>
+-->
 
 <h2>News</h2>
 
@@ -227,6 +229,14 @@ div#see-more-animals p {
 {% endif %}
 
 <h2>Zoo logbook entries</h2>
+
+<ul>
+{% for trip in place.most_recent_trips_with_desc|slice:":5" %}
+<li>
+<blockquote>{{ trip.description|truncatewords:10 }}</blockquote>
+<p>&mdash; <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by }}</a></p>
+{% endfor %}
+</ul>
 
 <h2>Comments</h2>
 {% with place as object %}

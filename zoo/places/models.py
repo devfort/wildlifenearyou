@@ -5,7 +5,6 @@ from django.db.models.signals import post_save
 
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
-#from zoo.trips.models import Trip
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -91,6 +90,15 @@ class Place(AuditedModel):
 
     def visible_photos(self):
         return self.photos.filter(is_visible = True)
+
+    def most_recent_trips(self):
+        from zoo.trips.models import Trip
+        trips = Trip.objects.filter(sighting__place=self).order_by('-created_at').distinct()
+        return trips
+
+    def most_recent_trips_with_desc(self):
+        trips = self.most_recent_trips().exclude(description='')
+        return trips
 
     def __unicode__(self):
         return self.known_as
