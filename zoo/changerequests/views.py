@@ -21,12 +21,7 @@ def moderation_queue(request):
             changerequest = form.cleaned_data['changerequest']
 
             if action == 'delete':
-                if changerequest.group.changerequest_set.count() == 1:
-                    # Delete the group if this request is the last request in
-                    # this group.
-                    changerequest.group.delete()
-                else:
-                    changerequest.delete()
+                changerequest.delete()
 
             return HttpResponseRedirect(reverse('admin-moderation'))
 
