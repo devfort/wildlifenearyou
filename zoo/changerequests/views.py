@@ -4,8 +4,8 @@ from zoo.shortcuts import render
 
 from zoo.changerequests.models import ChangeRequestGroup, ChangeRequest
 
-def moderation_index(request):
-    return render(request, 'changerequests/index.html', {
+def moderation_queue(request):
+    return render(request, 'changerequests/queue.html', {
         'change_request_groups': ChangeRequestGroup.objects.all(),
         'total_change_requests': ChangeRequest.objects.count(),
     })

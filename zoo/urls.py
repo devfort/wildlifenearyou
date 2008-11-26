@@ -131,7 +131,7 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('zoo.changerequests.views',
-    url(r'moderation/', 'moderation_index',
+    url(r'moderation/', 'moderation_queue',
         name='admin-moderation'),
 )
 
