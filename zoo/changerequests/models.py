@@ -22,6 +22,9 @@ class ChangeRequestGroup(models.Model):
                 self.created_at, self.created_by
             )
 
+    def get_pending_changerequests(self):
+        return self.changerequest_set.filter(applied_by__isnull=True)
+
 class ChangeRequest(models.Model):
     """
     A change request is a request by an unprivelidged user to change
