@@ -145,7 +145,8 @@ class DeleteObjectRequest(ChangeRequest):
         return super(DeleteObjectRequest, self).apply(user)
 
     def conflicts(self):
-        return False
+        # Deletion conflicts iff the object is already deleted.
+        return self.content_object is None
 
     def request_description(self):
         return u'Delete %s' % self.content_object
