@@ -116,8 +116,10 @@ class ChangeAttributeRequest(ChangeRequest):
         )
 
 class CreateObjectRequest(ChangeRequest):
+    parent = models.ForeignKey('self')
     content_type = models.ForeignKey(ContentType)
-    attributes = models.TextField() # JSON goes here
+    attributes = models.TextField() # JSON
+    reverse_relation = models.TextField()
 
     def apply(self, user=None):
         klass = self.content_type.model_class()
