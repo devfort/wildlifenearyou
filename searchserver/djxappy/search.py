@@ -405,7 +405,7 @@ def newdb(request):
     db_path = os.path.realpath(get_db_path(db_name))
 
     if os.path.exists(db_path):
-        if not overwrite:
+        if not params['overwrite']:
             raise DatabaseExistsError("The path for '%s' is already in use" % db_path)
         else:
             shutil.rmtree(db_path)
