@@ -35,6 +35,6 @@ def moderation_queue(request):
 
     return render(request, 'changerequests/queue.html', {
         'form': form,
-        'change_request_groups': ChangeRequestGroup.objects.all(),
+        'change_request_groups': ChangeRequestGroup.objects.filter(changerequest__isnull=False),
         'total_change_requests': ChangeRequest.objects.count(),
     })
