@@ -4,7 +4,7 @@
 {% for comment in comment_list %}
 <div class="comment" id="c{{ comment.id }}">
 {{ comment.comment|linebreaks }}
-<div class="posted-by">Posted by <a href="{% url accounts-profile comment.user.username %}/">{{ comment.user|title }}</a> at {{ comment.submit_date|date:"jS F Y H:i" }}</div>
+<div class="posted-by">Posted by <a href="{% url accounts-profile comment.user.username %}">{{ comment.user_name }}</a> at {{ comment.submit_date|date:"jS F Y H:i" }}</div>
 </div>
 {% endfor %}
 

@@ -4,6 +4,8 @@
 
 {% block content %}
 
+<div id="main_stuff">
+
 <h1>{{ place.known_as }}</h1>
 <p class="sub-head">{{ place.legal_name }}</p>
 <address>{{ place.address|linebreaksbr }}</address>
@@ -43,6 +45,8 @@
 
 <a href="{% url place-species place.country.country_code,place.slug %}">All species</a>
 
+<div style="border: dotted 1px #cc0000;">
+<p><em>Not using:</em>
 
 {% with place.enclosures.all as enclosures %}
     {% if enclosures %}
@@ -61,6 +65,17 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
+</div>
+
+<h2>Price</h2>
+
+<h2>Facilities</h2>
+
+<h2>Directions</h2>
+
+<h2>Events</h2>
+
+<h2>News</h2>
 
 {% with place.news.all as news %}
     {% if news %}
@@ -73,6 +88,14 @@
     {% endif %}
 {% endwith %}
 
+</div>
+
+<div id="sidebar">
+
+<h2>Rating</h2>
+
+<h2>Photos</h2>
+
 {% for photo in place.photos.all %}
 <div>
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
@@ -82,8 +105,13 @@
 <p><a href="upload/">Upload a photo you took here!</a></p>
 {% endif %}
 
+<h2>Zoo logbook entries</h2>
+
+<h2>Comments</h2>
 {% with place as object %}
     {% include "comments/_comments.html" %}
 {% endwith %}
+
+</div>
 
 {% endblock %}
