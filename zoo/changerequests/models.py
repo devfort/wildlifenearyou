@@ -116,7 +116,7 @@ class ChangeAttributeRequest(ChangeRequest):
         )
 
 class CreateObjectRequest(ChangeRequest):
-    parent = models.ForeignKey('self')
+    parent = models.ForeignKey('self', null=True, blank=True)
     content_type = models.ForeignKey(ContentType)
     attributes = models.TextField() # JSON
     reverse_relation = models.TextField()
