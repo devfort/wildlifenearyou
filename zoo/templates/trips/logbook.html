@@ -12,14 +12,14 @@
 	{% else %}
 	<h2>{{ profile.user|title }}'s Logbook</h2>
 	{% endifequal %}
-	
+
 	{% if logbook %}
 	<ol>
 	{% for trip in logbook %}
 		<li>
 			<p>During your trip to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a> on {{ trip.start|date:"jS F Y" }} you saw</p>
 			<ul>
-			{% for species in trip.sightings.all %}
+			{% for species in trip.species.all %}
 				<li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></li>
 			{% endfor %}
 			</ul>
@@ -27,15 +27,15 @@
 	{% endfor %}
 	</ol>
 	{% else %}
-	
+
 	{% ifequal profile.user user %}
 	<p>You haven't been anywhere yet. Suggest a place for them to go?</p>
 	{% else %}
 	<p>This user hasn't been anywhere yet. Suggest a place for them to go?</p>
 	{% endifequal %}
-	
+
 	{% endif %}
-	
+
 </div>
 
 

@@ -12,7 +12,7 @@ class Trip(AuditedModel):
     end = models.DateTimeField(null=False, blank=True)
     name = models.CharField(null=True, blank=True, max_length=100)
     description = models.TextField(blank=True)
-    sightings = models.ManyToManyField(Species, through='Sighting')
+    species = models.ManyToManyField(Species, through='Sighting')
 
     class Meta:
         ordering = ['-start']

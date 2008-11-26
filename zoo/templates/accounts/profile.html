@@ -33,8 +33,8 @@
 	</ol>
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You apparently haven't{% else %}This user hasn't{% endifequal %} spotted any animals yet. 
-		{% ifequal profile.user user %}Spot now?{% endifequal %}		
+		{% ifequal profile.user user %}You apparently haven't{% else %}This user hasn't{% endifequal %} spotted any animals yet.
+		{% ifequal profile.user user %}Spot now?{% endifequal %}
 	</p>
 	{% endif %}
 </div>
@@ -47,7 +47,7 @@
 		<li>
 			<p>During your trip to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a> on {{ trip.start|date:"jS F Y" }} you saw</p>
 			<ul>
-			{% for species in trip.sightings.all %}
+			{% for species in trip.species.all %}
 				<li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></li>
 			{% endfor %}
 			</ul>
@@ -56,8 +56,8 @@
 	</ol>
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been anywhere yet. 
-		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}		
+		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been anywhere yet.
+		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
 	</p>
 	{% endif %}
 </div>
@@ -74,7 +74,7 @@
 	</ol>
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You don't{% else %}This user doesn't{% endifequal %} have any favourite animals yet. 
+		{% ifequal profile.user user %}You don't{% else %}This user doesn't{% endifequal %} have any favourite animals yet.
 		{% ifequal profile.user user %}Pick some?{% else %}Suggest some?{% endifequal %}
 	</p>
 	{% endif %}
