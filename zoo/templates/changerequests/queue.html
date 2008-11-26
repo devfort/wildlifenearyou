@@ -63,13 +63,19 @@
 						{% endcase %}
 
 						{% case "DeleteObjectRequest" %}
-							Delete the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
+							Delete
+						
+							{% if crs.content_object %}
+								the <em>{{ crs.content_object }}</em>
+							{% else %}
+								an <em>already deleted</em>
+							{% endif %}
+							
+							{{ crs.content_type }}.
 
 							{% if crs.conflicts %}
 								<strong>(conflicting change; object already deleted)</strong>
-							{% endif %}
-
-							{% if not crs.conflicts %}
+							{% else %}
 								<form action="{% url admin-moderation %}" method="post">
 									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
 									<input type="hidden" name="action" value="apply"/>
