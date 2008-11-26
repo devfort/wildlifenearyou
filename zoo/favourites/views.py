@@ -5,8 +5,10 @@ from zoo.shortcuts import render
 
 from zoo.animals.models import Species
 from zoo.favourites.models import FavouriteSpecies
+from zoo.trips.models import Sighting
 
-HIT_PARADE_LENGTH = 10
+HIT_PARADE_LENGTH = 20
+OBSCURE_LENGTH = 20
 
 def handle_favourite(request, action):
     if action == 'add':
@@ -53,6 +55,19 @@ def hit_parade(request):
     species_list.sort(key=lambda s: s.count, reverse=True)
     species_list = species_list[:HIT_PARADE_LENGTH]
 
+    sightings = Sighting.objects.all()
+    obscure = {}
+    for s in sightings:
+        obscure[s.species] = obscure.get(s.species, 0) + 1
+
+    obscure_list = obscure.keys()
+    for s in obscure_list:
+        s.count = obscure[s]
+
+    obscure_list.sort(key=lambda s: s.count)
+    obscure_list = obscure_list[:OBSCURE_LENGTH]
+
     return render(request, 'favourites/hit_parade.html', {
         'species_list': species_list,
+        'obscure_species': obscure_list,
     })

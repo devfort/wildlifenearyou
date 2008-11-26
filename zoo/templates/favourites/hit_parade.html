@@ -6,10 +6,28 @@
 
 <h1>The Animal Hit Parade</h1>
 
+<p>The top 20 most favourited animals</p>
+
 {% if species_list %}
 <ol>
   {% for species in species_list %}
-  <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a> ({{ species.count }})</li>
+  <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a>
+    (favourited by {{ species.count }} {{ species.count|pluralize:"person,people" }})</li>
+  {% endfor %}
+</ol>
+{% else %}
+<p>No animals have been favourited yet.</p>
+{% endif %}
+
+<h2>Obscure Animals</h2>
+
+<p>The top 5 least seen animals:</p>
+
+{% if species_list %}
+<ol>
+  {% for species in obscure_species %}
+  <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a>
+    (seen by {{ species.count }} {{ species.count|pluralize:"person,people" }})</li>
   {% endfor %}
 </ol>
 {% else %}
