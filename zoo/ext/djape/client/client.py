@@ -3,11 +3,14 @@ from django.utils import simplejson
 import urllib
 import urllib2
 import errors
+import document
 
 class Client(object):
     """A client for the Xappy webservice.
 
     """
+
+    Document = document.Document
 
     def __init__(self, base_url, default_db_name=None):
         """Create a client.
