@@ -47,25 +47,29 @@
 #
 # When auto-generating, we use ':' to separate bits of things where possible, and '__' where we require \w only (eg: search field names).
 
-# FIXME: we will have a ``deleted'' field; this means we delete instead of index. This (must be bool) can be overridden by a function.
 # FIXME: make it easy to reindex a model
 # FIXME: make it easy to reindex everything
 # FIXME: xappy linkage
 
+# FIXME: document the new hooks
 # FIXME: registering and initialising
 # FIXME: document that you have to call initialise (and figure out where additional config comes from...)
 # Test: the override stuff
 
 from django.db.models.signals import post_save
 from django.db import models
+from django.db.models import FieldDoesNotExist, BooleanField
 
 class TestClient:
     def newdb(self, fields, dbname):
-        print dbname
-        print fields
+        print 'init ' + dbname
+        print 'config ' + str(fields)
         
     def send_data(self, data):
-        print data
+        print 'index ' + str(data)
+        
+    def delete(self, uid):
+        print 'delete ' + uid
 
 xappy_client = None
 def initialise(xc, dbname):
@@ -85,11 +89,13 @@ def index_hook(sender, **kwargs):
     index_instance(xappy_client, kwargs['instance'])
 
 def index_instance(xappy_client, instance):
-    data = get_index_data(instance)
-    if data==None:
-        return
-    xappy_client.send_data(data)
-    if not hasattr(instance.Searchable, 'cascades'):
+    if should_delete_instance(instance):
+        xappy_client.delete(get_uid(instance))
+    else:
+        data = get_index_data(instance)
+        if data!=None:
+            xappy_client.send_data(data)
+    if not hasattr(instance, 'Searchable') or not hasattr(instance.Searchable, 'cascades'):
         return
     for descriptor in instance.Searchable.cascades:
         if isinstance(descriptor, str):
@@ -104,6 +110,22 @@ def index_instance(xappy_client, instance):
 #
 # These are the default behaviours for the various steps in the above strategy (some are actually defaults for steps in strategies in functions below).
 
+# Should we delete this instance? By default, we look for a BooleanField called ``deleted``.
+# Can be overridden.
+def should_delete_instance(instance):
+    if not hasattr(instance, 'Searchable'):
+        return False
+    if hasattr(instance.Searchable, 'should_delete_instance'):
+        return instance.Searchable.should_delete_instance(instance)
+    try:
+        fielddef = instance._meta.get_field('deleted')
+        if isinstance(fielddef, BooleanField):
+            return instance.deleted
+    except FieldDoesNotExist:
+        return False
+
+# Get the configuration for a particular model by pulling in details from Searchable.fields
+# Can be overridden.
 def get_configuration(model):
     # return a list of xappy field descriptors for this model
     if not hasattr(model, 'Searchable'):
@@ -176,6 +198,16 @@ def get_field_input(instance, django_field):
     else:
         return []
 
+# Generate a system-wide persistent uid for this instance.
+# Can be overridden.
+def get_uid(instance):
+    if not hasattr(instance,'Searchable'):
+        return None
+    if hasattr(instance.Searchable, 'get_uid'):
+        return instance.Searchable.get_uid(instance)
+    else:
+        return instance._meta.module_name + ':' + str(instance.pk)
+
 # Given a Django model instance, return a dict of id mapping to unique identifier; fields mapping to dict of search fields mapping to list of data.
 # Can be overridden.
 def get_index_data(instance):
@@ -189,7 +221,7 @@ def get_index_data(instance):
     
     doc = { 'fields': {} }
     # id based on model name + model pk
-    doc['id'] = instance._meta.module_name + ':' + str(instance.pk)
+    doc['id'] = get_uid(instance)
     # ``_TYPE`` field based on model name (so we can search just a particular model)
     doc['fields']['_TYPE'] = [ instance._meta.module_name ]
         
