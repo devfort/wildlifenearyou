@@ -16,10 +16,6 @@ migration = m.Migration(sql_up=["""
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ;
 """, """
-    ALTER TABLE `places_placedirection` ADD CONSTRAINT created_by_id_refs_id_115ba6d6 FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`);
-""", """
-    ALTER TABLE `places_placedirection` ADD CONSTRAINT modified_by_id_refs_id_115ba6d6 FOREIGN KEY (`modified_by_id`) REFERENCES `auth_user` (`id`);
-""", """
     INSERT INTO `places_currency` VALUES (3,'Yen','YEN')    
 """, """
     INSERT INTO `places_transporttypes` VALUES (1,'','Car')
