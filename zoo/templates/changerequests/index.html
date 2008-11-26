@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Moderation overview{% endblock %}
+
+{% block content %}
+
+<h1>Moderation overview</h1>
+
+<dl>
+	<dt>Number of pending change groups</dt>
+	<dd>{{ change_request_groups|length }}</dd>
+
+	<dt>Total number of change requests<dt>
+	<dd>{{ total_change_requests }}</dd>
+</dl>
+
+{% if change_request_groups %}
+	<h2>Queue</h2>
+
+	<ol>
+	{% for crg in change_request_groups %}
+		{% with crg.changerequest_set.objects as cr %}
+			<li>{{ cr|length }} change{{ cr|pluralize }} by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a> {{ crg.created_at|timesince }} ago</li>
+		{% endwith %}
+	{% endfor %}
+	</ol>
+{% endif %}
+
+{% endblock %}
