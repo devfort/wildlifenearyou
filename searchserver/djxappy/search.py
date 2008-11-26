@@ -466,6 +466,8 @@ def newdb(request):
                         freetext_params is None and
                         exacttext_params is None and
                         not noindex):
+                    if freetext_params is None:
+                        freetext_params = {}
                     validate_dict_entries(freetext_params, valid_freetext_options,
                                           'Invalid freetext option(s): %s')
                     opts = {}
@@ -507,6 +509,9 @@ def newdb(request):
                         field_type == 'geo' and
                         geo_params is None and
                         not noindex):
+                    if geo_params is None:
+                        geo_params = {}
+
                     validate_dict_entries(geo_params, valid_geo_options,
                                           'Invalid freetext option(s): %s')
                     bounding_box_search = geo_params.get('enable_bounding_box_search', True)
