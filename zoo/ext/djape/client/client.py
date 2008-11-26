@@ -1,9 +1,12 @@
 
 from django.utils import simplejson
+
+import document
+import errors
+import field
+import query
 import urllib
 import urllib2
-import errors
-import document
 
 class Client(object):
     """A client for the Xappy webservice.
@@ -11,6 +14,12 @@ class Client(object):
     """
 
     Document = document.Document
+    SearchClientError = errors.SearchClientError 
+    Field = field.Field 
+    Query = query.Query
+    QueryPart = query.QueryPart
+    FreeTextQuery = query.FreeTextQuery
+    GeoDistanceQuery = query.GeoDistanceQuery
 
     def __init__(self, base_url, default_db_name=None):
         """Create a client.
