@@ -1,11 +1,15 @@
 from django.contrib import admin
 from zoo.places.models import Country, Place, Enclosure, EnclosureSpecies, \
     Webcam, PlaceNews, PlaceOpening, Facility, PlaceFacility, Extra, \
-    PlaceDirection
+    PlaceDirection, Currency, PlacePrice
 from zoo.models import exclude as excludees
 
 class EnclosureSpeciesInline(admin.TabularInline):
     model = EnclosureSpecies
+    exclude = excludees
+    
+class PlacePriceInline(admin.TabularInline):
+    model = PlacePrice
     exclude = excludees
 
 class EnclosureAdmin(admin.ModelAdmin):
@@ -28,12 +32,13 @@ admin.site.register(PlaceFacility, exclude = excludees)
 admin.site.register(PlaceNews, exclude = excludees)
 admin.site.register(PlaceDirection, exclude = excludees)
 admin.site.register(Extra)
+admin.site.register(PlacePrice, exclude = excludees)
 admin.site.register(Place,
     exclude = excludees_place,
     list_filter = ['country'],
     list_display = ('known_as', 'legal_name', 'town', 'country'),
     search_fields = ['known_as', 'legal_name', 'town', 'address_line_1', 'address_line_2'],
-    inlines = [PlaceInline],
+    inlines = [PlaceInline, PlacePriceInline,],
     prepopulated_fields = {'slug': ('known_as',)},
 )
 admin.site.register(Enclosure, EnclosureAdmin)

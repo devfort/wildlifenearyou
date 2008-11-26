@@ -82,6 +82,14 @@
 </div>
 
 <h2>Price</h2>
+{% with place.price.all as prices %}
+    {% if prices %}
+        {% for price in prices %}
+			<p>{{ price.type|title }}: {{ price.currency }}{{ price.value }}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 
 <h2>Facilities</h2>
 <ul>

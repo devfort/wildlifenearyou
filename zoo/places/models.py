@@ -28,6 +28,16 @@ class Country(models.Model):
     def __unicode__(self):
         return self.name
         
+class Currency(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False)
+    currency_code = models.CharField(max_length=3, null=False, blank=False, unique=True)
+    
+    class Meta:
+        verbose_name_plural = 'currencies'
+        
+    def __unicode__(self):
+        return u'%s (%s)' % (self.name, self.currency_code)
+
 class Place(AuditedModel):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
     known_as = models.CharField(max_length=500, null=False, blank=False)
@@ -153,6 +163,15 @@ class Webcam(AuditedModel):
 
     def __unicode__(self):
         return self.name
+        
+class PlacePrice(AuditedModel):
+    place = models.ForeignKey(Place, related_name='price')
+    currency = models.ForeignKey(Currency)
+    type = models.CharField(max_length=100, null=False, blank=False)
+    value = models.DecimalField(decimal_places=2, max_digits=12, null=False, blank=False)
+    
+    def __unicode__(self):
+        return u'%s: %s%s' %(self.type, self.currency.currency_code, self.value)
 
 class Enclosure(AuditedModel):
     place = models.ForeignKey(Place, related_name='enclosures')
