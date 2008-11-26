@@ -45,7 +45,7 @@ class XappyClient(object):
             for field, vals in qs.iteritems():
                 if vals is None:
                     continue
-                if isinstance(vals, basestring):
+                if not hasattr(vals, '__iter__'):
                     vals = [vals]
                 vals = filter(None, vals)
                 args.append((field, vals))
