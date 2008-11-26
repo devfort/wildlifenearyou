@@ -5,10 +5,14 @@
 {% block content %}
 
 <h1>All Places</h1>
+{% if all_places %}
 <ul>
 {% for place in all_places %}
     <li><a href="{{ place.urls.absolute }}">{{ place.known_as }}</a> ({{ place.country.name }})</li>
 {% endfor %}
 </ul>
+{% else %}
+<p>eek! We have no places to show you!</p>
+{% endif %}
 
 {% endblock %}

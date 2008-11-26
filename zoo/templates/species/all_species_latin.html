@@ -5,10 +5,15 @@
 {% block content %}
 
 <h1>All species, by latin name</h1>
+{% if all_species %}
 <ul>
 {% for species in all_species %}
     <li><a href="{{ species.urls.absolute }}"><i class="scientific">{{ species.latin_name }}</i></a></li>
 {% endfor %}
 </ul>
+{% else %}
+<p>eek! Our menagerie is empty.</p>
+{% endif %}
+
 
 {% endblock %}

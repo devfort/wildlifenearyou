@@ -5,10 +5,14 @@
 {% block content %}
 
 <h1>All species</h1>
+{% if all_species %}
 <ul>
 {% for species in all_species %}
     <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></li>
 {% endfor %}
 </ul>
+{% else %}
+<p>eek! Our menagerie is empty.</p>
+{% endif %}
 
 {% endblock %}
