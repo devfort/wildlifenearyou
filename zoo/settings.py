@@ -117,6 +117,7 @@ DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
 XAPIAN_BASE_URL = 'http://10.0.1.205/xapian/'
 XAPIAN_SPECIES_DB = 'species'
 XAPIAN_LOCATION_DB = 'locations'
+XAPIAN_LOCATION_SEARCH_URL = 'http://10.0.1.205/xapian/search/simontestdb/'
 
 CACHE_BACKEND = 'dummy:///'
 
