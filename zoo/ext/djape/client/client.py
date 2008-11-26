@@ -181,8 +181,7 @@ class Client(object):
             # Note - only one of "freetext" and "exact" may be supplied
 
             'geo': {
-                # If present (even if empty), coordinates are stored such that
-                # searches can be ordered by distance from a point.
+                # If present (even if empty), or if field type is 'geo' and 'noindex' is not specified, coordinates are stored such that searches can be ordered by distance from a point.
                 'enable_bounding_box_search': # boolean (default True) - if True, index such that searches for all items within a bounding box can be retrieved.
                 'enable_range_search': # boolean (default True) - if True, index such that searches can be restricted to all items within a range (ie, great circle distance) of a point.
             }
