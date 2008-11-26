@@ -50,6 +50,7 @@
 
 # FIXME: make it easy to reindex a model
 # FIXME: make it easy to reindex everything
+# FIXME: make it possible to index an individual model to more than one database.
 
 # FIXME: document the new hooks
 # FIXME: registering and initialising
