@@ -11,6 +11,12 @@
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
+{% ifequal profile.user user %}<p><a href="{% url accounts-profile-edit profile.user %}">Edit your profile</a></p>{% endifequal %}
+
+<div>
+{{ profile.biography|linebreaks}}
+</div>
+
 {% for photo in profile.user.photos.all %}
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
 {% endfor %}
@@ -57,9 +63,9 @@
 
 <div id="favourite_species">
 	<h2>Favourite Animals</h2>
-	{% if request.user.favourite_species.all %}
+	{% if profile.user.favourite_species.all %}
 	<ol>
-    {% for favourite in request.user.favourite_species.all %}
+    {% for favourite in profile.user.favourite_species.all %}
 	<li><a href="{{ favourite.species.urls.absolute }}">{{ favourite.species }}</a>
 		{% favourite_toggler "remove" favourite.species.slug request.path  %}
 	</li>
@@ -74,9 +80,9 @@
 </div>
 
 
-{% if user.comment_comments.all %}
+{% if profile.user.comment_comments.all %}
 <h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Comments:</h2>
-{% for comment in user.comment_comments.all %}
+{% for comment in profile.user.comment_comments.all %}
 <div class="comment">
 {{ comment.comment|linebreaks }}
 <div class="posted-by">Posted on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a> at {{ comment.submit_date|date:"jS F Y H:i" }}</div>

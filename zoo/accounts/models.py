@@ -36,6 +36,7 @@ class ProfileBadge(AuditedModel):
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
     badges = models.ManyToManyField(Badge, through=ProfileBadge)
+    biography = models.TextField(null=False, blank=True)
 
     email_validated = models.BooleanField(null=False, blank=False, default=False)
 
