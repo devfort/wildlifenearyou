@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Add Trip{% endblock %}
+
+{% block content %}
+<form action="{% url trip-add profile.user %}" method="POST">
+{{ form.as_p }}
+<p>
+	<input type="submit" value="Add" />
+</p>
+</form>
+{% endblock %}

@@ -64,10 +64,12 @@ urlpatterns = patterns('',
         name='logbook-default'),
     url(r'^profile/(?P<username>\w+)/logbook/$', 'zoo.trips.views.logbook',
         name='logbook'),
-    url(r'^profile/(?P<username>\w+)/logbook/edit/$', 'zoo.trips.views.logbook_edit',
-        name='logbook-edit'),
-
-
+    url(r'^profile/(?P<username>\w+)/trip/edit/$', 'zoo.trips.views.trip_edit',
+        name='trip-edit'),
+    url(r'^profile/(?P<username>\w+)/trip/add/$', 'zoo.trips.views.trip_add',
+        name='trip-add'),
+    url(r'^profile/(?P<username>\w+)/trip/(?P<trip_id>\d+)/$', 'zoo.trips.views.trip_view',
+        name='trip-view'),
 
     url(r'^profiles/$', accounts.all_profiles,
         name='accounts-all-profiles'),
