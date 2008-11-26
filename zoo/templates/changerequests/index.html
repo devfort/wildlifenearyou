@@ -25,11 +25,11 @@
 
 			<ol>
 			{% for cr in crg.changerequest_set.all %}
+			{% with cr.get_real as crs %}
 				<li>
 					{% switch cr.subclass %}
-					
 						{% case "ChangeAttributeRequest" %}
-							"{{ cr.attribute }}" <em>{{ cr.old_value }}</em> -&gt; <em>{{ cr.new_value }}</em>
+							Change &ldquo;{{ crs.attribute }}&rdquo; on the <em>{{ crs.content_object }}</em> {{ crs.content_type }} from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
 						{% endcase %}
 
 						{% defaultcase %}
@@ -38,10 +38,12 @@
 
 					{% endswitch %}
 
-					{% if cr.is_conflict %}
+					{% if crs.is_conflict %}
 						<strong>(conflicts)</strong>
 					{% endif %}
 				</li>
+
+			{% endwith %}
 			{% endfor %}
 			</ol>
 
