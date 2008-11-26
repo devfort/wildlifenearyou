@@ -20,6 +20,7 @@ class SearchPickerWidget(MultiWidget):
 # TODO: What if they should be associating with more than one?
 
 class SearchPickerField(MultiValueField):
+    pick_one_text = '-- pick one --'
     def __init__(self, *args, **kwargs):
         self.choices = (
             ('', '-- enter a search term --'),
@@ -51,7 +52,7 @@ class SearchPickerField(MultiValueField):
             results = list(self.search(search_val))
 
             self.picker.choices = self.choices = \
-                [('', '-- choose a location --')] + results
+                [('', self.pick_one_text)] + results
 
             for val, name in results:
                 if name.lower() == search_val.lower():
