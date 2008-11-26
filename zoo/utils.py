@@ -1,3 +1,6 @@
+import datetime, md5
+from django.conf import settings
+
 def attrproperty(getter_function):
     ''' usage:
     >>> class Foo(object):
@@ -24,3 +27,16 @@ def attrproperty(getter_function):
             return getter_function(self.obj, attr)
 
     return property(_Object)
+
+def send_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None):
+    from django.core.mail import send_mail
+    if settings.DEBUG:
+        print """Sending email to %s from %s
+
+subject: %s
+body:
+%s
+""" % (recipient_list, from_email, subject, message)
+    else:
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None)
+

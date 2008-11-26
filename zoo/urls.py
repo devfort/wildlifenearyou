@@ -45,14 +45,22 @@ urlpatterns = patterns('',
         name='accounts-default'),
 
     # User accounts stuff
-    url(r'^login/$', 'django.contrib.auth.views.login', {
+    url(r'^login/$', 'accounts.views.login', {
         'template_name': 'accounts/login.html'
     }, name='accounts-login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {
         'next_page': '/login/'
     }, name='accounts-logout'),
+
     url(r'^register/$', accounts.register,
         name='accounts-register'),
+    url(r'^register/complete/$', accounts.registration_complete,
+        name='accounts-registration-complete'),
+    url(r'^register/validate/([a-z0-9]{1,})/([a-f0-9]+)/([a-f0-9]{32})/$', 'accounts.views.validate_email',
+        name='validate-email'),
+    url(r'^register/validated/$', 'accounts.views.validate_email_success',
+        name='validate-email-success'),
+
     url(r'^welcome/$', accounts.welcome,
         name='accounts-welcome'),
 

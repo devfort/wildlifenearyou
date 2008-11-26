@@ -1,13 +1,16 @@
 from zoo.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.conf import settings
 from django.http import HttpResponseRedirect as Redirect
-
+from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+
 from zoo.accounts.models import Profile
+from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm
 
 def welcome(request):
     # Just to show people that they are logged in, really
@@ -15,20 +18,67 @@ def welcome(request):
         'user': request.user,
     })
 
+def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
+
+    redirect_to = request.REQUEST.get(redirect_field_name, '')
+
+    if request.method == "POST":
+        form = OurAuthenticationForm(data=request.POST)
+        if form.is_valid():
+            from django.contrib.auth import login
+            login(request, form.get_user())
+            if request.session.test_cookie_worked():
+                request.session.delete_test_cookie()
+            if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
+                redirect_to = settings.LOGIN_REDIRECT_URL
+            return Redirect(redirect_to)
+    else:
+        form = OurAuthenticationForm(request)
+
+    request.session.set_test_cookie()
+
+    return render(request, template_name, {
+        'form': form,
+        redirect_field_name: redirect_to,
+    })
+login = never_cache(login)
+
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Ugly but necessary
-            user.backend = 'django.contrib.auth.backends.ModelBackend'
-            login(request, user)
-            return Redirect('/')
+            p = user.get_profile()
+            p.send_validation_email()
+            return Redirect(reverse('accounts-registration-complete'))
     else:
         form = RegistrationForm()
     return render(request, 'accounts/register.html', {
         'form': form,
     })
+
+def registration_complete(request):
+    return render(request, 'accounts/registration_complete.html', {})
+
+def validate_email(request, username, days, hash):
+    user = get_object_or_404(User, username=username)
+    p = user.get_profile()
+    if p.hash_is_valid(days, hash):
+        p.email_validated = True
+        p.save()
+        user.backend='django.contrib.auth.backends.ModelBackend'
+        from django.contrib.auth import login
+        login(request, user)
+        # TODO: send welcome email
+        return Redirect(reverse('validate-email-success'))
+    return Redirect('/')
+
+def validate_email_success(request):
+    if not request.user.is_authenticated():
+        if not request.user.get_profile.email_validated:
+            raise Http404
+
+    return render(request, 'accounts/email_validated.html', {})
 
 @login_required
 def profile_default(request):
@@ -47,54 +97,3 @@ def all_profiles(request):
     return render(request, 'accounts/all_profiles.html', {
         'all_users': User.objects.all(),
     })
-
-from django import forms
-
-class RegistrationForm(forms.ModelForm):
-    username = forms.RegexField(
-        label = _("Username"), max_length = 30, regex = r'^\w+$',
-        help_text = _(
-            "Required. 30 characters or fewer. Alphanumeric characters " +
-            "only (letters, digits and underscores)."
-        ),
-        error_message = _(
-            "This value must contain only letters, numbers and underscores."
-        )
-    )
-    password1 = forms.CharField(
-        label = _("Password"),
-        widget = forms.PasswordInput,
-    )
-    password2 = forms.CharField(
-        label= _ ("Password confirmation"),
-        widget=forms.PasswordInput,
-    )
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
-
-    def clean_username(self):
-        username = self.cleaned_data["username"]
-        try:
-            User.objects.get(username=username)
-        except User.DoesNotExist:
-            return username
-        raise forms.ValidationError(_(
-            "A user with that username already exists."
-        ))
-
-    def clean_password2(self):
-        password1 = self.cleaned_data.get("password1", "")
-        password2 = self.cleaned_data["password2"]
-        if password1 != password2:
-            raise forms.ValidationError(_(
-                "The two password fields didn't match."
-            ))
-        return password2
-
-    def save(self):
-        user = super(RegistrationForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        user.save()
-        Profile.objects.create(user=user)
-        return user

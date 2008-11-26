@@ -127,6 +127,8 @@ try:
 except ImportError:
     pass
 
+EMAIL_FROM = 'zoo@example.com'
+
 try:
     from local_settings import *
 except ImportError:
