@@ -60,14 +60,14 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'zoo.middleware.OnlyLowercaseUrls',
     'zoo.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-)
+]
 
 ROOT_URLCONF = 'zoo.urls'
 
@@ -87,7 +87,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -108,7 +108,7 @@ INSTALLED_APPS = (
     'zoo.favourites',
     'django.contrib.comments',
     'schedule', # from zoo.ext
-)
+]
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
 
@@ -117,6 +117,15 @@ XAPIAN_SPECIES_DB = 'species'
 XAPIAN_LOCATION_DB = 'locations'
 
 CACHE_BACKEND = 'dummy:///'
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+try:
+    import debug_toolbar
+    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    INSTALLED_APPS.append('debug_toolbar')
+except ImportError:
+    pass
 
 try:
     from local_settings import *
