@@ -56,7 +56,7 @@ class ChangeRequest(models.Model):
 
     def save(self, *args, **kwargs):
         self.subclass = self.__class__.__name__
-        super(ChangeRequest, self).save(*args, **kwargs)
+        return super(ChangeRequest, self).save(*args, **kwargs)
 
     def get_real(self):
         "Returns 'real' object of correct subclass"
@@ -92,7 +92,7 @@ class ChangeAttributeRequest(ChangeRequest):
         obj = self.content_object
         setattr(obj, self.attribute, self.value)
         obj.save()
-        super(ChangeAttributeRequest, self).apply(user)
+        return super(ChangeAttributeRequest, self).apply(user)
 
     def request_description(self):
         return u'Change "%s" to "%s" on <%s>' % (
@@ -109,7 +109,7 @@ class CreateObjectRequest(ChangeRequest):
             (str(key), value)
             for key, value in simplejson.loads(self.attributes).items()
         ]))
-        super(CreateObjectRequest, self).apply(user)
+        return super(CreateObjectRequest, self).apply(user)
 
     def request_description(self):
         return u'Create a %s with attributes %s' % (
@@ -124,7 +124,7 @@ class DeleteObjectRequest(ChangeRequest):
     def apply(self, user=None):
         obj = self.content_object
         obj.delete()
-        super(DeleteObjectRequest, self).apply(user)
+        return super(DeleteObjectRequest, self).apply(user)
 
     def request_description(self):
         return u'Delete %s' % self.content_object

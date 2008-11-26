@@ -19,7 +19,7 @@ class Trip(AuditedModel):
     def save(self, *args, **kwargs):
         if self.end is None and self.start:
             self.end = self.start + datetime.timedelta(1)
-        super(Trip,self).save(args, kwargs)
+        return super(Trip,self).save(args, kwargs)
 
     # THIS MUST BE static. It does not act on an instance and is called from
     # the profile model
