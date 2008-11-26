@@ -84,7 +84,9 @@ class ChangeAttributeRequest(ChangeRequest):
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     attribute = models.CharField(max_length=100)
-    value = models.TextField(blank = True)
+
+    old_value = models.TextField(blank=True)
+    new_value = models.TextField(blank=True)
 
     def apply(self, user=None):
         obj = self.content_object
@@ -93,7 +95,7 @@ class ChangeAttributeRequest(ChangeRequest):
         return super(ChangeAttributeRequest, self).apply(user)
 
     def request_description(self):
-        return u'Change "%s" to "%s" on <%s>' % (
+        return u'Change "%s" from "%s" to "%s" on <%s>' % (
             self.attribute, self.value, self.content_object
         )
 
