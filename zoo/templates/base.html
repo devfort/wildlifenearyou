@@ -4,41 +4,64 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <script type="text/javascript" src="/static/js/jquery-1.2.6.js"></script>
-    <link rel="stylesheet" href="/static/css/harmonise.css" type="text/css">
-    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/general.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/helper_styles.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/page_structure.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/page_components.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/overrides.css" type="text/css">
     <!--[if IE]>
     <link rel="stylesheet" type="text/css" href="/static/css/ie.css">
     <![endif]-->
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-<div id="heading">
-    NAMEOFTHESITE
-    <span>Can I Keep It?</span>
-</div>
-<div id="hd">
-	<a href="/">Homepage</a> |
+<div class="header">
+    <p class="heading">NAMEOFTHESITE
+    <span>Can I Keep It?</span></p>
+	<ul>
+		<li><a href="/">Home</a></li>
 	{% if user.is_authenticated %}
-	<a href="{% url accounts-profile user %}">My Profile</a> |
-	<a href="{% url tripbook user %}">My Tripbook</a> |
-	<a href="{% url accounts-logout %}">Logout</a> |
+		<li><a href="{% url accounts-profile user %}">My Profile</a></li>
+		<li><a href="{% url tripbook user %}">My Trip book</a></li>
+		<li><a href="{% url accounts-logout %}">Logout</a></li>
+
 	{% else %}
-	<a href="{% url accounts-register %}">Signup</a> |
-	<a href="{% url accounts-login %}?next={{ request.path }}">Login</a> |	
+		<li><a href="{% url accounts-register %}">Register</a></li>
+		<li><a href="{% url accounts-login %}?next={{ request.path }}">Login</a></li>
+
 	{% endif %}
+	</ul>
     <form action="/search/" method="GET" accept-charset="utf-8">
-        <p><label for="search_term">Search</label> <input type="text" name="search" id="search_term" value="NOT WIRED UP"> <input type="submit" value="Go"></p>
+        <div>
+			<label for="search_term">Find me</label>
+			<input type="text" name="search" id="search_term" value="NOT WIRED UP"> 
+			<input type="submit" value="Go">
+		</div>
     </form>
 </div>
+<div class="content">
 {% block content %}
+	
+	<div class="primary">
+		{% block primary_content %}
+		{% endblock %}
+	</div>
+
+	<div class="secondary">
+		{% block secondary_content %}
+		{% endblock %}
+		<p class="suggest-changes">
+			Found incorrect information on the page?
+			<a href="{{ place.urls.suggest_changes }}">Let us know! You won’t hurt our feelings.</a>
+		</p>
+	</div>
 
 {% endblock %}
-
-<p id="footer">
-&copy; 2008 
-| <a href="{% url flatpage "about/" %}">About</a>
-| <a href="{% url flatpage "contact/" %}">Contact</a>
-</p>
-
+</div>
+<div class="footer">
+	<p>&copy; <a href="/colophon">SEDF</a>
+	| <a href="{% url flatpage "about/" %}">About</a>
+	| <a href="{% url flatpage "contact/" %}">Contact</a></p>
+</div>
 </body>
 </html>

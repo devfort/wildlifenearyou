@@ -1,0 +1,55 @@
+/* @group See  more animals */
+
+div#see-more-animals {
+    background-color: lightblue;
+}
+div#see-more-animals label {
+    width: 5em;
+    float: left;
+}
+div#see-more-animals p {
+    margin: 0;
+}
+
+/* @end */
+
+/* @group Cloud on species page */
+
+.cloud-quad-0 {
+    font-size: 1em;
+}
+.cloud-quad-1 {
+    font-size: 1.29em;
+}
+.cloud-quad-2 {
+    font-size: 1.71em;
+}
+.cloud-quad-3 {
+    font-size: 2.14em;
+}
+.seen {
+    color: #cc0000;
+    background-color: #ffffff;
+}
+
+/* @end */
+
+/* @group Comments */
+
+div.comment {
+	border-left: 0.5em solid #ccc;
+	padding-left: 0.5em;
+}
+div.comment .posted-by {
+	font-size: 0.85em;
+}
+
+/* @end */
+
+/* @group Edit form */
+
+.nested-edit {
+  margin-left: 1em;
+}
+
+/* @end */

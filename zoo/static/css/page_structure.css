@@ -1,0 +1,25 @@
+.primary {
+    float: left;
+    width: 64%;
+    border-right: solid 1px #cccccc;
+    padding-right: 1%;
+}
+
+.secondary {
+    float: right;
+    width: 34%;    
+}
+.secondary h2:first-child,
+.secondary h3:first-child {
+    margin-top: 0;
+}
+
+.footer {
+    text-align: center;
+    color: #000000;
+    background-color: #c6ddab;
+    padding: 1em;
+    border-top: solid 1em white;
+    margin: 1em 0 0 0;
+    clear: both;
+}

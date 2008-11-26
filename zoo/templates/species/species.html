@@ -5,9 +5,7 @@
 
 {% block title %}{{ species.common_name }} ({{ species.latin_name }}){% endblock %}
 
-{% block content %}
-
-<div id="main_stuff">
+{% block primary_content %}
 
 <h1>{{ species.common_name }} <i class="scientific">({{ species.latin_name }})</i></h1>
 
@@ -40,14 +38,12 @@
 &mdash; <a href="{% url hit-parade %}">{{ hit_parade|ordinal }} most favourited animal</p>
 {% endif %}
 
-</div>
+{% endblock %}
 
-<div id="sidebar">
+{% block secondary_content %}
 
 {% with species as object %}
     {% include "comments/_comments.html" %}
 {% endwith %}
-
-</div>
 
 {% endblock %}

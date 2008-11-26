@@ -3,6 +3,7 @@
 {% block title %}{{ place.known_as }}{% endblock %}
 
 {% block extra_head %}
+<!-- <script type="text/javascript" src="/static/js/species-adding.js"></script> -->
 <script type="text/javascript">
 function anyEmptyOnes() {
     return jQuery('#see-more-animals p:visible :text').filter(function() {
@@ -59,23 +60,9 @@ jQuery(function($) {
     doWeNeedMoreBoxes();
 });
 </script>
-<style type="text/css">
-div#see-more-animals {
-    background-color: lightblue;
-}
-div#see-more-animals label {
-    width: 5em;
-    float: left;
-}
-div#see-more-animals p {
-    margin: 0;
-}
-</style>
 {% endblock %}
 
-{% block content %}
-
-<div id="main_stuff">
+{% block primary_content %}
 
 <h1>{{ place.known_as }}</h1>
 {% if place.url %}
@@ -216,9 +203,9 @@ div#see-more-animals p {
 <li><a href="">Zoo summary sheet</a></li>
 </ul>
 
-</div>
+{% endblock %}
 
-<div id="sidebar">
+{% block secondary_content %}
 
 <h2>Rating</h2>
 
@@ -254,8 +241,5 @@ div#see-more-animals p {
 Found incorrect information on this page?
 <a href="{{ place.urls.suggest_changes }}">Let us know</a>
 </p>
-
-
-</div>
 
 {% endblock %}
