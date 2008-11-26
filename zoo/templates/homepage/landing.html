@@ -41,7 +41,7 @@ jQuery(function($) {
     <p>Your location: {{ current_location }}</p>
 {% endif %}
     <form action="/set-location/" method="POST">
-        <p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location" /> <input type="submit" value="Go" /></p>
+        <p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location"> <input type="submit" value="Go"></p>
     </form>
 
     <p><a href="{% url hit-parade %}">Check out the most popular animals!</a></p>
