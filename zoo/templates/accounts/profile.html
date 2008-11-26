@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<h1>{{ profile.user|title }}</h1>
+<h1>{{ profile.user|title }} ({{ profile.user.get_full_name }})</h1>
 {% if profile.badges.all %}
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}

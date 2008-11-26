@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from zoo.accounts.models import Profile
-from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm
+from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm, UserEditProfileBitsForm
 
 def welcome(request):
     # Just to show people that they are logged in, really
@@ -95,15 +95,19 @@ def profile_edit(request, username):
     profile = user.get_profile()
     if request.method == 'POST':
         f = ProfileEditForm(request.POST, instance=profile)
-        if f.is_valid():
+        f2 = UserEditProfileBitsForm(request.POST, instance=user)
+        if f.is_valid() and f2.is_valid():
             f.save()
+            f2.save()
             return Redirect(profile.get_absolute_url())
     else:
         f = ProfileEditForm(instance=profile)
+        f2 = UserEditProfileBitsForm(instance=user)
     
     return render(request, 'accounts/profile_edit.html', {
         'profile': profile,
-        'form': f,
+        'profile_form': f,
+        'user_form': f2,
     })
 
 def all_profiles(request):
