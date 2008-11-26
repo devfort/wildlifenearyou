@@ -29,7 +29,9 @@
 				<li>
 					{% switch cr.subclass %}
 						{% case "ChangeAttributeRequest" %}
-							Change &ldquo;{{ crs.attribute }}&rdquo; on the <em>{{ crs.content_object }}</em> {{ crs.content_type }} from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
+							Change &ldquo;{{ crs.attribute }}&rdquo;
+								on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
+								from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
 						{% endcase %}
 
 						{% defaultcase %}
