@@ -32,7 +32,7 @@ class Place(AuditedModel):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
     known_as = models.CharField(max_length=500, null=False, blank=False)
     description = models.TextField(blank=True)
-    url = models.URLField()
+    url = models.URLField(blank=True)
     slug = models.SlugField(max_length=255, null=False, blank=False,
         unique=True
     )
