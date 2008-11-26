@@ -120,9 +120,8 @@ urlpatterns = patterns('',
 
 )
 
-
 # research and development -- ATL = animal testing laboratory
-urlpatterns = patterns('zoo.places.views',
+urlpatterns += patterns('zoo.places.views',
     url(r'atl/editea/(?P<ea_id>\d+)', 'edit_enc_species',
         name='edit-enclosure-species'),
     url(r'atl/editenc/(?P<enc_id>\d+)', 'edit_enc',
