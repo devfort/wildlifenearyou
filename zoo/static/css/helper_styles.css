@@ -155,6 +155,17 @@ input.submit {
 
 /* @end */
 
+h1 a:link,
+h1 a:visited,
+h1 a:active,
+h1 a:focus,
+h1 a:hover {
+	font-size: 0.5em;
+	text-transform: uppercase;
+	font-weight: normal;
+	font-family: Calibri, "Helvetica Neue", sans-serif;
+}
+
 h2 .meta {
     font-size: 0.8em;
     font-style: italic;
@@ -173,4 +184,9 @@ h1 i.scientific {
 
 .notusing {
 	background-color: #E185E9;	
+}
+
+.intro {
+	font-size: 1.2857em;
+	line-height: 1.2;
 }
