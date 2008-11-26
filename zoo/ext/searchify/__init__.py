@@ -3,6 +3,7 @@
 #
 
 # Add an inner class Searchable to your model, with fields (list of django_fields) and cascades (list of strings which are Django fields that are relations to other Django model instances).
+# Note that you can't have one search field multiple times (only the last one processed will be preserved).
 #
 # django_field is either a string (name of Django model field, use all defaults), or a dictionary.
 # Within the dictionary, ``django_fields`` is either a string (again), or a callable (takes the instance, returns a list of data to index into the search field).
@@ -23,7 +24,7 @@
 # get_field_input(instance, django_field) -- return an iterable, but you almost never want to do this
 # get_details(field_descriptor) -- the Searchify field descriptor, returns a tuple (django_field_list, search field name, config dictionary), you almost never want to do this either
 #   (importantly, 'field_name' in the dictionary is filled out to the explicit or auto-generated search field name)
-# get_index_data(instance) -- return a dictionary: ``id`` is a unique identifier (we use model ':' pk), ``fields`` is a dict of search field names mapping to lists of input data. We auto-create a field _TYPE which is the model name.
+# get_index_data(instance) -- return a unique identifier (we use model ':' pk), and a dict of search field names mapping to lists of input data. We auto-create a field _TYPE which is the model name.
 #
 # EXAMPLE
 #
@@ -65,8 +66,16 @@ class TestClient:
         print 'init ' + dbname
         print 'config ' + str(fields)
         
-    def send_data(self, data):
-        print 'index ' + str(data)
+    class Document:
+        def __init__(self):
+            self.d = {}
+            self.id = None
+            
+        def extend(self, data):
+            self.d.update(data)
+        
+    def add(self, doc):
+        print 'index %s: %s' % (doc.id, str(doc.d))
         
     def delete(self, uid):
         print 'delete ' + uid
@@ -79,7 +88,7 @@ def initialise(xc, dbname):
     for model in models.get_models():
         if not hasattr(model, 'Searchable'):
             continue
-        fields.append(get_configuration(model))
+        fields = fields + get_configuration(model)
     if len(fields)==0:
         return
     xappy_client.newdb(fields, dbname)
@@ -106,11 +115,15 @@ def index_instance(xappy_client, instance):
         xappy_client.delete(get_uid(instance))
         cascade_reindex(xappy_client, instance)
     else:
-        data = get_index_data(instance)
-        if data!=None:
-            xappy_client.send_data(data)
+        dret = get_index_data(instance)
+        if dret!=None:
+            (ident, fielddata) = dret
+            doc = xappy_client.Document()
+            doc.extend(fielddata)
+            doc.id = ident
+            xappy_client.add(doc)
         cascade_reindex(xappy_client, instance)
-    
+
 def cascade_reindex(xappy_client, instance):
     if not hasattr(instance, 'Searchable') or not hasattr(instance.Searchable, 'cascades'):
         return
@@ -227,7 +240,7 @@ def get_uid(instance):
     else:
         return instance._meta.module_name + ':' + str(instance.pk)
 
-# Given a Django model instance, return a dict of id mapping to unique identifier; fields mapping to dict of search fields mapping to list of data.
+# Given a Django model instance, return a unique identifier and a dict of search fields mapping to list of data.
 # Can be overridden.
 def get_index_data(instance):
     if not hasattr(instance,'Searchable'):
@@ -238,16 +251,13 @@ def get_index_data(instance):
         return None
     fields = instance.Searchable.fields
     
-    doc = { 'fields': {} }
-    # id based on model name + model pk
-    doc['id'] = get_uid(instance)
     # ``_TYPE`` field based on model name (so we can search just a particular model)
-    doc['fields']['_TYPE'] = [ instance._meta.module_name ]
+    outfields = { '_TYPE': instance._meta.module_name }
         
     for field in fields:
         (django_field_list, xappy_fieldname, xappy_config) = get_details(instance, field)
         interim_data = map(lambda x: get_field_input(instance, x), django_field_list)
         #print '>>>' + str(interim_data)
-        doc['fields'][xappy_fieldname] = reduce(lambda x,y: x+y, interim_data)
+        outfields[xappy_fieldname] = reduce(lambda x,y: x + y, interim_data)
     
-    return doc
+    return (get_uid(instance), outfields)
