@@ -104,6 +104,24 @@ class Client(object):
 
         return self._doreq('search/' + db_name, qs=req)
 
+    def get(self, ids, db_name=None):
+        """Get a document, or documents.
+
+         - `ids`: A document ID (as a string), or a list of document IDs.
+
+        FIXME: document return type - perhaps wrap in an object
+
+        """
+        if db_name is None:
+            db_name = self.default_db_name
+        if db_name is None:
+            raise Invalid('Missing db_name')
+
+        if isinstance(ids, basestring):
+            ids = (ids,)
+
+        return self._doreq('get/' + db_name, qs={'id': ids})
+
     def listdbs(self):
         """Get a list of the available databases.
 
