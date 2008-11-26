@@ -27,7 +27,7 @@ class Country(models.Model):
 
     def __unicode__(self):
         return self.name
-
+        
 class Place(AuditedModel):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
     known_as = models.CharField(max_length=500, null=False, blank=False)
@@ -67,7 +67,7 @@ class Place(AuditedModel):
     # long and lot for mapping
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
-
+    
     @models.permalink
     def get_absolute_url(self):
         return ('place', (), {
@@ -120,6 +120,14 @@ class PlaceNews(AuditedModel):
     def __unicode__(self):
         return u'%s (%s on %s)' % (self.headline, self.place, self.story_date)
 
+class PlaceDirection(AuditedModel):
+    place = models.ForeignKey(Place, related_name='direction')
+    mode = models.CharField(max_length=50, null=False, blank=False)
+    route = models.TextField()
+    
+    def __unicode__(self):
+        return u'by %s: %s' % (self.mode, self.route)
+        
 class Webcam(AuditedModel):
     place = models.ForeignKey(Place, related_name='webcams')
     name = models.CharField(max_length=300, null=True, blank=True)
