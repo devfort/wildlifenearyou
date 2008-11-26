@@ -50,13 +50,14 @@
 # FIXME: make it easy to reindex a model
 # FIXME: make it easy to reindex everything
 # FIXME: xappy linkage
+# Question: should auto-gen search field names just be the sanitised Django field names?
 
 # FIXME: document the new hooks
 # FIXME: registering and initialising
 # FIXME: document that you have to call initialise (and figure out where additional config comes from...)
 # Test: the override stuff
 
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete, post_delete
 from django.db import models
 from django.db.models import FieldDoesNotExist, BooleanField
 
@@ -84,17 +85,34 @@ def initialise(xc, dbname):
         return
     xappy_client.newdb(fields, dbname)
     post_save.connect(index_hook)
+    pre_delete.connect(delete_hook)
 
 def index_hook(sender, **kwargs):
     index_instance(xappy_client, kwargs['instance'])
 
+def delete_hook(sender, **kwargs):
+    delete_instance(xappy_client, kwargs['instance'])
+
+def post_delete_hook(instance):
+    def hook(sender, **kwargs):
+        if kwargs['instance']==instance:
+            cascade_reindex(xappy_client, kwargs['instance'])
+            post_delete.disconnect(hook)
+    return hook
+
 def index_instance(xappy_client, instance):
+    # first, check should_delete_instance for situations where we *mark* as deleted rather than deleting in the ORM/database
+    # (eg: a deleted boolean field)
     if should_delete_instance(instance):
         xappy_client.delete(get_uid(instance))
+        cascade_reindex(xappy_client, instance)
     else:
         data = get_index_data(instance)
         if data!=None:
             xappy_client.send_data(data)
+        cascade_reindex(xappy_client, instance)
+    
+def cascade_reindex(xappy_client, instance):
     if not hasattr(instance, 'Searchable') or not hasattr(instance.Searchable, 'cascades'):
         return
     for descriptor in instance.Searchable.cascades:
@@ -105,6 +123,11 @@ def index_instance(xappy_client, instance):
                     if not cascade_inst.Searchable.reindex_on_cascade(instance, cascade_inst):
                         continue
                 index_instance(xappy_client, cascade_inst) # ie: recurse through this function to get recursion, yay!
+
+def delete_instance(xappy_client, instance):
+    if hasattr(instance, 'Searchable'):
+        xappy_client.delete(get_uid(instance))
+    post_delete.connect(post_delete_hook(instance))
 
 # UTILITY FUNCTIONS
 #
