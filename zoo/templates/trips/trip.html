@@ -1,20 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}{{ profile.user }}'s Trip "{{ trip.name }}" {% endblock %}
+{% block title %}{{ trip.title }}{% endblock %}
 
 {% block content %}
+	<h1>{{ trip.title }}</h1>
+	{% with trip.sighting_set.all as sightings %}
+	{% regroup sightings by place.known_as as sightings_by_place %}
 
-<h1>{{ trip.title }}</h1>
-<p>From {{ trip.start|date:"jS F Y" }} to {{ trip.end|date:"jS F Y" }}</p>
+	{% with sightings_by_place|length as sl %}
+	{% ifequal 1 sl %}
+	<p>A trip to {% for place in sightings_by_place %}{{ place.grouper }}{% endfor %} with {{ trip.sighting_set.all.count }} sighting{{ trip.sighting_set.all.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
 
-<p>{{ trip.description }}</p>
+	{% for place in sightings_by_place %}
+	<h2>Sighting{{ trip.sighting_set.all.count|pluralize }}</h2>
+	<ul>
+		{% for sighting in place.list %}
+		<li><a href="{% url species sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+		{% endfor %}
+	</ul>
+	{% endfor %}
+{% else %}
+	<p>A trip {% ifnotequal trip.formatted_date '' %} taken {{ trip.formatted_date }}{% endifnotequal %} with {{ trip.sighting_set.all.count }} sighting{{ trip.sighting_set.all.count|pluralize }} </p>
 
-{% if trip.sighting_set.all %}
-<h2>Sightings</h2>
-<ul>
-{% for sighting in trip.sighting_set.all %}
-	<li><a href="{% url species sighting.species.common_name %}">{{ sighting.species.common_name }}</a> at <a href="{% url place sighting.place.country.country_code,sighting.place.known_as %}">{{ sighting.place.known_as }}</a></li>
-{% endfor %}
-</ul>
-{% endif %}	
+	<p class="description">
+	{{ trip.description }}
+	</p>
+
+	<h2>Sightings</h2>
+	{% for place in sightings_by_place %}
+	<h2>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>{% endfor %}</h2>
+	<p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
+
+	<ul>
+		{% for sighting in place.list %}
+		<li><a href="{% url species sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+		{% endfor %}
+	</ul>
+	{% endfor %}
+{% endifequal %}
+	{% endwith %}
+	{% endwith %}	
 {% endblock %}

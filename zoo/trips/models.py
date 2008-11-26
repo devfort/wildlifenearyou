@@ -52,15 +52,7 @@ class Trip(AuditedModel):
 
         return Passport(species_list)
 
-    def title(self):
-        name = self.name or 'A trip'
-            
-        p = Place.objects.filter(sighting__trip=self).distinct()
-        if p.count() > 1:
-            place = ' to multiple places'
-        elif p.count() == 1:
-            place = u' to %s' % p[0].known_as
-            
+    def formatted_date(self):
         date = self.start
         if date is not None:
             date = u'%s' % dateformat.format(self.start, 'jS F Y')
@@ -78,7 +70,20 @@ class Trip(AuditedModel):
                 date = u' on %s' % date
         else:
             date = '';
-
+            
+        return date
+        
+    def title(self):
+        name = self.name or 'A trip'
+            
+        p = Place.objects.filter(sighting__trip=self).distinct()
+        if p.count() > 1:
+            place = ' to multiple places'
+        elif p.count() == 1:
+            place = u' to %s' % p[0].known_as
+            
+        date = self.formatted_date()
+        
         # Multiple conditions allowed here
         return u'%s%s%s' % (name, place, date)
 
