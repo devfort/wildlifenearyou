@@ -8,8 +8,8 @@ from zoo.models import AuditedModel
 from zoo.animals.models import Species
 
 class Trip(AuditedModel):
-    start = models.DateTimeField(null=False, blank=True)
-    end = models.DateTimeField(null=False, blank=True)
+    start = models.DateField(null=True, blank=True)
+    end = models.DateField(null=True, blank=True)
     name = models.CharField(null=True, blank=True, max_length=100)
     description = models.TextField(blank=True)
     species = models.ManyToManyField(Species, through='Sighting')
@@ -19,7 +19,7 @@ class Trip(AuditedModel):
 
     def save(self, *args, **kwargs):
         if self.end is None and self.start:
-            self.end = self.start + datetime.timedelta(1)
+            self.end = self.start
         return super(Trip,self).save(args, kwargs)
 
     # THIS MUST BE static. It does not act on an instance and is called from
