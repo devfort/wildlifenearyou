@@ -17,7 +17,7 @@ class Trip(AuditedModel):
         ordering = ['-start']
 
     def save(self, *args, **kwargs):
-        if self.end==None:
+        if self.end==None and self.start:
             self.end = self.start + datetime.timedelta(1)
         super(Trip,self).save(args, kwargs)
 
