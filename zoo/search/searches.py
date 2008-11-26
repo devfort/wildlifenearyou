@@ -4,7 +4,7 @@ from djape.client import Client, Query
 class NotFound(Exception):
     pass
 
-def doc_from_result_item(item):
+def doc_from_result_item(item, latlon_fields):
     """Make a document from a result item.
 
     """
@@ -22,7 +22,7 @@ def make_lookup(dbname, latlon_fields=[]):
         result = client.get(id)
         if len(result['items']) == 1:
             item = result['items'][0]
-            return doc_from_result_item(item)
+            return doc_from_result_item(item, latlon_fields)
         else:
             raise NotFound, id
     return lookup
@@ -32,7 +32,7 @@ def make_searcher(dbname, latlon_fields=[]):
     def search(q, num=0):
         results = client.search(Query(q), end_rank=num)
         for item in results['items']:
-            yield doc_from_result_item(item)
+            yield doc_from_result_item(item, latlon_fields)
     return search
 
 search_locations = make_searcher(
