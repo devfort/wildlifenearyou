@@ -45,7 +45,6 @@ class Place(AuditedModel):
     opening_times = models.TextField()
     facilities = models.ManyToManyField('Facility', through='PlaceFacility')
 
-    # Address
     address_line_1 = models.CharField(max_length=250, null=True, blank=True)
     address_line_2 = models.CharField(max_length=250,  null=True, blank=True)
     town = models.CharField(max_length=250, null=True, blank=True)
@@ -79,7 +78,10 @@ class Place(AuditedModel):
     def urls(self, name):
         if name == 'absolute':
             return self.get_absolute_url()
-
+    
+    def visible_photos(self):
+        return self.photos.filter(is_visible = True)
+    
     def __unicode__(self):
         return self.known_as
 

@@ -8,6 +8,10 @@ from zoo.utils import attrproperty
 from zoo.places.models import Place
 from zoo.animals.models import Species
 
+class VisiblePhotoManager(models.Manager):
+    def get_query_set(self):
+        return self.filter(is_visible = True)
+
 class Photo(models.Model):
     created_by = models.ForeignKey(User, related_name = 'photos')
     created_at =  models.DateTimeField()
@@ -19,6 +23,13 @@ class Photo(models.Model):
             'admin': {'size': (70, 50), 'options': ('sharpen',)},
         }
     )
+    
+    # Moderation flags
+    is_visible = models.BooleanField(default = False)
+    moderated_by = models.ForeignKey(
+        User, related_name = 'photos_moderated', null=True, blank=True,
+    )
+    moderated_at = models.DateTimeField(null=True, blank=True)
 
     # Photos can optionally relate to a trip and/or a place
     trip = models.ForeignKey(Trip, null=True, blank=True,
@@ -33,7 +44,10 @@ class Photo(models.Model):
 
     def __unicode__(self):
         return self.title or unicode(self.photo)
-
+    
+    objects = models.Manager()
+    visible = VisiblePhotoManager()
+    
     @models.permalink
     def get_absolute_url(self):
         return ('photo', (), {
