@@ -1,3 +1,4 @@
+	<{{htag}}>{% ifequal link_title "true" %}<a href="{% url trip-view trip.created_by, trip.id %}">{% endifequal %}{{ trip.title }}{% ifequal link_title "true" %}</a>{% endifequal %}</{{htag}}>
 	{% with trip.sighting_set.all as sightings %}
 	{% regroup sightings by place.known_as as sightings_by_place %}
 

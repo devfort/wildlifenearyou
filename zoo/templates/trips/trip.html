@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% load trip_sightings %}
 
 {% block title %}{{ trip.title }}{% endblock %}
 
 {% block content %}
-	<h1>{{ trip.title }}</h1>
-	{% trip_sightings trip %}
+{% load trip_sightings %}
+	{% trip_sightings trip 'h1' '' %}
 {% endblock %}
