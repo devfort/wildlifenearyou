@@ -19,15 +19,12 @@
 </ul>
 {% endif %}
 
+<a href="{% url place-species place.country.country_code,place.slug %}">All species</a>
 
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
 {% for date_ranges in opening_times %}
 	<h3>{{ date_ranges.0|safe }}</h3>
 
-{% for section_title, days in date_ranges.1.items %}
-{% if section_title %}
-<h4>{{ section_title }}</h4>
-{% endif %}
 	<dl>
 	{% for day in days %}
 		{% if day %}
@@ -41,10 +38,8 @@
 		{% endif %}
 	{% endfor %}
 	</dl>
-	{% endfor %}
 {% endfor %}
 
-<a href="{% url place-species place.country.country_code,place.slug %}">All species</a>
 
 <div style="border: dotted 1px #cc0000;">
 <p><em>Not using:</em>
@@ -71,6 +66,11 @@
 <h2>Price</h2>
 
 <h2>Facilities</h2>
+<ul>
+{% for placefacility in place.place_facilities.all %}
+<li><img src="{{ placefacility.facility.icon.url }}">{{ placefacility.desc }}</li>
+{% endfor %}
+</ul>
 
 <h2>Directions</h2>
 

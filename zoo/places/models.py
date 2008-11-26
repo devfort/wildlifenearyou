@@ -43,6 +43,7 @@ class Place(AuditedModel):
     #trips = models.ManyToManyField('trips.Trip', through='Sighting')
 
     opening_times = models.TextField()
+    facilities = models.ManyToManyField('Facility', through='PlaceFacility')
 
     # Address
     address_line_1 = models.CharField(max_length=250, null=True, blank=True)
@@ -86,6 +87,25 @@ def create_place_callback(sender, instance, created, **kwargs):
     if created:
         Enclosure.objects.create(place=instance)
 post_save.connect(create_place_callback, sender=Place)
+
+class Facility(models.Model):
+    icon = models.ImageField(upload_to='facility_icons')
+    default_desc = models.CharField(max_length=200, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.default_desc
+
+class PlaceFacility(AuditedModel):
+    place = models.ForeignKey(Place, related_name='place_facilities')
+    facility = models.ForeignKey(Facility)
+    specific_desc = models.CharField(max_length=200, blank=True, null=True)
+
+    @property
+    def desc(self):
+        return self.specific_desc or self.facility.default_desc
+
+    def __unicode__(self):
+        return self.desc
 
 class PlaceNews(AuditedModel):
     place = models.ForeignKey(Place, related_name='news')

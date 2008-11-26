@@ -118,7 +118,7 @@ def edit_enc_species(request, ea_id):
                                        data=request.POST)
         if form.is_valid():
             changes = []
-            
+
             for name, val in form.cleaned_data.items():
                 oldval = getattr(form.instance, name)
                 if oldval != val:
@@ -170,7 +170,7 @@ class UberForm(object):
                     form_list.extend(suf.forms)
 
         self.forms = form_list
-        
+
     model = None
     parts = []
 
@@ -205,7 +205,7 @@ def edit_enc(request, enc_id):
                 break
 
         if is_valid:
-            print "all valid" 
+            print "all valid"
 
     else:
         uf = EnclosureUberForm(enclosure)
