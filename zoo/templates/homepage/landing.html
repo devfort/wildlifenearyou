@@ -32,7 +32,7 @@ jQuery(function($) {
 {% block content %}
 
 {% if user.is_authenticated %}
-    <p>Well hey {{ user.username }}, welcome back. View your <a href="{% url accounts-default %}">profile</a> or <a href="{% url accounts-logout %}">logout</a>?</p>
+    <p>Well hey {{ user.username|title }}, welcome back. View your <a href="{% url accounts-default %}">profile</a> or <a href="{% url accounts-logout %}">logout</a>?</p>
 {% else %}
     <p>Well hey there, you look new around here. If you're already registered you should <a href="{% url accounts-logout %}">login</a>, otherwise you can <a href="{% url accounts-register %}">register</a>.</p>
 {% endif %}

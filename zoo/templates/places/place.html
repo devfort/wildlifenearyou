@@ -70,7 +70,7 @@
 
 {% for photo in place.photos.all %}
 <div>
-<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by }}</a>
+<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
 </div>
 {% endfor %}
 {% if not user.is_anonymous %}
