@@ -18,9 +18,11 @@ def moderation_queue(request):
 
         if form.is_valid():
             action = form.cleaned_data['action']
-            changerequest = form.cleaned_data['changerequest']
+            changerequest = form.cleaned_data['changerequest'].get_real()
 
-            if action == 'delete':
+            if action in ('apply', 'force'):
+                changerequest.apply(request.user)
+            elif action == 'delete':
                 changerequest.delete()
 
             return HttpResponseRedirect(reverse('admin-moderation'))
