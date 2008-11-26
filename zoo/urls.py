@@ -98,6 +98,7 @@ urlpatterns = patterns('',
         name="geonames-autocomplete"),
 
     (r'^comments/', include('django.contrib.comments.urls')),
+    (r'^feedback/$', 'zoo.feedback.views.submit'),
 
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),

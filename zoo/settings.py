@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     'zoo.favourites',
     'django.contrib.comments',
     'schedule', # from zoo.ext
+    'zoo.feedback',
 ]
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')

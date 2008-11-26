@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Send us feedback{% endblock %}
+
+{% block content %}
+
+<h1>Send us feedback</h1>
+
+<form action="/feedback/" method="POST">
+{{ form.as_p }}
+<p><input type="submit" value="Send">
+    <input type="hidden" name="from_page" value="{{ from_page }}">
+</p>
+</form>
+{{ form_class }}
+
+{% endblock %}
