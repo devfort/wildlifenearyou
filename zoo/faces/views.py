@@ -36,6 +36,7 @@ def profile_images_xml(request):
                 'name': area.name,
                 'description': area.description,
                 'id': str(area.id),
+                'small': area.is_small and '1' or '0',
             }
             faceareacategory.append(partlist)
             for part in area.parts.all():

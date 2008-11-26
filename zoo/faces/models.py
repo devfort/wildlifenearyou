@@ -45,6 +45,7 @@ class FaceArea(models.Model):
     category = models.ForeignKey(
         FaceAreaCategory, blank=True, null=True, related_name = 'areas'
     )
+    is_small = models.BooleanField(blank=True)
     
     objects = FaceAreaManager()
     
