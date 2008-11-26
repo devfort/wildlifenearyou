@@ -66,8 +66,8 @@ class ChangeRequest(models.Model):
         "Returns 'real' object of correct subclass"
         return globals()[self.subclass].objects.get(pk=self.pk)
 
-    def is_conflict(self):
-        raise NotImplementedError, "ChangeRequest.is_conflict() is abstract"
+    def conflicts(self):
+        raise NotImplementedError, "ChangeRequest.conflicts() is abstract"
 
     def __unicode__(self):
         s = u'%s (part of %s)' % (self.request_description(), self.group)
@@ -91,7 +91,7 @@ class ChangeAttributeRequest(ChangeRequest):
     old_value = models.TextField(blank=True)
     new_value = models.TextField(blank=True)
 
-    def is_conflict(self):
+    def conflicts(self):
         obj = self.content_object
         cur_value = getattr(obj, self.attribute)
 
@@ -125,7 +125,7 @@ class CreateObjectRequest(ChangeRequest):
         ]))
         return super(CreateObjectRequest, self).apply(user)
 
-    def is_conflict(self):
+    def conflicts(self):
         return False
 
     def request_description(self):
@@ -142,7 +142,7 @@ class DeleteObjectRequest(ChangeRequest):
         self.content_object.delete()
         return super(DeleteObjectRequest, self).apply(user)
 
-    def is_conflict(self):
+    def conflicts(self):
         return False
 
     def request_description(self):

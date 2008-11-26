@@ -10,7 +10,7 @@ class ChangeRequestActionForm(forms.Form):
         action = self.cleaned_data.get('action', None)
         cr = self.cleaned_data.get('changerequest', None)
 
-        if action == 'apply' and cr and cr.get_real().is_conflict():
+        if action == 'apply' and cr and cr.get_real().conflicts():
             raise forms.ValidationError("Race condition.")
 
         return self.cleaned_data

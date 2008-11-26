@@ -37,11 +37,11 @@
 								on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
 								from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
 
-								{% if crs.is_conflict %}
+								{% if crs.conflicts %}
 									<strong>(change conflicts)</strong>
 								{% endif %}
 
-							{% if crs.is_conflict %}
+							{% if crs.conflicts %}
 								<form action="{% url admin-moderation %}" method="post">
 									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
 									<input type="hidden" name="action" value="force"/>
