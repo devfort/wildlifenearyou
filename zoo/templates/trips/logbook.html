@@ -4,13 +4,13 @@
 
 {% block content %}
 
-<h1>{{ profile.user }}'s Logbook</h1>
+<h1>{{ profile.user|title }}'s Logbook</h1>
 
 <div id="my_trips">
 	{% ifequal profile.user user %}
 	<h2>My Logbook</h2>
 	{% else %}
-	<h2>{{ profile.user }}'s Logbook</h2>
+	<h2>{{ profile.user|title }}'s Logbook</h2>
 	{% endifequal %}
 	
 	{% if logbook %}
