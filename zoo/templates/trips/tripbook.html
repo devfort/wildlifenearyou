@@ -4,7 +4,7 @@
 
 {% block content %}
 {% load trip_sightings %}
-<h1>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Tripbook</h1>
+<h1>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Trip Book</h1>
 
 <div id="my_trips">
 	{% if tripbook %}

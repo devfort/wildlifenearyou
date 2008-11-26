@@ -21,13 +21,6 @@
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
 {% endfor %}
 {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
-<p>
-{% ifequal profile.user user %}
-	<a href="{% url tripbook-default %}">My Tripbook</a>
-{% else %}
-	<a href="{% url tripbook profile.user %}">{{ profile.user|title }}'s Tripbook</a>
-{% endifequal %}
-</p>
 
 <div id="animal_passport">
 	<h2>Animal Passport</h2>
@@ -53,6 +46,8 @@
 		<li><a href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a> ({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</li>
 	{% endfor %}
 	</ol>
+	<p><a href="{% url tripbook profile.user %}">More...</a></p>
+	
 	{% else %}
 	<p>
 		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been anywhere yet.
