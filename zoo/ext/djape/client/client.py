@@ -127,9 +127,11 @@ class Client(object):
             'range_searchable': # boolean (default=False), whether to allow range searches on the field
             'is_document_weight': # boolean (default=False), whether the field value can be used for document weighting
 
+            'noindex': # boolean (default=False), if True, don't index, but still support above options.
+
             'freetext': {
-                # If present (even if empty), field is indexed for free text searching
-                'language': # string (2 letter ISO lang code) (default None) - if missing or None, no language specific stuff is done
+                # If present (even if empty), or if field type is 'text' and no other text indexing option (eg, 'exacttext' or 'noindex') is specified, field is indexed for free text searching
+                'language': # string (2 letter ISO lang code) (default None) - if missing, use database default.  If None no language specific stuff is done.  (FIXME - for the moment, the database default is to use no language specific processing).
                 'term_frequency_multiplier': # int (default 1) - must be positive or zero - multiplier for term frequency, increases term frequency by the given multipler to increase its weighting
                 'enable_phrase_search': # boolean (default True) - whether to allow phrase searches on this field
                 'index_groups': [
