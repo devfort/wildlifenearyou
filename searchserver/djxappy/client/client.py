@@ -2,6 +2,7 @@
 import simplejson
 import urllib
 import urllib2
+import errors
 
 class XappyClient(object):
     """A client for the Xappy webservice.
@@ -66,7 +67,7 @@ class XappyClient(object):
         else:
             self.last_elapsed_time = None
         if 'error' in res:
-            raise SearchClientError(res['error'], res.get('type', 'Search error'))
+            raise errors.SearchClientError(res['error'], res.get('type', 'Search error'))
             
         return res
 
@@ -154,7 +155,7 @@ class XappyClient(object):
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise SearchClientError('Missing db_name')
+            raise errors.SearchClientError('Missing db_name')
 
         req = {
             'db_name': db_name,
@@ -170,7 +171,7 @@ class XappyClient(object):
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise SearchClientError('Missing db_name')
+            raise errors.SearchClientError('Missing db_name')
 
         req = {
             'db_name': db_name,
@@ -187,7 +188,7 @@ class XappyClient(object):
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise SearchClientError('Missing db_name')
+            raise errors.SearchClientError('Missing db_name')
 
         return self._doreq('add/' + db_name, data={'doc': [doc.as_json()]})
 
@@ -200,7 +201,7 @@ class XappyClient(object):
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise SearchClientError('Missing db_name')
+            raise errors.SearchClientError('Missing db_name')
 
         return self._doreq('add/' + db_name, data={'doc': [doc.as_json() for doc in docs]})
 

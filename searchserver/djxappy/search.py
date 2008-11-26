@@ -280,13 +280,22 @@ def newdb(request):
     if not os.path.exists(os.path.dirname(db_path)):
         os.makedirs(os.path.dirname(db_path))
 
-    db = xappy.IndexerConnection(get_db_path(params['db_name'][0]))
+    db = xappy.IndexerConnection(db_path)
+    try:
+        try:
 
-    # FIXME - parse `fields`
-    db.add_field_action('text', xappy.FieldActions.INDEX_FREETEXT, language='en', spell=True)
-    db.add_field_action('text', xappy.FieldActions.STORE_CONTENT)
-    db.flush()
-
+            # FIXME - parse `fields`
+            db.add_field_action('text', xappy.FieldActions.INDEX_FREETEXT, language='en', spell=True)
+            db.add_field_action('text', xappy.FieldActions.STORE_CONTENT)
+            db.flush()
+        finally:
+            db.close()
+    except:
+        del db
+        shutil.rmtree(db_path)
+        dircache.reset()
+        raise
+    dircache.reset()
     return {'ok': 1}
 
 @jsonreturning
@@ -314,6 +323,7 @@ def deldb(request):
         raise DbNotFound("The path '%s' is already empty" % db_path)
 
     shutil.rmtree(db_path)
+    dircache.reset()
     return {'ok': 1}
 
 def doc_from_params(params):
