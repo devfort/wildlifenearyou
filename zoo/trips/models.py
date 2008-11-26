@@ -11,7 +11,16 @@ from zoo.places.models import Place
 
 class Trip(AuditedModel):
     start = models.DateField(null=True, blank=True)
-    end = models.DateField(null=True, blank=True)
+    start_accuracy = models.CharField(max_length = 5,
+        choices = (
+            ('day', 'to the day'),
+            ('month', 'to the month'),
+            ('year', 'to the year'),
+        )
+    )
+    end = models.DateField(null=True, blank=True, help_text = """
+        Not currently used
+    """.strip())
     name = models.CharField(null=True, blank=True, max_length=100,
         help_text="A title for this trip. At least one of name or date must be provided."
     )
@@ -81,7 +90,9 @@ class Trip(AuditedModel):
             place = ' to multiple places'
         elif p.count() == 1:
             place = u' to %s' % p[0].known_as
-            
+        else:
+            # This will only happen against broken old databases
+            place = u' to place unknown'    
         date = self.formatted_date()
         
         # Multiple conditions allowed here
