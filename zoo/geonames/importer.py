@@ -59,6 +59,12 @@ def import_into_xapian():
     }])
     # We have a database!
     
+    # We throw away anything that results in a description that we have 
+    # already used for something else. There are only 213 (out of 27,000)
+    # where a duplicate description has more than one lat/lon pair - so 
+    # we've chosen to just discard those.
+    seen_descriptions = set()
+    
     # Now we create documents
     queue = []
     count = 0
@@ -66,6 +72,10 @@ def import_into_xapian():
         # Some (3) of them don't have lat or lon - ignore those
         if not (row['latitude'] and row['longitude']):
             continue
+        description = make_description(row)
+        if description in seen_descriptions:
+            continue
+        seen_descriptions.add(description)
         count += 1
         doc = Document()
         # doc.id = 'X' will over-ride auto ID /AND/ cause replace if exists
@@ -74,7 +84,7 @@ def import_into_xapian():
             ('county', row['admin_name2']),
             ('postal_code', row['postal_code']),
             ('country_code', row['country_code']),
-            ('description', make_description(row)),
+            ('description', description),
             ('latlon', '%s %s' % (
                 row['latitude'], row['longitude'],
             )),
