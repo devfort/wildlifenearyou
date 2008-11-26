@@ -3,7 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from zoo.shortcuts import render
 
-from zoo.places.models import Place, Country, EnclosureSpecies, Enclosure
+from zoo.places.models import Place, Country, EnclosureSpecies, \
+     Enclosure, PlaceOpening
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
 
@@ -109,7 +110,6 @@ def all_countries(request):
         'all_countries': Country.objects.all().order_by('name'),
     })
 
-from zoo.places.forms import EnclosureSpeciesEditForm, EnclosureEditForm
 
 def edit_enc_species(request, ea_id):
     ea = EnclosureSpecies.objects.get(pk=ea_id)
@@ -141,78 +141,21 @@ def edit_enc_species(request, ea_id):
         'form': form,
         })
 
-from pprint import pprint
+from zoo.places.forms import PlaceUberForm
 
-class UberForm(object):
-    def __init__(self, instance, data=None, prefix=""):
-        if prefix != "":
-            prefix += "__"
-        prefix += '%s-%s' % (type(instance).__name__, instance.pk)
-
-        kwargs = {
-            'instance': instance,
-            'prefix': prefix,
-        }
-
-        if data:
-            kwargs['data'] = data
-
-        from django import forms
-
-        form_list = []
-
-        for part in self.parts:
-            if isinstance(part, type) and issubclass(part, forms.BaseForm):
-                form_list.append(part(**kwargs))
-            else:
-                objects = part(instance)
-                for obj in objects:
-                    sub_uber_form_klass = UF_DEFS[type(obj)]
-
-                    suf = sub_uber_form_klass(obj, data, prefix)
-                    form_list.extend(suf.forms)
-
-        self.forms = form_list
-
-    model = None
-    parts = []
-
-class EnclosureUberForm(UberForm):
-    model = Enclosure
-    parts = [
-        EnclosureEditForm,
-        lambda instance: instance.enclosurespecies_set.all(),
-        ]
-
-class EnclosureSpeciesUberForm(UberForm):
-    model = EnclosureSpecies
-    parts = [
-        EnclosureSpeciesEditForm,
-        ]
-
-UF_DEFS = {}
-for uf in EnclosureUberForm, EnclosureSpeciesUberForm:
-    UF_DEFS[uf.model] = uf
-
-def edit_enc(request, enc_id):
-
-    enclosure = get_object_or_404(Enclosure, pk=enc_id)
+def place_edit(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
 
     if request.method == 'POST':
-        uf = EnclosureUberForm(enclosure, request.POST)
+        uf = PlaceUberForm(place, request.POST)
 
-        is_valid = True
-        for form in uf.forms:
-            if not form.is_valid():
-                is_valid = false
-                break
-
-        if is_valid:
+        if uf.is_valid:
             print "all valid"
-
     else:
-        uf = EnclosureUberForm(enclosure)
+        uf = PlaceUberForm(place)
 
-    return render(request, "edit/enc.html", {
-        'forms': uf.forms,
+    return render(request, 'places/place_edit.html', {
+        'place': place,
+        'form': uf,
     })

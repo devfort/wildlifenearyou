@@ -76,18 +76,23 @@ class Place(AuditedModel):
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('place', (), {
-            'country_code': self.country.country_code.lower(),
-            'slug': self.slug,
-        })
+        return self.urls.absolute
 
     @attrproperty
+    @models.permalink
     def urls(self, name):
         if name == 'absolute':
-            return self.get_absolute_url()
-
+            urlname = 'place'
+        elif name == 'suggest_changes':
+            urlname = 'place-edit'
+        else:
+            raise AttributeError, 'No such url "%s"' % name
+        return (urlname, (), {
+            'country_code': self.country.country_code.lower(),
+            'slug': self.slug,
+            })
+    
     def visible_photos(self):
         return self.photos.filter(is_visible = True)
 
