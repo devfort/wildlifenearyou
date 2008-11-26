@@ -16,7 +16,7 @@
 	<p>{% favourite_toggler "add" species.slug request.path %}</p>
 	{% endif %}
 {% else %}
-	<p><a href="{% url accounts-login %}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this as one of your favourite animals.</p>
+	<p><a href="{% url accounts-login %}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
 {% endif %}
 
 {% with species.enclosure_set.all as enclosures %}
