@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.admin',
+    'django.contrib.humanize',
     'dmigrations', # from zoo.ext
     'zoo.accounts',
     'zoo.animals',

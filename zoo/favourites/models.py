@@ -7,7 +7,7 @@ from zoo.animals.models import Species
 
 class FavouriteSpecies(models.Model):
     user = models.ForeignKey(User, related_name='favourite_species')
-    species = models.ForeignKey(Species)
+    species = models.ForeignKey(Species, related_name='favourited')
     when_added = models.DateTimeField(null=False, blank=False)
 
     class Meta:
@@ -21,3 +21,18 @@ class FavouriteSpecies(models.Model):
 
     def __unicode__(self):
         return "%s loves %s" % (self.user.username, self.species.common_name,)
+
+    @staticmethod
+    def hit_parade():
+        all_favourites = FavouriteSpecies.objects.all()
+        species = {}
+        for f in all_favourites:
+            species[f.species] = species.get(f.species, 0) + 1
+
+        species_list = species.keys()
+        for s in species_list:
+            s.count = species[s]
+
+        species_list.sort(key=lambda s: s.count, reverse=True)
+        return species_list
+

@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from zoo.shortcuts import render
 from zoo.animals.models import Species, SuperSpecies
+from zoo.favourites.models import FavouriteSpecies
 
 def species(request, slug):
     try:
@@ -16,9 +17,14 @@ def species(request, slug):
         c = Context({'species': species})
         return HttpResponse(t.render(c), status=species.status)
 
+    favourites = species.favourited.count()
+    hit_parade = FavouriteSpecies.hit_parade().index(species) + 1
+
     return render(request, 'species/species.html', {
         'species': species,
         'favourited': species.has_favourited(request.user),
+        'hit_parade': hit_parade,
+        'favourites': favourites,
     })
 
 def all_species(request):

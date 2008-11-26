@@ -43,16 +43,7 @@ def remove_favourite(request):
     return Redirect(next)
 
 def hit_parade(request):
-    all_favourites = FavouriteSpecies.objects.all()
-    species = {}
-    for f in all_favourites:
-        species[f.species] = species.get(f.species, 0) + 1
-
-    species_list = species.keys()
-    for s in species_list:
-        s.count = species[s]
-
-    species_list.sort(key=lambda s: s.count, reverse=True)
+    species_list = FavouriteSpecies.hit_parade()
     species_list = species_list[:HIT_PARADE_LENGTH]
 
     sightings = Sighting.objects.all()

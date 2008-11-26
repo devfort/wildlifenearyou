@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load humanize %}
 {% load favourites_extras %}
 
 {% block title %}{{ species.common_name }} ({{ species.latin_name }}){% endblock %}
@@ -32,7 +33,11 @@
     {% endfor %}
 </ul>
 
+{% endif %}
 
+<p>Favourited by {{ favourites }} {{ favourites|pluralize:"person,people" }}
+{% if hit_parade %}
+&mdash; <a href="{% url hit-parade %}">{{ hit_parade|ordinal }} most favourited animal</p>
 {% endif %}
 
 </div>
