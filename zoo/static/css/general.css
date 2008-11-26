@@ -144,7 +144,7 @@ ul ul, ol ol, ol ul, ul ol {
 	margin-bottom: 0;
 }
 
-
+ul,
 .prose ul, 
 ul.bullets, 
 ul.bullets ul {	/* unordered lists more often DON'T require bullets except in extended bits of writing - use the .prose class or apply directly with .bullets */

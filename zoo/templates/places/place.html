@@ -126,12 +126,19 @@ jQuery(function($) {
 {% endfor %}
 {% endfor %}
 
-<h2>Price</h2>
+<h2 class="">Price</h2>
 {% with place.price.all as prices %}
     {% if prices %}
+		<ul class="currency">
         {% for price in prices %}
-			<p>{{ price.type|title }}: {{ price.currency }}{{ price.value }}
+			<li class="currency_{{ price.currency.currency_code }}">{{ price.type|title }}:
+{% ifequal price.currency.currency_code 'GBP' %}
+&pound;{% endifequal %}{%ifequal price.currency.currency_code 'EUR' %}
+&euro;{% endifequal %}{%ifequal price.currency.currency_code 'YEN' %}
+&yen;{% endifequal %}{%ifequal price.currency.currency_code 'USD' %}
+${% endifequal %}{{ price.value }}
         {% endfor %}
+		</ul>
     {% endif %}
 {% endwith %}
 

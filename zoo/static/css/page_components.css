@@ -53,3 +53,25 @@ div.comment .posted-by {
 }
 
 /* @end */
+
+ul.currency {
+	list-style-type: none;
+	margin-left: 0;
+}
+ul.currency li {
+	padding-left: 30px;
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.currency_GBP {
+	background-image: url(/static/img/icons/price_GBP.png);		
+}
+.currency_EUR {
+	background-image: url(/static/img/icons/price_EUR.png);		
+}
+.currency_USD {
+	background-image: url(/static/img/icons/price_USD.png);		
+}
+.currency_YEN {
+	background-image: url(/static/img/icons/price_YEN.png);		
+}
