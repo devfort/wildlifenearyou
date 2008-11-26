@@ -1,9 +1,17 @@
+.contents {
+	text-align: left;
+	width: 69em;
+	max-width: 100%;
+	margin: 0 auto;
+}
 .header {
-	text-align: right;
 	background-image: url(/static/img/bg/header.png);
 	background-repeat: repeat-x;
 	background-position: bottom left;
 	padding: 0.8em;
+}
+.header .contents {
+	text-align: right;
 }
 .header p.heading {
 	float: left;
@@ -45,23 +53,27 @@
 	display: inline;
 }
 
-.content {
+.main {
 	clear: both;
 	background-color: #ffffff;
+	background-image: url(/static/img/bg/bg_gradient_blue_white.png);
+	background-repeat: repeat-x;
+	background-position: top left;
 	width: 100%;
 	overflow: hidden;
+	padding-top: 1em;
 }
 
 .primary {
     float: left;
-    width: 64%;
-    border-right: solid 1px #cccccc;
-    padding-right: 1%;
+    width: 65%;
+    display: inline;
 }
 
 .secondary {
     float: right;
-    width: 34%;    
+    width: 34%;
+    display: inline;
 }
 .secondary h2:first-child,
 .secondary h3:first-child {
@@ -72,7 +84,7 @@
 	padding-top: 312px;
 	background-image: url(/static/img/bg/animals.png);
 	background-repeat: no-repeat;
-	background-position: top 98%;
+	background-position: 98% top;
     background-color: #ffffff;
     border-top: solid 1em #ffffff;
 }

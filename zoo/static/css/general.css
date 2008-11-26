@@ -58,6 +58,7 @@ body {
 	font-family: Calibri, "Helvetica Neue", sans-serif;
     font-size:16px;
     line-height:1.125em; /* Baseline grid of 18px */
+    text-align: center;
 }
 
 h1, h2, h3, h4, h5, h6 {

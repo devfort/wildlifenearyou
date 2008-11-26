@@ -80,8 +80,8 @@ jQuery(function($) {
 <p>{{ place.description }}</p>
 {% endif %}
 
-<h2>Animals you might see</h2>
 {% if species_list %}
+<h2>Animals you might see</h2>
 <ul id="species_list">
 {% for species in species_list %}
 	<li><span class="cloud-quad-{{ species.quad }}" title="{{ species.count }} seen"><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></span></li>
@@ -127,7 +127,7 @@ jQuery(function($) {
 {% endfor %}
 
 
-<div style="border: dotted 1px #cc0000;">
+<div class="notusing">
 <p><em>Not using:</em>
 
 {% with place.enclosures.all as enclosures %}

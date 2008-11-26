@@ -16,7 +16,8 @@
 </head>
 <body>
 <div class="header">
-    <p class="heading">{% ifequal request.path '/' %}NAMEOFTHESITE{% else %}<a href="/">NAMEOFTHESITE</a>{% endifequal %}
+    <div class="contents">
+	<p class="heading">{% ifequal request.path '/' %}NAMEOFTHESITE{% else %}<a href="/">NAMEOFTHESITE</a>{% endifequal %}
     <span>Can I Keep It?</span></p>
 	<ul>
 		<li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a></li><li><a href="{% url tripbook user %}">My Trip book</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?next={{ request.path }}">Login</a></li>{% endif %}
@@ -28,9 +29,11 @@
 			<input type="submit" value="Go">
 		</div>
     </form>
+	</div>
 </div>
-<div class="content">
-{% block content %}
+<div class="main">
+<div class="contents">
+	{% block content %}
 	
 	<div class="primary">
 		{% block primary_content %}
@@ -46,8 +49,10 @@
 		</p>
 	</div>
 
-{% endblock %}
+	{% endblock %}
 </div>
+</div>
+
 <div class="footer">
 	<p>&copy; <a href="{% url flatpage "colophon/" %}">SEDF</a>
 	| <a href="{% url flatpage "about/" %}">About</a>
