@@ -48,6 +48,16 @@ h2 .meta {
     display: inline;
 }
 
+#footer {
+    text-align: center;
+    color: #000000;
+    background-color: #c6ddab;
+    padding: 1em;
+    border-top: solid 1em white;
+    margin-top: 1em;
+    clear: both;
+}
+
 /* Place page */
 
 #main_stuff {
@@ -61,7 +71,7 @@ h2 .meta {
     float: right;
     width: 34%;    
 }
-#sidebar h2:first-child {
+#sidebar h2:first-child, #sidebar h3:first-child {
     margin-top: 0;
 }
 

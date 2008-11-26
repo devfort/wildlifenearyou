@@ -217,6 +217,8 @@ div#see-more-animals p {
 
 <h2>Rating</h2>
 
+<p><a href="">&raquo; Support your zoo!</a></p>
+
 <h2>Photos</h2>
 
 {% for photo in place.visible_photos.all %}
@@ -244,8 +246,10 @@ div#see-more-animals p {
 {% endwith %}
 
 <p class="suggest-changes">
-Found incorrect info on this page?
-<a href="{{ place.urls.suggest_changes }}">sobebebeb</a>
+Found incorrect information on this page?
+<a href="{{ place.urls.suggest_changes }}">Let us know</a>
+</p>
+
 
 </div>
 
