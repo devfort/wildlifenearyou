@@ -6,12 +6,12 @@ elif settings.DATABASE_ENGINE == 'sqlite3':
 import datetime
 
 migration = m.Migration(sql_up=["""
-    ALTER TABLE `places_placeopening` MODIFY `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY
+    ALTER TABLE `places_placeopening` MODIFY `id` integer AUTO_INCREMENT NOT NULL
 ""","""
-    ALTER TABLE `django_flatpage` MODIFY `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY
+    ALTER TABLE `django_flatpage` MODIFY `id` integer AUTO_INCREMENT NOT NULL
 ""","""
-    ALTER TABLE `django_flatpage_sites` MODIFY `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY
+    ALTER TABLE `django_flatpage_sites` MODIFY `id` integer AUTO_INCREMENT NOT NULL
 ""","""
-    ALTER TABLE `trips_sighting` MODIFY `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY
+    ALTER TABLE `trips_sighting` MODIFY `id` integer AUTO_INCREMENT NOT NULL
 """
 ], sql_down=[])
