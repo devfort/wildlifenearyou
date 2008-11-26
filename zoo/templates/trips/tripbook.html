@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ profile.user }}'s Tripbook{% endblock %}
+
+{% block content %}
+
+<h1>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Tripbook</h1>
+
+<div id="my_trips">
+	{% if tripbook %}
+	{% for trip in tripbook %}
+		<h2><a href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></h2>
+		<p>{{ trip.description }}</p>
+		
+		{% with trip.sighting_set.all as sightings %}
+		{% regroup sightings by place.known_as as sightings_by_place %}
+		
+		{% for place in sightings_by_place %}
+		<h2>{{ place.grouper }}</h2>
+		<p>({{ place.list.all.count }} sighting{{ place.list.species.count|pluralize }})</p>
+		
+		<ul>
+			{% for sighting in place.list %}
+			<li><a href="{% url species sighting.species.common_name %}">{{ sighting.species.common_name }}</a> at <a href="{% url place sighting.place.country.country_code,sighting.place.known_as %}">{{ sighting.place.known_as }}</a></li>
+			{% endfor %}
+		</ul>
+		{% endfor %}
+		{% endwith %}
+	{% endfor %}
+	{% else %}
+	<p>
+		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been on any trips yet.
+		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
+	</p>
+	{% endif %}
+</div>
+
+
+{% endblock %}

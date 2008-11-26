@@ -38,6 +38,12 @@ urlpatterns = patterns('',
     url(r'^$', 'zoo.homepage.views.landing',
         name='landing-page'),
 
+    # shortcuts
+    url(r'^tripbook/$', 'zoo.trips.views.tripbook_default',
+        name='tripbook-default'),
+    url(r'^profile/$', accounts.profile_default,
+        name='accounts-default'),
+
     # User accounts stuff
     url(r'^login/$', 'django.contrib.auth.views.login', {
         'template_name': 'accounts/login.html'
@@ -50,8 +56,6 @@ urlpatterns = patterns('',
     url(r'^welcome/$', accounts.welcome,
         name='accounts-welcome'),
 
-    url(r'^profile/$', accounts.profile_default,
-        name='accounts-default'),
     url(r'^profile/(?P<username>\w+)/$', accounts.profile,
         name='accounts-profile'),
     url(r'^profile/(?P<username>\w+)/edit/$', accounts.profile_edit,
@@ -60,10 +64,8 @@ urlpatterns = patterns('',
         'zoo.photos.views.photo',
         name='photo'),
 
-    url(r'^logbook/$', 'zoo.trips.views.logbook_default',
-        name='logbook-default'),
-    url(r'^profile/(?P<username>\w+)/logbook/$', 'zoo.trips.views.logbook',
-        name='logbook'),
+    url(r'^profile/(?P<username>\w+)/tripbook/$', 'zoo.trips.views.tripbook',
+        name='tripbook'),
     url(r'^profile/(?P<username>\w+)/trip/edit/$', 'zoo.trips.views.trip_edit',
         name='trip-edit'),
     url(r'^profile/(?P<username>\w+)/trip/add/$', 'zoo.trips.views.trip_add',

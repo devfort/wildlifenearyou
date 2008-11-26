@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 import datetime
+from django.utils import dateformat
 
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
@@ -47,14 +48,12 @@ class Trip(AuditedModel):
         return Passport(species_list)
 
     def title(self):
-        if self.name:
-            return self
-
         # FIXME - Need I18N
-        return u'your trip to %s' % self.place.known_as
+        return self.name or u'Trip on %s' % dateformat.format(self.start, 'jS F Y')
 
     def __unicode__(self):
-        return u"%s, %s" % (self.created_by.username, self.name)
+        return self.title()
+        #return u"%s, %s" % (self.created_by.username, self.name)
 
 class Sighting(AuditedModel):
     place = models.ForeignKey('places.Place',

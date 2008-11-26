@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1>{{ profile.user|title }}'s Trip {{ trip.name }} </h1>
+<h1>{{ trip.title }}</h1>
 <p>From {{ trip.start|date:"jS F Y" }} to {{ trip.end|date:"jS F Y" }}</p>
 
 <p>{{ trip.description }}</p>

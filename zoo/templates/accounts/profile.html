@@ -17,9 +17,9 @@
 {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 <p>
 {% ifequal profile.user user %}
-	<a href="{% url logbook-default %}">My Logbook</a>
+	<a href="{% url tripbook-default %}">My Tripbook</a>
 {% else %}
-	<a href="{% url logbook profile.user %}">{{ profile.user|title }}'s Logbook</a>
+	<a href="{% url tripbook profile.user %}">{{ profile.user|title }}'s Tripbook</a>
 {% endifequal %}
 </p>
 
@@ -40,18 +40,11 @@
 </div>
 
 <div id="my_trips">
-	<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Trips</h2>
+	<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Most Recent Trips</h2>
 	{% if profile.user.created_trip_set.all %}
 	<ol>
-	{% for trip in profile.user.created_trip_set.all %}
-		<li>
-			<p>During your trip to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a> on {{ trip.start|date:"jS F Y" }} you saw</p>
-			<ul>
-			{% for species in trip.species.all %}
-				<li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></li>
-			{% endfor %}
-			</ul>
-		</li>
+	{% for trip in profile.user.created_trip_set.all|slice:":5" %}
+		<li><a href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a> ({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</li>
 	{% endfor %}
 	</ol>
 	{% else %}
