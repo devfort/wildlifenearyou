@@ -47,7 +47,7 @@ def place(request, country_code, slug):
         else:
             date_range = "%s &mdash; %s" % (start_date, end_date)
 
-        arr = opening_times.setdefault(date_range, [None] * 7)
+        arr = opening_times.setdefault(date_range, [None] * 8)
 
         def gen_day_dict(day_of_week=None):
             name = None
