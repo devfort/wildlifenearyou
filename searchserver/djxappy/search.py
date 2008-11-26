@@ -313,7 +313,7 @@ def get(request, db_name):
             item = db.get_document(item_id)
         except KeyError:
             # docid not found
-            missing_ids.append(item)
+            missing_ids.append(item_id)
             continue
         items.append({'id': item.id, 'data': item.data})
 
