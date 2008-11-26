@@ -5,6 +5,8 @@ from zoo.utils import attrproperty
 from zoo.trips.models import Trip
 from zoo.animals.models import Species
 
+import datetime
+
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
 
@@ -24,3 +26,8 @@ class Profile(models.Model):
 
     def passport(self):
         return Trip.get_passport(self.user)
+    
+    def is_not_brand_new_account(self):
+        return self.user.date_joined < (
+            datetime.datetime.now() - datetime.timedelta(days = 7)
+        )
