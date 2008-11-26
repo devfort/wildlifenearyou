@@ -17,14 +17,16 @@ def get_place_species(place, user, limit=None):
         species = sighting.species
         by_count[species] = by_count.get(species, 0) + 1
 
-    species_list = by_count.keys()
+    max_species = max(by_count.values())
 
+    species_list = by_count.keys()
     for species in species_list:
         species.count = by_count[species]
+        species.quad = int( 4 * ( by_count[species] - 1.0 ) / max_species )
         if species in passport.seen_species:
             species.seen = True
 
-    species_list.sort(key=lambda s: s.count, reverse=True)
+    species_list.sort(key=lambda s: s.common_name)
 
     if limit:
         species_list = species_list[:limit]

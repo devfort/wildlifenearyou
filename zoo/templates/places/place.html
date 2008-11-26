@@ -22,11 +22,11 @@
 <p>{{ place.description }}</p>
 {% endif %}
 
-<h2>Species seen (<span class="seen">by you</span>)</h2>
+<h2>Animals you might see</h2>
 {% if species_list %}
-<ul>
+<ul id="species_list">
 {% for species in species_list %}
-	<li><span {% if species.seen %}class="seen" {% endif %}title="{{ species.count }} seen">{{ species.common_name }}</span></li>
+	<li><span class="cloud-quad-{{ species.quad }}" title="{{ species.count }} seen"><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></span></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -36,6 +36,11 @@
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
 {% for date_ranges in opening_times %}
 	<h3>{{ date_ranges.0|safe }}</h3>
+
+	{% for section_title, days in date_ranges.1.items %} 
+	 	{% if section_title %} 
+	 	<h4>{{ section_title }}</h4> 
+	 	{% endif %} 
 
 	<dl>
 	{% for day in days %}
@@ -50,6 +55,7 @@
 		{% endif %}
 	{% endfor %}
 	</dl>
+{% endfor %}
 {% endfor %}
 
 
