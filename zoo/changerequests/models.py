@@ -18,6 +18,10 @@ class ChangeRequestGroup(models.Model):
         User, null=True, blank=True, related_name = 'created_changerequests'
     )
 
+    def __unicode__(self):
+        return u'Change group created at %s by %s' % (
+                self.created_at, self.created_by
+            )
 
 class ChangeRequest(models.Model):
     """
@@ -63,21 +67,15 @@ class ChangeRequest(models.Model):
         return globals()[self.subclass].objects.get(pk = self.pk)
 
     def __unicode__(self):
-        if self.created_by:
-            s = u'%s created at %s by %s' % (
-                self.request_description(), self.created_at, self.created_by
-            )
-        else:
-            s = u'%s created at %s' % (
-                self.request_description(), self.created_at
-            )
+        s = u'%s (part of %s)' % (self.request_description(), self.group)
+
         if self.applied_at:
             if self.applied_by:
-                s += u' (applied at %s by %s)' % (
+                s += u' applied at %s by %s' % (
                     self.applied_at, self.applied_by
                 )
             else:
-                s += u' (applied at %s)' % self.applied_at
+                s += u' applied at %s' % self.applied_at
         return s
 
 class ChangeAttributeRequest(ChangeRequest):
