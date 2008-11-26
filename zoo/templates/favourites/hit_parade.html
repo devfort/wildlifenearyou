@@ -6,11 +6,14 @@
 
 <h1>The Animal Hit Parade</h1>
 
+{% if species_list %}
 <ol>
   {% for species in species_list %}
-  <li>{{ species.common_name }} ({{ species.count }})</li>
+  <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a> ({{ species.count }})</li>
   {% endfor %}
 </ol>
-
+{% else %}
+<p>No animals have been favourited yet.</p>
+{% endif %}
 
 {% endblock %}
