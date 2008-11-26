@@ -27,14 +27,14 @@ class Country(models.Model):
 
     def __unicode__(self):
         return self.name
-        
+
 class Currency(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     currency_code = models.CharField(max_length=3, null=False, blank=False, unique=True)
-    
+
     class Meta:
         verbose_name_plural = 'currencies'
-        
+
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.currency_code)
 
@@ -76,7 +76,7 @@ class Place(AuditedModel):
     # long and lot for mapping
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
-    
+
     @models.permalink
     def get_absolute_url(self):
         return ('place', (), {
@@ -88,10 +88,10 @@ class Place(AuditedModel):
     def urls(self, name):
         if name == 'absolute':
             return self.get_absolute_url()
-    
+
     def visible_photos(self):
         return self.photos.filter(is_visible = True)
-    
+
     def __unicode__(self):
         return self.known_as
 
@@ -120,7 +120,7 @@ class PlaceFacility(AuditedModel):
     def __unicode__(self):
         return self.desc
 
-class Extra(models.Model):
+class Extra(AuditedModel):
     place = models.ForeignKey(Place, related_name='extras')
     text_desc = models.CharField(max_length=200, blank=True, null=True)
     file = models.FileField(upload_to='places_extras')
@@ -152,10 +152,10 @@ class PlaceDirection(AuditedModel):
     place = models.ForeignKey(Place, related_name='direction')
     mode = models.CharField(max_length=50, null=False, blank=False)
     route = models.TextField()
-    
+
     def __unicode__(self):
         return u'by %s: %s' % (self.mode, self.route)
-        
+
 class Webcam(AuditedModel):
     place = models.ForeignKey(Place, related_name='webcams')
     name = models.CharField(max_length=300, null=True, blank=True)
@@ -163,13 +163,13 @@ class Webcam(AuditedModel):
 
     def __unicode__(self):
         return self.name
-        
+
 class PlacePrice(AuditedModel):
     place = models.ForeignKey(Place, related_name='price')
     currency = models.ForeignKey(Currency)
     type = models.CharField(max_length=100, null=False, blank=False)
     value = models.DecimalField(decimal_places=2, max_digits=12, null=False, blank=False)
-    
+
     def __unicode__(self):
         return u'%s: %s%s' %(self.type, self.currency.currency_code, self.value)
 

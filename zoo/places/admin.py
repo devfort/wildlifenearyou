@@ -7,7 +7,7 @@ from zoo.models import exclude as excludees
 class EnclosureSpeciesInline(admin.TabularInline):
     model = EnclosureSpecies
     exclude = excludees
-    
+
 class PlacePriceInline(admin.TabularInline):
     model = PlacePrice
     exclude = excludees
@@ -31,7 +31,7 @@ admin.site.register(Facility, exclude = excludees)
 admin.site.register(PlaceFacility, exclude = excludees)
 admin.site.register(PlaceNews, exclude = excludees)
 admin.site.register(PlaceDirection, exclude = excludees)
-admin.site.register(Extra)
+admin.site.register(Extra, exclude = excludees)
 admin.site.register(PlacePrice, exclude = excludees)
 admin.site.register(Place,
     exclude = excludees_place,
