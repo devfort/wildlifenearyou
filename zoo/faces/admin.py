@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from zoo.faces.models import FaceArea, FacePart, FaceAreaCategory, \
-    SpecialPermission
+    SpecialPermission, SelectedFacePart
 
 class FacePartAdmin(admin.ModelAdmin):
     list_display = ('image', 'description', 'area', 'preview')
@@ -14,3 +14,5 @@ admin.site.register(FaceArea, list_display = ['name', 'category', 'order'])
 admin.site.register(FaceAreaCategory)
 admin.site.register(SpecialPermission)
 admin.site.register(FacePart, FacePartAdmin)
+
+admin.site.register(SelectedFacePart)

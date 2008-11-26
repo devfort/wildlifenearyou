@@ -45,6 +45,26 @@ def profile_images_xml(request):
         content_type = 'application/xml; charset=utf8'
     )
 
+def profile_image(request, username):
+    from django.contrib.auth.models import User
+    from django.shortcuts import get_object_or_404
+    from django.http import HttpResponse
+    from PIL import Image
+    user = get_object_or_404(User, username=username)
+    parts = [p.part for p in user.selectedfaceparts.all()]
+    
+    # Use part.image.path as full path to the file
+    im = None
+    for part in parts:
+        if im is None:
+            im = Image.open(part.image.path)
+        else:
+            im2 = Image.open(part.image.path)
+            im.paste(im2, None, im2) # Using im2 as both content and mask
+    response = HttpResponse(content_type = 'image/png')
+    im.save(response, format = 'png')
+    return response
+
 """
 <?xml version="1.0" encoding="utf-8"?>
 <profileImages>

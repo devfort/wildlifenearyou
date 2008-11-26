@@ -70,6 +70,7 @@ urlpatterns = patterns('',
         name='accounts-all-profiles'),
 
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
+    (r'^faces/(\w+).png$', faces.profile_image),
 
     url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),

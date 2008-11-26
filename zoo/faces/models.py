@@ -41,6 +41,20 @@ class FacePart(models.Model):
     def __unicode__(self):
         return u'%s (%s)' % (self.description, self.area)
 
+class SelectedFacePart(models.Model):
+    part = models.ForeignKey(FacePart)
+    area = models.ForeignKey(FaceArea)
+    user = models.ForeignKey('auth.User', related_name='selectedfaceparts')
+    
+    class Meta:
+        unique_together = ('area', 'user')
+        ordering = ('area__order',)
+    
+    def __unicode__(self):
+        return u'%s picked %s for area %s' % (
+            self.user, self.part, self.area
+        )
+
 class SpecialPermission(models.Model):
     category = models.ForeignKey(FaceAreaCategory)
     user = models.ForeignKey('auth.User')
