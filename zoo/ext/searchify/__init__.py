@@ -7,7 +7,7 @@
 # django_field is either a string (name of Django model field, use all defaults), or a dictionary.
 # Within the dictionary, ``django_fields`` is either a string (again), or a callable (takes the instance, returns a list of data to index into the search field).
 # ``field_name`` is the search field name (optional, auto-generated), ``config`` is an optional dictionary of configuration options (search provider dependent; currently we use xappyc)
-# In your search field names, don't start with an underscore ('_') as that's reserved. Also, avoid putting double underscore ('__') anywhere, as we use that internally. (You can use it, but you'll have to understand how we use it to avoid conflicts.)
+# In your search field names, don't start with an underscore ('_') as that's reserved.
 #
 # We STRONGLY recommend explicitly declaring your search field names, as it makes the resultant search system more useful to users. In some cases you don't need it, but that's rare.
 #
@@ -45,12 +45,11 @@
 #
 # NASTY DETAILS
 #
-# When auto-generating, we use ':' to separate bits of things where possible, and '__' where we require \w only (eg: search field names).
+# When auto-generating, we use ':' to separate bits of things where possible, and '__' where we require \w only.
 
 # FIXME: make it easy to reindex a model
 # FIXME: make it easy to reindex everything
 # FIXME: xappy linkage
-# Question: should auto-gen search field names just be the sanitised Django field names?
 
 # FIXME: document the new hooks
 # FIXME: registering and initialising
@@ -177,14 +176,11 @@ def get_details(instance_or_model, field):
         django_field_list = [field]
         xappy_fieldname = None
     if xappy_fieldname == None:
-        def smashify(random_characters):
-            return filter(lambda x: x.isalpha(), random_characters)
-
         if isinstance(django_field_list[0], str):
-            field_specific_name = smashify(django_field_list[0])
+            field_specific_name = django_field_list[0]
         elif callable(django_field_list[0]):
-            field_specific_name = smashify(django_field_list[0](None))
-        xappy_fieldname = '__' + instance_or_model._meta.module_name + '__' + field_specific_name
+            field_specific_name = django_field_list[0](None)
+        xappy_fieldname = filter(lambda x: x.isalpha(), field_specific_name)
     # auto-detect index type (eg: date) based on field type (if FIXME: django_field_list allows us to figure it out?)
     if type(field) is dict:
         return (django_field_list, xappy_fieldname, field.get('config', {}))
