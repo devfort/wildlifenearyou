@@ -12,7 +12,13 @@
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
 {% endfor %}
 {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
-<p><a href="{% url logbook-default %}">{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Logbook</a></p>
+<p>
+{% ifequal profile.user user %}
+	<a href="{% url logbook-default %}">My Logbook</a>
+{% else %}
+	<a href="{% url logbook profile.user %}">{{ profile.user|title }}'s Logbook</a>
+{% endifequal %}
+</p>
 
 <div id="animal_passport">
 	<h2>Animal Passport</h2>
