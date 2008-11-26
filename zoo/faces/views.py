@@ -4,6 +4,9 @@ try:
 except ImportError:
     from elementtree import ElementTree as ET
 from models import FaceAreaCategory
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from PIL import Image
 
 """
 <profileImages>
@@ -45,11 +48,32 @@ def profile_images_xml(request):
         content_type = 'application/xml; charset=utf8'
     )
 
+def profile_image_xml(request, username):
+    user = get_object_or_404(User, username=username)
+    parts = [p.part for p in user.selectedfaceparts.all()]
+    profile = ET.Element('profile')
+    profile.attrib = {
+        'user_id': str(user.id),
+        'username': username,
+        'name': user.get_full_name(),
+        'update-url': '/faces/%s/update/' % username,
+    }
+    for part in parts:
+        facepart = ET.Element('facepart')
+        profile.append(facepart)
+        facepart.attrib = {
+            'area': part.area.name,
+            'src': part.image.url,
+            'id': str(part.id),
+            'title': part.description,
+        }
+    return HttpResponse(
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        ET.tostring(profile), 
+        content_type = 'application/xml; charset=utf8'
+    )
+
 def profile_image(request, username):
-    from django.contrib.auth.models import User
-    from django.shortcuts import get_object_or_404
-    from django.http import HttpResponse
-    from PIL import Image
     user = get_object_or_404(User, username=username)
     parts = [p.part for p in user.selectedfaceparts.all()]
     
