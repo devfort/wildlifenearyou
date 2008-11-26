@@ -1,5 +1,5 @@
 
-import simplejson
+from django.utils import simplejson
 from field import Field
 
 class Document(object):
