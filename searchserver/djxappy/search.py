@@ -250,6 +250,45 @@ def listdbs(request):
     """
     return {'db_names': dircache.listdir(settings.XAPPY_DATABASE_DIR)}
 
+valid_field_config_keys = set((
+    'exacttext',
+    'field_name',
+    'freetext',
+    'geo',
+    'store',
+    'type',
+))
+
+valid_freetext_options = set((
+    'language',
+    'term_frequency_multiplier',
+    'enable_phrase_search',
+    'index_groups',
+))
+
+valid_geo_options = set ((
+    'enable_bounding_box_search',
+    'enable_range_search',
+))
+
+def validate_dict_entries(dict, allowed, msg):
+    """Check that a dict has no entried other than those in allowed.
+
+    `msg` should contain the message to use in the ValidationError raised if
+    a problem is found.  %s in this will be replaced with the list of
+    disallowed items.
+
+    """
+    invalid_keys = []
+    for key in dict.keys():
+        if key not in allowed:
+            invalid_keys.append(key)
+    if len(invalid_keys) != 0:
+        raise ValidationError(
+            msg % ', '.join("'%s'" % p for p in invalid_keys))
+
+
+
 @jsonreturning
 @timed
 @errchecked
@@ -283,10 +322,92 @@ def newdb(request):
     db = xappy.IndexerConnection(db_path)
     try:
         try:
+            # Set up the field actions from fields
+            config = simplejson.loads(params['fields'][0])
+            # FIXME -perhaps we should validate here?
+            for settings in config:
+                validate_dict_entries(settings, valid_field_config_keys,
+                                      'Invalid field setting parameter(s): %s')
 
-            # FIXME - parse `fields`
-            db.add_field_action('text', xappy.FieldActions.INDEX_FREETEXT, language='en', spell=True)
-            db.add_field_action('text', xappy.FieldActions.STORE_CONTENT)
+                field_name = settings.get('field_name', None)
+                if field_name is None:
+                    raise ValidationError("Missing field_name parameter")
+
+                field_type = settings.get('type', 'text')
+                if field_type not in ('text', 'date', 'float', 'geo'):
+                    raise ValidationError("Unknown field_type parameter %s" %
+                                          field_type)
+
+                if settings.get('store', False):
+                    db.add_field_action(field_name, xappy.FieldActions.STORE_CONTENT)
+
+                #spelling_word_source = settings.get('spelling_word_source', False)
+                #collapsible = settings.get('collapsible', False)
+                #sortable = settings.get('sortable', False)
+                #range_searchable = settings.get('range_searchable', False)
+                #is_document_weight = settings.get('is_document_weight', False)
+
+                freetext_params = settings.get('freetext', None)
+                exacttext_params = settings.get('exacttext', None)
+                if (freetext_params is not None and
+                    exacttext_params is not None):
+                    raise ValidationError(
+                         "Field settings for %s specify both 'freetext' and "
+                         "'exacttext' for a single field - at most one may be "
+                         "specified")
+
+                if (freetext_params is not None or
+                    exacttext_params is not None):
+                    if field_type != 'text':
+                        raise ValidationError(
+                            "Text searching options specified, but field type "
+                            "is not text")
+
+                if freetext_params is not None:
+                    validate_dict_entries(freetext_params, valid_freetext_options,
+                                          'Invalid freetext option(s): %s')
+                    opts = {}
+
+                    lang = freetext_params.get('language', None)
+                    if lang is not None:
+                        opts['language'] = lang
+
+                    opts['weight'] = freetext_params.get('term_frequency_multiplier', 1)
+
+                    phrase = freetext_params.get('enable_phrase_search', True)
+                    if not phrase:
+                        opts['nopos'] = True
+
+                    index_groups = freetext_params.get('index_groups',
+                        ['_FIELD_INDEX', '_GENERAL_INDEX'])
+                    db.add_field_action(field_name,
+                                        xappy.FieldActions.INDEX_FREETEXT,
+                                        **opts)
+
+                if exacttext_params is not None:
+                    #FIXME - implement
+                    raise ValidationError("exacttext not yet implemented")
+
+                geo_params = settings.get('geo', None)
+                if geo_params is not None:
+                    if field_type != 'geo':
+                        raise ValidationError(
+                            "Text searching options specified, but field type "
+                            "is not text")
+
+                    validate_dict_entries(geo_params, valid_geo_options,
+                                          'Invalid freetext option(s): %s')
+                    bounding_box_search = geo_params.get('enable_bounding_box_search', True)
+                    range_search = geo_params.get('enable_range_search', True)
+
+                    # Geolocation action (for sorting by distance).
+                    db.add_field_action(field_name,
+                                        xappy.FieldActions.GEOLOCATION)
+
+                    if bounding_box_search or range_search:
+                        pass
+                        # FIXME - need to do something to index these.
+
             db.flush()
         finally:
             db.close()
@@ -329,10 +450,10 @@ def deldb(request):
 def doc_from_params(params):
     doc = xappy.UnprocessedDocument()
     print params
-    for val in params['data']:
-        doc.append('text', val)
-    if len(params['id']) > 0:
+    doc.extend(params['data'])
+    if params['id'] is not None and len(params['id']) > 0:
         doc.id = params['id'][0]
+    return doc
 
 @jsonreturning
 @timed
@@ -374,7 +495,7 @@ def add(request, db_name):
         newids = []
         for doc in params['doc']:
             doc = simplejson.loads(doc)
-            ids.append = db.add(doc_from_params(doc))
+            newids.append(db.add(doc_from_params(doc)))
         db.flush()
         return {'ok': 1, 'ids': newids, 'doccount': db.get_doccount()}
     finally:

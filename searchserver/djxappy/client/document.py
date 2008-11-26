@@ -1,5 +1,6 @@
 
 import simplejson
+from field import Field
 
 class Document(object):
     """A document to be passed to the indexer.
@@ -52,7 +53,7 @@ class Document(object):
         self.fields.append(Field(*args, **kwargs))
 
     def extend(self, fields):
-        """Append a sequence or iterable of fields or groups to the document.
+        """Append a sequence or iterable of fields to the document.
 
         This is simply a shortcut for adding several Field objects to the
         document, by calling `append` with each item in the list of fields

@@ -120,7 +120,7 @@ class XappyClient(object):
             'field_name': # fieldname (required)
             'type':  # One of 'text', 'date', 'geo', 'float' (default=text)
             'store': # boolean (default=False), whether to store in document data (for 'display')
-            'spelling_word_source': # boolean (default=False), whether to use for build the spelling dictionary
+            'spelling_word_source': # boolean (default=False), whether to use for building the spelling dictionary
             'collapsible': # boolean (default=False), whether to use for collapsing
             'sortable': # boolean (default=False), whether to allow sorting on the field
             'range_searchable': # boolean (default=False), whether to allow range searches on the field
@@ -139,7 +139,7 @@ class XappyClient(object):
                 ]
             },
 
-            'exact': {
+            'exacttext': {
                 # If present (even if empty), search is indexed for exact text searching
                 'index_groups': [
                     # Index groupings to index this field.  Defaults to containing '_FIELD_INDEX'
@@ -149,6 +149,13 @@ class XappyClient(object):
             },
 
             # Note - only one of "freetext" and "exact" may be supplied
+
+            'geo': {
+                # If present (even if empty), coordinates are stored such that
+                # searches can be ordered by distance from a point.
+                'enable_bounding_box_search': # boolean (default True) - if True, index such that searches for all items within a bounding box can be retrieved.
+                'enable_range_search': # boolean (default True) - if True, index such that searches can be restricted to all items within a range (ie, great circle distance) of a point.
+            }
         }
 
         """
