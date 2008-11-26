@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class FaceAreaCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -16,6 +17,20 @@ class FaceAreaCategory(models.Model):
         else:
             return self.name
 
+class FaceAreaManager(models.Manager):
+    def for_user(self, user_or_username):
+        if isinstance(user_or_username, basestring):
+            user = User.objects.get(username = user_or_username)
+        else:
+            user = user_or_username
+        return (
+            list(self.filter(category__is_special = False)) + 
+            list(self.filter(
+                category__is_special = True,
+                category__specialperms__user = user
+            ))
+        )
+
 class FaceArea(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -26,6 +41,8 @@ class FaceArea(models.Model):
     category = models.ForeignKey(
         FaceAreaCategory, blank=True, null=True, related_name = 'areas'
     )
+    
+    objects = FaceAreaManager()
     
     class Meta:
         ordering = ('order',)
@@ -39,7 +56,7 @@ class FacePart(models.Model):
     image = models.ImageField(upload_to='faceparts')
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.description, self.area)
+        return self.description
 
 class SelectedFacePart(models.Model):
     part = models.ForeignKey(FacePart)
@@ -56,7 +73,9 @@ class SelectedFacePart(models.Model):
         )
 
 class SpecialPermission(models.Model):
-    category = models.ForeignKey(FaceAreaCategory)
+    category = models.ForeignKey(
+        FaceAreaCategory, related_name='specialperms'
+    )
     user = models.ForeignKey('auth.User')
     
     def __unicode__(self):

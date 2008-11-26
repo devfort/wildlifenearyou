@@ -3,10 +3,12 @@ try:
     from xml.etree import ElementTree as ET
 except ImportError:
     from elementtree import ElementTree as ET
-from models import FaceAreaCategory
+from models import FaceAreaCategory, FaceArea
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from PIL import Image
+from django.contrib.auth.decorators import login_required
+from zoo.shortcuts import render
 
 """
 <profileImages>
@@ -32,6 +34,7 @@ def profile_images_xml(request):
             partlist.attrib = {
                 'name': area.name,
                 'description': area.description,
+                'id': area.id,
             }
             faceareacategory.append(partlist)
             for part in area.parts.all():
@@ -56,15 +59,16 @@ def profile_image_xml(request, username):
         'user_id': str(user.id),
         'username': username,
         'name': user.get_full_name(),
-        'update-url': '/faces/%s/update/' % username,
+        'update-url': '/faces/update/',
     }
     for part in parts:
         facepart = ET.Element('facepart')
         profile.append(facepart)
         facepart.attrib = {
             'area': part.area.name,
+            'area_id': str(part.area.id),
             'src': part.image.url,
-            'id': str(part.id),
+            'part_id': str(part.id),
             'title': part.description,
         }
     return HttpResponse(
@@ -73,21 +77,71 @@ def profile_image_xml(request, username):
         content_type = 'application/xml; charset=utf8'
     )
 
+from django.conf import settings
+import os
 def profile_image(request, username):
     user = get_object_or_404(User, username=username)
     parts = [p.part for p in user.selectedfaceparts.all()]
     
     # Use part.image.path as full path to the file
-    im = None
+    im = Image.open(os.path.join(
+        settings.OUR_ROOT, 'static/img/blank-face.png'
+    ))
     for part in parts:
-        if im is None:
-            im = Image.open(part.image.path)
-        else:
-            im2 = Image.open(part.image.path)
-            im.paste(im2, None, im2) # Using im2 as both content and mask
+        im2 = Image.open(part.image.path)
+        im.paste(im2, None, im2) # Using im2 as both content and mask
     response = HttpResponse(content_type = 'image/png')
     im.save(response, format = 'png')
     return response
+
+@login_required
+def update(request):
+    # This is mostly for the flash player to talk to, but a rudimentary 
+    # interface is provided for the impatient
+    msg = ''
+    user = request.user
+    if request.method == 'POST':
+        form = FaceUpdateForm(user, request.POST)
+        if form.is_valid():
+            # Over-write the user's profile data
+            user.selectedfaceparts.all().delete()
+            for key, part in form.cleaned_data.items():
+                if not part:
+                    continue # Skip the ones that they didn't fill in
+                area_id = int(key.split('_')[1])
+                user.selectedfaceparts.create(
+                    part = part,
+                    user = user,
+                    area = FaceArea.objects.get(pk = area_id),
+                )
+            msg = 'Updated!'
+    else:
+        form = FaceUpdateForm(user)
+    
+    # TODO: If it's the flash player serve back XML instead
+    return render(request, 'faces/update.html', {
+        'form': form,
+        'msg': msg,
+    })
+
+from django import forms
+class FaceUpdateForm(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        # Dynamically add a choicefield for each facearea that the user has 
+        # access to
+        super(FaceUpdateForm, self).__init__(*args, **kwargs)
+        for area in FaceArea.objects.for_user(user):
+            self.fields['area_%s' % area.id] = forms.ModelChoiceField(
+                area.parts.all(),
+                label = area.name,
+                required = False,
+            )
+        if not args:
+            # First time we've displayed; set initial to user's current face
+            self.initial = dict(
+                ['area_%s' % selected.area.id, str(selected.part.id)]
+                for selected in user.selectedfaceparts.all()
+            )
 
 """
 <?xml version="1.0" encoding="utf-8"?>
