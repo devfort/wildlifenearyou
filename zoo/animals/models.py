@@ -43,6 +43,8 @@ class Species(AbstractSpecies):
     species_group = models.ForeignKey(SpeciesGroup, blank=False, null=False)
 
     def has_favourited(self, user):
+        if not user.is_authenticated():
+            return False
         return user.favourite_species.filter(species=self).count() != 0
 
     class Meta:
