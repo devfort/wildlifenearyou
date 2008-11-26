@@ -53,7 +53,7 @@ class Document(object):
         self.fields.append(Field(*args, **kwargs))
 
     def extend(self, fields):
-        """Append a sequence or iterable of fields to the document.
+        """Append a sequence or iterable or dict of fields to the document.
 
         This is simply a shortcut for adding several Field objects to the
         document, by calling `append` with each item in the list of fields
@@ -63,11 +63,21 @@ class Document(object):
         objects, or sequences of parameters for creating Field objects.
 
         """
-        for field in fields:
-            if isinstance(field, Field):
-                self.fields.append(field)
-            else:
-                self.fields.append(Field(*field))
+        if hasattr(fields, 'iteritems'):
+            for field_name, field_items in fields.iteritems():
+                for field in field_items:
+                    if isinstance(field, Field):
+                        if field.name != field_name:
+                            raise Error
+                        self.fields.append(field)
+                    else:
+                        self.fields.append(Field(field_name, field))
+        else: # Assume sequence
+            for field in fields:
+                if isinstance(field, Field):
+                    self.fields.append(field)
+                else:
+                    self.fields.append(Field(*field))
 
     def as_json(self):
         """Return a JSON represenation of the document.
