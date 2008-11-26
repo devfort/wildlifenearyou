@@ -51,6 +51,7 @@ class Place(AuditedModel):
     town = models.CharField(max_length=250, null=True, blank=True)
     state = models.CharField(max_length=250, null=True, blank=True)
     zip = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
 
     def address(self):
         bits = []
