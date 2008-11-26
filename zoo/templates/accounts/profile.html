@@ -7,6 +7,9 @@
 {% block content %}
 
 <h1>{{ profile.user|title }}</h1>
+{% if profile.badges.all %}
+<ul>{{ profile.badges.all|unordered_list }}</ul>
+{% endif %}
 
 {% for photo in profile.user.photos.all %}
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>

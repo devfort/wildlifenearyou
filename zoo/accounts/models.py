@@ -4,11 +4,24 @@ from django.contrib.auth.models import User
 from zoo.utils import attrproperty
 from zoo.trips.models import Trip
 from zoo.animals.models import Species
+from zoo.models import AuditedModel
 
-import datetime
+class Badge(models.Model):
+    name = models.CharField(null=False, blank=False, max_length=100)
+    
+    def __unicode__(self):
+        return self.name
+
+class ProfileBadge(AuditedModel):
+    profile = models.ForeignKey('Profile')
+    badge = models.ForeignKey(Badge)
+    
+    def __unicode__(self):
+        return u'%s: %s' % (unicode(self.profile.user), unicode(self.badge),)
 
 class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
+    badges = models.ManyToManyField(Badge, through=ProfileBadge)
 
     @models.permalink
     def get_absolute_url(self):
