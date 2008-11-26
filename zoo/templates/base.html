@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="header">
-    <p class="heading">NAMEOFTHESITE
+    <p class="heading">{% ifequal request.path '/' %}NAMEOFTHESITE{% else %}<a href="/">NAMEOFTHESITE</a>{% endifequal %}
     <span>Can I Keep It?</span></p>
 	<ul>
 		<li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a></li><li><a href="{% url tripbook user %}">My Trip book</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?next={{ request.path }}">Login</a></li>{% endif %}

@@ -9,9 +9,12 @@
 	float: left;
 	width: 15em;
 	margin: 0;
+	text-align: left;
 }
 .header span {
-	
+	color: #5c822f;
+	font-style: italic;
+	font-size: 0.8em;
 }
 .header ul {
 	display: inline;
