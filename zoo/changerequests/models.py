@@ -4,8 +4,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils import simplejson
 
-from zoo.changerequests.managers import PendingChangeRequestManager
-
 import datetime
 
 class ChangeRequestGroup(models.Model):
@@ -50,8 +48,6 @@ class ChangeRequest(models.Model):
 
     # Record the subclass used - needed for fully functional model inheritance
     subclass = models.CharField(max_length=100)
-
-    objects = PendingChangeRequestManager()
 
     def request_description(self):
         return 'Change request'
