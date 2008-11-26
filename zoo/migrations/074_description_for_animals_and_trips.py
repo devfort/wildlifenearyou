@@ -6,7 +6,7 @@ elif settings.DATABASE_ENGINE == 'sqlite3':
 import datetime
 
 migration = m.Compound([
-    m.AddColumn('trips', 'trip', 'description', 'longtext NOT NULL default ""'),
-    m.AddColumn('animals', 'species', 'description', 'longtext NOT NULL default ""'),
-    m.AddColumn('animals', 'superspecies', 'description', 'longtext NOT NULL default ""'),
+    m.AddColumn('trips', 'trip', 'description', 'longtext NOT NULL'),
+    m.AddColumn('animals', 'species', 'description', 'longtext NOT NULL'),
+    m.AddColumn('animals', 'superspecies', 'description', 'longtext NOT NULL'),
 ])
