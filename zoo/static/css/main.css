@@ -54,7 +54,7 @@ h2 .meta {
     background-color: #c6ddab;
     padding: 1em;
     border-top: solid 1em white;
-    margin-top: 1em;
+    margin: 1em 0 0 0;
     clear: both;
 }
 
