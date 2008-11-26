@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <profileImages>
 	<faceareacategory name="Hair">
-		<facearea description="" name="Hair (bottom)">
+		<facearea description="" id="34" name="Hair (bottom)">
 			<facepart id="530" src="../../images/hair_curly_black.png" title="Curly Black"/>
 			<facepart id="531" src="../../images/hair_curly_blonde.png" title="Curly Blonde"/>
 			<facepart id="532" src="../../images/hair_curly_blonde_dirty.png" title="Curly Blonde Dirty"/>
@@ -21,7 +21,7 @@
 			<facepart id="546" src="../../images/hair_side_gray_dark.png" title="Side Gray Dark"/>
 			<facepart id="547" src="../../images/hair_side_white.png" title="Side White"/>
 		</facearea>
-		<facearea description="" name="Hair (top)">
+		<facearea description="" id="33" name="Hair (top)">
 			<facepart id="470" src="../../images/hair_bangs2_black.png" title="Bangs2 Black"/>
 			<facepart id="471" src="../../images/hair_bangs2_blonde.png" title="Bangs2 Blonde"/>
 			<facepart id="472" src="../../images/hair_bangs2_blue.png" title="Bangs2 Blue"/>
@@ -83,7 +83,7 @@
 			<facepart id="528" src="../../images/hair_spikey_purple.png" title="Spikey Purple"/>
 			<facepart id="529" src="../../images/hair_spikey_teal.png" title="Spikey Teal"/>
 		</facearea>
-		<facearea description="" name="Beards">
+		<facearea description="" id="42" name="Beards">
 			<facepart id="609" src="../../images/facial_beard_black.png" title="Black"/>
 			<facepart id="610" src="../../images/facial_beard_blonde.png" title="Blonde"/>
 			<facepart id="611" src="../../images/facial_beard_blue.png" title="Blue"/>
@@ -101,7 +101,7 @@
 		</facearea>
 	</faceareacategory>
 	<faceareacategory name="Face">
-		<facearea description="" name="Faces">
+		<facearea description="" id="40" name="Faces">
 			<facepart id="623" src="../../images/face_beige.png" title="Beige"/>
 			<facepart id="624" src="../../images/face_brown_dark.png" title="Dark Brown"/>
 			<facepart id="625" src="../../images/face_brown_light.png" title="Light Brown"/>
@@ -110,7 +110,7 @@
 			<facepart id="628" src="../../images/face_olive.png" title="Olive"/>
 			<facepart id="629" src="../../images/face_fair.png" title="Fair"/>
 		</facearea>
-		<facearea description="" name="Lips">
+		<facearea description="" id="35" name="Lips">
 			<facepart id="548" src="../../images/lips_black.png" title="Black"/>
 			<facepart id="549" src="../../images/lips_brown_dark.png" title="Brown Dark"/>
 			<facepart id="550" src="../../images/lips_brown_light.png" title="Brown Light"/>
@@ -130,7 +130,7 @@
 			<facepart id="564" src="../../images/lips_smirk_teal.png" title="Smirk Teal"/>
 			<facepart id="565" src="../../images/lips_teal.png" title="Teal"/>
 		</facearea>
-		<facearea description="" name="Noses">
+		<facearea description="" id="36" name="Noses">
 			<facepart id="566" src="../../images/nose_black.png" title="Black"/>
 			<facepart id="567" src="../../images/nose_brown.png" title="Brown"/>
 			<facepart id="568" src="../../images/nose_brown_dark.png" title="Brown Dark"/>
@@ -139,7 +139,7 @@
 			<facepart id="571" src="../../images/nose_fair.png" title="Fair"/>
 			<facepart id="572" src="../../images/nose_olive.png" title="Olive"/>
 		</facearea>
-		<facearea description="" name="Cheeks">
+		<facearea description="" id="38" name="Cheeks">
 			<facepart id="584" src="../../images/cheeks_brown_dark.png" title="Brown Dark"/>
 			<facepart id="585" src="../../images/cheeks_brown_light.png" title="Brown Light"/>
 			<facepart id="586" src="../../images/cheeks_cream.png" title="Cream"/>
@@ -147,7 +147,7 @@
 			<facepart id="588" src="../../images/cheeks_olive.png" title="Olive"/>
 			<facepart id="589" src="../../images/cheeks_pink.png" title="Pink"/>
 		</facearea>
-		<facearea description="" name="Eyelashes">
+		<facearea description="" id="39" name="Eyelashes">
 			<facepart id="590" src="../../images/eyelashes_black.png" title="Black"/>
 			<facepart id="591" src="../../images/eyelashes_blonde.png" title="Blonde"/>
 			<facepart id="592" src="../../images/eyelashes_blue.png" title="Blue"/>
@@ -159,7 +159,7 @@
 			<facepart id="598" src="../../images/eyelashes_red.png" title="Red"/>
 			<facepart id="599" src="../../images/eyelashes_teal.png" title="Teal"/>
 		</facearea>
-		<facearea description="" name="Glasses">
+		<facearea description="" id="41" name="Glasses">
 			<facepart id="600" src="../../images/glasses_mazz_black.png" title="Mazz Black"/>
 			<facepart id="601" src="../../images/glasses_mazz_blue.png" title="Mazz Blue"/>
 			<facepart id="602" src="../../images/glasses_mazz_brown_dark.png" title="Mazz Brown Dark"/>
@@ -172,7 +172,7 @@
 		</facearea>
 	</faceareacategory>
 	<faceareacategory name="Accessories">
-		<facearea description="" name="Hats">
+		<facearea description="" id="37" name="Hats">
 			<facepart id="573" src="../../images/accessories_hat_beannie.png" title="Beannie"/>
 			<facepart id="574" src="../../images/accessories_hat_cap_black.png" title="Cap Black"/>
 			<facepart id="575" src="../../images/accessories_hat_cap_blue.png" title="Cap Blue"/>
@@ -186,7 +186,7 @@
 		</facearea>
 	</faceareacategory>
 	<faceareacategory name="Staff only">
-		<facearea description="" name="Special Hats">
+		<facearea description="" id="43" name="Special Hats">
 			<facepart id="583" src="../../images/accessories_hat_safari.png" title="Safari"/>
 		</facearea>
 	</faceareacategory>
