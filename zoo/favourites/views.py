@@ -15,7 +15,7 @@ def handle_favourite(request, action):
         return remove_favourite(request)
 
 def add_favourite(request):
-    if not request.POST:
+    if not request.method == 'POST':
         raise Http404
     slug = request.POST.get('species', None)
     species = get_object_or_404(Species, slug=slug)
@@ -26,7 +26,7 @@ def add_favourite(request):
     return Redirect(next)
 
 def remove_favourite(request):
-    if not request.POST:
+    if not request.method == 'POST':
         raise Http404
     slug = request.POST.get('species', None)
     species = get_object_or_404(Species, slug=slug)
