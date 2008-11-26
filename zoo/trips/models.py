@@ -7,6 +7,7 @@ from django.utils import dateformat
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
 from zoo.animals.models import Species
+from zoo.places.models import Place
 
 class Trip(AuditedModel):
     start = models.DateField(null=True, blank=True)
@@ -52,12 +53,38 @@ class Trip(AuditedModel):
         return Passport(species_list)
 
     def title(self):
-        # FIXME - Need I18N
-        return self.name or u'Trip on %s' % dateformat.format(self.start, 'jS F Y')
+        name = self.name or 'A trip'
+            
+        p = Place.objects.filter(sighting__trip=self).distinct()
+        if p.count() > 1:
+            place = ' to multiple places'
+        elif p.count() == 1:
+            place = u' to %s' % p[0].known_as
+            
+        date = self.start
+        if date is not None:
+            date = u'%s' % dateformat.format(self.start, 'jS F Y')
+            
+            # now see if we need to add the end date
+            if self.end > self.start:
+                # now check if month and year are the same
+                if dateformat.format(self.start, 'mY') == dateformat.format(self.end, 'mY'):
+                    date = u' from %s to %s' % (dateformat.format(self.start, 'jS'), dateformat.format(self.end, 'jS F Y'))
+                elif self.start.year == self.end.year:
+                    date = u' from %s to %s' % (dateformat.format(self.start, 'jS F'), dateformat.format(self.end, 'jS F Y'))
+                else:
+                    date = u' from %s to %s' % (date, dateformat.format(self.end, 'jS F Y'))
+            else:
+                date = u' on %s' % date
+        else:
+            date = '';
+
+        # Multiple conditions allowed here
+        return u'%s%s%s' % (name, place, date)
 
     def __unicode__(self):
-        return self.title()
         #return u"%s, %s" % (self.created_by.username, self.name)
+        return self.title()
 
 class Sighting(AuditedModel):
     place = models.ForeignKey('places.Place',
