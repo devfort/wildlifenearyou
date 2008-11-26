@@ -16,6 +16,7 @@ class SpeciesGroup(AuditedModel):
 
 class AbstractSpecies(AuditedModel):
     common_name = models.CharField(max_length=500, blank=False, null=False)
+    description = models.TextField(blank=True)
     slug = models.SlugField(max_length=255, blank=False, null=False, unique=True)
 
     class Meta:

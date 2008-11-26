@@ -11,6 +11,7 @@ class Trip(AuditedModel):
     start = models.DateTimeField(null=False, blank=True)
     end = models.DateTimeField(null=False, blank=True)
     name = models.CharField(null=True, blank=True, max_length=100)
+    description = models.TextField(blank=True)
     sightings = models.ManyToManyField(Species, through='Sighting')
 
     class Meta:
