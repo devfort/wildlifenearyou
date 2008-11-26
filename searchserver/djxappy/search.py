@@ -63,7 +63,7 @@ def errchecked(fn):
                 return {"error": str(e), "type": e.errtype}
             except xappy.SearchEngineError, e:
                 return {"error": str(e), "type": "xappy.%s" % e.__class__.__name__}
-            except BaseException, e:
+            except Exception, e:
                 return {"error": "Server error: traceback:\n" +
                                 traceback.format_exc(),
                         "type": e.__class__.__name__}
