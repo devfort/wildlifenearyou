@@ -56,9 +56,15 @@ class Trip(AuditedModel):
         return u"%s, %s" % (self.created_by.username, self.name)
 
 class Sighting(AuditedModel):
-    place = models.ForeignKey('places.Place')
-    species = models.ForeignKey(Species)
-    trip = models.ForeignKey(Trip, null=True, blank=True)
+    place = models.ForeignKey('places.Place',
+        help_text="The place at which this sighting occurred",
+    )
+    species = models.ForeignKey(Species,
+        help_text="What was sighted",
+    )
+    trip = models.ForeignKey(Trip, null=True, blank=True,
+        help_text="If this sighting was part of a trip, give it here. Leave blank for a non-trip sighting, e.g. just <em>knowledge</em> about the species at this place",
+    )
 
     def __unicode__(self):
         ret = u'Sighting of %s at %s' % (self.species.common_name, self.place)

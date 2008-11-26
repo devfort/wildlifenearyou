@@ -1,7 +1,6 @@
 from django.contrib import admin
 from zoo.animals.models import Species, SpeciesGroup, SuperSpecies
-
-excludes = ['created_at', 'created_by', 'modified_at', 'modified_by']
+from zoo.models import exclude as excludes
 
 admin.site.register(Species,
     list_display = ('common_name', 'species_group', 'latin_name', 'slug'),
@@ -10,7 +9,9 @@ admin.site.register(Species,
     prepopulated_fields = {'slug': ('common_name',)},
     exclude = excludes,
 )
-admin.site.register(SpeciesGroup)
+admin.site.register(SpeciesGroup,
+    exclude = excludes,
+)
 admin.site.register(SuperSpecies,
     exclude = excludes,
     prepopulated_fields = {'slug': ('common_name',)},
