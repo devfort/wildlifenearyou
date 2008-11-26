@@ -66,6 +66,9 @@ class ChangeRequest(models.Model):
         "Returns 'real' object of correct subclass"
         return globals()[self.subclass].objects.get(pk=self.pk)
 
+    def is_conflict(self):
+        return False
+
     def __unicode__(self):
         s = u'%s (part of %s)' % (self.request_description(), self.group)
 
@@ -87,6 +90,17 @@ class ChangeAttributeRequest(ChangeRequest):
 
     old_value = models.TextField(blank=True)
     new_value = models.TextField(blank=True)
+
+    def is_conflict(self):
+        obj = self.content_object
+        cur_value = getattr(obj, self.attribute)
+
+        if self.old_value != cur_value:
+            # The current value of the field does not match the old value, thus
+            # there is a conflict.
+            return True
+
+        return super(ChangeAttributeRequest, self).is_conflict()
 
     def apply(self, user=None):
         obj = self.content_object
