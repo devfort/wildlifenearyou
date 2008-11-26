@@ -35,7 +35,7 @@ def profile_images_xml(request):
             partlist.attrib = {
                 'name': area.name,
                 'description': area.description,
-                'id': area.id,
+                'id': str(area.id),
             }
             faceareacategory.append(partlist)
             for part in area.parts.all():
