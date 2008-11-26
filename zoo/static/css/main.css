@@ -1,5 +1,12 @@
+/* Nat, I will sort this out for you if you tell me how, but I needed
+   to do some :) Matthew */
+
 body {
 	font-family: Calibri, "Helvetica Neue", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Rockwell, "Times New Roman", Times, serif;
 }
 
 h1 {
@@ -34,6 +41,9 @@ dt {
 #sidebar {
     float: right;
     width: 34%;    
+}
+#sidebar h2:first-child {
+    margin-top: 0;
 }
 
 /* Cloud */
