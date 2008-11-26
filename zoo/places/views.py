@@ -17,7 +17,8 @@ def get_place_species(place, user, limit=None):
         species = sighting.species
         by_count[species] = by_count.get(species, 0) + 1
 
-    max_species = max(by_count.values())
+    if by_count.values():
+        max_species = max(by_count.values())
 
     species_list = by_count.keys()
     for species in species_list:
