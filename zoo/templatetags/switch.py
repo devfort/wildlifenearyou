@@ -12,6 +12,7 @@ def switch(parser, token):
         {% switch meal %}
             {% case "spam" %}...{% endcase %}
             {% case "eggs" %}...{% endcase %}
+            {% defaultcase %}...{% enddefaultcase %}
         {% endswitch %}
 
     Note that ``{% case %}`` arguments can be variables if you like (as can
@@ -30,8 +31,9 @@ def switch(parser, token):
 
     # We just care about case children; all other direct children get ignored.
     casenodes = childnodes.get_nodes_by_type(CaseNode)
+    defaultnodes = childnodes.get_nodes_by_type(DefaultCaseNode)
 
-    return SwitchNode(args[1], casenodes)
+    return SwitchNode(args[1], casenodes, defaultnodes)
 
 @register.tag
 def case(parser, token):
@@ -46,10 +48,23 @@ def case(parser, token):
     parser.delete_first_token()
     return CaseNode(args[1], children)
 
+@register.tag
+def defaultcase(parser, token):
+    """
+    Defaultcase tag. Used only inside ``{% switch %}`` tags, so see above for those docs.
+    """
+    args = token.split_contents()
+    assert len(args) == 1
+
+    children = parser.parse(("enddefaultcase",))
+    parser.delete_first_token()
+    return DefaultCaseNode(children)
+
 class SwitchNode(template.Node):
-    def __init__(self, value, cases):
+    def __init__(self, value, cases, defaultcases):
         self.value = value
         self.cases = cases
+        self.defaultcases = defaultcases
 
     def render(self, context):
         # Resolve the value; if it's a non-existant variable don't even bother
@@ -64,6 +79,9 @@ class SwitchNode(template.Node):
         for case in self.cases:
             if case.equals(value, context):
                 return case.render(context)
+
+        for case in self.defaultcases:
+            return case.render(context)
 
         # No matches; render nothing.
         return ""
@@ -83,6 +101,14 @@ class CaseNode(template.Node):
         except template.VariableDoesNotExist:
             # If the variable doesn't exist, it doesn't equal anything.
             return False
+
+    def render(self, context):
+        """Render this particular case, which means rendering its child nodes."""
+        return self.childnodes.render(context)
+
+class DefaultCaseNode(template.Node):
+    def __init__(self, childnodes):
+        self.childnodes = childnodes
 
     def render(self, context):
         """Render this particular case, which means rendering its child nodes."""
