@@ -8,6 +8,7 @@ from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect as Redirect
 
 from zoo.accounts.models import Profile
 from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm, UserEditProfileBitsForm
@@ -19,6 +20,8 @@ def welcome(request):
     })
 
 def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
+    if request.user.is_authenticated():
+        return Redirect('/')
 
     redirect_to = request.REQUEST.get(redirect_field_name, '')
 
@@ -103,7 +106,7 @@ def profile_edit(request, username):
     else:
         f = ProfileEditForm(instance=profile)
         f2 = UserEditProfileBitsForm(instance=user)
-    
+
     return render(request, 'accounts/profile_edit.html', {
         'profile': profile,
         'profile_form': f,
