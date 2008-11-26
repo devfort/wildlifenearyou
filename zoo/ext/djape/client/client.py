@@ -4,7 +4,7 @@ import urllib
 import urllib2
 import errors
 
-class XappyClient(object):
+class Client(object):
     """A client for the Xappy webservice.
 
     """
