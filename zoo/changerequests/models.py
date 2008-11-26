@@ -15,7 +15,7 @@ class ChangeRequestGroup(models.Model):
     created_at = models.DateTimeField(default=datetime.datetime.now)
     # Can be created by an anonymous user
     created_by = models.ForeignKey(
-        User, null=True, blank=True, related_name = 'created_changerequests'
+        User, null=True, blank=True, related_name='created_changerequests'
     )
 
     def __unicode__(self):
@@ -44,7 +44,7 @@ class ChangeRequest(models.Model):
     # Track if and when this change request was applied
     applied_at = models.DateTimeField(null=True, blank=True)
     applied_by = models.ForeignKey(
-        User, null=True, blank=True, related_name = 'applied_changerequests'
+        User, null=True, blank=True, related_name='applied_changerequests'
     )
 
     # Record the subclass used - needed for fully functional model inheritance
@@ -64,7 +64,7 @@ class ChangeRequest(models.Model):
 
     def get_real(self):
         "Returns 'real' object of correct subclass"
-        return globals()[self.subclass].objects.get(pk = self.pk)
+        return globals()[self.subclass].objects.get(pk=self.pk)
 
     def __unicode__(self):
         s = u'%s (part of %s)' % (self.request_description(), self.group)
@@ -122,43 +122,8 @@ class DeleteObjectRequest(ChangeRequest):
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     def apply(self, user=None):
-        obj = self.content_object
-        obj.delete()
+        self.content_object.delete()
         return super(DeleteObjectRequest, self).apply(user)
 
     def request_description(self):
         return u'Delete %s' % self.content_object
-
-
-
-#Enclosure.list_of_sub_enclosures.append(Enclosure(name="the other bat cave"))
-#
-#Enclosure: <The Zoo>
-#   Enclosure: <the bat hole> *modified*
-#   Enclosure: <the bat cave 2> *new*
-#
-#<submit name="enc-id-1-enc-create" value='1'>
-#
-#enc-id-1-name = 'narwhals'
-#enc-id-1-enc-id-3-name = 'loldongs'
-#enc-id-1-enc-create = '1'
-#
-#enc-id-1-enc-id-3-name = 'loldongs'
-#enc-id-1-enc-id-new1-name = 'uaobeuoe'
-#enc-id-1-enc-id-new1-enc-id-new3-name = 'foobar'
-#enc-id-1-enc-id-new2-name = 'test'
-#
-#
-#{(Enclosure, 1):
-# 
-#    'form': Form(data),
-#    (Enclosure, 3): {'name': 'loldongs'}
-#    (Enclosure, None): {'name': 'uaobeuoe',
-#                        (Enclosure, None): {'name': 'foobar'}}
-#    (Enclosure, None): {'name': 'test'}}}
-#
-#
-#enc = Enclosure.objects.get(pk=1)
-#
-#
-#
