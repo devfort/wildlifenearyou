@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 
 class FaceAreaCategory(models.Model):
     name = models.CharField(max_length=100)
+    order = models.IntegerField(blank = True, null=True, help_text="""
+        This is the order the tabs show up in the SWF
+    """.strip())
     is_special = models.BooleanField(help_text = """
         Special categories are not available to everyone - users can have them
         enabled for their account (e.g. zoo keepers hats)
@@ -10,6 +13,7 @@ class FaceAreaCategory(models.Model):
     
     class Meta:
         verbose_name_plural = 'face area categories'
+        ordering = ('order',)
     
     def __unicode__(self):
         if self.is_special:

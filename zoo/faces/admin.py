@@ -11,7 +11,9 @@ class FacePartAdmin(admin.ModelAdmin):
     preview.allow_tags = True
 
 admin.site.register(FaceArea, list_display = ['name', 'category', 'order'])
-admin.site.register(FaceAreaCategory)
+admin.site.register(FaceAreaCategory, 
+    list_display = ['name', 'order']
+)
 admin.site.register(SpecialPermission)
 admin.site.register(FacePart, FacePartAdmin)
 

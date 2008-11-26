@@ -46,11 +46,7 @@ def profile_images_xml(request):
                     'title': part.description,
                 }
                 partlist.append(p)
-    return HttpResponse(
-        '<?xml version="1.0" encoding="UTF-8"?>\n' +
-        ET.tostring(profileImages), 
-        content_type = 'application/xml; charset=utf8'
-    )
+    return XmlResponse(ET.tostring(profileImages))
 
 def profile_image_xml(request, username):
     user = get_object_or_404(User, username=username)
@@ -72,11 +68,7 @@ def profile_image_xml(request, username):
             'part_id': str(part.id),
             'title': part.description,
         }
-    return HttpResponse(
-        '<?xml version="1.0" encoding="UTF-8"?>\n' +
-        ET.tostring(profile), 
-        content_type = 'application/xml; charset=utf8'
-    )
+    return XmlResponse(ET.tostring(profile))
 
 from django.conf import settings
 import os
@@ -113,14 +105,27 @@ def profile_image(request, username):
     
     return response
 
+class XmlResponse(HttpResponse):
+    def __init__(self, xml):
+        super(XmlResponse, self).__init__(
+            '<?xml version="1.0" encoding="UTF-8"?>\n' + xml,
+            content_type = 'application/xml; charset=utf8'
+        )
+
 @login_required
 def update(request):
+    flash = request.POST.get('flash')
     # This is mostly for the flash player to talk to, but a rudimentary 
     # interface is provided for the impatient
+    print request.POST
     msg = ''
     user = request.user
     if request.method == 'POST':
-        form = FaceUpdateForm(user, request.POST)
+        post = dict([
+            (key, value) for key, value in request.POST.items()
+            if value != '0'
+        ])
+        form = FaceUpdateForm(user, post)
         if form.is_valid():
             # Over-write the user's profile data
             user.selectedfaceparts.all().delete()
@@ -134,6 +139,12 @@ def update(request):
                     area = FaceArea.objects.get(pk = area_id),
                 )
             msg = 'Updated!'
+            if flash:
+                return XmlResponse('<result status="ok" />')
+        else:
+            if flash:
+                return XmlResponse('<result status="errors" />')
+            print "Form is invalid: %s" % form.errors
     else:
         form = FaceUpdateForm(user)
     
