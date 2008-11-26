@@ -94,7 +94,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.admin',
-    'dmigrations',
+    'dmigrations', # from zoo.ext
     'zoo.accounts',
     'zoo.animals',
     'zoo.places',
@@ -102,11 +102,12 @@ INSTALLED_APPS = (
     'zoo.homepage',
     'zoo.faces',
     'zoo.geonames',
-    'sorl.thumbnail',
+    'sorl.thumbnail', # from zoo.ext
     'zoo.photos',
     'zoo.trips',
     'zoo.favourites',
     'django.contrib.comments',
+    'schedule', # from zoo.ext
 )
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
