@@ -33,21 +33,21 @@ class ValidationError(SearchError):
     """
     errtype = 'Validation'
 
-class PathInUseError(SearchError):
-    """Raised when there is already something at a path we want to use.
+class DatabaseExistsError(SearchError):
+    """Raised when there is already a database of the name we want to use.
     
     When creating a database, this either means that the database is already
     there, or that there's something else in the location to be used for the
     database on the filesystem.
 
     """
-    errtype = 'PathInUse'
+    errtype = 'DatabaseExists'
 
-class DbNotFound(SearchError):
+class DatabaseNotFoundError(SearchError):
     """Raised when no database is present at the path we expect.
 
     """
-    errtype = 'DbNotFound'
+    errtype = 'DatabaseNotFound'
 
 
 def errchecked(fn):
@@ -381,24 +381,34 @@ def newdb(request):
 
     Accepts POST requests only.
 
-    Returns an error if the database already exists.
+    If the database already exists:
+     - if overwrite is 1, replaces the database completely with a new one
+       (deleting all the contents).
+     - otherwise, returns an error.
 
     Supported parameters:
 
      - `db_name`: contains the name of the database.
      - `fields`: the field parameters (see the client for documentation for
        now: major FAIL, FIXME)
+     - `overwrite`: if 1, the database already exists, instead of returning an
+       error, remove it and create it anew. (doesn't affect behaviour if
+       database doesn't exist).
  
     """
     params = validate_params(request.POST, {
                              'db_name': (1, 1, '^\w+$', None),
                              'fields': (1, 1, None, None),
+                             'overwrite': (0, 1, '^[01]$', [0]),
                              })
     db_name = params['db_name'][0]
     db_path = os.path.realpath(get_db_path(db_name))
 
     if os.path.exists(db_path):
-        raise PathInUseError("The path for '%s' is already in use" % db_path)
+        if not overwrite:
+            raise DatabaseExistsError("The path for '%s' is already in use" % db_path)
+        else:
+            shutil.rmtree(db_path)
 
     if not os.path.exists(os.path.dirname(db_path)):
         os.makedirs(os.path.dirname(db_path))
@@ -558,7 +568,7 @@ def deldb(request):
     db_path = os.path.realpath(get_db_path(db_name))
 
     if not os.path.exists(db_path):
-        raise DbNotFound("The path '%s' is already empty" % db_path)
+        raise DatabaseNotFoundError("The path '%s' is already empty" % db_path)
 
     shutil.rmtree(db_path)
     dircache.reset()
