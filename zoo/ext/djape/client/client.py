@@ -131,7 +131,7 @@ class Client(object):
         res = self._doreq('listdbs')
         return res['db_names']
 
-    def newdb(self, fields, db_name=None):
+    def newdb(self, fields, overwrite=False, db_name=None):
         """Create a new database.
         
         Returns an error if the database already exists.
@@ -141,6 +141,9 @@ class Client(object):
            configuration for that field in xappy.  The field_name specified in
            each dictionary must be unique (ie, can't appear in multiple entries
            in the list).
+         - `overwrite` is a bool; if True, an existing database of that name
+           will be overwritten.  Defaults to False, if False an existing
+           database will cause an error.
 
         The dictionaries contain the following:
 
@@ -193,9 +196,15 @@ class Client(object):
         if db_name is None:
             raise errors.SearchClientError('Missing db_name')
 
+        if overwrite:
+            overwrite = '1'
+        else:
+            overwrite = '0'
+
         req = {
             'db_name': db_name,
             'fields': simplejson.dumps(list(fields)),
+            'overwrite': overwrite
         }
 
         return self._doreq('newdb', data=req)
