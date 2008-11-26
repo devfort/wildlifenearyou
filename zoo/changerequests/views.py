@@ -37,5 +37,5 @@ def moderation_queue(request):
                 changerequest__applied_by__isnull=True
             ),
         'total_pending_change_requests':
-            ChangeRequest.objects.filter(applied_by__isnull=True).count(),
+            ChangeRequest.objects.count(),
     })
