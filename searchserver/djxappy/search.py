@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 import time
+import traceback
 import xappy
 
 def render_result_as_json(result):
@@ -55,16 +56,19 @@ def errchecked(fn):
     """
     def res(*args, **kwargs):
         try:
-            return fn(*args, **kwargs)
-        except SearchError, e:
-            return {"error": str(e), "type": e.errtype}
-        except xappy.SearchEngineError, e:
-            return {"error": str(e), "type": "xappy.%s" % e.__class__.__name__}
+            try:
+                return fn(*args, **kwargs)
+                # FIXME - log these errors
+            except SearchError, e:
+                return {"error": str(e), "type": e.errtype}
+            except xappy.SearchEngineError, e:
+                return {"error": str(e), "type": "xappy.%s" % e.__class__.__name__}
+            except BaseException, e:
+                return {"error": "Server error: traceback:\n" +
+                                traceback.format_exc(),
+                        "type": e.__class__.__name__}
         except:
-            # FIXME - log this (and other errors) better
-            import traceback
             traceback.print_exc()
-            traceback.print_last()
     return res
 
 def jsonreturning(fn):
@@ -478,7 +482,7 @@ def doc_from_params(params):
     doc = xappy.UnprocessedDocument()
     doc.extend(params['data'])
     if params['id'] is not None and len(params['id']) > 0:
-        doc.id = params['id'][0]
+        doc.id = params['id']
     return doc
 
 @jsonreturning
@@ -518,7 +522,7 @@ def add(request, db_name):
 
     db = xappy.IndexerConnection(get_db_path(db_name))
     try:
-        origdoccount = db.get_doccount()
+        prev_doc_count = db.get_doccount()
         newids = []
         for doc in params['doc']:
             doc = simplejson.loads(doc)
@@ -526,9 +530,11 @@ def add(request, db_name):
             if doc.id is None:
                 newids.append(db.add(doc))
             else:
+                db.replace(doc)
                 newids.append(doc.id)
         db.flush()
-        return {'ok': 1, 'ids': newids, 'doccount': db.get_doccount()}
+        return {'ok': 1, 'ids': newids, 'doc_count': db.get_doccount(),
+            'prev_doc_count': prev_doc_count}
     finally:
         db.close()
 
