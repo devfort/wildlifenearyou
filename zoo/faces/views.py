@@ -6,6 +6,7 @@ except ImportError:
 from models import FaceAreaCategory, FaceArea
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 from PIL import Image
 from django.contrib.auth.decorators import login_required
 from zoo.shortcuts import render
@@ -79,6 +80,18 @@ def profile_image_xml(request, username):
 
 from django.conf import settings
 import os
+
+def paste_transparent(dest, position, src):
+    """
+    Split RGBA src images into RGB and A to avoid
+    modifying the alpha channel of the dest image.
+    """
+    rgba = src.split()
+    mask = rgba[3]
+    rgb_src = Image.merge('RGB', rgba[:3])
+    dest.paste(rgb_src, position, mask)
+        
+
 def profile_image(request, username):
     user = get_object_or_404(User, username=username)
     parts = [p.part for p in user.selectedfaceparts.all()]
@@ -89,9 +102,15 @@ def profile_image(request, username):
     ))
     for part in parts:
         im2 = Image.open(part.image.path)
-        im.paste(im2, None, im2) # Using im2 as both content and mask
+        paste_transparent(im, None, im2)
+
     response = HttpResponse(content_type = 'image/png')
-    im.save(response, format = 'png')
+
+    if im:
+        im.save(response, format = 'png')
+    else:
+        return HttpResponseRedirect('/static/img/default_face.png')
+    
     return response
 
 @login_required
