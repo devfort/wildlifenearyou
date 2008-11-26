@@ -7,7 +7,11 @@
 <h1>{{ profile.user }}'s Logbook</h1>
 
 <div id="my_trips">
+	{% ifequal profile.user user %}
 	<h2>My Logbook</h2>
+	{% else %}
+	<h2>{{ profile.user }}'s Logbook</h2>
+	{% endifequal %}
 	
 	{% if logbook %}
 	<ol>
