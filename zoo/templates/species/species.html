@@ -2,12 +2,17 @@
 
 {% load favourites_extras %}
 
-{% block title %}{{ species }}{% endblock %}
+{% block title %}{{ species.common_name }} ({{ species.latin_name }}){% endblock %}
 
 {% block content %}
 
-<h1>{{ species }}</h1>
-<p class="sub-head"><i class="scientific">{{ species.latin_name }}</i></p>
+<div id="main_stuff">
+
+<h1>{{ species.common_name }} <i class="scientific">({{ species.latin_name }})</i></h1>
+
+{% if species.description %}
+<p>{{ species.description }}</p>
+{% endif %}
 
 {% if request.user.is_authenticated %}
 	{% if favourited %}
@@ -19,19 +24,8 @@
 	<p><a href="{% url accounts-login %}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
 {% endif %}
 
-{% with species.enclosure_set.all as enclosures %}
-    {% if enclosures %}
-        <h2>See them here:</h2>
-        <ul>
-        {% for enclosure in enclosures %}
-            <li>{{ enclosure }} at <a href="{{ enclosure.place.urls.absolute }}">{{ enclosure.place.known_as }}</a></li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
-
 {% if species.seen_at %}
-<h2>Our users have seen them here:</h2>
+<h2>See them here:</h2>
 <ul>
     {% for place in species.seen_at %}
     <li><a href="{{ place.urls.absolute }}">{{ place }}</a></li>
@@ -41,8 +35,14 @@
 
 {% endif %}
 
+</div>
+
+<div id="sidebar">
+
 {% with species as object %}
     {% include "comments/_comments.html" %}
 {% endwith %}
+
+</div>
 
 {% endblock %}

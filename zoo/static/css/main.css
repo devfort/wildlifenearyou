@@ -84,6 +84,21 @@ h2 .meta {
     background-color: #ffffff;
 }
 
+/* Animal page */
+
+h1 i.scientific {
+    font-size: smaller;
+    font-weight: normal;
+    font-style: italic;
+}
+
+#egg_dodo {
+    margin: 0 40px;
+}
+#egg_unicorn {
+    margin: 0 81px;
+}
+
 /* comments */
 
 div.comment {
@@ -92,11 +107,4 @@ div.comment {
 }
 div.comment .posted-by {
 	font-size: 0.85em;
-}
-
-#egg_dodo {
-    margin: 0 40px;
-}
-#egg_unicorn {
-    margin: 0 81px;
 }
