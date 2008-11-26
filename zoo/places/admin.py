@@ -18,10 +18,13 @@ class PlaceInline(admin.TabularInline):
     model = Enclosure
     exclude = excludees
 
+excludees_place = excludees
+excludees_place.append('opening_times')
+
 admin.site.register(Webcam, exclude = excludees)
 admin.site.register(PlaceNews, exclude = excludees)
 admin.site.register(Place,
-    exclude = excludees,
+    exclude = excludees_place,
     list_filter = ['country'],
     list_display = ('known_as', 'legal_name', 'town', 'country'),
     search_fields = ['known_as', 'legal_name', 'town', 'address_line_1', 'address_line_2'],

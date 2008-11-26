@@ -152,6 +152,7 @@ class PlaceOpening(models.Model):
         closed = self.closed and 'closed ' or 'open'
         start_date = self.start_date or '*'
         end_date = self.end_date or '*'
+        section = self.section and ('%s, ' % self.section) or ''
         if self.days_of_week:
             days_of_week = self.days_of_week.split(',')
             days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -159,4 +160,4 @@ class PlaceOpening(models.Model):
         else:
             days_of_week = 'all days'
         times = self.times or 'All day'
-        return "%s, %s %s %s-%s %s" % (self.place, closed, days_of_week, start_date, end_date, times)
+        return "%s%s, %s %s %s-%s %s" % (section, self.place, closed, days_of_week, start_date, end_date, times)

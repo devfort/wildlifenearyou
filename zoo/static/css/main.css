@@ -12,12 +12,21 @@ body {
     display: inline;
 }
 
-/* Cloud on place page */
+/* Place page */
 
+/* Opening times */
+dt {
+    float: left;
+    margin: 0 1em 0 0;
+    clear: left;
+}
+
+/* Cloud */
 .seen {
     color: #cc0000;
     background-color: #ffffff;
 }
+
 
 /* comments */
 
