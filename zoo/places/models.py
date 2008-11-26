@@ -136,6 +136,7 @@ class PlaceOpening(models.Model):
     times = models.CharField(max_length=100, blank=True)
     closed = models.BooleanField()
     place = models.ForeignKey(Place, null=False)
+    section = models.CharField(max_length=255, blank=True)
 
     def __unicode__(self):
         closed = self.closed and 'closed ' or 'open'
