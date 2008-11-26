@@ -23,7 +23,7 @@
 			<li>
 			{{ cr|length }} change{{ cr|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a> {{ crg.created_at|timesince }} ago:
 
-			<ol>
+			<ul>
 			{% for cr in crg.changerequest_set.all %}
 			{% with cr.get_real as crs %}
 				<li>
@@ -45,7 +45,7 @@
 
 			{% endwith %}
 			{% endfor %}
-			</ol>
+			</ul>
 
 			</li>
 		{% endwith %}
