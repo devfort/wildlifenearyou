@@ -146,9 +146,9 @@ ${% endifequal %}{{ price.value }}
 
 
 <h2>Facilities</h2>
-<ul>
+<ul class="facilities">
 {% for placefacility in place.place_facilities.all %}
-<li><img src="{{ placefacility.facility.icon.url }}">{{ placefacility.desc }}</li>
+<li><img alt="" src="{{ placefacility.facility.icon.url }}">{{ placefacility.desc }}</li>
 {% endfor %}
 </ul>
 

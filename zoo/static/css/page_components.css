@@ -59,9 +59,10 @@ ul.currency {
 	margin-left: 0;
 }
 ul.currency li {
-	padding-left: 30px;
+	padding-left: 25px;
 	background-position: left center;
 	background-repeat: no-repeat;
+    margin-bottom: 0.5em;
 }
 .currency_GBP {
 	background-image: url(/static/img/icons/price_GBP.png);		
@@ -74,4 +75,17 @@ ul.currency li {
 }
 .currency_YEN {
 	background-image: url(/static/img/icons/price_YEN.png);		
+}
+
+.facilities {
+	list-style-type: none;
+	margin-left: 0;
+}
+.facilities img {
+	margin-right: 5px;
+	position: relative;
+    top: 3px;
+}
+.facilities li {
+	margin-bottom: 0.5em;
 }
