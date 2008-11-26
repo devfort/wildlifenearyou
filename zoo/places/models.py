@@ -105,6 +105,9 @@ class Facility(models.Model):
     icon = models.ImageField(upload_to='facility_icons')
     default_desc = models.CharField(max_length=200, blank=True, null=True)
 
+    class Meta:
+        verbose_name_plural = 'facilities'
+
     def __unicode__(self):
         return self.default_desc
 
@@ -116,6 +119,9 @@ class PlaceFacility(AuditedModel):
     @property
     def desc(self):
         return self.specific_desc or self.facility.default_desc
+
+    class Meta:
+        verbose_name_plural = 'place facilities'
 
     def __unicode__(self):
         return self.desc
