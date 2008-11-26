@@ -7,6 +7,9 @@ class FaceAreaCategory(models.Model):
         enabled for their account (e.g. zoo keepers hats)
     """.strip())
     
+    class Meta:
+        verbose_name_plural = 'face area categories'
+    
     def __unicode__(self):
         if self.is_special:
             return u'%s (special)' % self.name
@@ -20,7 +23,12 @@ class FaceArea(models.Model):
         Order is needed to ensure that the images are stacked correctly on 
         top of each other
     """.strip())
-    category = models.ForeignKey(FaceAreaCategory, blank=True, null=True)
+    category = models.ForeignKey(
+        FaceAreaCategory, blank=True, null=True, related_name = 'areas'
+    )
+    
+    class Meta:
+        ordering = ('order',)
     
     def __unicode__(self):
         return self.name
@@ -39,11 +47,3 @@ class SpecialPermission(models.Model):
     
     def __unicode__(self):
         return u'%s can use %s' % (self.user, self.category)
-
-# TODO: migration to 
-#    add column facearea category
-#    add column facearea order
-#    add table specialpermission
-#    add table faceareacategory
-# Then update the views to kick out the correct XML
-# And add a view-per-user XML file that serves up the faces they are allowed

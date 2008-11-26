@@ -3,36 +3,42 @@ try:
     from xml.etree import ElementTree as ET
 except ImportError:
     from elementtree import ElementTree as ET
-from models import FaceArea
+from models import FaceAreaCategory
 
 """
 <profileImages>
-    <facearea description="" name="Hair (top)">
-        <facepart id="470" 
-            src="/static/uploaded/faceparts/hair_bangs2_black.png" 
-            title="Bangs2 Black"/>
-    </facearea>
-    ...
+    <faceareacategory name="Hair">
+        <facearea description="" name="Hair (top)">
+            <facepart id="470" 
+                src="/static/uploaded/faceparts/hair_bangs2_black.png" 
+                title="Bangs2 Black"/>
+        </facearea>
+        ...
+    </faceareacategory>
 </profileImages>
 """
 
 def profile_images_xml(request):
     profileImages = ET.Element('profileImages')
-    for area in FaceArea.objects.all():
-        partlist = ET.Element('facearea')
-        partlist.attrib = {
-            'name': area.name,
-            'description': area.description,
-        }
-        profileImages.append(partlist)
-        for part in area.parts.all():
-            p = ET.Element('facepart')
-            p.attrib = {
-                'src': part.image.url,
-                'id': str(part.id),
-                'title': part.description,
+    for category in FaceAreaCategory.objects.all():
+        faceareacategory = ET.Element('faceareacategory')
+        faceareacategory.attrib = {'name': category.name}
+        profileImages.append(faceareacategory)
+        for area in category.areas.all():
+            partlist = ET.Element('facearea')
+            partlist.attrib = {
+                'name': area.name,
+                'description': area.description,
             }
-            partlist.append(p)
+            faceareacategory.append(partlist)
+            for part in area.parts.all():
+                p = ET.Element('facepart')
+                p.attrib = {
+                    'src': part.image.url,
+                    'id': str(part.id),
+                    'title': part.description,
+                }
+                partlist.append(p)
     return HttpResponse(
         '<?xml version="1.0" encoding="UTF-8"?>\n' +
         ET.tostring(profileImages), 
