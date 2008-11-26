@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.conf import settings
 from django.db.models.signals import pre_save
 import datetime, threading
 
@@ -39,3 +40,9 @@ pre_save.connect(onanymodel_presave)
 class AutoCreatedAndModifiedFields:
     def process_request(self, request):
         set_current_user(request.user)
+
+# Hook up searchify/djape magic
+from searchify import initialise, TestClient
+from djape.client import Client
+c = Client(settings.XAPIAN_BASE_URL, 't')
+#initialise(c)
