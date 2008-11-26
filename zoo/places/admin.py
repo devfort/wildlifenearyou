@@ -1,8 +1,7 @@
 from django.contrib import admin
 from zoo.places.models import Country, Place, Enclosure, EnclosureSpecies, \
     Webcam, PlaceNews, PlaceOpening
-
-excludees = ['created_at', 'created_by', 'modified_at', 'modified_by']
+from zoo.models import exclude as excludees
 
 class EnclosureSpeciesInline(admin.TabularInline):
     model = EnclosureSpecies
@@ -10,19 +9,16 @@ class EnclosureSpeciesInline(admin.TabularInline):
 
 class EnclosureAdmin(admin.ModelAdmin):
     list_display = ('name', 'place')
+    exclude = excludees
     inlines = [
         EnclosureSpeciesInline,
     ]
-
-    def changelist_view(self, request):
-        #import pdb; pdb.set_trace()
-        return super(EnclosureAdmin, self).changelist_view(request)
 
 class PlaceInline(admin.TabularInline):
     model = Enclosure
     exclude = excludees
 
-admin.site.register(Webcam)
+admin.site.register(Webcam, exclude = excludees)
 admin.site.register(PlaceNews, exclude = excludees)
 admin.site.register(Place,
     exclude = excludees,

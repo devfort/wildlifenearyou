@@ -130,13 +130,23 @@ class EnclosureSpecies(AuditedModel):
         return retstr
 
 class PlaceOpening(models.Model):
-    start_date = models.DateField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True,
+        help_text="Range of dates for which these times apply - leave either or both blank for an open-ended range",
+    )
     end_date = models.DateField(null=True, blank=True)
-    days_of_week = models.CharField(max_length=100, blank=True)
-    times = models.CharField(max_length=100, blank=True)
-    closed = models.BooleanField()
+    days_of_week = models.CharField(max_length=100, blank=True,
+        help_text="Comma separated string of days this entry applies to, with 0=Sun, 6=Sat - e.g. 0,1,2,5 for Sun-Tue and Fri",
+    )
+    times = models.CharField(max_length=100, blank=True,
+        help_text="Free form text field of times, e.g. 9am-5pm or dawn-dusk. Leave blank for all day",
+    )
+    closed = models.BooleanField(
+        help_text="Whether this entry denotes a period when the place is closed",
+    )
     place = models.ForeignKey(Place, null=False)
-    section = models.CharField(max_length=255, blank=True)
+    section = models.CharField(max_length=255, blank=True,
+        help_text="Section of the place this entry applies to, e.g. petting zoo - leave blank for entire place",
+    )
 
     def __unicode__(self):
         closed = self.closed and 'closed ' or 'open'
