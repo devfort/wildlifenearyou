@@ -431,13 +431,27 @@ def newdb(request):
                 #range_searchable = settings.get('range_searchable', False)
                 #is_document_weight = settings.get('is_document_weight', False)
 
+                noindex = settings.get('noindex', False)
                 freetext_params = settings.get('freetext', None)
                 exacttext_params = settings.get('exacttext', None)
+
                 if (freetext_params is not None and
                     exacttext_params is not None):
                     raise ValidationError(
                          "Field settings for %s specify both 'freetext' and "
                          "'exacttext' for a single field - at most one may be "
+                         "specified")
+
+                if freetext_params is not None and noindex:
+                    raise ValidationError(
+                         "Field settings for %s specify both 'freetext' and "
+                         "'noindex' for a single field - at most one may be "
+                         "specified")
+
+                if exacttext_params is not None and noindex:
+                    raise ValidationError(
+                         "Field settings for %s specify both 'exacttext' and "
+                         "'noindex' for a single field - at most one may be "
                          "specified")
 
                 if (freetext_params is not None or
@@ -447,7 +461,11 @@ def newdb(request):
                             "Text searching options specified, but field type "
                             "is not text")
 
-                if freetext_params is not None:
+                if freetext_params is not None or (
+                        field_type == 'text' and
+                        freetext_params is None and
+                        exacttext_params is None and
+                        not noindex):
                     validate_dict_entries(freetext_params, valid_freetext_options,
                                           'Invalid freetext option(s): %s')
                     opts = {}
@@ -473,12 +491,22 @@ def newdb(request):
                     raise ValidationError("exacttext not yet implemented")
 
                 geo_params = settings.get('geo', None)
+                if geo_params is not None and noindex:
+                    raise ValidationError(
+                         "Field settings for %s specify both 'geo' and "
+                         "'noindex' for a single field - at most one may be "
+                         "specified")
+
                 if geo_params is not None:
                     if field_type != 'geo':
                         raise ValidationError(
                             "Text searching options specified, but field type "
                             "is not text")
 
+                if geo_params is not None or (
+                        field_type == 'geo' and
+                        geo_params is None and
+                        not noindex):
                     validate_dict_entries(geo_params, valid_geo_options,
                                           'Invalid freetext option(s): %s')
                     bounding_box_search = geo_params.get('enable_bounding_box_search', True)
