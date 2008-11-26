@@ -1,0 +1,34 @@
+	{% if user.is_authenticated %}
+	    <p>Well hey {{ user.username|title }}, welcome back. View your <a href="{% url accounts-default %}">profile</a> or <a href="{% url accounts-logout %}">logout</a>?</p>
+	{% else %}
+	    <p>Well hey there, you look new around here. If you're already registered you should <a href="{% url accounts-logout %}">login</a>, otherwise you can <a href="{% url accounts-register %}">register</a>.</p>
+	{% endif %}
+
+	{% if current_location %}
+	    <p>Your location: {{ current_location }}</p>
+	{% endif %}
+	    <form action="/set-location/" method="POST">
+	        <p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location"> <input type="submit" value="Go"></p>
+	    </form>
+
+	    <p><a href="{% url hit-parade %}">Check out the most popular animals!</a></p>
+
+		{% if random_zoo %}<p><a href="{{ random_zoo.urls.absolute }}">A random place</a>{% endif %}
+
+	    <h2>Look Around</h2>
+	    <ul>
+	        <li><a href="{% url all-species-latin %}">Our menagerie of animals by Latin name</a></li>
+	        <li><a href="{% url all-species %}">Our menagerie of animals by the name you're most likely to know them by</a></li>
+	        <li><a href="{% url accounts-all-profiles %}">All User Profiles</a></li>
+	        <li><a href="{% url countries %}">All countries in our database</a></li>
+	        <li><a href="{% url places %}">All places in our database</a></li>
+	    </ul>
+
+	{% if user.is_superuser %}
+	    <h2>Admin &amp; Dev</h2>
+	    <ul>
+	        <li><a href="/admin/">Admin</a></li>
+	        <li><a href="/databrowse/">Data Browser</a></li>
+	        <li><a href="{% url admin-moderation %}">Moderation queue</a></li>
+	    </ul>
+	{% endif %}

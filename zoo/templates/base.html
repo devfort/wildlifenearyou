@@ -24,16 +24,14 @@
 		<li><a href="{% url accounts-profile user %}">My Profile</a></li>
 		<li><a href="{% url tripbook user %}">My Trip book</a></li>
 		<li><a href="{% url accounts-logout %}">Logout</a></li>
-
 	{% else %}
 		<li><a href="{% url accounts-register %}">Register</a></li>
 		<li><a href="{% url accounts-login %}?next={{ request.path }}">Login</a></li>
-
 	{% endif %}
 	</ul>
     <form action="/search/" method="GET" accept-charset="utf-8">
         <div>
-			<label for="search_term">Find me</label>
+			<label for="search_term">Look for</label>
 			<input type="text" name="search" id="search_term" value="NOT WIRED UP"> 
 			<input type="submit" value="Go">
 		</div>
