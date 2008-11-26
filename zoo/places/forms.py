@@ -25,7 +25,7 @@ class PlaceOpeningUberForm(UberForm):
 class PlaceUberForm(UberForm):
     parts = [
         ('main', PlaceEditForm),
-        ('openings', PlaceOpeningUberForm,
+        ('opening', PlaceOpeningUberForm,
          lambda instance: instance.placeopening_set.all()),
         ]
 

@@ -9,23 +9,14 @@
 <div>
 {{ form.delete_form.as_p }}
 {{ form.main.as_p }}
-{% for encform in form.enclosure.subforms %}
+Open Hours:
+{% for oh in form.openings.subforms %}
 <div class="nested-edit">
-Enclosure:
-{{ encform.delete_form.as_p }}
-{{ encform.main.as_p }}
-{% for species_form in encform.enc_species.subforms %}
-<div class="nested-edit">
-{{ species_form.main.as_p }}
-{{ species_form.delete_form.as_p }}
+{{ oh.delete_form.as_p }}
+{{ oh.main.as_p }}
 </div>
 {% endfor %}
-Add new species to this enclosure: {{ encform.enc_species.addform }}
-{{ f.as_p }}
-</div>
-{% endfor %}
-Add new enclosure: {{ form.enclosure.addform }}
-Add new opening time rule: {{ form.openings.addform }}
+Add more detailed opening hours: {{ form.openings.addform|length }}
 
 <input type="submit" name="submit" value="Save all proposed changes">
 </div>

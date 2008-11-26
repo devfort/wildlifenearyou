@@ -126,29 +126,6 @@ jQuery(function($) {
 {% endfor %}
 {% endfor %}
 
-
-<div class="notusing">
-<p><em>Not using:</em>
-
-{% with place.enclosures.all as enclosures %}
-    {% if enclosures %}
-        <h2>Enclosures</h2>
-        {% for enclosure in enclosures %}
-            <h3>{{ enclosure }}</h3>
-			{% if enclosure.enclosurespecies_set.all %}
-			<ul>
-            {% for inhabitant in enclosure.enclosurespecies_set.all %}
-                <li>{{ inhabitant.number_of_inhabitants }} &times; <a href="{{ inhabitant.species.urls.absolute }}">{{ inhabitant.species }}</a></li>
-            {% endfor %}
-			</ul>
-			{% else %}
-			<p>We don't know which animals live in this enclosure, do you?</p>
-			{% endif %}
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-</div>
-
 <h2>Price</h2>
 {% with place.price.all as prices %}
     {% if prices %}
