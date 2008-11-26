@@ -7,4 +7,4 @@ import datetime
 migration = m.Migration(
     sql_up   = """ALTER TABLE `trips_trip` DROP COLUMN `place_id`""",
     sql_down = """ALTER TABLE `trips_trip` ADD `place_id` integer NOT NULL REFERENCES `place` (`id`)"""
-])
+)
