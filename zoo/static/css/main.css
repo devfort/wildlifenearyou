@@ -1,7 +1,7 @@
 /* Nat, I will sort this out for you if you tell me how, but I needed
    to do some :) Matthew */
 
-body {
+body, h2 .meta {
 	font-family: Calibri, "Helvetica Neue", sans-serif;
 }
 
@@ -17,6 +17,20 @@ dt {
     float: left;
     margin: 0 1em 0 0;
     clear: left;
+}
+
+h2 .meta {
+    font-size: 0.8em;
+    font-style: italic;
+    font-weight: normal;
+    color: #666666;
+}
+
+#heading {
+    float: left;
+}
+#heading span {
+    font-style: italic;
 }
 
 #hd {
