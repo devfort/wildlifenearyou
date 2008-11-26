@@ -110,6 +110,22 @@ class PlaceFacility(AuditedModel):
     def __unicode__(self):
         return self.desc
 
+class Extra(models.Model):
+    place = models.ForeignKey(Place, related_name='extras')
+    text_desc = models.CharField(max_length=200, blank=True, null=True)
+    file = models.FileField(upload_to='places_extras')
+
+    @property
+    def display_filename(self):
+        return self.file.name.split('/')[-1]
+
+    @property
+    def desc(self):
+        return self.text_desc or self.display_filename
+
+    def __unicode__(self):
+        return self.desc
+
 class PlaceNews(AuditedModel):
     place = models.ForeignKey(Place, related_name='news')
     headline = models.CharField(max_length=300)

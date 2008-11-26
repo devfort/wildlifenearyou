@@ -110,6 +110,15 @@
     {% endif %}
 {% endwith %}
 
+<h2>Extras</h2>
+
+<ul>
+{% for extra in place.extras.all %}
+<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
+{% endfor %}
+<li><a href="">Zoo summary sheet</a></li>
+</ul>
+
 </div>
 
 <div id="sidebar">
