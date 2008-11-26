@@ -161,9 +161,19 @@ class PlaceNews(AuditedModel):
     def __unicode__(self):
         return u'%s (%s on %s)' % (self.headline, self.place, self.story_date)
 
+class TransportTypes(models.Model):
+    icon = models.ImageField(upload_to='transport_icons')
+    default_desc = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = 'Modes of Transport'
+
+    def __unicode__(self):
+        return self.default_desc
+
 class PlaceDirection(AuditedModel):
     place = models.ForeignKey(Place, related_name='direction')
-    mode = models.CharField(max_length=50, null=False, blank=False)
+    mode = models.ForeignKey(TransportTypes)
     route = models.TextField()
 
     def __unicode__(self):
