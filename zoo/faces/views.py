@@ -117,7 +117,6 @@ def update(request):
     flash = request.POST.get('flash')
     # This is mostly for the flash player to talk to, but a rudimentary 
     # interface is provided for the impatient
-    print request.POST
     msg = ''
     user = request.user
     if request.method == 'POST':
@@ -144,8 +143,7 @@ def update(request):
         else:
             if flash:
                 return XmlResponse('<result status="errors" />')
-            print "Form is invalid: %s" % form.errors
-    else:
+    else: # GET requests should always be from HTML, not flash
         form = FaceUpdateForm(user)
     
     # TODO: If it's the flash player serve back XML instead
