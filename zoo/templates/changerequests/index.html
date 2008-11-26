@@ -19,8 +19,33 @@
 
 	<ol>
 	{% for crg in change_request_groups %}
-		{% with crg.changerequest_set.objects as cr %}
-			<li>{{ cr|length }} change{{ cr|pluralize }} by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a> {{ crg.created_at|timesince }} ago</li>
+		{% with crg.changerequest_set.all as cr %}
+			<li>
+			{{ cr|length }} change{{ cr|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a> {{ crg.created_at|timesince }} ago:
+
+			<ol>
+			{% for cr in crg.changerequest_set.all %}
+				<li>
+					{% switch cr.subclass %}
+					
+						{% case "ChangeAttributeRequest" %}
+							"{{ cr.attribute }}" <em>{{ cr.old_value }}</em> -&gt; <em>{{ cr.new_value }}</em>
+						{% endcase %}
+
+						{% defaultcase %}
+							<strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass
+						{% enddefaultcase %}
+
+					{% endswitch %}
+
+					{% if cr.is_conflict %}
+						<strong>(conflicts)</strong>
+					{% endif %}
+				</li>
+			{% endfor %}
+			</ol>
+
+			</li>
 		{% endwith %}
 	{% endfor %}
 	</ol>
