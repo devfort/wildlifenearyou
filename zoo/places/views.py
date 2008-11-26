@@ -3,8 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from zoo.shortcuts import render
 
-from zoo.places.models import Place, Country, EnclosureSpecies, \
-     Enclosure, PlaceOpening
+from zoo.places.models import Place, Country, PlaceOpening
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
 
@@ -110,37 +109,6 @@ def all_countries(request):
         'all_countries': Country.objects.all().order_by('name'),
     })
 
-
-def edit_enc_species(request, ea_id):
-    ea = EnclosureSpecies.objects.get(pk=ea_id)
-
-    from zoo.changerequests.models import ChangeAttributeRequest, ChangeRequestGroup
-
-    if request.method == 'POST':
-        form = EnclosureSpeciesEditForm(instance=ea,
-                                       data=request.POST)
-        if form.is_valid():
-            changes = []
-
-            for name, val in form.cleaned_data.items():
-                oldval = getattr(form.instance, name)
-                if oldval != val:
-                    changes.append(ChangeAttributeRequest(content_object=ea,
-                                                          attribute=name,
-                                                          value=val))
-
-            if changes:
-                crg = ChangeRequestGroup.objects.create()
-                for c in changes:
-                    c.group = crg
-                    c.save()
-    else:
-        form = EnclosureSpeciesEditForm(instance=ea)
-
-    return render(request, "edit/ea.html", {
-        'form': form,
-        })
-
 from zoo.places.forms import PlaceUberForm
 
 def place_edit(request, country_code, slug):
@@ -148,6 +116,9 @@ def place_edit(request, country_code, slug):
     place = get_object_or_404(Place, slug=slug, country=country)
 
     if request.method == 'POST':
+        from pprint import pprint
+        pprint(dict(request.POST))
+    
         uf = PlaceUberForm(place, request.POST)
 
         if uf.is_valid:

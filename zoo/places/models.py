@@ -108,12 +108,6 @@ class Place(AuditedModel):
     def __unicode__(self):
         return self.known_as
 
-def create_place_callback(sender, instance, created, **kwargs):
-    # Create default nameless enclosure when place is created.
-    if created:
-        Enclosure.objects.create(place=instance)
-post_save.connect(create_place_callback, sender=Place)
-
 class Facility(models.Model):
     icon = models.ImageField(upload_to='facility_icons')
     default_desc = models.CharField(max_length=200, blank=True, null=True)
@@ -191,30 +185,6 @@ class PlacePrice(AuditedModel):
 
     def __unicode__(self):
         return u'%s: %s%s' %(self.type, self.currency.currency_code, self.value)
-
-class Enclosure(AuditedModel):
-    place = models.ForeignKey(Place, related_name='enclosures')
-    species = models.ManyToManyField('animals.Species', through='EnclosureSpecies')
-    name = models.CharField(max_length=300, null=True, blank=True)
-
-    def __unicode__(self):
-        if self.name is None:
-            return u"Nameless enclosure"
-        return self.name
-
-class EnclosureSpecies(AuditedModel):
-    enclosure = models.ForeignKey(Enclosure)
-    species = models.ForeignKey('animals.Species')
-    number_of_inhabitants = models.IntegerField(null=True, blank=True)
-
-    def __unicode__(self):
-        retstr = self.species.common_name
-        if self.number_of_inhabitants!=None:
-            retstr += ' (%i)' % self.number_of_inhabitants
-        if self.enclosure.name:
-            retstr += ', %s' % self.enclosure.name
-        retstr += ', %s' % self.enclosure.place.known_as
-        return retstr
 
 class PlaceOpening(models.Model):
     start_date = models.DateField(null=True, blank=True,

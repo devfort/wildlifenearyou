@@ -20,7 +20,7 @@ from pygen import Alternation as A
 
 from django.contrib.auth.models import User
 from zoo.animals.models import Species, SpeciesGroup
-from zoo.places.models import Place, Enclosure, EnclosureSpecies, Country
+from zoo.places.models import Place, Country
 from zoo.middleware import set_current_user
 
 user = User.objects.get(username='sedf')
@@ -36,8 +36,6 @@ def main():
 
     address_1 = 'No. ', A(range(10)), ' ', S('New') | S('Old'), ' ', A('Avenue', 'Street', 'Road', 'Crescent')
     address_2 = A('New', 'Old'), A('town', 'shire')
-
-    g_enclosure = A("Pen", "Cage", "Plains", "Tunnel", "Nest", "Enclosure", "Aquarium", "Pocket")
 
     start = A("dung", "sea", "land", "air", "amphibuous", "flying", "dwarf", "lesser-spotted",
               "hopping", "horned", "tasty", "mediocre", "boring", "psycho", "bizarro")
@@ -74,19 +72,6 @@ def main():
             town='Town',
             zip='Zip',
         )
-
-        for e_idx in range(random.randrange(0, 5)):
-            enclosure = Enclosure.objects.create(
-                place=place,
-                name=generate_string(g_enclosure),
-            )
-
-            for ea_idx in range(random.randrange(0, 5)):
-                EnclosureSpecies.objects.create(
-                    enclosure=enclosure,
-                    species=random.choice(species),
-                    number_of_inhabitants=random.randrange(0, 250),
-                )
 
     return 0
 

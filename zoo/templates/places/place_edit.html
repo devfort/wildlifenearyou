@@ -6,24 +6,29 @@
 <h1>{{ place.known_as }} - Suggest Changes</h1>
 
 <form action="{{ path }}" method="post">
+<div>
 {{ form.delete_form.as_p }}
 {{ form.main.as_p }}
-{% for encform in form.enclosure %}
+{% for encform in form.enclosure.subforms %}
 <div class="nested-edit">
 Enclosure:
 {{ encform.delete_form.as_p }}
 {{ encform.main.as_p }}
-{% for species_form in encform.enc_species %}
+{% for species_form in encform.enc_species.subforms %}
 <div class="nested-edit">
 {{ species_form.main.as_p }}
 {{ species_form.delete_form.as_p }}
 </div>
 {% endfor %}
+Add new species to this enclosure: {{ encform.enc_species.addform }}
 {{ f.as_p }}
 </div>
 {% endfor %}
+Add new enclosure: {{ form.enclosure.addform }}
+Add new opening time rule: {{ form.openings.addform }}
 
-<input type="submit" name="submit" value="Submit that shit">
+<input type="submit" name="submit" value="Save all proposed changes">
+</div>
 </form>
 
 {% endblock %}
