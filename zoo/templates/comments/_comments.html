@@ -1,12 +1,5 @@
 {% load comments %}
 <h3 id="comments">Comments</h3>
-{% get_comment_list for object as comment_list %}
-{% for comment in comment_list %}
-<div class="comment" id="c{{ comment.id }}">
-{{ comment.comment|linebreaks }}
-<div class="posted-by">Posted by <a href="{% url accounts-profile comment.user.username %}">{{ comment.user_name|title }}</a> at {{ comment.submit_date|date:"jS F Y H:i" }}</div>
-</div>
-{% endfor %}
 
 {% if user and not user.is_anonymous %}
 {% get_comment_form for object as form %}
@@ -14,3 +7,12 @@
 {% else %}
 <p>You need to <a href="/login/?next={{ request.path }}">log in</a> to post comments.</p>
 {% endif %}
+
+{% get_comment_list for object as comment_list %}
+{% for comment in comment_list reversed %}
+<div class="comment" id="c{{ comment.id }}">
+{{ comment.comment|linebreaks }}
+<div class="posted-by">Posted by <a href="{% url accounts-profile comment.user.username %}">{{ comment.user_name|title }}</a> at {{ comment.submit_date|date:"jS F Y H:i" }}</div>
+</div>
+{% endfor %}
+
