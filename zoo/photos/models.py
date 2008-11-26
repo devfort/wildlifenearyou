@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 
@@ -18,7 +19,7 @@ class Photo(models.Model):
     title = models.CharField(max_length=255, blank=True)
     photo = ImageWithThumbnailsField(
         upload_to='photos',
-        thumbnail={'size': (100, 100), 'options': ('crop', 'upscale')},
+        thumbnail={'size': (75, 75), 'options': ('crop', 'upscale')},
         extra_thumbnails={
             'admin': {'size': (70, 50), 'options': ('sharpen',)},
         }
@@ -44,6 +45,16 @@ class Photo(models.Model):
 
     def __unicode__(self):
         return self.title or unicode(self.photo)
+    
+    def thumb_75(self):
+        return mark_safe(
+            '<a href="%s" title="%s"><img src="%s" alt="%s" width="75" height="75"></a>' % (
+                self.get_absolute_url(),
+                self.title or ('Photo by %s' % self.created_by),
+                self.photo.thumbnail,
+                self.title or ('Photo by %s' % self.created_by),
+            )
+        )
     
     objects = models.Manager()
     visible = VisiblePhotoManager()

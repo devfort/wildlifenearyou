@@ -6,20 +6,32 @@ from django.contrib.auth.decorators import login_required
 from models import Photo
 from zoo.shortcuts import render
 from zoo.places.models import Place
+from zoo.animals.forms import SpeciesField
 
 @login_required
-def upload(request):
+def upload(request, place=None, redirect_to=None):
     if request.method == 'POST':
         # Process uploaded photo
         form = UploadPhotoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return Redirect('/profile/%s/' % request.user.username)
+            obj = form.save(commit = False)
+            if place:
+                obj.place = place
+            # If user has account 7 days or older, or is staff
+            # go live straight away
+            if request.user.get_profile().is_not_brand_new_account() or \
+                request.user.is_staff:
+                obj.is_visible = True
+            obj.save()
+            return Redirect(redirect_to or (
+                '/profile/%s/' % request.user.username
+            ))
     else:
         form = UploadPhotoForm()
 
     return render(request, 'photos/upload.html', {
         'form': form,
+        'attach_to': place,
     })
 
 class UploadPhotoForm(forms.ModelForm):
@@ -33,26 +45,14 @@ def upload_place(request, country_code, slug):
         slug=slug,
         country__country_code=country_code
     )
-    if request.method == 'POST':
-        # Process uploaded photo
-        form = UploadPhotoForm(request.POST, request.FILES)
-        if form.is_valid():
-            obj = form.save(commit = False)
-            obj.place = place
-            obj.save()
-            return Redirect(place.get_absolute_url())
-    else:
-        form = UploadPhotoForm()
+    return upload(request, place, redirect_to = place.get_absolute_url())
 
-    return render(request, 'photos/upload.html', {
-        'form': form,
-        'attach_to': place,
-    })
-
-from zoo.search_picker import LocationPickerField
 from django import forms
-class PhotoLocationForm(forms.Form):
-    location = LocationPickerField()
+class PhotoSpeciesForm(forms.Form):
+    species1 = SpeciesField(required = False)
+    species2 = SpeciesField(required = False)
+    species3 = SpeciesField(required = False)
+    species4 = SpeciesField(required = False)
 
 def photo(request, username, photo_id):
     photo = get_object_or_404(
@@ -60,15 +60,12 @@ def photo(request, username, photo_id):
     )
 
     if request.method == 'POST':
-        form = PhotoLocationForm(request.POST)
+        form = PhotoSpeciesForm(request.POST)
         if form.is_valid():
             print "OK", form.cleaned_data
             print "ERR", form.errors
     else:
-        from zoo.geonames.models import Geoname
-        location = Geoname.objects.all()[0]
-
-        form = PhotoLocationForm(initial={'location': location})
+        form = PhotoSpeciesForm()
 
     return render(request, 'photos/photo.html', {
         'photo': photo,
