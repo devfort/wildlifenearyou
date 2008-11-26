@@ -165,7 +165,7 @@ def parse_query_spec(db, subq):
 
     # Handle the different types of subq.  Convert this to a dict lookup if we
     # end up with lots.
-    if subq[0] == 'query_parse':
+    if subq[0] == 'freetext':
         return db.query_parse(subq[1])
 
     raise ValidationError("Invalid query specification - unknown query type '%s'" % subq[0])
@@ -207,7 +207,7 @@ def search(request, db_name):
 
     """
     params = validate_params(request.GET, {
-                             'q': (0, None, '^.*$', []),
+                             'q': (0, 1, '^.*$', []),
                              'start_rank': (1, 1, '^\d+$', ['0']),
                              'end_rank': (1, 1, '^\d+$', ['10']),
                              'spellcorrect': (0, 1, '^never|auto|always$', ['auto']),
@@ -223,23 +223,20 @@ def search(request, db_name):
     if len(params['q']) == 0:
         q = db.query_all()
     else:
-        qs = []
-        for subq in params['q']:
-            query_defn = simplejson.loads(subq)
-            validate_dict_entries(query_defn, ('opts', 'query'),
-                                  'Invalid item in query definition: %s')
+        query_defn = simplejson.loads(params['q'][0])
+        validate_dict_entries(query_defn, ('opts', 'query'),
+                              'Invalid item in query definition: %s')
 
-            subq = parse_query_spec(db, query_defn.get('query'))
 
-            opts = query_defn.get('opts')
-            if opts is not None:
-                validate_dict_entries(opts, ('sort_by',),
-                                      'Invalid search option: %s')
-                # FIXME - handle sort_by in opts
-                raise ValidationError("query opts not yet implemented")
+        q = parse_query_spec(db, query_defn.get('query'))
 
-            qs.append(subq)
-        q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
+        opts = query_defn.get('opts')
+        if opts is not None:
+            validate_dict_entries(opts, ('sort_by',),
+                                  'Invalid search option: %s')
+            # FIXME - handle sort_by in opts
+            raise ValidationError("query opts not yet implemented")
+
     res = q.search(int(params['start_rank'][0]),
                    int(params['end_rank'][0]))
 
