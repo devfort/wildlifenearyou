@@ -90,13 +90,13 @@ class ChangeAttributeRequest(ChangeRequest):
 
     def apply(self, user=None):
         obj = self.content_object
-        setattr(obj, self.attribute, self.value)
+        setattr(obj, self.attribute, self.new_value)
         obj.save()
         return super(ChangeAttributeRequest, self).apply(user)
 
     def request_description(self):
         return u'Change "%s" from "%s" to "%s" on <%s>' % (
-            self.attribute, self.value, self.content_object
+            self.attribute, self.old_value, self.new_value, self.content_object
         )
 
 class CreateObjectRequest(ChangeRequest):
