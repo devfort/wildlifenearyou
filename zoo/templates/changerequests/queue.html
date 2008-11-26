@@ -74,7 +74,7 @@
 							{{ crs.content_type }}.
 
 							{% if crs.conflicts %}
-								<strong>(conflicting change; object already deleted)</strong>
+								<strong>(conflicting change: object already deleted)</strong>
 							{% else %}
 								<form action="{% url admin-moderation %}" method="post">
 									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
