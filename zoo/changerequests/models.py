@@ -67,7 +67,7 @@ class ChangeRequest(models.Model):
         return globals()[self.subclass].objects.get(pk=self.pk)
 
     def is_conflict(self):
-        return False
+        raise NotImplementedError, "ChangeRequest.is_conflict() is abstract"
 
     def __unicode__(self):
         s = u'%s (part of %s)' % (self.request_description(), self.group)
@@ -100,7 +100,7 @@ class ChangeAttributeRequest(ChangeRequest):
             # there is a conflict.
             return True
 
-        return super(ChangeAttributeRequest, self).is_conflict()
+        return False
 
     def apply(self, user=None):
         obj = self.content_object
@@ -125,6 +125,9 @@ class CreateObjectRequest(ChangeRequest):
         ]))
         return super(CreateObjectRequest, self).apply(user)
 
+    def is_conflict(self):
+        return False
+
     def request_description(self):
         return u'Create a %s with attributes %s' % (
             self.content_type, self.attributes
@@ -138,6 +141,9 @@ class DeleteObjectRequest(ChangeRequest):
     def apply(self, user=None):
         self.content_object.delete()
         return super(DeleteObjectRequest, self).apply(user)
+
+    def is_conflict(self):
+        return False
 
     def request_description(self):
         return u'Delete %s' % self.content_object
