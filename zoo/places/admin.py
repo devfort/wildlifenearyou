@@ -1,6 +1,6 @@
 from django.contrib import admin
 from zoo.places.models import Country, Place, Enclosure, EnclosureSpecies, \
-    Webcam, PlaceNews, PlaceOpening, Facility, PlaceFacility, Extra \
+    Webcam, PlaceNews, PlaceOpening, Facility, PlaceFacility, Extra, \
     PlaceDirection
 from zoo.models import exclude as excludees
 
