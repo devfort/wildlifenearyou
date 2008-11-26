@@ -93,7 +93,7 @@ urlpatterns = patterns('',
     url(r'^animal/(?P<slug>[^/]+)/$', 'zoo.animals.views.species',
         name='species'),
 
-    url(r'^favourite/(?P<action>[^/]+)/$', 'zoo.favourites.views.handle_favourite',
+    url(r'^favourite/(?P<action>add|remove)/$', 'zoo.favourites.views.handle_favourite',
         name='favourite-species'),
 
     url(r'^latin/$', 'zoo.animals.views.all_species_latin',
