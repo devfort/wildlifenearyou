@@ -1,9 +1,48 @@
 
+from copy import copy
+
 class Query(object):
-    """A query object.
+    """A query object.  This is composed of query parts.
 
     This represents arbitrarily complex queries, together with the query
     options which they support.
+
+    """
+    def __init__(self, text=None):
+        """Create the query object.
+
+        If `text` is supplied, it is treated as a text string, and is
+        equivalent to setting the query definition to TextQuery(text).
+
+        """
+        self.opts = {}
+        self.part = None
+
+        if text is not None:
+            self.part = TextQuery(text)
+
+    def sort_by(self, field_name, ascending=True):
+        """Set the field to sort by.
+
+        """
+        self.opts['sort_by'] = [(fieldname, ascending)]
+
+    def to_params(self):
+        opts = copy(self.opts)
+        opts['query'] = self.part.to_params()
+        return opts
+
+class QueryPart(object):
+    """A part of a query.
+
+    This is an abstract class - use one of it's subclasses
+
+    """
+    def to_params(self):
+        raise NotImplementedError('Implement this method in subclass.')
+
+class TextQuery(QueryPart):
+    """A query object.
 
     """
     def __init__(self, query_string=None):
@@ -15,21 +54,7 @@ class Query(object):
         """
         self.query_string = query_string
 
-    # FIXME - implement more factory methods!
+    def to_params(self):
+        return ['query_parse', self.query_string]
 
-class Field(object):
-    """An instance of a Field in a document.
-
-    """
-
-    # Use __slots__ because we're going to have very many Field objects in
-    # typical usage.
-    __slots__ = 'name', 'value'
-
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value
-
-    def __repr__(self):
-        return 'Field(%r, %r)' % (self.name, self.value)
-
+# FIXME - implement more query types

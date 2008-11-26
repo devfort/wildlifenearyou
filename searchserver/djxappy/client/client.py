@@ -54,9 +54,7 @@ class XappyClient(object):
         if data is None:
             fd = urllib2.urlopen(self.base_url + path)
         else:
-            print data
             data = urllib.urlencode(data, doseq=1)
-            print (self.base_url + path, data)
             fd = urllib2.urlopen(self.base_url + path, data)
         res = fd.read()
         fd.close()
@@ -87,7 +85,7 @@ class XappyClient(object):
             raise Invalid('Missing db_name')
 
         req = {
-            'q': query.query_string,
+            'q': simplejson.dumps(query.to_params()),
             'start_rank': start_rank,
             'end_rank': end_rank,
         }
@@ -117,7 +115,7 @@ class XappyClient(object):
         The dictionaries contain the following:
 
         {
-            'field_name': # fieldname (required)
+            'field_name': # field name (required)
             'type':  # One of 'text', 'date', 'geo', 'float' (default=text)
             'store': # boolean (default=False), whether to store in document data (for 'display')
             'spelling_word_source': # boolean (default=False), whether to use for building the spelling dictionary

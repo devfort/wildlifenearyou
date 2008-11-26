@@ -155,6 +155,21 @@ def validate_params(requestobj, constraints):
 def get_db_path(dbname):
     return os.path.join(settings.XAPPY_DATABASE_DIR, dbname)
 
+def parse_query_spec(db, subq):
+    if subq is None:
+        return db.query_all()
+    if not isinstance(subq, (list, tuple)):
+        raise ValidationError("Invalid query specification - expected [query_type, parameters], didn't get a list (got %r)" % subq)
+    if len(subq) != 2:
+        raise ValidationError("Invalid query specification - expected [query_type, parameters], got a list of length %d" % len(subq))
+
+    # Handle the different types of subq.  Convert this to a dict lookup if we
+    # end up with lots.
+    if subq[0] == 'query_parse':
+        return db.query_parse(subq[1])
+
+    raise ValidationError("Invalid query specification - unknown query type '%s'" % subq[0])
+
 @jsonreturning
 @timed
 @errchecked
@@ -208,7 +223,22 @@ def search(request, db_name):
     if len(params['q']) == 0:
         q = db.query_all()
     else:
-        qs = [db.query_parse(subq) for subq in params['q']]
+        qs = []
+        for subq in params['q']:
+            query_defn = simplejson.loads(subq)
+            validate_dict_entries(query_defn, ('opts', 'query'),
+                                  'Invalid item in query definition: %s')
+
+            subq = parse_query_spec(db, query_defn.get('query'))
+
+            opts = query_defn.get('opts')
+            if opts is not None:
+                validate_dict_entries(opts, ('sort_by',),
+                                      'Invalid search option: %s')
+                # FIXME - handle sort_by in opts
+                raise ValidationError("query opts not yet implemented")
+
+            qs.append(subq)
         q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
     res = q.search(int(params['start_rank'][0]),
                    int(params['end_rank'][0]))
@@ -449,7 +479,6 @@ def deldb(request):
 
 def doc_from_params(params):
     doc = xappy.UnprocessedDocument()
-    print params
     doc.extend(params['data'])
     if params['id'] is not None and len(params['id']) > 0:
         doc.id = params['id'][0]
