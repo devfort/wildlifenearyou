@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from zoo.shortcuts import render
 from zoo.trips.models import Trip
 from zoo.accounts.models import Profile
+from zoo.animals.forms import SpeciesField
 
 @login_required
 def logbook_default(request):
@@ -21,3 +22,11 @@ def logbook(request, username):
 
 def logbook_edit(request, username):
     pass
+
+from zoo.places.models import Place, Country
+from zoo.animals.models import Species
+
+def add_sightings(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+    assert False, request.POST

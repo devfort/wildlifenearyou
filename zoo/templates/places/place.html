@@ -2,6 +2,72 @@
 
 {% block title %}{{ place.known_as }}{% endblock %}
 
+{% block extra_head %}
+<script type="text/javascript">
+function anyEmptyOnes() {
+    return jQuery('#see-more-animals p:visible :text').filter(function() {
+        return $(this).val() == '';
+    }).length > 0;
+}
+
+function unusedSawId() {
+    var i = 1;
+    var saw_id = 'saw_' + i;
+    while ($('#' + saw_id).length) {
+        i += 1;
+        saw_id = 'saw_' + i;
+    }
+    return saw_id;
+}
+
+jQuery(function($) {
+    function setupSawBoxes() {
+        $('div#see-more-animals input[name=saw]').unbind('keyup').keyup(
+            function() {
+                var $this = $(this);
+                if ($this.val()) {
+                    // Only do something if this is the last empty one
+                    if (anyEmptyOnes()) {
+                        return;
+                    }
+                    if (!$this.parent().hasClass('and-a')) {
+                        $('div#see-more-animals .and-a').show();
+                    } else {
+                        // Clone an existing .and-a
+                        var and_a = $(
+                            'div#see-more-animals .and-a'
+                        ).eq(0).clone();
+                        var unused_id = unusedSawId();
+                        and_a.find('input').val('').attr('id', unused_id);
+                        and_a.find('label').attr('for', unused_id);
+                        and_a.insertBefore('#see-more-animals :submit');
+                        setupSawBoxes();
+                    }
+                }
+            }
+        );
+    }
+    // Set up the I saw a form bit
+    if (anyEmptyOnes()) {
+        $('div#see-more-animals .and-a').hide()
+    }
+    setupSawBoxes();
+});
+</script>
+<style type="text/css">
+div#see-more-animals {
+    background-color: lightblue;
+}
+div#see-more-animals label {
+    width: 5em;
+    float: left;
+}
+div#see-more-animals p {
+    margin: 0;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <div id="main_stuff">
@@ -30,6 +96,16 @@
 {% endfor %}
 </ul>
 {% endif %}
+
+<div id="see-more-animals">
+    <h3>Did you see more animals?</h3>
+    <p>What did you see?</p>
+    <form action="{{ request.path }}add-sightings/" method="POST">
+        <p><label for="saw_1">I saw a </label><input type="text" name="saw" id="saw_1"></p>
+        <p class="and-a"><label for="saw_2">and a </label><input type="text" name="saw" id="saw_2"> (optional)</p>
+        <input type="submit" value="Add my animals">
+    </form>
+</div>
 
 <a href="{% url place-species place.country.country_code,place.slug %}">All species</a>
 
