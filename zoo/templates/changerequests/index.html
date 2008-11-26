@@ -32,6 +32,12 @@
 							Change &ldquo;{{ crs.attribute }}&rdquo;
 								on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
 								from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
+
+							<form action="." method="post">
+								<input type="hidden" name="changerequest_id" value="{{ cr.pk }}"/>
+								<input type="submit" name="action" value="Apply"/>
+								<input type="submit" name="action" value="Delete"/>
+							</form>
 						{% endcase %}
 
 						{% defaultcase %}
