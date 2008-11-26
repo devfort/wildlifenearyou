@@ -6,9 +6,9 @@ elif settings.DATABASE_ENGINE == 'sqlite3':
 import datetime
 
 migration = m.Migration(sql_up=[
-    """ALTER TABLE `trips_trip` MODIFY `id` date""",
-    """ ALTER TABLE `trips_trip` MODIFY `id` date"""
+    """ALTER TABLE `trips_trip` MODIFY `start` date""",
+    """ ALTER TABLE `trips_trip` MODIFY `end` date"""
 ], sql_down=[
-    """ALTER TABLE `trips_trip` MODIFY `id` datetime NOT NULL""",
-    """ALTER TABLE `trips_trip` MODIFY `id` datetime NOT NULL"""
+    """ALTER TABLE `trips_trip` MODIFY `start` datetime NOT NULL""",
+    """ALTER TABLE `trips_trip` MODIFY `end` datetime NOT NULL"""
 ])
