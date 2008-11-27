@@ -36,16 +36,21 @@ def make_searcher(dbname, latlon_fields=[]):
             yield doc_from_result_item(item, latlon_fields)
     return search
 
-def make_db_searcher(dbname, db_prefix=None):
+def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
     # A DB searcher knows that the results will be just search_ids, but each
     # one will be something like "places.Place:34" - it looks up the model
     # and uses .in_bulk(ids) to load those ORM objects, then returns them.
     client = Client(settings.XAPIAN_BASE_URL, dbname, db_prefix)
-    def search(q, num=0, details=False):
+    def search(q, num=0, details=False, latlon=False):
         # If details=True, it returns a tuple pair - the first item is the 
         # results list it would normally return, the second is the full Xapian
         # results object.
-        results = client.search(Query(q), end_rank=num)
+        query = Query(q)
+        if latlon and latlon_fields:
+            if not isinstance(latlon, basestring): # deal with (lat, lon) 
+                latlon = ' '.join(latlon)
+            query.sort_by_distance(latlon_fields[0], latlon)
+        results = client.search(query, end_rank=num)
         search_ids = [
             item['id'] for item in results['items']
         ]
@@ -85,7 +90,8 @@ search_species = make_searcher(settings.XAPIAN_SPECIES_DB)
 lookup_species = make_lookup(settings.XAPIAN_SPECIES_DB)
 
 search_places = make_db_searcher(
-    'placeinfo', settings.XAPIAN_PERSONAL_PREFIX
+    'placeinfo', settings.XAPIAN_PERSONAL_PREFIX,
+    latlon_fields = ['latlon']
 )
 delete_places = make_db_deleter(
     'placeinfo'
