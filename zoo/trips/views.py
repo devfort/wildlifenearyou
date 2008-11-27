@@ -254,9 +254,12 @@ def finish_add_sightings(request, country_code, slug, ids):
             # Now we finally add the sightings!
             for id in saw_id_set:
                 # Look up the id
-                obj = lookup_xapian_or_django_id(id)
-                if obj: # None if it was somehow invalid
-                    trip.sightings.add(obj)
+                species = lookup_xapian_or_django_id(id)
+                if species: # None if it was somehow invalid
+                    trip.sightings.create(
+                        species = species,
+                        place = place,
+                    )
                 
                 # TODO: Shouldn't allow a trip to be added if no valid 
                 # sightings

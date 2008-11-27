@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Add your sightings{% endblock %}
+
+{% block primary_content %}
+
+<h1>Tell us about your trip</h1>
+
+<p>Why not write about your trip in your tripbook? You can upload your photos too.</p>
+
+<form action="{{ request.path }}" method="POST">
+<p>
+    {{ form.name.errors }}
+    {{ form.name.label_tag }}
+    {{ form.name }}
+</p>
+<p>
+    {{ form.start.errors }}
+    {{ form.start.label_tag }}
+    {{ form.start }}
+    (optional, as accurate as you can remember)
+</p>
+<p>
+    {{ form.description.errors }}
+    {{ form.description.label_tag }} (optional)
+    {{ form.description }}
+</p>
+<p>
+    <input type="submit" name="save-trip" value="Save my trip report">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="submit" name="just-sightings" value="No thanks, just save my sightings">
+{% for hidden in hiddens %}
+    <input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
+{% endfor %}
+</p>
+</form>
+
+
+
+{% endblock %}
