@@ -73,11 +73,11 @@ h2 {
 
 a:link, button.link span {
 	color: #4A64B3;
-	text-decoration: none;
+	text-decoration: underline;
 }
 a:visited {
 	color: #003474;
-	text-decoration: none;
+	text-decoration: underline;
 }
 a:hover, 
 a:focus, 

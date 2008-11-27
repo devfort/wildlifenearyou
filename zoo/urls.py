@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django import http
+from django.views.generic.simple import direct_to_template
 
 import os
 
@@ -181,6 +182,7 @@ urlpatterns = patterns('',
     url(r'^countries/$', 'zoo.places.views.all_countries',
         name='countries'),
 
+    url(r'^500/$', direct_to_template, {'template':'500.html'}),
 )
 
 urlpatterns += patterns('zoo.changerequests.views',
