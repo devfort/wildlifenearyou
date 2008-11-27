@@ -251,13 +251,14 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 
 {% if place.most_recent_trips_with_desc %}
 <h2>Zoo Tripbook entries</h2>
-<ul>
+<ol class="comments">
 {% for trip in place.most_recent_trips_with_desc|slice:":5" %}
-	<li>
+	<li >
 	<blockquote>{{ trip.description|truncatewords:10 }}</blockquote>
-	<p>&mdash; <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by }}</a></p>
+	<p class="posted-by">&mdash; <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by }}</a></p>
+	<img src="{% url profile-image-resized request.user.username %}" alt="{{ request.user.username }} avatar" height="30" width="30">
 {% endfor %}
-</ul>
+</ol>
 {% endif %}
 
 <h2>Comments</h2>
