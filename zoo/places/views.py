@@ -112,7 +112,8 @@ def place_species_view(request, country_code, slug, species_slug):
     place_species_list = PlaceSpeciesSolelyForLinking.objects.filter(place=place).filter(species=species)
     if len(place_species_list)==0:
         # auto-create here
-        place_species = None
+        place_species = PlaceSpeciesSolelyForLinking(place=place, species=species)
+        place_species.save()
     else:
         place_species = place_species_list[0]
     sighters = [s.created_by for s in Sighting.objects.filter(species=species).filter(place=place).all()]
