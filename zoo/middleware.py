@@ -1,3 +1,12 @@
+"""
+Various custom middlewares used by the site. We also use this file as a way 
+of getting some initialisation code to run only once (the initialise() method
+that starts up our searchify search integration logic). This is not ideal, 
+since middleware is only executed by a first incoming web request and hence 
+is not triggered for command line tools or the ./manage.py shell. It will have
+to do for the moment though.
+"""
+
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.db.models.signals import pre_save
@@ -5,17 +14,20 @@ import datetime, threading
 
 from django.contrib.auth.models import User
 
+##### Only allow lowercase URLs on this site, redirect if contains uppercase
+
 class OnlyLowercaseUrls:
     def process_request(self, request):
         if request.path.lower() != request.path:
             return HttpResponseRedirect(request.path.lower())
+
+##### Save current user in a thread local and auto-populate created_by etc
 
 stash = threading.local()
 def set_current_user(user):
     stash.current_user = user
 
 set_current_user(None)
-
 
 def onanymodel_presave(sender, **kwargs):
     current_user = stash.current_user
@@ -41,10 +53,6 @@ class AutoCreatedAndModifiedFields:
     def process_request(self, request):
         set_current_user(request.user)
 
-# Hook up searchify/djape magic
+##### Hook up searchify/djape magic
 from searchify import initialise
-from djape.client import Client
-c = Client(
-    settings.XAPIAN_BASE_URL, 'placeinfo', settings.XAPIAN_PERSONAL_PREFIX
-)
-initialise(c)
+initialise()

@@ -60,6 +60,8 @@
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.db import models
 from django.db.models import FieldDoesNotExist, BooleanField
+from django.conf import settings
+from djape.client import Client
 
 class TestClient:
     def newdb(self, fields, dbname):
@@ -80,65 +82,88 @@ class TestClient:
     def delete(self, uid):
         print 'delete ' + uid
 
-xappy_client = None
-def initialise(xc):
-    global xappy_client
-    xappy_client = xc
-    fields = []
+def get_client(dbname):
+    return Client(
+        settings.XAPIAN_BASE_URL, dbname, settings.XAPIAN_PERSONAL_PREFIX
+    )
+
+def initialise():
+    indexes = {} # Map Xapain dbname => list of fields
     for model in models.get_models():
         if not hasattr(model, 'Searchable'):
             continue
-        fields = fields + get_configuration(model)
-    if len(fields)==0:
-        return
-    xappy_client.newdb(fields, allow_reopen=True)
+        index = getattr(model.Searchable, 'xapian_index')
+        assert index, 'Searchable classes require a xapian_index property'
+        indexes.setdefault(index, []).extend(get_configuration(model))
+    
+    # Now loop through and ensure each db exists
+    for index, fields in indexes.items():
+        if len(fields) == 0:
+            continue # Skip this index
+        client = get_client(index)
+        client.newdb(fields, allow_reopen = True)
+    
+    # Set up the global signal hooks
     post_save.connect(index_hook)
     pre_delete.connect(delete_hook)
 
 def index_hook(sender, **kwargs):
-    index_instance(xappy_client, kwargs['instance'])
+    index_instance(kwargs['instance'])
 
 def delete_hook(sender, **kwargs):
-    delete_instance(xappy_client, kwargs['instance'])
+    delete_instance(kwargs['instance'])
 
 def post_delete_hook(instance):
     def hook(sender, **kwargs):
         if kwargs['instance']==instance:
-            cascade_reindex(xappy_client, kwargs['instance'])
+            cascade_reindex(kwargs['instance'])
             post_delete.disconnect(hook)
     return hook
 
-def index_instance(xappy_client, instance):
-    # first, check should_delete_instance for situations where we *mark* as deleted rather than deleting in the ORM/database
+def index_instance(instance):
+    if not hasattr(instance, 'Searchable'):
+        return False
+    
+    # first, check should_delete_instance for situations where we *mark* as
+    # deleted rather than deleting in the ORM/database
     # (eg: a deleted boolean field)
+    
+    client = get_client(instance.Searchable.xapian_index)
+    
     if should_delete_instance(instance):
-        xappy_client.delete(get_uid(instance))
-        cascade_reindex(xappy_client, instance)
+        client.delete(get_uid(instance))
+        cascade_reindex(instance)
     else:
         dret = get_index_data(instance)
         if dret!=None:
             (ident, fielddata) = dret
-            doc = xappy_client.Document()
+            doc = client.Document()
             doc.extend(fielddata)
             doc.id = ident
-            xappy_client.add(doc)
-        cascade_reindex(xappy_client, instance)
+            client.add(doc)
+        cascade_reindex(instance)
 
-def cascade_reindex(xappy_client, instance):
-    if not hasattr(instance, 'Searchable') or not hasattr(instance.Searchable, 'cascades'):
+def cascade_reindex(instance):
+    if not hasattr(instance, 'Searchable') or \
+        not hasattr(instance.Searchable, 'cascades'):
         return
+    client = get_index_data(instance.Searchable.xapian_index)
     for descriptor in instance.Searchable.cascades:
         if isinstance(descriptor, str):
             cascade_inst = getattr(instance, descriptor)
             if hasattr(cascade_inst, 'Searchable'):
                 if hasattr(cascade_inst.Searchable, 'reindex_on_cascade'):
-                    if not cascade_inst.Searchable.reindex_on_cascade(instance, cascade_inst):
+                    if not cascade_inst.Searchable.reindex_on_cascade(
+                        instance, cascade_inst
+                    ):
                         continue
-                index_instance(xappy_client, cascade_inst) # ie: recurse through this function to get recursion, yay!
+                index_instance(cascade_inst)
+                # ie: recurse through this function to get recursion, yay!
 
-def delete_instance(xappy_client, instance):
+def delete_instance(instance):
     if hasattr(instance, 'Searchable'):
-        xappy_client.delete(get_uid(instance))
+        client = get_client(instance.Searchable.xapian_index)
+        client.delete(get_uid(instance))
     post_delete.connect(post_delete_hook(instance))
 
 # UTILITY FUNCTIONS
