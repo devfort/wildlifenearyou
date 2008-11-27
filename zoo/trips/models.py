@@ -119,6 +119,31 @@ class Trip(AuditedModel):
         # Multiple conditions allowed here
         return u'%s%s%s' % (name, place, date)
 
+    @staticmethod
+    def get_average_rating(place):
+        trips = Trip.objects.filter(sightings__place=place)
+        return Trip.calculate_rating_average(trips)
+
+    @staticmethod
+    def get_my_average_rating_for_place(user, place):
+        trips = Trip.objects.filter(sightings__place=place,created_by=user)
+        return Trip.calculate_rating_average(trips)
+
+    @staticmethod
+    def calculate_rating_average(trips):
+        total_rating = 0
+        rating = 0
+        for trip in trips:
+            if trip.rating:
+                total_rating += int(trip.rating)
+        if len(trips):
+            rating = int( (total_rating + 0.0) / len(trips) + 0.5 )
+        rating = {
+            'on': [ 1 for x in range(rating) ],
+            'off': [ 1 for x in range(5-rating) ],
+        }
+        return rating  
+
     def __unicode__(self):
         #return u"%s, %s" % (self.created_by.username, self.name)
         return self.title()

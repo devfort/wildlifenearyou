@@ -63,24 +63,11 @@ def place(request, country_code, slug):
 
     times_sorted = [ (key, opening_times[key]) for key in sorted(opening_times.keys()) ]
 
-    trips = Trip.objects.filter(sightings__place=place)
-    total_rating = 0
-    rating = 0
-    for trip in trips:
-        if trip.rating:
-            total_rating += int(trip.rating)
-    if len(trips):
-        rating = int( (total_rating + 0.0) / len(trips) + 0.5 )
-    rating = {
-        'on': [ 1 for x in range(rating) ],
-        'off': [ 1 for x in range(5-rating) ],
-    }
-
     return render(request, 'places/place.html', {
         'place': place,
         'species_list': species_list,
         'opening_times': times_sorted,
-        'rating' : rating,
+        'rating' : Trip.get_average_rating(place),
     })
 
 def place_summary(request, country_code, slug):

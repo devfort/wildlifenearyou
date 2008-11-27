@@ -51,8 +51,9 @@ def trip_view(request, username, trip_id):
     return render(request, 'trips/trip.html', {
         'profile': user.get_profile(),
         'trip': trip,
+        # do this to prepare the rating for the view
+        'rating': Trip.calculate_rating_average([trip]),
     })
-
     
 from django import forms
 

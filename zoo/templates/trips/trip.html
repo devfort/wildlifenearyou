@@ -2,8 +2,27 @@
 
 {% block title %}{{ trip.title }}{% endblock %}
 
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/star-select-replace.js"></script>
+{% endblock %}
+
 {% block content %}
 
 {% load trip_sightings %}
 	{% trip_sightings trip 'h1' 'h2' '' %}
+
+	<h2>Trip Rating</h2>
+	{% if rating.on %}
+	<p class="rating" title="{{ rating.on|length }} out of 5 stars">
+	{% for i in rating.on %}
+	<img src="/static/img/icons/starselect_single.gif" alt="">
+	{% endfor %}
+	{% for i in rating.off %}
+	<img src="/static/img/icons/starselect_off.png" alt="">
+	{% endfor %}
+	</p>
+	{% else %}
+	<p>You haven't rated this trip yet, don't worry though, you can do this by editing the trip.</p>
+	{% endif %}
+	
 {% endblock %}
