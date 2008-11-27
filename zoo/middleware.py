@@ -8,13 +8,13 @@ to do for the moment though.
 """
 # Wrap everything and catch exceptions, and die completely if they happen.
 try:
-
     from django.http import HttpResponseRedirect
     from django.conf import settings
-    from django.db.models.signals import pre_save
+    from django.db.models.signals import pre_save, post_save
     import datetime, threading
 
     from django.contrib.auth.models import User
+    from accounts.models import profilecalc_postsave
 
     ##### Only allow lowercase URLs on this site, redirect if contains uppercase
 
@@ -55,9 +55,11 @@ try:
         def process_request(self, request):
             set_current_user(request.user)
 
+    ##### Profiles have a percentage completion which needs recalculating when certain related models change
+    post_save.connect(profilecalc_postsave)
+
     ##### Hook up searchify/djape magic
     from searchify import initialise
-
     initialise()
 
 except:

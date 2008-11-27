@@ -13,9 +13,11 @@ from django.contrib.comments.models import Comment
 
 import zoo.utils
 from zoo.utils import attrproperty
-from zoo.trips.models import Trip
+from zoo.trips.models import Trip, Sighting
 from zoo.animals.models import Species
 from zoo.models import AuditedModel
+from zoo.favourites.models import FavouriteSpecies
+from zoo.faces.models import SelectedFacePart
 from zoo.photos.models import Photo
 
 HASH_ORIGIN_DATE = datetime.date(2000, 1, 1)
@@ -41,44 +43,9 @@ class Profile(models.Model):
     badges = models.ManyToManyField(Badge, through=ProfileBadge)
     biography = models.TextField(null=False, blank=True)
     url = models.URLField(null=False, blank=True, verify_exists=False)
-    percentage_complete = models.IntegerField(null=False, blank=False, default=0)
+    percentage_complete = models.IntegerField(null=False, blank=False, default=0) # see recalculate_percentage_complete()
 
     email_validated = models.BooleanField(null=False, blank=False, default=False)
-
-    # FIXME: also have a signal attached to all models that affect this
-    def save(self, *args, **kwargs):
-        self.recalculate_percentage_complete()
-        return super(Profile,self).save(*args, **kwargs)
-
-    def recalculate_percentage_complete(self):
-        self.percentage_complete = self._percentage_complete()
-        qs = Profile.objects.filter(pk=self.pk)
-        qs.update(percentage_complete = self.percentage_complete)
-
-    def _percentage_complete(self):
-        percent = 0
-        if self.biography: percent += 10
-        if self.user.get_full_name(): percent += 10
-        if self.url: percent += 5
-        # location: 15
-        if self.user.created_sighting_set.count() > 0: percent += 5
-        if self.user.photos.all().count() > 0: percent += 5
-        if self.user.comment_comments.all().count() > 0: percent += 5
-        photo_ids = self.user.photos.values_list('id', flat=True)
-        pct = ContentType.objects.get_for_model(Photo)
-        # Note that if things get slow, it's probably the following not optimising properly as the number of photos
-        # increases.
-        if Comment.objects.filter(content_type = pct, object_pk__in = photo_ids).exclude(user = self.user).count() > 0:
-            percent += 5
-        if self.user.selectedfaceparts.count() > 0: percent += 10 # avatar / profile picture
-        if self.user.favourite_species.all().count() > 0: percent += 5
-        if self.user.created_sighting_set.count() > 10: percent += 5
-        if self.user.photos.all().count() > 10: percent += 5
-        if self.user.created_sighting_set.count() > 100: percent += 5
-        if self.user.photos.all().count() > 100: percent += 5
-        # 5% reserved. Once we fill that up, we'll start awarding badges for specific things instead.
-
-        return percent
 
     @models.permalink
     def get_absolute_url(self):
@@ -170,3 +137,67 @@ class Profile(models.Model):
         return self.user.date_joined < (
             datetime.datetime.now() - datetime.timedelta(days = 7)
         )
+
+    # This works by having a postsave hook (below) that calls this on certain save actions.
+    def recalculate_percentage_complete(self):
+        self.percentage_complete = self._percentage_complete()
+        qs = Profile.objects.filter(pk=self.pk)
+        qs.update(percentage_complete = self.percentage_complete)
+
+    # If you add something new in here that means more model saves need to be checked, don't forget to
+    # update the hook (below).
+    def _percentage_complete(self):
+        percent = 0
+        if self.biography: percent += 10
+        if self.user.get_full_name(): percent += 10
+        if self.url: percent += 5
+        # location: 15
+        if self.user.created_sighting_set.count() > 0: percent += 5
+        if self.user.photos.filter(is_visible=True).count() > 0: percent += 5
+        if self.user.comment_comments.all().count() > 0: percent += 5
+        photo_ids = self.user.photos.values_list('id', flat=True)
+        pct = ContentType.objects.get_for_model(Photo)
+        # Note that if things get slow, it's probably the following not optimising properly as the number of photos
+        # increases.
+        if Comment.objects.filter(content_type = pct, object_pk__in = photo_ids).exclude(user = self.user).count() > 0:
+            percent += 5
+        if self.user.selectedfaceparts.count() > 0: percent += 10 # avatar / profile picture
+        
+        # avatar
+        
+        if self.user.favourite_species.all().count() > 0: percent += 5
+        if self.user.created_sighting_set.count() > 10: percent += 5
+        if self.user.photos.filter(is_visible=True).count() > 10: percent += 5
+        if self.user.created_sighting_set.count() > 100: percent += 5
+        if self.user.photos.filter(is_visible=True).count() > 100: percent += 5
+        # 5% reserved. Once we fill that up, we'll start awarding badges for specific things instead.
+
+        return percent
+
+# presave hook to update profile percentage completion
+def profilecalc_postsave(sender, **kwargs):
+    print 'postsave'
+    instance = kwargs['instance']
+    user = None
+    if sender==Profile:
+        instance.recalculate_percentage_complete()
+        return
+    elif sender==User: # FIXME: not picked up (we're forcing it for now in the edit profile view)
+        user = instance
+    elif sender==Sighting:
+        user = instance.created_by
+    elif sender==Photo:
+        user = instance.created_by
+    elif sender==Comment:
+        user = instance.user
+    elif sender==FavouriteSpecies:
+        user = instance.user
+    elif sender==SelectedFacePart:
+        user = instance.user
+    if user:
+        try:
+            profile = user.get_profile()
+            profile.recalculate_percentage_complete()
+        except:
+            # not ready for us yet
+            pass

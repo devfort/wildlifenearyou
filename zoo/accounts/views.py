@@ -157,6 +157,7 @@ def profile_edit(request, username):
         if f.is_valid() and f2.is_valid():
             f.save()
             f2.save()
+            profile.recalculate_percentage_complete()
             return Redirect(profile.get_absolute_url())
     else:
         f = ProfileEditForm(instance=profile)
