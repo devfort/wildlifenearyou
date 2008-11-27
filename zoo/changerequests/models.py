@@ -10,6 +10,20 @@ from itertools import chain
 
 from zoo.fields import JSONField
 
+def reformat_foreign_keys(fn):
+    def wrapper(self, *args, **kwargs):
+        val = fn(self, *args, **kwargs)
+
+        # Nicer way?
+        if not self.attribute.endswith('_id'):
+            return val
+
+        klass = self.content_type.model_class()
+        dummy_obj = klass()
+        setattr(dummy_obj, self.attribute, val)
+        return getattr(dummy_obj, self.attribute[:-3])
+    return wrapper
+
 class ChangeRequestGroup(models.Model):
     """
     A group of ChangeRequests that cannot sensibly be applied individually.
@@ -117,12 +131,15 @@ class ChangeAttributeRequest(ChangeRequest):
         # there is a conflict.
         return self.old_value != self.get_current_value()
 
+    @reformat_foreign_keys
     def get_current_value(self):
         return getattr(self.content_object, self.attribute)
 
+    @reformat_foreign_keys
     def get_old_value(self):
         return self.old_value
 
+    @reformat_foreign_keys
     def get_new_value(self):
         return self.new_value
 
