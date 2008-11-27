@@ -201,6 +201,12 @@ def search(request, db_name):
      - `end_rank` is the rank at the end of the range of matching documents to
        return.  This is exclusive, so the result with this rank will not be
        returned.  Defaults to 10.
+     - `relevant_data` is a boolean: if True, only relevant data items will be
+       returned.  Defaults to False.
+     - `summarise` is a length: if specified and non 0, returned data will be
+       summarised to the length supplied.
+     - `hl` is a pair of tags used for marking relevant items in the summarised
+       data. 
 
     Returns some JSON:
 
@@ -210,7 +216,7 @@ def search(request, db_name):
         - `rank`: rank of result - 0 is best
         - `id`: id of result
         - `data`: data of result, which is a dict, keyed by name, contents is a
-          list of values.
+          list of values.  If "relevant_data"
      - `matches_lower_bound`: lower bound on number of matches.
      - `matches_estimated`: estimated number of matches.
      - `matches_upper_bound`: upper bound on number of matches.
@@ -223,7 +229,10 @@ def search(request, db_name):
                              'q': (0, 1, '^.*$', []),
                              'start_rank': (1, 1, '^\d+$', ['0']),
                              'end_rank': (1, 1, '^\d+$', ['10']),
-                             'spellcorrect': (0, 1, '^never|auto|always$', ['auto']),
+                             'spellcorrect': (1, 1, '^never|auto|always$', ['auto']),
+                             'relevant_data': (1, 1, '^[01]$', ['0']),
+                             'summarise': (0, 1, '^\d+$', ['0']),
+                             'hl': (0, 1, None, ['["<span class=\\"relevant\\">","</span>"]']),
                              })
 
     db = xappy.SearchConnection(get_db_path(db_name))
@@ -241,7 +250,10 @@ def search(request, db_name):
         validate_dict_entries(query_defn, ('opts', 'query'),
                               'Invalid item in query definition: %s')
 
-        q, ignore = parse_query_spec(db, query_defn.get('query'))
+        if params['spellcorrect'][0] == 'always':
+            q, ignore = parse_query_spec(db, query_defn.get('query'), spell=True)
+        else:
+            q, ignore = parse_query_spec(db, query_defn.get('query'))
 
         opts = query_defn.get('opts')
         if opts is not None:
@@ -254,11 +266,11 @@ def search(request, db_name):
                    int(params['end_rank'][0]))
 
     if len(res) == 0:
-        if len(params['q']) != 0:
-            query_defn = simplejson.loads(params['q'][0])
+        if len(params['q']) != 0 and params['spellcorrect'][0] == 'auto':
             # Try spell correcting
+            query_defn = simplejson.loads(params['q'][0])
             q, corrected_q = parse_query_spec(db, query_defn.get('query'),
-                                           spell=True)
+                                              spell=True)
 
             res = q.search(int(params['start_rank'][0]),
                            int(params['end_rank'][0]))
