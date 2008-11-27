@@ -91,7 +91,7 @@ def initialise(xc):
         fields = fields + get_configuration(model)
     if len(fields)==0:
         return
-    xappy_client.newdb(fields)
+    xappy_client.newdb(fields, allow_reopen=True)
     post_save.connect(index_hook)
     pre_delete.connect(delete_hook)
 
