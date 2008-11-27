@@ -120,6 +120,12 @@ class ChangeAttributeRequest(ChangeRequest):
     def get_current_value(self):
         return getattr(self.content_object, self.attribute)
 
+    def get_old_value(self):
+        return self.old_value
+
+    def get_new_value(self):
+        return self.new_value
+
     def apply(self, user=None):
         obj = self.content_object
         setattr(obj, self.attribute, self.new_value)
