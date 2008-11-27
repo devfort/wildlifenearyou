@@ -1,5 +1,7 @@
 {% extends base %}
 
+{% load thumbnail %}
+
 {% block title %}{{ place.known_as }}{% endblock %}
 
 {% block extra_head %}
@@ -223,22 +225,20 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 <h2>Photos</h2>
 
 {% for photo in place.visible_photos.all %}
-<div>
-<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
-</div>
-{% endfor %}
-
+{% if forloop.first %}
 <div class="gallery">
-	<a href="/photourl"><img src="/static/img/site-images/sample_mid_photo.gif"></a>
+	<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 225x150 crop %}"></a>
 	<div class="slideshow">
 		<ul id="thumbnails">
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
+{% else %}
+	<li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+{% endif %}
+{% if forloop.last %}
 		</ul><!-- /#thumbnails -->
 	</div><!-- /.slideshow -->
 </div>
+{% endif %}
+{% endfor %}
 
 {% if not user.is_anonymous %}
 <p><a class="add" href="upload/">Upload a photo you took here!</a></p>
