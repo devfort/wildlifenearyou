@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.utils import simplejson
+
+from zoo.fields import JSONField
 
 import datetime
 
@@ -118,15 +119,12 @@ class ChangeAttributeRequest(ChangeRequest):
 class CreateObjectRequest(ChangeRequest):
     parent = models.ForeignKey('self', null=True, blank=True)
     content_type = models.ForeignKey(ContentType)
-    attributes = models.TextField() # JSON
+    attributes = JSONField()
     reverse_relation = models.TextField()
 
     def apply(self, user=None):
         klass = self.content_type.model_class()
-        klass.objects.create(**dict([
-            (str(key), value)
-            for key, value in simplejson.loads(self.attributes).items()
-        ]))
+        klass.objects.create(**self.attributes)
         return super(CreateObjectRequest, self).apply(user)
 
     def conflicts(self):
