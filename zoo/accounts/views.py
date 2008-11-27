@@ -76,7 +76,7 @@ def validate_email(request, username, days, hash):
         user.backend='django.contrib.auth.backends.ModelBackend'
         from django.contrib.auth import login
         login(request, user)
-        # TODO: send welcome email
+        p.send_welcome_email()
         return Redirect(reverse('validate-email-success'))
     return Redirect('/')
 

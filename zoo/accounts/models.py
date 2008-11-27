@@ -102,16 +102,13 @@ class Profile(models.Model):
         hash = md5.new(settings.SECRET_KEY + days + username).hexdigest()
         return (hash, days)
 
-    def send_validation_email(self):
-        body = render_to_string('emails/validation.txt',
-                                {'user': self.user,
-                                 'url': self.email_validation_url_for_user()
-                                 })
+    def send_email(self, subject, template, kwargs):
+        body = render_to_string(template, kwargs)
 
         import smtplib
         try:
             zoo.utils.send_mail(
-                'Welcome to BLAH', body,
+                subject, body,
                 settings.EMAIL_FROM, [self.user.email],
                 fail_silently=False
             )
@@ -119,26 +116,31 @@ class Profile(models.Model):
             # TODO: handle failed email sending
             pass
 
+    def send_validation_email(self):
+        self.send_email('Validation required',
+                        'emails/validation.txt',
+                        {'user': self.user,
+                         'url': self.email_validation_url_for_user()
+                         })
     send_validation_email.alters_data = True
 
     def send_password_key_email(self):
-        body = render_to_string('emails/password_key.txt',
-                                {'user': self.user,
-                                 'url': self.password_key_url_for_user()
-                                 })
-
-        import smtplib
-        try:
-            zoo.utils.send_mail(
-                'You can change your password', body,
-                settings.EMAIL_FROM, [self.user.email],
-                fail_silently=False
-            )
-        except smtplib.SMTPException:
-            # TODO: handle failed email sending
-            pass
-
+        self.send_email('You can change your password',
+                        'emails/password_key.txt',
+                        {'user': self.user,
+                         'url': self.password_key_url_for_user()
+                         })
     send_password_key_email.alters_data = True
+
+    def send_welcome_email(self):
+        self.send_email('Welcome to Narwhals.com!',
+                        'emails/welcome.txt',
+                        {'user': self.user,
+                         'url': 'www.example.com',
+                         'site_name': 'SITENAME',
+                         'site_email': 'us@example.com',
+                         })
+    send_welcome_email.alters_data = True
 
     def email_validation_url_for_user(self):
         (hash, days) = self._generate_user_hash(self.user.username)
