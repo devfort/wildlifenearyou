@@ -1,0 +1,21 @@
+{% extends base %}
+
+{% block title %}Support {{ place.known_as }}{% endblock %}
+
+{% block content %}
+
+<h1>Support {{ place.known_as|title }}</h1>
+
+<p>There are many ways you can support.</p>
+<ul>
+	<li>Sponsor a rain dance</li>
+	<li>Donate limbs to feed the animals</li>
+	<li>Organise at least 15 friends to attend a special day of Safari hunting. (This helps us lower our cleaning and feeding bill)</li>
+	<li>Suggest receipes which we can use our animals in</li>
+</ul>
+
+<p>What ever you can do, you can be sure it will go to support the Zoo Keepers Christmas Party, *hic*</p>
+
+<p>Back to <a href="{{ place.urls.absolute }}">{{ place.known_as|title }}</a> Page</p>
+
+{% endblock %}

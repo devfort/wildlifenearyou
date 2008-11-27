@@ -223,7 +223,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 </p>
 {% endif %}
 
-<p><a href="" class="button">&raquo; Support your zoo!</a></p>
+<p><a href="{% url place-support place.country.country_code place.slug %}" class="button">&raquo; Support your zoo!</a></p>
 
 <h2>Photos</h2>
 

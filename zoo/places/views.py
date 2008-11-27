@@ -118,7 +118,6 @@ def all_places(request):
         'all_places': Place.objects.all().order_by('known_as'),
     })
 
-
 def country(request, country_code):
     country = get_object_or_404(Country, country_code=country_code)
     places = Place.objects.filter(country__country_code=country_code).order_by('known_as')
@@ -206,3 +205,12 @@ def place_edit_done(request, country_code, slug):
     return render(request, 'places/place_edit_done.html', {
         'place': place,
         })
+        
+def support(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+
+    return render(request, 'places/place_support.html', {
+        'place': place,
+        })
+    
