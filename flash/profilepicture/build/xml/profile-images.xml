@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profileImages>
+	<faceareacategory name="Face">
+		<facearea description="" id="40" name="Faces" small="0">
+			<facepart id="623" src="../images/face_beige.png" title="Beige"/>
+			<facepart id="624" src="../images/face_brown_dark.png" title="Dark Brown"/>
+			<facepart id="625" src="../images/face_brown_light.png" title="Light Brown"/>
+			<facepart id="626" src="../images/face_brown.png" title="Brown"/>
+			<facepart id="627" src="../images/face_cream.png" title="Cream"/>
+			<facepart id="628" src="../images/face_olive.png" title="Olive"/>
+			<facepart id="629" src="../images/face_fair.png" title="Fair"/>
+		</facearea>
+		<facearea description="" id="35" name="Lips" small="1">
+			<facepart id="548" src="../images/lips_black.png" title="Black"/>
+			<facepart id="549" src="../images/lips_brown_dark.png" title="Brown Dark"/>
+			<facepart id="550" src="../images/lips_brown_light.png" title="Brown Light"/>
+			<facepart id="551" src="../images/lips_green.png" title="Green"/>
+			<facepart id="552" src="../images/lips_orange.png" title="Orange"/>
+			<facepart id="553" src="../images/lips_pink.png" title="Pink"/>
+			<facepart id="554" src="../images/lips_red_bright.png" title="Red Bright"/>
+			<facepart id="555" src="../images/lips_red_dark.png" title="Red Dark"/>
+			<facepart id="556" src="../images/lips_smirk_brown.png" title="Smirk Brown"/>
+			<facepart id="557" src="../images/lips_smirk_brown_dark.png" title="Smirk Brown Dark"/>
+			<facepart id="558" src="../images/lips_smirk_brown_light.png" title="Smirk Brown Light"/>
+			<facepart id="559" src="../images/lips_smirk_green.png" title="Smirk Green"/>
+			<facepart id="560" src="../images/lips_smirk_orange.png" title="Smirk Orange"/>
+			<facepart id="561" src="../images/lips_smirk_pink.png" title="Smirk Pink"/>
+			<facepart id="562" src="../images/lips_smirk_purple.png" title="Smirk Purple"/>
+			<facepart id="563" src="../images/lips_smirk_red.png" title="Smirk Red"/>
+			<facepart id="564" src="../images/lips_smirk_teal.png" title="Smirk Teal"/>
+			<facepart id="565" src="../images/lips_teal.png" title="Teal"/>
+		</facearea>
+		<facearea description="" id="36" name="Noses" small="0">
+			<facepart id="566" src="../images/nose_black.png" title="Black"/>
+			<facepart id="567" src="../images/nose_brown.png" title="Brown"/>
+			<facepart id="568" src="../images/nose_brown_dark.png" title="Brown Dark"/>
+			<facepart id="569" src="../images/nose_cream.png" title="Cream"/>
+			<facepart id="570" src="../images/nose_creampng.png" title="Creampng"/>
+			<facepart id="571" src="../images/nose_fair.png" title="Fair"/>
+			<facepart id="572" src="../images/nose_olive.png" title="Olive"/>
+		</facearea>
+		<facearea description="" id="38" name="Cheeks" small="0">
+			<facepart id="584" src="../images/cheeks_brown_dark.png" title="Brown Dark"/>
+			<facepart id="585" src="../images/cheeks_brown_light.png" title="Brown Light"/>
+			<facepart id="586" src="../images/cheeks_cream.png" title="Cream"/>
+			<facepart id="587" src="../images/cheeks_fair.png" title="Fair"/>
+			<facepart id="588" src="../images/cheeks_olive.png" title="Olive"/>
+			<facepart id="589" src="../images/cheeks_pink.png" title="Pink"/>
+		</facearea>
+		<facearea description="" id="39" name="Eyes" small="0">
+			<facepart id="590" src="../images/eyelashes_black.png" title="Black"/>
+			<facepart id="591" src="../images/eyelashes_blonde.png" title="Blonde"/>
+			<facepart id="592" src="../images/eyelashes_blue.png" title="Blue"/>
+			<facepart id="593" src="../images/eyelashes_brown_dark.png" title="Brown Dark"/>
+			<facepart id="594" src="../images/eyelashes_brown_light.png" title="Brown Light"/>
+			<facepart id="595" src="../images/eyelashes_green.png" title="Green"/>
+			<facepart id="596" src="../images/eyelashes_orange.png" title="Orange"/>
+			<facepart id="597" src="../images/eyelashes_pink.png" title="Pink"/>
+			<facepart id="598" src="../images/eyelashes_red.png" title="Red"/>
+			<facepart id="599" src="../images/eyelashes_teal.png" title="Teal"/>
+		</facearea>
+		<facearea description="" id="41" name="Glasses" small="0">
+			<facepart id="600" src="../images/glasses_mazz_black.png" title="Mazz Black"/>
+			<facepart id="601" src="../images/glasses_mazz_blue.png" title="Mazz Blue"/>
+			<facepart id="602" src="../images/glasses_mazz_brown_dark.png" title="Mazz Brown Dark"/>
+			<facepart id="603" src="../images/glasses_mazz_green.png" title="Mazz Green"/>
+			<facepart id="604" src="../images/glasses_mazz_orange.png" title="Mazz Orange"/>
+			<facepart id="605" src="../images/glasses_mazz_pink.png" title="Mazz Pink"/>
+			<facepart id="606" src="../images/glasses_mazz_red.png" title="Mazz Red"/>
+			<facepart id="607" src="../images/glasses_mazz_teal.png" title="Mazz Teal"/>
+			<facepart id="608" src="../images/glasses_natalie_black.png" title="Natalie Black"/>
+		</facearea>
+	</faceareacategory>
+	<faceareacategory name="Hair">
+		<facearea description="" id="34" name="Hair (bottom)" small="0">
+			<facepart id="530" src="../images/hair_curly_black.png" title="Curly Black"/>
+			<facepart id="531" src="../images/hair_curly_blonde.png" title="Curly Blonde"/>
+			<facepart id="532" src="../images/hair_curly_blonde_dirty.png" title="Curly Blonde Dirty"/>
+			<facepart id="533" src="../images/hair_curly_blue.png" title="Curly Blue"/>
+			<facepart id="534" src="../images/hair_curly_brown_dark.png" title="Curly Brown Dark"/>
+			<facepart id="535" src="../images/hair_curly_brown_light.png" title="Curly Brown Light"/>
+			<facepart id="536" src="../images/hair_curly_green.png" title="Curly Green"/>
+			<facepart id="537" src="../images/hair_curly_orange.png" title="Curly Orange"/>
+			<facepart id="538" src="../images/hair_curly_pink.png" title="Curly Pink"/>
+			<facepart id="539" src="../images/hair_curly_purple.png" title="Curly Purple"/>
+			<facepart id="540" src="../images/hair_curly_red.png" title="Curly Red"/>
+			<facepart id="541" src="../images/hair_side_black.png" title="Side Black"/>
+			<facepart id="542" src="../images/hair_side_blonde.png" title="Side Blonde"/>
+			<facepart id="543" src="../images/hair_side_brown.png" title="Side Brown"/>
+			<facepart id="544" src="../images/hair_side_brown_dark.png" title="Side Brown Dark"/>
+			<facepart id="545" src="../images/hair_side_gray.png" title="Side Gray"/>
+			<facepart id="546" src="../images/hair_side_gray_dark.png" title="Side Gray Dark"/>
+			<facepart id="547" src="../images/hair_side_white.png" title="Side White"/>
+		</facearea>
+		<facearea description="" id="33" name="Hair (top)" small="0">
+			<facepart id="470" src="../images/hair_bangs2_black.png" title="Bangs2 Black"/>
+			<facepart id="471" src="../images/hair_bangs2_blonde.png" title="Bangs2 Blonde"/>
+			<facepart id="472" src="../images/hair_bangs2_blue.png" title="Bangs2 Blue"/>
+			<facepart id="473" src="../images/hair_bangs2_brown_dark.png" title="Bangs2 Brown Dark"/>
+			<facepart id="474" src="../images/hair_bangs2_brown_light.png" title="Bangs2 Brown Light"/>
+			<facepart id="475" src="../images/hair_bangs2_green.png" title="Bangs2 Green"/>
+			<facepart id="476" src="../images/hair_bangs2_orange.png" title="Bangs2 Orange"/>
+			<facepart id="477" src="../images/hair_bangs2_pink.png" title="Bangs2 Pink"/>
+			<facepart id="478" src="../images/hair_bangs2_purple.png" title="Bangs2 Purple"/>
+			<facepart id="479" src="../images/hair_bangs2_red.png" title="Bangs2 Red"/>
+			<facepart id="480" src="../images/hair_bangs2_teal.png" title="Bangs2 Teal"/>
+			<facepart id="481" src="../images/hair_bangs_black.png" title="Bangs Black"/>
+			<facepart id="482" src="../images/hair_bangs_blonde.png" title="Bangs Blonde"/>
+			<facepart id="483" src="../images/hair_bangs_blonde_dirty.png" title="Bangs Blonde Dirty"/>
+			<facepart id="484" src="../images/hair_bangs_blue.png" title="Bangs Blue"/>
+			<facepart id="485" src="../images/hair_bangs_brown_dark.png" title="Bangs Brown Dark"/>
+			<facepart id="486" src="../images/hair_bangs_brown_light.png" title="Bangs Brown Light"/>
+			<facepart id="487" src="../images/hair_bangs_green.png" title="Bangs Green"/>
+			<facepart id="488" src="../images/hair_bangs_orange.png" title="Bangs Orange"/>
+			<facepart id="489" src="../images/hair_bangs_pink.png" title="Bangs Pink"/>
+			<facepart id="490" src="../images/hair_bangs_purple.png" title="Bangs Purple"/>
+			<facepart id="491" src="../images/hair_bangs_red.png" title="Bangs Red"/>
+			<facepart id="492" src="../images/hair_black_spikey_red.png" title="Black Spikey Red"/>
+			<facepart id="493" src="../images/hair_mohawk_black.png" title="Mohawk Black"/>
+			<facepart id="494" src="../images/hair_mohawk_blonde.png" title="Mohawk Blonde"/>
+			<facepart id="495" src="../images/hair_mohawk_blue.png" title="Mohawk Blue"/>
+			<facepart id="496" src="../images/hair_mohawk_brown.png" title="Mohawk Brown"/>
+			<facepart id="497" src="../images/hair_mohawk_brown_dark.png" title="Mohawk Brown Dark"/>
+			<facepart id="498" src="../images/hair_mohawk_brown_light.png" title="Mohawk Brown Light"/>
+			<facepart id="499" src="../images/hair_mohawk_green.png" title="Mohawk Green"/>
+			<facepart id="500" src="../images/hair_mohawk_pink.png" title="Mohawk Pink"/>
+			<facepart id="501" src="../images/hair_mohawk_purple.png" title="Mohawk Purple"/>
+			<facepart id="502" src="../images/hair_mohawk_teal.png" title="Mohawk Teal"/>
+			<facepart id="503" src="../images/hair_short_thin_black.png" title="Short Thin Black"/>
+			<facepart id="504" src="../images/hair_short_thin_blonde.png" title="Short Thin Blonde"/>
+			<facepart id="505" src="../images/hair_short_thin_brown.png" title="Short Thin Brown"/>
+			<facepart id="506" src="../images/hair_short_thin_brown_dark.png" title="Short Thin Brown Dark"/>
+			<facepart id="507" src="../images/hair_short_thin_brown_light.png" title="Short Thin Brown Light"/>
+			<facepart id="508" src="../images/hair_short_thin_red.png" title="Short Thin Red"/>
+			<facepart id="509" src="../images/hair_spikey2_black.png" title="Spikey2 Black"/>
+			<facepart id="510" src="../images/hair_spikey2_blue.png" title="Spikey2 Blue"/>
+			<facepart id="511" src="../images/hair_spikey2_brown.png" title="Spikey2 Brown"/>
+			<facepart id="512" src="../images/hair_spikey2_brown_dark.png" title="Spikey2 Brown Dark"/>
+			<facepart id="513" src="../images/hair_spikey2_brown_light.png" title="Spikey2 Brown Light"/>
+			<facepart id="514" src="../images/hair_spikey2_green.png" title="Spikey2 Green"/>
+			<facepart id="515" src="../images/hair_spikey2_orange.png" title="Spikey2 Orange"/>
+			<facepart id="516" src="../images/hair_spikey2_pink.png" title="Spikey2 Pink"/>
+			<facepart id="517" src="../images/hair_spikey2_purple.png" title="Spikey2 Purple"/>
+			<facepart id="518" src="../images/hair_spikey2_red.png" title="Spikey2 Red"/>
+			<facepart id="519" src="../images/hair_spikey2_teal.png" title="Spikey2 Teal"/>
+			<facepart id="520" src="../images/hair_spikey_black.png" title="Spikey Black"/>
+			<facepart id="521" src="../images/hair_spikey_blue.png" title="Spikey Blue"/>
+			<facepart id="522" src="../images/hair_spikey_brown.png" title="Spikey Brown"/>
+			<facepart id="523" src="../images/hair_spikey_brown_dark.png" title="Spikey Brown Dark"/>
+			<facepart id="524" src="../images/hair_spikey_brown_light.png" title="Spikey Brown Light"/>
+			<facepart id="525" src="../images/hair_spikey_green.png" title="Spikey Green"/>
+			<facepart id="526" src="../images/hair_spikey_orange.png" title="Spikey Orange"/>
+			<facepart id="527" src="../images/hair_spikey_pink.png" title="Spikey Pink"/>
+			<facepart id="528" src="../images/hair_spikey_purple.png" title="Spikey Purple"/>
+			<facepart id="529" src="../images/hair_spikey_teal.png" title="Spikey Teal"/>
+		</facearea>
+		<facearea description="" id="42" name="Beards" small="0">
+			<facepart id="609" src="../images/facial_beard_black.png" title="Black"/>
+			<facepart id="610" src="../images/facial_beard_blonde.png" title="Blonde"/>
+			<facepart id="611" src="../images/facial_beard_blue.png" title="Blue"/>
+			<facepart id="612" src="../images/facial_beard_brown.png" title="Brown"/>
+			<facepart id="613" src="../images/facial_beard_brown_dark.png" title="Brown Dark"/>
+			<facepart id="614" src="../images/facial_beard_brown_light.png" title="Brown Light"/>
+			<facepart id="615" src="../images/facial_beard_gray.png" title="Gray"/>
+			<facepart id="616" src="../images/facial_beard_gray_dark.png" title="Gray Dark"/>
+			<facepart id="617" src="../images/facial_beard_green.png" title="Green"/>
+			<facepart id="618" src="../images/facial_beard_orange.png" title="Orange"/>
+			<facepart id="619" src="../images/facial_beard_pink.png" title="Pink"/>
+			<facepart id="620" src="../images/facial_beard_purple.png" title="Purple"/>
+			<facepart id="621" src="../images/facial_beard_red.png" title="Red"/>
+			<facepart id="622" src="../images/facial_beard_white.png" title="White"/>
+		</facearea>
+	</faceareacategory>
+	<faceareacategory name="Accessories">
+		<facearea description="" id="37" name="Hats" small="0">
+			<facepart id="573" src="../images/accessories_hat_beannie.png" title="Beannie"/>
+			<facepart id="574" src="../images/accessories_hat_cap_black.png" title="Cap Black"/>
+			<facepart id="575" src="../images/accessories_hat_cap_blue.png" title="Cap Blue"/>
+			<facepart id="576" src="../images/accessories_hat_cap_brown.png" title="Cap Brown"/>
+			<facepart id="577" src="../images/accessories_hat_cap_gray.png" title="Cap Gray"/>
+			<facepart id="578" src="../images/accessories_hat_cap_green.png" title="Cap Green"/>
+			<facepart id="579" src="../images/accessories_hat_cap_pink.png" title="Cap Pink"/>
+			<facepart id="580" src="../images/accessories_hat_cap_purple.png" title="Cap Purple"/>
+			<facepart id="581" src="../images/accessories_hat_cap_red.png" title="Cap Red"/>
+			<facepart id="582" src="../images/accessories_hat_cap_teal.png" title="Cap Teal"/>
+		</facearea>
+	</faceareacategory>
+	<faceareacategory name="Staff only">
+		<facearea description="" id="43" name="Special Hats" small="0">
+			<facepart id="583" src="../images/accessories_hat_safari.png" title="Safari"/>
+		</facearea>
+	</faceareacategory>
+</profileImages>

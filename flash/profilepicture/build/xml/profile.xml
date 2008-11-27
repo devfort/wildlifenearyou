@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile name="" update-url="/faces/update/" user_id="1" username="sedf">
+	<facepart area="Faces" area_id="40" part_id="627" src="/static/uploaded/faceparts/face_cream.png" title="Cream"/>
+	<facepart area="Hair (bottom)" area_id="34" part_id="531" src="/static/uploaded/faceparts/hair_curly_blonde.png" title="Curly Blonde"/>
+	<facepart area="Hair (top)" area_id="33" part_id="504" src="/static/uploaded/faceparts/hair_short_thin_blonde.png" title="Short Thin Blonde"/>
+	<facepart area="Lips" area_id="35" part_id="553" src="/static/uploaded/faceparts/lips_pink.png" title="Pink"/>
+	<facepart area="Noses" area_id="36" part_id="570" src="/static/uploaded/faceparts/nose_creampng.png" title="Creampng"/>
+	<facepart area="Cheeks" area_id="38" part_id="586" src="/static/uploaded/faceparts/cheeks_cream.png" title="Cream"/>
+	<facepart area="Eyes" area_id="39" part_id="592" src="/static/uploaded/faceparts/eyelashes_blue.png" title="Blue"/>
+	<facepart area="Hats" area_id="37" part_id="576" src="/static/uploaded/faceparts/accessories_hat_cap_brown.png" title="Cap Brown"/>
+</profile>
