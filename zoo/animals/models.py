@@ -42,15 +42,25 @@ class AbstractSpecies(models.Model):
 
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
-    
+
     def has_favourited(self, user):
         if not user.is_authenticated():
             return False
         return user.favourite_species.filter(species=self).count() != 0
-    
+
+    def popularity(self):
+        """
+        Currently just calculated using number of sightings of this
+        species.
+        """
+
+        num_of_sightings = float(self.sighting_set.all().count())
+
+        return 1 - (1 / (num_of_sightings + 1))
+
     class Meta:
         verbose_name_plural = 'species'
-    
+
     class Searchable:
         fields = [
             { # Searching for species by name.
@@ -75,7 +85,7 @@ class Species(AbstractSpecies):
 
 class SuperSpecies(AbstractSpecies):
     """
-    A SuperSpecies is a fictional animal with special powers, such as a 
+    A SuperSpecies is a fictional animal with special powers, such as a
     unicorn, Narwhal or the Django Pony.
     """
     TYPE_CHOICES = [(t, t) for t in ['imaginary', 'extinct', 'alive', 'narwhals']]
