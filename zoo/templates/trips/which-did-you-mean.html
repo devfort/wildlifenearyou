@@ -2,13 +2,22 @@
 
 {% block title %}Add your sightings{% endblock %}
 
-{% block content %}
+{% block primary_content %}
 
 <h1>Add your sightings</h1>
 
 <form action="{{ request.path }}" method="POST">
 {{ form.as_p }}
-<input type="submit" value="Continue">
+<p><input type="submit" value="Continue">
+{% for hidden in hiddens %}
+<input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
+{% endfor %}
+</p>
 </form>
 
+<pre>
+'saw_id_set': {{ saw_id_set }}
+'saw_selection_dict': {{ saw_selection_dict }}
+'saw_dict': {{ saw_dict }}
+</ple>
 {% endblock %}

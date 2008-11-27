@@ -14,10 +14,11 @@ class SpeciesGroup(AuditedModel):
     def __unicode__(self):
         return self.name
 
-class AbstractSpecies(AuditedModel):
+class AbstractSpecies(models.Model):
     common_name = models.CharField(max_length=500, blank=False, null=False)
     description = models.TextField(blank=True)
     slug = models.SlugField(max_length=255, blank=False, null=False, unique=True)
+    species_group = models.ForeignKey(SpeciesGroup, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -41,7 +42,6 @@ class AbstractSpecies(AuditedModel):
 
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
-    species_group = models.ForeignKey(SpeciesGroup, blank=False, null=False)
 
     def has_favourited(self, user):
         if not user.is_authenticated():
@@ -52,11 +52,14 @@ class Species(AbstractSpecies):
         verbose_name_plural = 'species'
 
 class SuperSpecies(AbstractSpecies):
+    """
+    A SuperSpecies is a fictional animal with special powers, such as a 
+    unicorn, Narwhal or the Django Pony.
+    """
     TYPE_CHOICES = [(t, t) for t in ['imaginary', 'extinct', 'alive', 'narwhals']]
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=False, blank=False)
 
     latin_name = models.CharField(max_length=500, blank=True, null=True)
-    species_group = models.ForeignKey(SpeciesGroup, blank=True, null=True)
 
     @property
     def status(self):

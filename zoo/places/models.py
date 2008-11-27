@@ -98,7 +98,9 @@ class Place(AuditedModel):
 
     def most_recent_trips(self):
         from zoo.trips.models import Trip
-        trips = Trip.objects.filter(sighting__place=self).order_by('-created_at').distinct()
+        trips = Trip.objects.filter(
+            sightings__place=self
+        ).order_by('-created_at').distinct()
         return trips
 
     def most_recent_trips_with_desc(self):

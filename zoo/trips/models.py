@@ -36,7 +36,22 @@ class Trip(AuditedModel):
         elif self.end is None and self.start:
             self.end = self.start
         return super(Trip,self).save(args, kwargs)
+        
+    
+    def get_absolute_url(self):
+        return self.urls.absolute
 
+    @attrproperty
+    @models.permalink
+    def urls(self, name):
+        if name == 'absolute':
+            return ('trip-view', (), {
+                'username': self.created_by.username,
+                'trip_id': self.id,
+                })
+        else:
+            raise AttributeError, name
+    
     # THIS MUST BE static. It does not act on an instance and is called from
     # the profile model
     @staticmethod
@@ -110,7 +125,11 @@ class Sighting(AuditedModel):
         help_text="What was sighted",
     )
     trip = models.ForeignKey(Trip, null=True, blank=True,
-        help_text="If this sighting was part of a trip, give it here. Leave blank for a non-trip sighting, e.g. just <em>knowledge</em> about the species at this place",
+        help_text="""
+            If this sighting was part of a trip, give it here. Leave blank for 
+            a non-trip sighting, e.g. just <em>knowledge</em> about the
+            species at this place
+        """, related_name = 'sightings'
     )
 
     def __unicode__(self):

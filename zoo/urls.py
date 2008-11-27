@@ -138,6 +138,10 @@ urlpatterns = patterns('',
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/add-sightings/$',
         'zoo.trips.views.add_sightings',
         name='place-add-sightings'),
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/' + 
+            'add-sightings/(?P<ids>[xs].*?)/$',
+        'zoo.trips.views.finish_add_sightings',
+        name='place-finish-add-sightings'),
 
     url(r'^(?P<country_code>\w{2})/$', 'zoo.places.views.country',
         name='country'),
