@@ -14,6 +14,10 @@
 
 /* @group homepage */
 
+.signup {
+	
+}
+
 .interaction {
 	background-color: #BDDA9B;
 	border-top: 1px solid #879E6B;
@@ -24,6 +28,10 @@
 .map {
 	background-color: #FFFFFF;
 	padding: 1em 0;
+}
+
+.map img {
+	float: left;
 }
 
 .features {

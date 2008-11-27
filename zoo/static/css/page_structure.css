@@ -6,6 +6,8 @@
 }
 .main .wrapper {
 	padding: 0 1em;
+	overflow: hidden;
+	zoom: 1;
 }
 
 /* @group Header */
