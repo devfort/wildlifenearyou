@@ -10,6 +10,7 @@ class PlaceEditForm(ModelForm):
         fields = ['known_as', 'legal_name', 'description', 'url',
                   'country']
 
+
 class PlaceOpeningEditForm(ModelForm):
     class Meta:
         model = PlaceOpening

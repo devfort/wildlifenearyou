@@ -60,6 +60,11 @@ div.comment .posted-by {
   margin-left: 1em;
 }
 
+ul.errorlist { 
+  list-style-type: none;
+  color: #cc0000;
+}
+
 /* @end */
 
 /* @group Currencies */

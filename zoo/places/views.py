@@ -126,19 +126,31 @@ def all_countries(request):
     })
 
 from zoo.places.forms import PlaceUberForm
+from zoo.changerequests.models import ChangeRequestGroup, ChangeAttributeRequest
 
 def place_edit(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
 
     if request.method == 'POST':
-        from pprint import pprint
-        pprint(dict(request.POST))
-    
         uf = PlaceUberForm(place, request.POST)
 
-        if uf.is_valid:
-            print "all valid"
+        if uf.is_valid():
+            changes = uf.changes()
+            if changes:
+                crg = ChangeRequestGroup.objects.create()
+
+                for (obj, attrname), (oldval, newval) in changes.iteritems():
+                    ChangeAttributeRequest.objects.create(
+                        group=crg,
+                        content_object=obj,
+                        attribute=attrname,
+                        old_value=oldval,
+                        new_value=newval,
+                    )
+
+        else:
+            print "INVALID"
     else:
         uf = PlaceUberForm(place)
 

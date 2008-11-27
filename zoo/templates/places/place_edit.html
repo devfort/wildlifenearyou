@@ -10,13 +10,15 @@
 {{ form.delete_form.as_p }}
 {{ form.main.as_p }}
 Open Hours:
-{% for oh in form.openings.subforms %}
+{% for o in form.opening.subuforms %}
 <div class="nested-edit">
-{{ oh.delete_form.as_p }}
-{{ oh.main.as_p }}
+{{ o.delete_form.as_p }}
+{{ o.main.as_p }}
 </div>
 {% endfor %}
-Add more detailed opening hours: {{ form.openings.addform|length }}
+<p>
+Add more detailed opening hours: {{ form.opening.addform }}
+</p>
 
 <input type="submit" name="submit" value="Save all proposed changes">
 </div>

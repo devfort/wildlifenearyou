@@ -94,6 +94,18 @@ class ChangeAttributeRequest(ChangeRequest):
     old_value = models.TextField(blank=True)
     new_value = models.TextField(blank=True)
 
+    def save(self, *args, **kwargs):
+        def pkify(obj):
+            if isinstance(obj, models.Model):
+                return obj.pk
+            else:
+                return obj
+
+        self.old_value = pkify(self.old_value)
+        self.new_value = pkify(self.new_value)
+
+        super(ChangeAttributeRequest, self).save(*args, **kwargs)
+
     def conflicts(self):
         obj = self.content_object
         cur_value = getattr(obj, self.attribute)
