@@ -6,8 +6,6 @@ elif settings.DATABASE_ENGINE == 'sqlite3':
 import datetime
 migration = m.Migration(sql_up=["""
     DROP TABLE `photos_photo_contained_species`;
-""", """
-    DROP TABLE `photos_photo`;
 """], sql_down=["""
     CREATE TABLE `photos_photo_contained_species` (
         `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
