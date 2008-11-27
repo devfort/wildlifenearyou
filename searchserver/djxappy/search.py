@@ -437,6 +437,24 @@ def listdbs(request):
     """
     return {'db_names': dircache.listdir(settings.XAPPY_DATABASE_DIR)}
 
+@jsonreturning
+@timed
+@errchecked
+def parse_latlong(request):
+    """Parse a latitude/longitude coordinate, in a variety of formats, to a
+    pair of floating point numbers.
+
+    Takes a single querystring parameter.
+
+    Returns {'ok': 1, 'latitude': latitude, 'longitude': longitude}
+
+    """
+    params = validate_params(request.GET, {
+                             'latlong_string': (1, 1, '^.*$', None),
+                             })
+    coord = xapian.LatLongCoord.parse_latlong(params['latlong_string'][0])
+    return {'ok': 1, 'latitude': coord.latitude, 'longitude': coord.longitude}
+
 valid_field_config_keys = set((
     'exacttext',
     'field_name',
@@ -473,8 +491,6 @@ def validate_dict_entries(dict, allowed, msg):
     if len(invalid_keys) != 0:
         raise ValidationError(
             msg % ', '.join("'%s'" % p for p in invalid_keys))
-
-
 
 @jsonreturning
 @timed

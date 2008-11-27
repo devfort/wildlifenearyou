@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     # Searching
     ('^' + settings.BASEURL + r'search/(?P<db_name>\w+)', "search.search"),
     ('^' + settings.BASEURL + r'get/(?P<db_name>\w+)', "search.get"),
+    ('^' + settings.BASEURL + r'parse_latlong', "search.parse_latlong"),
 
     # Database admin stuff
     ('^' + settings.BASEURL + r'listdbs', "search.listdbs"),
