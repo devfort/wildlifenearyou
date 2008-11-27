@@ -61,6 +61,12 @@ def make_db_searcher(dbname, db_prefix=None):
     
     return search
 
+def make_db_deleter(dbname):
+    client = Client(settings.XAPIAN_BASE_URL, dbname,
+                    settings.XAPIAN_PERSONAL_PREFIX)
+    def delete_database():
+        client.deldb()
+    return delete_database
 
 search_locations = make_searcher(
     settings.XAPIAN_LOCATION_DB, latlon_fields = ['latlon']
@@ -73,4 +79,7 @@ lookup_species = make_lookup(settings.XAPIAN_SPECIES_DB)
 
 search_places = make_db_searcher(
     'placeinfo', settings.XAPIAN_PERSONAL_PREFIX
+)
+delete_places = make_db_deleter(
+    'placeinfo'
 )
