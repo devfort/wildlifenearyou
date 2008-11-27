@@ -205,9 +205,9 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 
 {% block secondary_content %}
 
-<h2>Rating</h2>
+<h2>Average Trip Rating</h2>
 
-<span class="rating" title="{{ rating.on|length }} out of 5 stars">
+<p class="rating" title="{{ rating.on|length }} out of 5 stars">
 {% for i in rating.on %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
 {% endfor %}
@@ -215,7 +215,7 @@ NOT:
 {% for i in rating.off %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
 {% endfor %}
-</span>
+</p>
 
 <p><a href="">&raquo; Support your zoo!</a></p>
 
