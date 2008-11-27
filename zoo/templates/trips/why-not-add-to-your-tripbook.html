@@ -55,8 +55,10 @@
 </div>
 <div class="container">
     <input type="submit" name="save-trip" value="Save my trip report">
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="submit" name="just-sightings" value="No thanks, just save my sightings">
+</div>
+<h2>Just report that this zoo has them</h2>
+<div class="container">
+    <input type="submit" name="just-sightings" value="They definitely do but I haven't seen them (yet!)">
 {% for hidden in hiddens %}
     <input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
 {% endfor %}
