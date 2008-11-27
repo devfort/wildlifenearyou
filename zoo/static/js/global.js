@@ -12,7 +12,7 @@ jQuery(function($) {
 	
 	//	Automatically clear default text in input fields when they are focused
 	$("input[type='text']").focus(function() {
-		if (($(this).val() == this.defaultValue) && (!$(this).hasClass('remove-default'))) {
+		if (($(this).val() == this.defaultValue) && ($(this).hasClass('remove-default'))) {
 			$(this).val('');
 		}
 	});
