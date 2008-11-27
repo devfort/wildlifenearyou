@@ -88,7 +88,7 @@ def get_client(dbname):
     )
 
 def initialise():
-    indexes = {} # Map Xapain dbname => list of fields
+    indexes = {} # Map Xapian dbname => list of fields
     for model in models.get_models():
         if not hasattr(model, 'Searchable'):
             continue
@@ -101,7 +101,12 @@ def initialise():
         if len(fields) == 0:
             continue # Skip this index
         client = get_client(index)
-        client.newdb(fields, allow_reopen = True)
+        try:
+            client.newdb(fields, allow_reopen = True)
+        except client.SearchClientError:
+            print "Clearing database - you will need to re-index"
+            client.newdb(fields, overwrite = True)
+            raise
     
     # Set up the global signal hooks
     post_save.connect(index_hook)
