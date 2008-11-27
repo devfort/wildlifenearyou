@@ -133,11 +133,12 @@ class Profile(models.Model):
     send_password_key_email.alters_data = True
 
     def send_welcome_email(self):
+        from django.contrib.sites.models import Site
+        site = Site.objects.all()[0] # there can be only one.
         self.send_email('Welcome to Narwhals.com!',
                         'emails/welcome.txt',
                         {'user': self.user,
-                         'url': 'www.example.com',
-                         'site_name': 'SITENAME',
+                         'site': site,
                          'site_email': 'us@example.com',
                          })
     send_welcome_email.alters_data = True
