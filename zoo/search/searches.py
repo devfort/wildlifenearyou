@@ -79,9 +79,8 @@ def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
     
     return search
 
-def make_db_deleter(dbname):
-    client = Client(settings.XAPIAN_BASE_URL, dbname,
-                    settings.XAPIAN_PERSONAL_PREFIX)
+def make_db_deleter(dbname, prefix=None):
+    client = Client(settings.XAPIAN_BASE_URL, dbname, prefix)
     def delete_database():
         client.deldb()
     return delete_database
@@ -100,7 +99,7 @@ search_places = make_db_searcher(
     latlon_fields = ['latlon']
 )
 delete_places = make_db_deleter(
-    'placeinfo'
+    'placeinfo', settings.XAPIAN_PERSONAL_PREFIX,
 )
 
 # Known species index holds only species which we have some information about,
@@ -110,7 +109,7 @@ search_known_species = make_db_searcher(
     'known_species', settings.XAPIAN_PERSONAL_PREFIX
 )
 delete_known_species = make_db_deleter(
-    'known_species'
+    'known_species', settings.XAPIAN_PERSONAL_PREFIX
 )
 
 
