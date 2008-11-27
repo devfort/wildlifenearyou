@@ -12,7 +12,7 @@
 	background-image: url(/static/img/bg/header.png);
 	background-repeat: repeat-x;
 	background-position: bottom left;
-	padding: 0.8em 0.8em 0.8em 0.8em;
+	padding: 0.8em 0.8em 0.8em 0;
 }
 .header .contents {
 	text-align: right;
