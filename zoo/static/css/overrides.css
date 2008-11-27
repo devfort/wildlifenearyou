@@ -46,6 +46,18 @@
 	margin-bottom: -50em;
 }
 
+.inner {
+	padding-left: 15px;
+}
+
+.inner img {
+	float: left;
+}
+
+.column h2 {
+	margin-top: 10px;
+}
+
 .first {
 	margin-left: 0;
 }
