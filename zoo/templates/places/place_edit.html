@@ -3,56 +3,60 @@
 {% block title %}Suggest changes to {{ place.known_as }}{% endblock %}
 
 {% block content %}
-<h1>{{ place.known_as }} - Suggest Changes</h1>
-<a href="{{ place.urls.absolute }}">Cancel and go back to viewing {{ place.known_as }}</a>
+<h1>Suggest changes to {{ place.known_as }}</h1>
 
-<p>TODO Some copy about ringing or visiting a zoo (or its website) to
-check/discover the information.</p>
+<p><a href="{{ place.urls.absolute }}">Go back to viewing {{ place.known_as }}</a></p>
+
+<p>
+    If you have updated information about {{ place.known_as }}, please let us know. Changes are moderated but are added as soon as possible.
+</p>
 
 <form action="{{ path }}" method="post">
-{% if form.deleted %}
-<div>
-{{ form.undelete_form.undelete }}
-{{ form.render_deleted }}
-</div>
-{% else %}
-<div>
-{{ form.delete_form.delete }}
-{{ form.main.as_p }}
+    {% if form.deleted %}
+        <div>
+        {{ form.undelete_form.undelete }}
+        {{ form.render_deleted }}
+        </div>
+    {% else %}
+        <div>
+        {{ form.delete_form.delete }}
+        {{ form.main.as_p }}
+        
+        Facilities:
+        {% for f in form.facility.subuforms %}
+            {% if f.deleted %}
+                <div>
+                    {{ f.undelete_form.undelete }}
+                    {{ f.render_deleted }}
+                </div>
+            {% else %}
+                <div class="nested-edit">
+                {{ f.delete_form.as_p }}
+                {{ f.main.as_p }}
+                </div>
+            {% endif %}
+        {% endfor %}
 
-Facilities:
-{% for f in form.facility.subuforms %}
-{% if f.deleted %}
-<div>
-{{ f.undelete_form.undelete }}
-{{ f.render_deleted }}
-</div>
-{% else %}
-<div class="nested-edit">
-{{ f.delete_form.as_p }}
-{{ f.main.as_p }}
-</div>
-{% endif %}
-{% endfor %}
-<p>
-Add more facilities: {{ form.facility.addform }}
-</p>
+        <p>
+        Add more facilities: {{ form.facility.addform }}
+        </p>
+    
+        Opening Hours:
+        {% for o in form.opening.subuforms %}
+        <div class="nested-edit">
+            {{ o.delete_form.as_p }}
+            {{ o.main.as_p }}
+        </div>
+        {% endfor %}
 
-Opening Hours:
-{% for o in form.opening.subuforms %}
-<div class="nested-edit">
-{{ o.delete_form.as_p }}
-{{ o.main.as_p }}
-</div>
-{% endfor %}
-<p>
-Add more detailed opening hours: {{ form.opening.addform }}
-</p>
+        <p>
+        Add more detailed opening hours: {{ form.opening.addform }}
+        </p>
+    
+        </div>
+    {% endif %}
 
-</div>
-{% endif %}
-<input type="submit" name="submit" value="Save all proposed changes">
+    <input type="submit" name="submit" value="Save all proposed changes">
 
 </form>
-
 {% endblock %}
