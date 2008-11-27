@@ -13,12 +13,15 @@
 <p>Why not write about your trip in your tripbook? You can upload your photos too.</p>
 
 <form action="{{ request.path }}" method="POST">
-<h2>An existing trip</h2>
+{% if request.user.created_trip_set.all %}
+<h2>Add this sighting to an existing trip</h2>
+<p>We show you all the trips you have been on - even ones where you didn't visit {{ place.known_as }}. That's in case you went to two places during one trip.</p>
 	{{ form.user_trips.errors }}
 	{{ form.user_trips.label_tag }}
 	{{ form.user_trips }}
 
     <input type="submit" name="add-to-existing" value="Add to my trip">
+{% endif %}
 
 <h2>A New Trip</h2>
 <p>
