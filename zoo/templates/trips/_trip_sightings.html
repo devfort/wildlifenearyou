@@ -7,7 +7,7 @@
 	<p>A trip to {% for place in sightings_by_place %}{{ place.grouper }}{% endfor %} with {{ trip.sightings.all.count }} sighting{{ trip.sightings.all.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
 
 	{% for place in sightings_by_place %}
-	<h2>Sighting{{ trip.sightings.all.count|pluralize }}</h2>
+	<{{htag2}}>Sighting{{ trip.sightings.all.count|pluralize }}</{{htag2}}>
 	<ul>
 		{% for sighting in place.list %}
 		<li><a href="{% url species sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
@@ -21,7 +21,7 @@
 	{{ trip.description }}
 	</p>
 
-	<h2>Sightings</h2>
+	<{{htag2}}>Sightings</{{htag2}}>
 	{% for place in sightings_by_place %}
 	<h2>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>{% endfor %}</h2>
 	<p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
