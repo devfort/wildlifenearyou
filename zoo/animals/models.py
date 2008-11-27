@@ -73,16 +73,11 @@ class Species(AbstractSpecies):
             }, { # Searching for the place address.
                 'field_name': 'latin_name',
                 'django_fields': ['latin_name'],
-                'config': {
-                    'freetext': {'language': 'en'}, # Remove this when bug with different stemmers in one index is fixed
-                    'store': True
-                },
+                'config': {'store': True},
             }, { # Searching for the place address.
                 'field_name': 'description',
                 'django_fields': ['description'],
-                'config': {
-                    'freetext': {'language': 'en'}
-                },
+                'config': {'freetext': {'language': 'en'}},
             }
             # TODO: Index places you can see this animal perhaps?
         ]
