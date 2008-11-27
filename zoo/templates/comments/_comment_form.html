@@ -2,7 +2,7 @@
 <form action="{% comment_form_target %}" method="post">
     <p{% if form.comment.errors %} class="error"{% endif %}>
         {{ form.comment.errors }}
-        <div>{{ form.comment.label_tag }}</div>
+        <div><label for="id_comment">Add Your Comment</label></div>
         <div>{{ form.comment }}</div>
     </p>
     <p style="display: none">
