@@ -26,25 +26,6 @@ def tripbook(request, username):
         'profile': user.get_profile(),
     })
 
-def trip_edit(request, username):
-    pass
-
-@login_required
-def trip_add(request, username):
-    user = get_object_or_404(User, username=username)
-    if request.method == 'POST':
-        form = AddTripForm(request.POST)
-        if form.is_valid():
-            trip = form.save()
-            return Redirect(reverse('trip-view', args=(trip.id,)))
-    else:
-        form = AddTripForm()
-    
-    return render(request, 'trips/add_trip.html', {
-        'profile': user.get_profile(),
-        'form': form,
-    })
-    
 def trip_view(request, username, trip_id):
     user = get_object_or_404(User, username=username)
     trip = get_object_or_404(Trip, id=trip_id, created_by=user)
