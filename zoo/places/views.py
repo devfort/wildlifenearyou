@@ -146,7 +146,6 @@ def place_edit(request, country_code, slug):
         uf = PlaceUberForm(place, request.POST)
 
         if uf.is_valid():
-            print "VALID"
             if 'save all' in request.POST.get('submit', '').lower():
                 changes, deletions = uf.modifications()
 
@@ -156,7 +155,7 @@ def place_edit(request, country_code, slug):
                     if crg[0] is None:
                         crg[0] = ChangeRequestGroup.objects.create()
                     return crg[0]
-                        
+
                 if changes:
                     for (obj, attrname), (oldval, newval) in changes.iteritems():
                         ChangeAttributeRequest.objects.create(
@@ -183,13 +182,9 @@ def place_edit(request, country_code, slug):
                         )
 
                         return cor
-                    
                 uf.mapadds(create_add_request)
 
                 return HttpResponseRedirect(place.urls.changes_suggested)
-
-        else:
-            print "INVALID"
     else:
         uf = PlaceUberForm(place)
 
