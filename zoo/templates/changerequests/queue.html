@@ -71,11 +71,13 @@
       {% endcase %}
 
       {% case "CreateObjectRequest" %}
-        Create a {{ crs.content_type }} object with the following properties:
+        Create a {% if crs.parent %}nested {% endif %}{{ crs.content_type }} object {% if crs.children %}and their children below{% endif %} with the following properties:
        {{ crs.attributes }}
-       
-       {% include "changerequests/form_apply.html" %}
-       {% include "changerequests/form_delete.html" %}
+      
+       {% if not crs.parent %}
+         {% include "changerequests/form_apply.html" %}
+         {% include "changerequests/form_delete.html" %}
+       {% endif %}
       {% endcase %}
 
       {% defaultcase %}

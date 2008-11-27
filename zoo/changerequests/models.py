@@ -165,6 +165,9 @@ class CreateObjectRequest(ChangeRequest):
     attributes = JSONField()
     reverse_relation = models.TextField()
 
+    def children(self):
+        return self.__class__.objects.filter(parent=self)
+
     def apply(self, user=None):
         klass = self.content_type.model_class()
         instance = klass(**self.attributes)
