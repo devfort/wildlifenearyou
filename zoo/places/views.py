@@ -10,36 +10,11 @@ from zoo.trips.models import Trip, Sighting
 
 SPECIES_ON_PLACE_PAGE = 10
 
-def get_place_species(place, user, limit=None):
-    passport = Trip.get_passport(user)
-
-    by_count = {}
-    for sighting in Sighting.objects.filter(place=place):
-        species = sighting.species
-        by_count[species] = by_count.get(species, 0) + 1
-
-    if by_count.values():
-        max_species = max(by_count.values())
-
-    species_list = by_count.keys()
-    for species in species_list:
-        species.count = by_count[species]
-        species.quad = int( 4 * ( by_count[species] - 1.0 ) / max_species )
-        if species in passport.seen_species:
-            species.seen = True
-
-    species_list.sort(key=lambda s: s.common_name)
-
-    if limit:
-        species_list = species_list[:limit]
-
-    return species_list
-
 def place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
 
-    species_list = get_place_species(place, request.user, SPECIES_ON_PLACE_PAGE)
+    species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE)
 
     opening_times = {}
     for opening in place.placeopening_set.all():
@@ -98,7 +73,7 @@ def place_species(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
 
-    species_list = get_place_species(place, request.user)
+    species_list = place.get_species(request.user)
 
     return render(request, 'places/place_species.html', {
         'place': place,

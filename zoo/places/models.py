@@ -156,6 +156,40 @@ class Place(AuditedModel):
         yield self.town
         yield self.state
 
+    def get_species(self, user=None, limit=None):
+        """
+        If user argument is provided, seen=True flag will be added to all 
+        species which have been seen by that user.
+        """
+        if user and not user.is_anonymous():
+            from zoo.trips.models import Trip, Sighting
+            seen_species = Trip.get_passport(user).seen_species
+        else:
+            seen_species = []
+        
+        by_count = {}
+        for sighting in Sighting.objects.filter(place=self):
+            species = sighting.species
+            by_count[species] = by_count.get(species, 0) + 1
+        
+        if by_count.values():
+            max_species = max(by_count.values())
+        
+        species_list = by_count.keys()
+        for species in species_list:
+            species.count = by_count[species]
+            species.quad = int(4 * (by_count[species] - 1.0) / max_species)
+            if species in seen_species:
+                species.seen = True
+        
+        species_list.sort(key=lambda s: s.common_name)
+        
+        if limit:
+            species_list = species_list[:limit]
+        
+        return species_list
+
+
 class Facility(models.Model):
     icon = models.ImageField(upload_to='facility_icons')
     default_desc = models.CharField(max_length=200, blank=True, null=True)
