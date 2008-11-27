@@ -222,6 +222,7 @@ def add_sightings(request, country_code, slug):
         'saw_dict': repr(saw_dict),
     })
 
+@login_required
 def finish_add_sightings(request, country_code, slug, ids):
     """
     At this point, the user has told us exactly what they saw. We're going to
