@@ -73,6 +73,7 @@ jQuery(function($) {
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
 <p class="address">{% if place.address %}{{ place.address }},{% endif %}
 	<a href="{% url country place.country.country_code %}">{{ place.country }}</a>
+	<a href="{{ place.country.get_absolute_url }}" class="flag"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code|lower }}.gif" alt="Flag of {{ place.country }}"></a>
 	{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
 </p>
 

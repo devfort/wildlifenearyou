@@ -23,7 +23,7 @@
     <ol>
     {% for place in results %}
         <li>
-            <h4><a href="{{ place.get_absolute_url }}">{{ place }}</a></h4>
+            <h4><a href="{{ place.get_absolute_url }}">{{ place }}</a>, {{ place.country }} <a href="{{ place.country.get_absolute_url }}" class="flag"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code|lower }}.gif" alt="Flag of {{ place.country }}"></a></h4>
             {% if place.address %}<p>{{ place.address }}</p>{% endif %}
             {% if place.species_list %}
             <ul class="species_list">
