@@ -8,12 +8,15 @@ from django.contrib.auth.models import User
 from django.template import loader, Context
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.comments.models import Comment
 
 import zoo.utils
 from zoo.utils import attrproperty
 from zoo.trips.models import Trip
 from zoo.animals.models import Species
 from zoo.models import AuditedModel
+from zoo.photos.models import Photo
 
 HASH_ORIGIN_DATE = datetime.date(2000, 1, 1)
 
@@ -38,8 +41,44 @@ class Profile(models.Model):
     badges = models.ManyToManyField(Badge, through=ProfileBadge)
     biography = models.TextField(null=False, blank=True)
     url = models.URLField(null=False, blank=True, verify_exists=False)
+    percentage_complete = models.IntegerField(null=False, blank=False, default=0)
 
     email_validated = models.BooleanField(null=False, blank=False, default=False)
+
+    # FIXME: also have a signal attached to all models that affect this
+    def save(self, *args, **kwargs):
+        self.recalculate_percentage_complete()
+        return super(Profile,self).save(args, kwargs)
+
+    def recalculate_percentage_complete(self):
+        self.percentage_complete = self._percentage_complete()
+        qs = Profile.objects.filter(pk=self.pk)
+        qs.update(percentage_complete = self.percentage_complete)
+
+    def _percentage_complete(self):
+        percent = 0
+        if self.biography: percent += 10
+        if self.user.get_full_name(): percent += 10
+        if self.url: percent += 5
+        # location: 15
+        if self.user.created_sighting_set.count() > 0: percent += 5
+        if self.user.photos.all().count() > 0: percent += 5
+        if self.user.comment_comments.all().count() > 0: percent += 5
+        photo_ids = self.user.photos.values_list('id', flat=True)
+        pct = ContentType.objects.get_for_model(Photo)
+        # Note that if things get slow, it's probably the following not optimising properly as the number of photos
+        # increases.
+        if Comment.objects.filter(content_type = pct, object_pk__in = photo_ids).exclude(user = self.user).count() > 0:
+            percent += 5
+        if self.user.selectedfaceparts.count() > 0: percent += 10 # avatar / profile picture
+        if self.user.favourite_species.all().count() > 0: percent += 5
+        if self.user.created_sighting_set.count() > 10: percent += 5
+        if self.user.photos.all().count() > 10: percent += 5
+        if self.user.created_sighting_set.count() > 100: percent += 5
+        if self.user.photos.all().count() > 100: percent += 5
+        # 5% reserved. Once we fill that up, we'll start awarding badges for specific things instead.
+
+        return percent
 
     @models.permalink
     def get_absolute_url(self):

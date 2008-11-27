@@ -29,7 +29,7 @@
     <span>Can I Keep It?</span></p>
 	<ul>
 	  {% comment %} This has to all be on one line. {% endcomment %}
-	  <li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?next={{ request.path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.path|urlencode }}" id="feedback-link">Send Feedback!</a></li>
+	  <li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a> ({{ user.get_profile.percentage_complete }}% complete)</li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?next={{ request.path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.path|urlencode }}" id="feedback-link">Send Feedback!</a></li>
 	</ul>
     <form action="/search/" method="GET" accept-charset="utf-8">
         <div>
