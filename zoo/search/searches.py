@@ -70,17 +70,25 @@ def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
     # one will be something like "places.Place:34" - it looks up the model
     # and uses .in_bulk(ids) to load those ORM objects, then returns them.
     client = Client(settings.XAPIAN_BASE_URL, dbname, db_prefix)
-    def search(q, num=0, details=False, latlon=False, default_op=Query.OP_AND):
+    def search(q, num=0, details=False, latlon=False, 
+            default_op=Query.OP_AND, search_field=None):
         # If details=True, it returns a tuple pair - the first item is the 
         # results list it would normally return, the second is the full Xapian
         # results object.
-        q = FreeTextQuery(q, default_op=default_op)
+        kwargs = {
+            'default_op': default_op,
+        }
+        if search_field:
+            kwargs['default_allow'] = search_field
+        q = FreeTextQuery(q, **kwargs)
         query = Query()
         query.part = q
+        annotate_with_distances = False
         if latlon and latlon_fields:
             if not isinstance(latlon, basestring): # deal with (lat, lon) 
                 latlon = ' '.join(latlon)
             query.sort_by_distance(latlon_fields[0], latlon)
+            annotate_with_distances = True
         results = client.search(query, end_rank=num)
         search_ids = [
             item['id'] for item in results['items']
@@ -95,8 +103,17 @@ def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
             klass = models.get_model(*model_key.split('.'))
             for id, obj in klass.objects.in_bulk(ids).items():
                 grabbed['%s:%s' % (model_key, id)] = obj
-        # Finally, return objects for the search_ids in the correct order
+        # Put objects for the search_ids in the correct order
         objects = [grabbed[search_id] for search_id in search_ids]
+        if annotate_with_distances:
+            for obj in objects:
+                obj.distance = [
+                    i for i in results['items'] 
+                    if i['id'].split(':')[1] == str(obj.pk)
+                ][0]['geo_distance']['latlon']
+                obj.distance_miles = (obj.distance / 1609.244)
+                obj.distance_km = (obj.distance / 1000.0)
+        
         if results.get('spell_corrected', False):
             spell_corrected = results['spellcorr_q']
         else:
@@ -136,6 +153,9 @@ search_places = make_db_searcher(
 delete_places = make_db_deleter(
     'placeinfo', settings.XAPIAN_PERSONAL_PREFIX,
 )
+
+def nearest_places_with_species(q, latlon):
+    return search_places(q, latlon=latlon, search_field='species')
 
 # Known species index holds only species which we have some information about,
 # unlike the regular species index which has 44,000 animals including many 

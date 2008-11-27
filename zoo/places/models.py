@@ -134,7 +134,11 @@ class Place(AuditedModel):
             })
 
     def visible_photos(self):
-        return self.photos.filter(is_visible = True)
+        from zoo.photos.models import Photo
+        return Photo.objects.filter(
+            sightings__place = self,
+            is_visible = True
+        )
 
     class Searchable:
         fields = [

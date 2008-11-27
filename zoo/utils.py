@@ -40,3 +40,29 @@ body:
     else:
         send_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None)
 
+def location_from_request(request):
+    """
+    Returns ('description', (lat, lan)) if available, ('', (None, None))
+    otherwise. Pulls from profile first, cookie second, else fails.
+    """
+    # Location in profile over-rides location in cookie
+    if not request.user.is_anonymous():
+        profile = request.user.get_profile()
+        if profile.latitude and profile.longitude:
+            return (profile.location, (profile.latitude, profile.longitude))
+    if 'location' in request.COOKIES:
+        location = request.COOKIES['location']
+        # Should be format Description:lat,lon
+        if ':' in location:
+            bits = location.split(':')
+            latlon = bits[-1]
+            description = ':'.join(bits[:-1])
+            if ',' in latlon:
+                try:
+                    return description, map(float, latlon.split(',')[:2])
+                except ValueError:
+                    return ('', (None, None))
+    return ('', (None, None))
+
+        
+        

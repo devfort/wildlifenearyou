@@ -118,9 +118,9 @@ urlpatterns = patterns('',
     url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),
 
-    (r'^set-location/$', 'zoo.geonames.views.set_location'),
-    url(r'^geonames/autocomplete/$', 'zoo.geonames.views.autocomplete',
-        name="geonames-autocomplete"),
+    (r'^set-location/$', 'zoo.accounts.views.set_location'),
+    url(r'location-complete/$', 'zoo.search.views.location_complete',
+        name="location-autocomplete"),
 
     (r'^comments/', include('django.contrib.comments.urls')),
     url(r'^feedback/$', 'zoo.feedback.views.submit', name='feedback'),

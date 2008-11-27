@@ -167,3 +167,24 @@ def all_profiles(request):
     return render(request, 'accounts/all_profiles.html', {
         'all_users': User.objects.all(),
     })
+
+def set_location(request):
+    """
+    Logged in users use this view to set the location on their profile - 
+    anonymous users get a cookie instead
+    """
+    from zoo.search import search_locations
+    location = request.POST.get('location', '')
+    msg = ''
+    if location:
+        # Set their location to the first result
+        results = list(search_locations(location))
+        if len(results):
+            result = results[0]
+            description = results['description']
+            msg = 'Your location has been set to "%s"' % description
+        else:
+            msg = 'No matches for "%s"' % location
+    return render(request, 'accounts/set_location.html', {
+        'msg': msg,
+    })

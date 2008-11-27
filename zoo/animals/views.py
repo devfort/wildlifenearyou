@@ -7,6 +7,9 @@ from zoo.shortcuts import render
 from zoo.animals.models import Species, SuperSpecies
 from zoo.favourites.models import FavouriteSpecies
 
+from zoo.search import nearest_places_with_species
+from zoo.utils import location_from_request
+
 def species(request, slug):
     try:
         species = Species.objects.get(slug=slug)
@@ -23,12 +26,24 @@ def species(request, slug):
         hit_parade = FavouriteSpecies.hit_parade().index(species) + 1
     except ValueError, e:
         pass
-
+    
+    # If we have the user's location, find the nearest animal of this species
+    description, (latitude, longitude) = location_from_request(request)
+    if description:
+        try:
+            nearest = nearest_places_with_species(
+                species.common_name, '%f %f' % (latitude, longitude)
+            )[0]
+        except IndexError:
+            nearest = None
+    
     return render(request, 'animals/species.html', {
         'species': species,
         'favourited': species.has_favourited(request.user),
         'hit_parade': hit_parade,
         'favourites': favourites,
+        'nearest': nearest,
+        'location_description': description,
     })
 
 def all_species(request):

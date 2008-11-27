@@ -48,3 +48,11 @@ def search(request):
         'species_results_corrected_q': species_results_corrected_q,
         'location_results': location_results,
     })
+
+
+from zoo.shortcuts import render_json
+from zoo.search import search_locations
+def location_complete(request):
+    q = request.GET.get('q', '')
+    results = search_locations(q)
+    return render_json(request, list(results))

@@ -14,6 +14,12 @@
 <p class="intro">{{ species.description }}</p>
 {% endif %}
 
+{% if nearest %}
+<p>The nearest {{ species.common_name }} <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">to you</a> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, {{ nearest.distance_miles|floatformat:0 }} miles away</p>
+{% else %}
+<p><a href="/set-location/">Set your location</a> to find a {{ species.common_name }} near you (or just <a href="">search for one</a>)</p>
+{% endif %}
+
 {% if request.user.is_authenticated %}
 	{% if favourited %}
 	<p>This is one of your favourite animals! {% favourite_toggler "remove" species.slug request.path %}</a></p>

@@ -48,7 +48,13 @@ class Profile(models.Model):
 
     email_validated = models.BooleanField(null=False, blank=False, default=False)
     featured = models.BooleanField(null=False, blank=False, default=False)
-
+    
+    # Three fields for location: the first is a text description
+    location = models.TextField(max_length=100, blank=True)
+    # The other two are lat and lon
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    
     def avatar_img(self):
         return mark_safe('<img src="/faces/%s.png" alt="%s\'s Avatar" width="175" height="175" />' % (self.user.username.lower(), self.user.username))
 
