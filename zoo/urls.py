@@ -182,6 +182,7 @@ urlpatterns = patterns('',
     url(r'^countries/$', 'zoo.places.views.all_countries',
         name='countries'),
 
+    url(r'^404/$', direct_to_template, {'template':'404.html'}),
     url(r'^500/$', direct_to_template, {'template':'500.html'}),
 )
 
