@@ -90,7 +90,6 @@ class FreeTextQuery(QueryPart):
         QueryPart.__init__(self)
 
     def to_params(self):
-        print self.text
         return ['freetext', (self.text, self.opts)]
 
 class GeoDistanceQuery(QueryPart):
