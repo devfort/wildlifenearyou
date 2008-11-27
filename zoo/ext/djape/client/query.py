@@ -8,6 +8,10 @@ class Query(object):
     options which they support.
 
     """
+
+    OP_AND = 0
+    OP_OR = 1
+
     def __init__(self, text=None):
         """Create the query object.
 
