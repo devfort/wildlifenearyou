@@ -35,13 +35,14 @@
 
 <p>Favourited by {{ favourites }} {{ favourites|pluralize:"person,people" }}
 {% if hit_parade %}
-&mdash; <a href="{% url hit-parade %}">{{ hit_parade|ordinal }} most favourited animal</p>
+&mdash; <a href="{% url hit-parade %}">{{ hit_parade|ordinal }} most favourited animal</a></p>
 {% endif %}
 
 {% endblock %}
 
 {% block secondary_content %}
 
+<h2>Comments</h2>
 {% with species as object %}
     {% include "comments/_comments.html" %}
 {% endwith %}
