@@ -1,10 +1,10 @@
 {% extends base %}
 
-{% block title %}{{ place.known_as }}{% endblock %}
+{% block title %}{{ place.known_as|title }}{% endblock %}
 
 {% block primary_content %}
 
-<h1>{{ place.known_as }}</h1>
+<h1>{{ place.known_as|title }}</h1>
 {% if place.url %}
 <p class="url"><a href="{{ place.url }}">&raquo; Visit their official website</a></p>
 {% endif %}
