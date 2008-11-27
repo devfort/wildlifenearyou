@@ -142,7 +142,13 @@ button.link {
 }
 
 input[type=submit],
-input.submit {
+input.submit,
+a.button:link,
+a.button:visited,
+a.button:hover,
+a.button:active,
+a.button:focus {
+	text-decoration: none;
 	color: #ffffff;
 	background-color: #519ff1;
 	background-image: url(/static/img/bg/button.png);
@@ -154,6 +160,8 @@ input.submit {
 /* @end */
 
 /* @end */
+
+/* @group Extra heading bits */
 
 h1 a:link,
 h1 a:visited,
@@ -182,6 +190,24 @@ h1 i.scientific {
     font-weight: normal;
     font-size: smaller;
 }
+
+/* @end */
+
+/* @group Link types */
+
+a.add:link,
+a.add:visited,
+a.add:hover,
+a.add:focus,
+a.add:active, 
+.add {
+	padding-left: 20px;
+	background-image: url(/static/img/icons/add.gif);
+	background-position: 0.15em left;
+	background-repeat: no-repeat;
+}
+
+/* @end */
 
 .notusing {
 	background-color: #E185E9;	

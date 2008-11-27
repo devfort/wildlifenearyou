@@ -3,6 +3,7 @@
 div#see-more-animals {
     background-color: #E2F1F9;
     padding: 1em;
+    margin-top: 1.37em;
 }
 div#see-more-animals label {
     width: 4em;
@@ -175,7 +176,7 @@ p.tel {
 	position: relative;
 	width: 110px;
 	height: 20px;
-	margin: 0;
+	margin: 0.5em 0 0 0;
 	padding:0;
 	background: transparent url(/static/img/icons/starselect.gif) -110px 0 no-repeat;
 	overflow: hidden;

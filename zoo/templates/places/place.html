@@ -95,7 +95,7 @@ jQuery(function($) {
 {% endif %}
 
 <div id="see-more-animals">
-    <h3>Did you see more animals?</h3>
+    <h3 class="add">Did you see more animals?</h3>
     <p>What did you see?</p>
     <form action="{{ request.path }}add-sightings/" method="POST">
         <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></div>
@@ -157,7 +157,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 	<h2>Facilities</h2>
 	<ul class="facilities">
 		{% for facility in facilities %}
-		<li><img alt="" src="{{ placefacility.facility.icon.url }}">{{ placefacility.desc }}</li>
+		<li><img alt="{{ facility.facility.default_desc }}" src="{{ facility.facility.icon.url }}">{{ facility.desc }}</li>
 		{% endfor %}
 	</ul>
 	{% endif %}
@@ -205,8 +205,8 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 
 {% block secondary_content %}
 
-<h2>Average Trip Rating</h2>
 
+<h2>Average Trip Rating</h2>
 <p class="rating" title="{{ rating.on|length }} out of 5 stars">
 {% for i in rating.on %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
@@ -217,7 +217,7 @@ NOT:
 {% endfor %}
 </p>
 
-<p><a href="">&raquo; Support your zoo!</a></p>
+<p><a href="" class="button">&raquo; Support your zoo!</a></p>
 
 <h2>Photos</h2>
 
@@ -226,8 +226,23 @@ NOT:
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
 </div>
 {% endfor %}
+
+<div class="photos">
+	<a href="/photourl"><img src="/static/img/site-images/sample_mid_photo.gif"></a>
+	<div class="slideshow">
+		<ul id="thumbnails">
+			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
+			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
+			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
+			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
+		</ul><!-- /#thumbnails -->
+	</div><!-- /.slideshow -->
+</div>
+
 {% if not user.is_anonymous %}
-<p><a href="upload/">Upload a photo you took here!</a></p>
+<p><a class="add" href="upload/">Upload a photo you took here!</a></p>
+{% else %}
+<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add your own photos to this zoo</p>
 {% endif %}
 
 {% if place.most_recent_trips_with_desc %}
