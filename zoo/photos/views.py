@@ -111,28 +111,12 @@ class PhotoEditForm(forms.ModelForm):
         model = Photo
         fields = ('title')
 
-class PhotoSpeciesForm(forms.Form):
-    species1 = SpeciesField(required = False)
-    species2 = SpeciesField(required = False)
-    species3 = SpeciesField(required = False)
-    species4 = SpeciesField(required = False)
-
 def photo(request, username, photo_id):
     photo = get_object_or_404(
         Photo, created_by__username=username, pk=photo_id
     )
-
-    if request.method == 'POST':
-        form = PhotoSpeciesForm(request.POST)
-        if form.is_valid():
-            print "OK", form.cleaned_data
-            print "ERR", form.errors
-    else:
-        form = PhotoSpeciesForm()
-
     return render(request, 'photos/photo.html', {
         'photo': photo,
-        'form': form,
     })
 
 def all(request):

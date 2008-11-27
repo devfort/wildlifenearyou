@@ -6,13 +6,23 @@
 
 <h1>Edit photo details</h1>
 
+<form method="post" action="{{ request.path }}">
+{{ form.title.errors }}
+{{ form.title.label_tag }} {{ form.title }}
+<input type="submit" value="Save changes"></p>
+</form>
+
 {% load thumbnail %}
 <p><img src="{% thumbnail photo.photo 600x600 %}"></p>
 
-<form method="post" action="{{ request.path }}">
-{{ form.as_p }}
-<p><input type="submit" value="Save changes"></p>
-</form>
+{% if photo.place %}
+<p>Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></p>
+{% endif %}
+
+{% if photo.trip %}
+<p>Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></p>
+{% endif %}
+
 
 {% endblock %}
 
