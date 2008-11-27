@@ -168,7 +168,7 @@ class CreateObjectRequest(ChangeRequest):
     parent = models.ForeignKey('self', null=True, blank=True)
     content_type = models.ForeignKey(ContentType)
     attributes = JSONField()
-    reverse_relation = models.TextField()
+    reverse_relation = models.TextField(blank=True)
 
     def children(self):
         return self.__class__.objects.filter(parent=self)
