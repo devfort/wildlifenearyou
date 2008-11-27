@@ -136,6 +136,11 @@ class Place(AuditedModel):
     def __unicode__(self):
         return self.known_as
 
+    def get_slug_suggestions(self):
+        yield self.known_as
+        yield self.town
+        yield self.state
+
 class Facility(models.Model):
     icon = models.ImageField(upload_to='facility_icons')
     default_desc = models.CharField(max_length=200, blank=True, null=True)
