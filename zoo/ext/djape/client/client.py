@@ -88,7 +88,10 @@ class Client(object):
             
         return res
 
-    def search(self, query, start_rank=None, end_rank=None, db_name=None):
+    def search(self, query, start_rank=None, end_rank=None,
+               spell_correct=None, relevant_data=None,
+               summarise=None, hl=None,
+               db_name=None):
         """Perform a search.
 
          - `query`: A Query object, containing the query to perform.
@@ -105,10 +108,15 @@ class Client(object):
         if self.default_prefix is not None:
             db_name = self.default_prefix + '_' + db_name
 
+        hl = simplejson.dumps(hl)
         req = {
             'q': simplejson.dumps(query.to_params()),
             'start_rank': start_rank,
             'end_rank': end_rank,
+            'spell_correct': spell_correct,
+            'relevant_data': relevant_data,
+            'summarise': summarise,
+            'hl': hl,
         }
 
         return self._doreq('search/' + db_name, qs=req)
