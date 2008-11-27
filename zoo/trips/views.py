@@ -206,7 +206,7 @@ def add_sightings(request, country_code, slug):
                 article = 'an'
             else:
                 article = 'a'
-            choices += [('', "Actually I didn't see %s \"%s\"" % (article, string))]
+            choices += [('', "Actually I didn't see %s %s" % (article, string))]
         form.fields['saw_selection_%s' % key] = forms.ChoiceField(
             choices = choices,
             widget = forms.RadioSelect
