@@ -1,0 +1,11 @@
+LICENSE
+MANIFEST
+Makefile.PL
+lib/Geography/NationalGrid.pm
+lib/Geography/NationalGrid/GB.pm
+lib/Geography/NationalGrid/IE.pm
+t/01deg2rad.t
+t/02gbgrid.t
+t/03gbgrid.t
+t/04iegrid.t
+t/05iegrid.t

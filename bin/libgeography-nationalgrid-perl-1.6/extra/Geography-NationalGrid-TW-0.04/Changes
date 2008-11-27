@@ -1,0 +1,16 @@
+Revision history for Perl extension Geography::NationalGrid::TW.
+
+0.04  Tue Dec  4 17:04:15 PST 2007
+	- fix typo. See: http://rt.cpan.org/Public/Bug/Display.html?id=31203
+
+0.03  Wed Mar  1 00:00:58 CST 2006
+        - add transform() between TWD67 and TWD97
+	- first release
+
+0.02  Tue Feb 28 15:54:35 CST 2006
+        - first beta release
+
+0.01  Tue Feb 28 10:37:59 2006
+	- original version; created by h2xs 1.23 with options
+		-b 5.5.3 -X -n Geography::NationalGrid::TW
+
