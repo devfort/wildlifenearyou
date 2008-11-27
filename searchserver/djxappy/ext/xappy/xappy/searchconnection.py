@@ -2505,6 +2505,9 @@ class SearchConnection(object):
         """
         if self._index is None:
             raise _errors.SearchError("SearchConnection has been closed")
+
+        serialised = self._make_parent_func_repr("search")
+
         if 'facets' in _checkxapian.missing_features:
             if getfacets is not None or \
                allowfacets is not None or \
