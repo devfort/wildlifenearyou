@@ -146,7 +146,7 @@ def place_edit(request, country_code, slug):
         uf = PlaceUberForm(place, request.POST)
 
         if uf.is_valid():
-            if 'save all' in request.POST.get('submit', '').lower():
+            if 'suggest all' in request.POST.get('submit', '').lower():
                 changes, deletions = uf.modifications()
 
                 crg = [None]
