@@ -70,15 +70,17 @@
 
 .primary {
     float: left;
-    width: 60%;
+    width: 59%;
+    margin-left: 1%;
     display: inline;
 }
 
 .secondary {
     float: right;
-    width: 34%;
+    width: 33%;
     display: inline;
     margin-top: 2.7em;
+    margin-right: 1%;
 }
 .secondary h2:first-child,
 .secondary h3:first-child {
