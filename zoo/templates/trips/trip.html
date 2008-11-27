@@ -60,8 +60,8 @@
 
                 <h2>Sightings</h2>
                 {% for place in sightings_by_place %}
-                        <h2>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
-                {% endfor %}</h2>
+                        <h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
+                {% endfor %}</h3>
                 <p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
 
                 <ul>
