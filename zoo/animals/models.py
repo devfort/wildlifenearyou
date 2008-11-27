@@ -42,14 +42,36 @@ class AbstractSpecies(models.Model):
 
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
-
+    
     def has_favourited(self, user):
         if not user.is_authenticated():
             return False
         return user.favourite_species.filter(species=self).count() != 0
-
+    
     class Meta:
         verbose_name_plural = 'species'
+    
+    class Searchable:
+        fields = [
+            { # Searching for species by name.
+                'field_name': 'common_name',
+                'django_fields': ['common_name'],
+                'config': {
+                    'store': True,
+                    'freetext': {'language': 'en'}
+                },
+            }, { # Searching for the place address.
+                'field_name': 'latin_name',
+                'django_fields': ['latin_name'],
+                'config': {'store': True},
+            }, { # Searching for the place address.
+                'field_name': 'description',
+                'django_fields': ['description'],
+                'config': {'freetext': {'language': 'en'}},
+            }
+            # TODO: Index places you can see this animal perhaps?
+        ]
+        xapian_index = 'known_species'
 
 class SuperSpecies(AbstractSpecies):
     """

@@ -83,3 +83,15 @@ search_places = make_db_searcher(
 delete_places = make_db_deleter(
     'placeinfo'
 )
+
+# Known species index holds only species which we have some information about,
+# unlike the regular species index which has 44,000 animals including many 
+# thot our site doesn't care about at all.
+search_known_species = make_db_searcher(
+    'known_species', settings.XAPIAN_PERSONAL_PREFIX
+)
+delete_known_species = make_db_deleter(
+    'known_species'
+)
+
+
