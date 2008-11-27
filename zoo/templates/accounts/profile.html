@@ -11,17 +11,31 @@
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
-{% ifequal profile.user user %}<p><a href="{% url accounts-profile-edit profile.user %}">Edit your profile</a></p>{% endifequal %}
+{% ifequal profile.user user %}
+<p><a href="{% url accounts-profile-edit profile.user %}">Edit your profile</a> |
+{% if profile.location %}
+Your location, not publicly viewable, is currently {{ profile.location }}.
+<a href="/edit-location/">Edit your location</a>
+{% else %}
+<a href="/edit-location/">Set your location</a> to find animals near you
+{% endif %}
+</p>
+{% endifequal %}
 
 <div>
 {% if profile.url %}
 <p class="url"><a href="{{ profile.url }}">&raquo; {% ifequal profile.user user %}Your website{% else %}Visit their website{% endifequal %}</a></p>
 {% endif %}
+
 {% if profile.biography %}
 {{ profile.biography|linebreaks}}
 {% else %}
+{% ifequal profile.user user %}
 <p>You don&rsquo;t seem to have filled in your biography yet, so why not <a href='{% url accounts-profile-edit profile.user %}'>do that now</a> and tell us a bit about yourself?</p>
-{% endif  %}
+{% else %}
+<p>This user has not written a biography yet.</p>
+{% endifequal %}
+{% endif %}
 </div>
 
 <div>
