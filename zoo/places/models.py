@@ -161,8 +161,8 @@ class Place(AuditedModel):
         If user argument is provided, seen=True flag will be added to all 
         species which have been seen by that user.
         """
+        from zoo.trips.models import Trip, Sighting
         if user and not user.is_anonymous():
-            from zoo.trips.models import Trip, Sighting
             seen_species = Trip.get_passport(user).seen_species
         else:
             seen_species = []
