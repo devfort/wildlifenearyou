@@ -66,6 +66,28 @@ jQuery(function($) {
 					<input type="submit" value="Register" />
 				</form>
 			</div>
+                        {% else %}
+
+                            {% if recent_sightings_favourites %}
+                            <h2>Latest sightings of your favourite animals</h2>
+                            <ol>
+                            {% for sighting in recent_sightings_favourites|slice:":10" %}
+                            <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
+                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place.known_as }}</a>
+                            {% endfor %}
+                            </ol>
+                            {% endif %}
+                            
+                            {% if recent_sightings %}
+                            <h2>Latest sightings</h2>
+                            <ol>
+                            {% for sighting in recent_sightings|slice:":10" %}
+                            <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
+                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place.known_as }}</a>
+                            {% endfor %}
+                            </ol>
+                            {% endif %}
+
 			{% endif %}
 		</div>
 	</div>
@@ -79,7 +101,7 @@ jQuery(function($) {
 					<div>
 						<input type="text" id="q" name="q" size="50">
 			            <input type="submit" value="&raquo; Search">
-						<p>Try "Lions near London", "Tigers" or why not try and find your favourite animal</p>
+						<p>Try "Lions near London", "Tigers" or why not try and find your favourite animal?</p>
 					</div>
 
 		        </div>

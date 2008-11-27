@@ -4,6 +4,7 @@ from zoo.shortcuts import render
 from zoo.places.models import Place
 from zoo.accounts.forms import RegistrationForm
 from zoo.animals.models import Species
+from zoo.trips.models import Sighting
 from zoo.accounts.models import Profile
 from zoo.photos.models import Photo
 
@@ -15,6 +16,11 @@ def landing(request):
         random_zoo = None
 
     reg_form = RegistrationForm()
+
+    recent_sightings = Sighting.objects.order_by('-created_at')
+    if request.user:
+        favourite_animals = Species.objects.filter(favourited=request.user)
+        recent_sightings_favourites = Sighting.objects.filter(species__in=favourite_animals).order_by('-created_at')
 
     featured = {}
 
@@ -40,4 +46,6 @@ def landing(request):
         'featured': featured,
         'num_of_places': num_of_places,
         'reg_form': reg_form,
+        'recent_sightings': recent_sightings,
+        'recent_sightings_favourites': recent_sightings_favourites,
     })
