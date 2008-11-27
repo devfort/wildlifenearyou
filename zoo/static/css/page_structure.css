@@ -70,6 +70,7 @@
 	width: 100%;
 	overflow: hidden;
 	padding-top: 2em;
+	min-height: 500px;
 }
 
 .primary {
