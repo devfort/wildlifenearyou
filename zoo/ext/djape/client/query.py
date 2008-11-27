@@ -45,9 +45,12 @@ class Query(object):
             pass
 
     def to_params(self):
-        opts = copy(self.opts)
-        opts['query'] = self.part.to_params()
-        return opts
+        res = {
+            'query': self.part.to_params(),
+        }
+        if self.opts:
+            res['opts'] = self.opts
+        return res
 
 class QueryPart(object):
     """A part of a query.
