@@ -173,16 +173,20 @@ class CreateObjectRequest(ChangeRequest):
     def children(self):
         return self.__class__.objects.filter(parent=self)
 
-    def apply(self, user=None):
+    def apply(self, user=None, parent_object=None):
         klass = self.content_type.model_class()
-        instance = klass(**self.attributes)
+        attr = self.attributes
 
-        if hasattr(instance, 'slug') and hasattr(instance, 'get_slug_suggestions'):
-            def get_slug():
+        if parent_object is not None and self.reverse_relation:
+            attr[str(self.reverse_relation)] = parent_object.pk
+
+        if hasattr(klass, 'get_slug_suggestions'):
+            def get_slug_from_attributes():
                 slug = ""
+                dummy_instance = klass(**attr)
 
                 # Get slug suggestions from model
-                for suggestion in instance.get_slug_suggestions():
+                for suggestion in dummy_instance.get_slug_suggestions():
                     # Don't append blank strings, None etc.
                     if not suggestion:
                         continue
@@ -203,15 +207,11 @@ class CreateObjectRequest(ChangeRequest):
                         return num_slug
 
                 assert False, "Slug suggestions exhuasted"
-            instance.slug = get_slug()
+            attr['slug'] = get_slug_from_attributes()
 
-        instance.save()
-
+        instance = klass.objects.create(**attr)
         for child in self.children():
-            child_instance = child.apply(user)
-            if child.reverse_relation:
-                reverse = getattr(child_instance, child.reverse_relation)
-                reverse.add(instance)
+            child.apply(user, parent_object=instance)
 
         super(CreateObjectRequest, self).apply(user)
         return instance
