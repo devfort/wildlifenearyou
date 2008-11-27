@@ -5,11 +5,11 @@
 {% block content %}
 {% load comments %}
 <form action="{% comment_form_target %}" method="post">
-    <p{% if form.comment.errors %} class="error"{% endif %}>
+    <div{% if form.comment.errors %} class="error"{% endif %}>
         {{ form.comment.errors }}
         <div>{{ form.comment.label_tag }}</div>
         <div>{{ form.comment }}</div>
-    </p>
+    </div>
     <p style="display: none">
         {{ form.honeypot.errors }}
         {{ form.honeypot.label_tag }} {{ form.honeypot }}
