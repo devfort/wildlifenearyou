@@ -189,6 +189,11 @@ jQuery(function($) {
 
 /* Funky feedback form effect */
 jQuery(function($) {
+    // Don't add it if we are already on the /feedback/ page
+    if (location.pathname == '/feedback/') {
+        return;
+    }
+    
     var feedback_showing = false;
     function hideFeedback() {
         $('#ajax-feedback-form').slideUp('fast', function() {
