@@ -12,3 +12,42 @@
 
 /* @end */
 
+/* @group homepage */
+
+.interaction {
+	background-color: #BDDA9B;
+	border-top: 1px solid #879E6B;
+	border-bottom: 1px solid #879E6B;
+	padding: 1em 0;
+}
+
+.map {
+	background-color: #FFFFFF;
+	padding: 1em 0;
+}
+
+.features {
+	background-color: #BDDA9B;
+	padding: 1em 0;
+}
+
+.shrinkwrap {
+	width: 100%;
+	overflow: hidden;
+}
+
+.column {
+	background-color: #FFFFFF;
+	width: 30%;
+	margin-left: 3%;
+	float: left;
+	display: inline;
+	padding-bottom: 50em;
+	margin-bottom: -50em;
+}
+
+.first {
+	margin-left: 0;
+}
+
+/* @end */
