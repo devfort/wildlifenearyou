@@ -207,6 +207,11 @@ class CreateObjectRequest(ChangeRequest):
         instance.save()
         return super(CreateObjectRequest, self).apply(user)
 
+    def get_attributes_display(self):
+        return dict([
+            (get_pretty_field_key(k), get_pretty_field_value(v, self, k))
+            for k, v in self.attributes.iteritems()])
+
     def conflicts(self):
         return False
 

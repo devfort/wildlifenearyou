@@ -73,9 +73,13 @@
         Create a {% if crs.parent %}nested {% endif %}{{ crs.content_type }} object {% if crs.children %}and their children below{% endif %} with the following properties:
 
       <dl>
-      {% for key, value in crs.attributes.items %}
+      {% for key, value in crs.get_attributes_display.items %}
         <dt>{{ key }}</dt>
-        <dl>{{ value }}</dl>
+        {% if value.get_absolute_url %}
+          <dl><a href="{{ value.get_absolute_url }}">{{ value }}</a></dl>
+        {% else %}
+          <dl>{{ value }}</dl>
+        {% endif %}
       {% endfor %}
       </dl>
 
