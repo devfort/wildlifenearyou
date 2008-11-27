@@ -10,5 +10,5 @@ def landing(request):
         random_zoo = None
         
     return render(request, 'homepage/landing.html', {
-            'random_zoo': random_zoo,
+        'random_zoo': random_zoo,
     })

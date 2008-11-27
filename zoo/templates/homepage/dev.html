@@ -19,7 +19,7 @@
 
 	    <p><a href="{% url hit-parade %}">Check out the most popular animals!</a></p>
 
-		{% if random_zoo %}<p><a href="{{ random_zoo.urls.absolute }}">A random place</a>{% endif %}
+		{% if random_zoo %}<p>Why not visit <a href="{{ random_zoo.urls.absolute }}">{{ random_zoo }}</a>?{% endif %}
 
 	    <h2>Look Around</h2>
 	    <ul>
