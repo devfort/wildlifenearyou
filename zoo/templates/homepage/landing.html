@@ -53,7 +53,6 @@ jQuery(function($) {
 
 			<p>We&rsquo;re relying on you, yes YOU to make this site truly awesome (we&rsquo;re not just saying that!)! Share your experiences and create your animal passport, to personalize your visit.</p>
 			<p>How exciting is that! Come on in, be a part of it and <a href="{% url accounts-register %}">sign up now!</a></p>
-			 <!-- ><a href="{% url accounts-logout %}">login</a>, otherwise you can <a href="{% url accounts-register %}">register</a>.</p> -->
 		{% endif %}
 		</div>
 		<div class="secondary">
@@ -73,7 +72,7 @@ jQuery(function($) {
                             <ol>
                             {% for sighting in recent_sightings_favourites|slice:":10" %}
                             <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
-                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place.known_as }}</a>
+                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place|title }}</a>
                             {% endfor %}
                             </ol>
                             {% endif %}
@@ -83,7 +82,7 @@ jQuery(function($) {
                             <ol>
                             {% for sighting in recent_sightings|slice:":10" %}
                             <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
-                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place.known_as }}</a>
+                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place|title }}</a>
                             {% endfor %}
                             </ol>
                             {% endif %}
