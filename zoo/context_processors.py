@@ -6,4 +6,5 @@ def standard(request):
     if not num:
         num = Species.objects.all().count()
         cache.set('total_num_of_species', num, 60)
-    return {'total_num_of_species': num}
+    return {'base': 'base.html',
+            'total_num_of_species': num}
