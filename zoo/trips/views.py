@@ -212,7 +212,7 @@ def add_sightings(request, country_code, slug):
         hiddens.append(
             {'name': 'saw_%s' % i, 'value': saw_id}
         )
-        
+    
     return render(request, 'trips/which-did-you-mean.html', {
         'form': form,
         'hiddens': hiddens,
@@ -254,12 +254,12 @@ def finish_add_sightings(request, country_code, slug, ids):
             if request.POST.get('add-to-existing'):
                 # if the user chose this option they want to add this sighting to an existing trip of theirs
                 trip = Trip.objects.get(id=form.cleaned_data['user_trips'])
-            else:           
+            else:
                 # create a new trip
                 trip = Trip(
                     name = form.cleaned_data['name'],
                     start = form.cleaned_data['start'],
-                    start_accuracy = 'day', # TODO: figure this out properly
+                    start_accuracy = form.cleaned_data['start_accuracy'],
                     description = form.cleaned_data['description'],
                     rating = form.cleaned_data['review-rating'],
                 )
@@ -293,7 +293,7 @@ def finish_add_sightings(request, country_code, slug, ids):
                 whos_trip += "'s"
         whos_trip += ' trip'
         form = FinishAddSightingsForm(initial = {'name': whos_trip}, user=request.user)
-        
+    
     return render(request, 'trips/why-not-add-to-your-tripbook.html', {
         'hiddens': hiddens,
         'place': place,
@@ -310,19 +310,43 @@ class FinishAddSightingsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         trips = user.created_trip_set.all()
-        
+
         super(FinishAddSightingsForm, self).__init__(*args, **kwargs)
         self.fields['review-rating'] = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
-        self.fields['user_trips'] = forms.ChoiceField(required = False, choices=[ (trip.id, trip.title()) for trip in trips ])
 
     def clean_start(self):
-        start = self.cleaned_data['start']
-        print start
-        parse1 = Calendar().parse(start)
-        parse2 = Calendar().parse(start, sourceTime = datetime.datetime.now() + datetime.timedelta(days=365+45))
-	print parse1
-	print parse2
+        start = self.cleaned_data['start'].lower()
+        if re.match('\s*\d{4}\s*$', start):
+            self.cleaned_data['start'] = '%s-01-01' % start
+            self.cleaned_data['start_accuracy'] = 'year'
+            return
 
+        re_val = Calendar().ptc.re_values
+        re_val['sep'] = '[\s/,.-]+'
+        re_val['month_bit'] = '(%(months)s|%(shortmonths)s|\d\d?)' % re_val
+        month_match = re.match('\s*((?P<month>%(month_bit)s)%(sep)s(?P<year>\d{4})|(?P<year2>\d{4})%(sep)s(?P<month2>%(month_bit)s))\s*$' % re_val, start)
+        if month_match:
+            year = month_match.group('year') or month_match.group('year2')
+            month = month_match.group('month') or month_match.group('month2')
+            month = int(Calendar().ptc.MonthOffsets.get(month, month))
+            self.cleaned_data['start'] = '%s-%02d-01' % (year, month)
+            self.cleaned_data['start_accuracy'] = 'month'
+            return
+
+        day_match = re.match('\s*((?P<day>\d\d?)(%(daysuffix)s)?%(sep)s(?P<month>%(month_bit)s)%(sep)s(?P<year>\d{4})|(?P<year2>\d{4})%(sep)s(?P<month2>%(month_bit)s)%(sep)s(?P<day2>\d\d?)(%(daysuffix)s)?)\s*$' % re_val, start)
+        if day_match:
+            year = day_match.group('year') or day_match.group('year2')
+            month = day_match.group('month') or day_match.group('month2')
+            day = day_match.group('day') or day_match.group('day2')
+            month = int(Calendar().ptc.MonthOffsets.get(month, month))
+            self.cleaned_data['start'] = '%s-%02d-%02s' % (year, month, day)
+            self.cleaned_data['start_accuracy'] = 'day'
+            return
+
+        parse = Calendar().parse(start)
+        if parse[1] == 0:
+            raise forms.ValidationError("I'm afraid we couldn't parse that date; please try again.")
+        self.cleaned_data['start'] = '%d-%02d-%02d' % parse[0][:3]
 
 def lookup_xapian_or_django_id(id):
     if id.startswith('s'):

@@ -24,23 +24,23 @@
 {% endif %}
 
 <h2>A New Trip</h2>
-<p>
+<div class="container">
     {{ form.name.errors }}
     {{ form.name.label_tag }}
     {{ form.name }}
     to {{ place }}
-</p>
-<p>
+</div>
+<div class="container">
     {{ form.start.errors }}
     {{ form.start.label_tag }}
     {{ form.start }}
-    (optional, as accurate as you can remember)
-</p>
-<p>
+    <br>(optional, as accurate as you can remember; e.g. &ldquo;13/4/2007&rdquo;, &ldquo;November 2005&rdquo;)
+</div>
+<div class="container">
     {{ form.description.errors }}
     {{ form.description.label_tag }} (optional)
     {{ form.description }}
-</p>
+</div>
 	<div class="select-container container">
 		<label for="review-rating">Your rating of this trip</label>
 		<select id="review-rating" name="review-rating">
@@ -53,14 +53,14 @@
 		</select>
 		<input class="noscript" type="submit" value="save">
 	</div>
-<p>
+<div class="container">
     <input type="submit" name="save-trip" value="Save my trip report">
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <input type="submit" name="just-sightings" value="No thanks, just save my sightings">
 {% for hidden in hiddens %}
     <input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
 {% endfor %}
-</p>
+</div>
 </form>
 
 
