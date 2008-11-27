@@ -80,19 +80,24 @@ class Trip(AuditedModel):
     def formatted_date(self):
         date = self.start
         if date is not None:
-            date = u'%s' % dateformat.format(self.start, 'jS F Y')
-            
-            # now see if we need to add the end date
-            if self.end > self.start:
-                # now check if month and year are the same
-                if dateformat.format(self.start, 'mY') == dateformat.format(self.end, 'mY'):
-                    date = u' from %s to %s' % (dateformat.format(self.start, 'jS'), dateformat.format(self.end, 'jS F Y'))
-                elif self.start.year == self.end.year:
-                    date = u' from %s to %s' % (dateformat.format(self.start, 'jS F'), dateformat.format(self.end, 'jS F Y'))
-                else:
-                    date = u' from %s to %s' % (date, dateformat.format(self.end, 'jS F Y'))
+            if self.start_accuracy == 'year':
+                date = u'in %s' % self.start.year
+            elif self.start_accuracy == 'month':
+                date = u'in %s' % dateformat.format(self.start, 'F Y')
             else:
-                date = u' on %s' % date
+                date = u'%s' % dateformat.format(self.start, 'jS F Y')
+            
+                # now see if we need to add the end date
+                if self.end > self.start:
+                    # now check if month and year are the same
+                    if dateformat.format(self.start, 'mY') == dateformat.format(self.end, 'mY'):
+                        date = u' from %s to %s' % (dateformat.format(self.start, 'jS'), dateformat.format(self.end, 'jS F Y'))
+                    elif self.start.year == self.end.year:
+                        date = u' from %s to %s' % (dateformat.format(self.start, 'jS F'), dateformat.format(self.end, 'jS F Y'))
+                    else:
+                        date = u' from %s to %s' % (date, dateformat.format(self.end, 'jS F Y'))
+                else:
+                    date = u' on %s' % date
         else:
             date = '';
             
