@@ -9,7 +9,7 @@
 <div id="my_trips">
 	{% if tripbook %}
 	{% for trip in tripbook %}
-		{% trip_sightings trip 'h2' 'h3' 'true' %}
+		{% trip_sightings trip 2 'true' %}
 	{% endfor %}
 	{% else %}
 	<p>
