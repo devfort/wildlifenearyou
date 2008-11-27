@@ -10,7 +10,6 @@ class Command(BaseCommand):
     can_import_settings = True
 
     def handle(self, *args, **options):
-        searches.delete_places() # Or configuration changes will cause errors
         from zoo.places.models import Place
         if len(args) != 0:
             raise CommandError("Command doesn't accept any arguments")

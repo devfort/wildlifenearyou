@@ -10,8 +10,6 @@ class Command(BaseCommand):
     can_import_settings = True
 
     def handle(self, *args, **options):
-        searches.delete_known_species() # Or configuration changes will cause errors
-
         from zoo.animals.models import Species
         if len(args) != 0:
             raise CommandError("Command doesn't accept any arguments")

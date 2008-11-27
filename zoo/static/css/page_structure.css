@@ -61,6 +61,7 @@
 	text-transform: uppercase;
 	font-size: 0.9em;
     font-weight: bold;
+    white-space: nowrap;
 }
 .header form label {
 	margin-right: 0.3em;
