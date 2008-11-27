@@ -42,24 +42,12 @@
         {% endif %}
 
        {% if crs.conflicts %}
-        <form action="{% url admin-moderation %}" method="post">
-         <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-         <input type="hidden" name="action" value="force"/>
-         <input type="submit" value="Force change"/>
-        </form>
+         {% include "changerequests/form_force.html" %}
        {% else %}
-        <form action="{% url admin-moderation %}" method="post">
-         <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-         <input type="hidden" name="action" value="apply"/>
-         <input type="submit" value="Apply change"/>
-        </form>
+         {% include "changerequests/form_apply.html" %}
        {% endif %}
 
-       <form action="{% url admin-moderation %}" method="post">
-        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-        <input type="hidden" name="action" value="delete"/>
-        <input type="submit" value="Delete change request"/>
-       </form>
+       {% include "changerequests/form_delete.html" %}
       {% endcase %}
 
       {% case "DeleteObjectRequest" %}
@@ -76,35 +64,18 @@
        {% if crs.conflicts %}
         <strong>(conflicting change: object already deleted)</strong>
        {% else %}
-        <form action="{% url admin-moderation %}" method="post">
-         <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-         <input type="hidden" name="action" value="apply"/>
-         <input type="submit" value="Apply change"/>
-        </form>
+         {% include "changerequests/form_apply.html" %}
        {% endif %}
 
-       <form action="{% url admin-moderation %}" method="post">
-        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-        <input type="hidden" name="action" value="delete"/>
-        <input type="submit" value="Delete change request"/>
-       </form>
+       {% include "changerequests/form_delete.html" %}
       {% endcase %}
 
       {% case "CreateObjectRequest" %}
         Create a {{ crs.content_type }} object with the following properties:
        {{ crs.attributes }}
        
-       <form action="{% url admin-moderation %}" method="post">
-        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-        <input type="hidden" name="action" value="apply"/>
-        <input type="submit" value="Apply change"/>
-       </form>
-
-       <form action="{% url admin-moderation %}" method="post">
-        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-        <input type="hidden" name="action" value="delete"/>
-        <input type="submit" value="Delete change request"/>
-       </form>
+       {% include "changerequests/form_apply.html" %}
+       {% include "changerequests/form_delete.html" %}
       {% endcase %}
 
       {% defaultcase %}
