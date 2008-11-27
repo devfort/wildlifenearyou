@@ -28,6 +28,13 @@ set_current_user(user)
 
 from django.template.defaultfilters import slugify
 
+def random_lat_lon():
+    # Should be sort-of in the UK
+    return (
+        (random.random() * (53 - 35) + 35),
+        (random.random() * (1 - -5) + -5)
+    )
+
 def main():
     place = A("London", "Birmingham", "Coventry", "Alderney", "Loch Ness", "Springfield", "Huddersfield", "England", "Bournemouth")
     zootype = A("Petting ", "City ", "", "German ", "Yellow ", "Broke ", "Friendly ", "Confident ", "Burnin' ")
