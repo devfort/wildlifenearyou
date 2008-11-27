@@ -129,18 +129,18 @@ class ChangeAttributeRequest(ChangeRequest):
     def conflicts(self):
         # The current value of the field does not match the old value, thus
         # there is a conflict.
-        return self.old_value != self.get_current_value()
+        return self.old_value != getattr(self.content_object, self.attribute)
 
     @reformat_foreign_keys
-    def get_current_value(self):
+    def get_current_value_display(self):
         return getattr(self.content_object, self.attribute)
 
     @reformat_foreign_keys
-    def get_old_value(self):
+    def get_old_value_display(self):
         return self.old_value
 
     @reformat_foreign_keys
-    def get_new_value(self):
+    def get_new_value_display(self):
         return self.new_value
 
     def get_attribute_display(self):

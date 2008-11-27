@@ -35,10 +35,10 @@
       {% case "ChangeAttributeRequest" %}
        Change the &ldquo;{{ crs.get_attribute_display }}&rdquo; attribute
         on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
-        from &ldquo;<em>{{ crs.get_old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.get_new_value }}</em>&rdquo;
+        from &ldquo;<em>{{ crs.get_old_value_display }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.get_new_value_display }}</em>&rdquo;
 
         {% if crs.conflicts %}
-         <strong>(change conflicts; current value is <em>{{ crs.get_current_value }}</em>)</strong>
+         <strong>(change conflicts; current value is <em>{{ crs.get_current_value_display }}</em>)</strong>
         {% endif %}
 
        {% if crs.conflicts %}
