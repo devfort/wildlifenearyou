@@ -193,13 +193,18 @@ def add_sightings(request, country_code, slug):
         results = search_species(string)
         if not results:
             continue
+        choices = [((
+                r.get('django_id') and 's%s' % r['django_id'] 
+                or ('x%s' % r['search_id'])
+            ), u'%s (%s)' % (r['common_name'], r['scientific_name']))
+            for r in results
+        ]
+        if len(choices)==0:
+            choices = [('', "Sorry - we don't know anything about \"%s\"; you can send feedback to tell us all about it!" % string)]
+        else:
+            choices += [('', "Actually I didn't see a \"%s\"" % string)]
         form.fields['saw_selection_%s' % key] = forms.ChoiceField(
-            choices = [((
-                    r.get('django_id') and 's%s' % r['django_id'] 
-                    or ('x%s' % r['search_id'])
-                ), u'%s (%s)' % (r['common_name'], r['scientific_name']))
-                for r in results
-            ] + [('', "Actually I didn't see a \"%s\"" % string)],
+            choices = choices,
             widget = forms.RadioSelect
         )
     
