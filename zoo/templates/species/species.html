@@ -2,6 +2,7 @@
 
 {% load humanize %}
 {% load favourites_extras %}
+{% load thumbnail %}
 
 {% block title %}{{ species.common_name }} ({{ species.latin_name }}){% endblock %}
 
@@ -41,6 +42,13 @@
 {% endblock %}
 
 {% block secondary_content %}
+
+<h2>Photos</h2>
+<ul>
+  {% for photo in species.photo_set.all|slice:":30" %}
+  <li><a href="{{ photo.urls.absolute }}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+  {% endfor %}
+</ul>
 
 <h2>Comments</h2>
 {% with species as object %}
