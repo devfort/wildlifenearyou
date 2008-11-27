@@ -6,6 +6,7 @@ class Feedback(models.Model):
     )
     email = models.EmailField(blank = True, help_text = 'Enter your e-mail if you want a reply')
     ip_address = models.CharField(max_length = 40, blank = True)
+    user_agent = models.CharField(max_length = 255, blank = True)
     from_page = models.CharField(max_length = 255, blank = True)
     created = models.DateTimeField(auto_now_add = True)
     body = models.TextField()
