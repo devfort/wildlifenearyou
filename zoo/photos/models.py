@@ -61,6 +61,11 @@ class Photo(models.Model):
         """
     )
     
+    # Photos can belong to 0+ sightings
+    sightings = models.ManyToManyField(
+        'trips.Sighting', null=True, blank=True, related_name = 'photos'
+    )
+    
     def __unicode__(self):
         return self.title or unicode(self.photo)
     
