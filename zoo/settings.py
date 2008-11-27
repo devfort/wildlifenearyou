@@ -133,7 +133,7 @@ EMAIL_FROM = 'zoo@example.com'
 XAPIAN_BASE_URL = 'http://10.0.1.205/xapian/'
 XAPIAN_LOCATION_DB = 'locations' # It's safe to share the locations DB
 
-XAPIAN_PERSONAL_PREFIX = 'aaron'
+XAPIAN_PERSONAL_PREFIX = ''
 try:
     from local_settings import *
 except ImportError:
