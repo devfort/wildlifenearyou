@@ -1,0 +1,15 @@
+{% extends base %}
+
+{% block title %}Upload a photo{% endblock %}
+
+{% block content %}
+
+<h1>Upload a photo</h1>
+
+<form enctype="multipart/form-data" method="post" action="{{ action }}">
+{{ form.as_p }}
+<p><input type="submit" value="Upload"></p>
+</form>
+
+{% endblock %}
+

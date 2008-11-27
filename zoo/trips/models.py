@@ -140,7 +140,10 @@ class Trip(AuditedModel):
             'off': [ 1 for x in range(5-rating) ],
         }
         return rating  
-
+    
+    def visible_photos(self):
+        return self.photos.filter(is_visible = True)
+    
     def __unicode__(self):
         #return u"%s, %s" % (self.created_by.username, self.name)
         return self.title()

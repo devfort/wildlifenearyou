@@ -47,14 +47,14 @@ def trip_add(request, username):
     
 def trip_view(request, username, trip_id):
     user = get_object_or_404(User, username=username)
-    trip = get_object_or_404(Trip, id=trip_id)
+    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
     return render(request, 'trips/trip.html', {
         'profile': user.get_profile(),
         'trip': trip,
         # do this to prepare the rating for the view
         'rating': Trip.calculate_rating_average([trip]),
     })
-    
+
 from django import forms
 
 class AddTripForm(forms.ModelForm):

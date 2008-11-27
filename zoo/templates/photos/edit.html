@@ -1,0 +1,18 @@
+{% extends base %}
+
+{% block title %}Edit photo details{% endblock %}
+
+{% block content %}
+
+<h1>Edit photo details</h1>
+
+{% load thumbnail %}
+<p><img src="{% thumbnail photo.photo 600x600 %}"></p>
+
+<form method="post" action="{{ request.path }}">
+{{ form.as_p }}
+<p><input type="submit" value="Save changes"></p>
+</form>
+
+{% endblock %}
+

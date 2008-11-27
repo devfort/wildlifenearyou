@@ -1,12 +1,14 @@
 from django import forms
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect as Redirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from models import Photo
 from zoo.shortcuts import render
 from zoo.places.models import Place
 from zoo.animals.forms import SpeciesField
+from zoo.trips.models import Trip
 
 @login_required
 def upload(request, place=None, redirect_to=None):
@@ -23,7 +25,7 @@ def upload(request, place=None, redirect_to=None):
                 request.user.is_staff:
                 obj.is_visible = True
             obj.save()
-            return Redirect(redirect_to or (
+            return HttpResponseRedirect(redirect_to or (
                 '/profile/%s/' % request.user.username
             ))
     else:
@@ -47,7 +49,68 @@ def upload_place(request, country_code, slug):
     )
     return upload(request, place, redirect_to = place.get_absolute_url())
 
-from django import forms
+@login_required
+def upload_trip(request, username, trip_id):
+    user = get_object_or_404(User, username=username)
+    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
+    # The user should have got here via a file upload PUSH. If so, we 
+    # create the photo straight away and redirect them straight to the edit
+    # page.
+    if request.method == 'POST':
+        form = PhotoOnlyForm(request.POST, request.FILES)
+        if form.is_valid():
+            photo = form.save(commit = False)
+            photo.trip = trip
+            # If user has account 7 days or older, or is staff
+            # go live straight away
+            if request.user.get_profile().is_not_brand_new_account() or \
+                request.user.is_staff:
+                photo.is_visible = True
+            # Set the title to the filename, if provided
+            photo.title = form.cleaned_data['photo'].name
+            # If user has account 7 days or older, or is staff
+            # go live straight away
+            if request.user.get_profile().is_not_brand_new_account() or \
+                request.user.is_staff:
+                photo.is_visible = True
+            photo.save()
+            # Redirect them straight to the edit page for that photo
+            return HttpResponseRedirect(photo.get_absolute_url() + 'edit/')
+    
+    form = PhotoOnlyForm()
+    return render(request, 'photos/single_upload.html', {
+        'form': form,
+        'action': request.path,
+    })
+
+class PhotoOnlyForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ('photo')
+
+@login_required
+def edit_photo(request, username, photo_id):
+    if username != request.user.username:
+        raise HttpResponseForbidden
+    photo = get_object_or_404(Photo, id=photo_id, created_by=request.user)
+    if request.method == 'POST':
+        form = PhotoEditForm(request.POST)
+        if form.is_valid():
+            photo.title = form.cleaned_data['title']
+            photo.save()
+            return HttpResponseRedirect(photo.get_absolute_url())
+    else:
+        form = PhotoEditForm()
+    return render(request, 'photos/edit.html', {
+        'form': form,
+        'photo': photo,
+    })
+
+class PhotoEditForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ('title')
+
 class PhotoSpeciesForm(forms.Form):
     species1 = SpeciesField(required = False)
     species2 = SpeciesField(required = False)
