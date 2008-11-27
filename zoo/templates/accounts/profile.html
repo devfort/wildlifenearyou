@@ -7,6 +7,7 @@
 {% block content %}
 
 <h1>{{ profile.user|title }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+<img src="/faces/{{ profile.user|lower }}.png" alt="{{ profile.user }}'s Avatar" width="175" height="175" />
 {% if profile.badges.all %}
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
@@ -48,6 +49,7 @@
 
 <div id="my_trips">
 	<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Most Recent Trips</h2>
+	{% ifequal profile.user user %}<p>To add a trip <a href="{% url search %}" title="Look for something">look for</a> a place and then on it's page tell us the animals you saw.</p>{% endifequal %}
 	{% if profile.user.created_trip_set.all %}
 	<ol>
 	{% for trip in profile.user.created_trip_set.all|slice:":5" %}
