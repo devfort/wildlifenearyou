@@ -137,6 +137,7 @@ ul.currency li {
 	background-image: url(/static/img/icons/suggest.png);
 	background-repeat: no-repeat;
 	background-position: 5px 9px;
+	margin-top: 1em;
 }
 .suggest-changes a {
 	display: block;
