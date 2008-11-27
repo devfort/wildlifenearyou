@@ -191,3 +191,7 @@ h1 i.scientific {
 	font-size: 1.2857em;
 	line-height: 1.2;
 }
+
+.optional {
+	font-size: 0.8571em;
+}

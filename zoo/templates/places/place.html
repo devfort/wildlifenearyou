@@ -6,7 +6,7 @@
 <!-- <script type="text/javascript" src="/static/js/species-adding.js"></script> -->
 <script type="text/javascript">
 function anyEmptyOnes() {
-    return jQuery('#see-more-animals p:visible :text').filter(function() {
+    return jQuery('#see-more-animals div:visible :text').filter(function() {
         return $(this).val() == '';
     }).length > 0;
 }
@@ -95,9 +95,9 @@ jQuery(function($) {
     <h3>Did you see more animals?</h3>
     <p>What did you see?</p>
     <form action="{{ request.path }}add-sightings/" method="POST">
-        <p><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></p>
-        <p class="and-a"><label for="saw_2">and a </label><input type="text" name="saw_2" id="saw_2"> (optional)</p>
-        <input type="submit" value="Add my animals">
+        <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></div>
+        <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw_2" id="saw_2"> <span class="optional">(optional)</span></div>
+        <div><input type="submit" value="Add my animals"></div>
     </form>
 </div>
 

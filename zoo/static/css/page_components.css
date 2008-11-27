@@ -2,15 +2,16 @@
 
 div#see-more-animals {
     background-color: #E2F1F9;
+    padding: 1em;
 }
 div#see-more-animals label {
-    width: 5em;
+    width: 4em;
     float: left;
 }
-div#see-more-animals p {
-    margin: 0;
-}
 
+div#see-more-animals form {
+	margin-bottom: 0;
+}
 /* @end */
 
 /* @group Cloud on species page */
