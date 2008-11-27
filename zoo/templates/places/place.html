@@ -70,8 +70,10 @@ jQuery(function($) {
 {% endif %}
 
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
-<p class="address">{{ place.address }},
-	<a href="{% url country place.country.country_code %}">{{ place.country }}</a></p>
+<p class="address">{% if place.address %}{{ place.address }},{% endif %}
+	<a href="{% url country place.country.country_code %}">{{ place.country }}</a>
+	{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
+</p>
 
 {% if place.phone %}
 <p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
