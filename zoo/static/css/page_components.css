@@ -46,13 +46,45 @@ div#see-more-animals form {
 
 /* @group Comments */
 
-div.comment {
-	border-left: 0.5em solid #ccc;
-	padding-left: 0.5em;
+ol.comments { 
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
-div.comment .posted-by {
-	font-size: 0.85em;
+
+ol.comments li {
+                 margin-bottom: 1.375em;
+                 
+                 }
+
+ol.comments li blockquote {
+                            margin: 0;
+                            padding: 0.5em;
+                            background-color: #f4f9e2;
+                            font-style: normal;
+                            -moz-border-radius: 5px;
+                            -webkit-border-radius: 5px;
+                            border-radius: 5px;
 }
+ol.comments li p { 
+                   margin: 0 0 0.3em 0;
+}
+ol.comments li .posted-by {
+
+                            background-image: url('/static/img/bg/art_talkbubble_comment_point.png');
+                            background-repeat: no-repeat;
+                            background-position: 20px 0;
+}
+
+ol.comments li .posted-by span.meta {
+                                      font-size: 0.8em;
+                                      display: block;
+                                      padding-left: 35px;
+                                      }
+
+ol.comments li .posted-by a {
+                              font-weight: bold;
+                            }
 
 /* @end */
 
