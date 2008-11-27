@@ -17,6 +17,8 @@
 {% if change_request_groups %}
  <h2>Queue</h2>
 
+ {{ form.errors.changerequest }}
+
  {% if form.non_field_errors %}
   <p>The moderation request you just attempted to apply now conflicts with the current data - you will either have to force this change or delete the change altogether.</p>
  {% endif %}

@@ -14,3 +14,12 @@ class ChangeRequestActionForm(forms.Form):
             raise forms.ValidationError("Race condition.")
 
         return self.cleaned_data
+
+    def clean_changerequest(self):
+        cr = self.cleaned_data['changerequest']
+        if cr.subclass == 'CreateObjectRequest' and \
+                    cr.createobjectrequest.parent is not None:
+            raise forms.ValidationError(
+                "Refusing to apply a child of a nested creation request"
+            )
+        return cr
