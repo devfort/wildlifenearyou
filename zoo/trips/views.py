@@ -328,6 +328,14 @@ class FinishAddSightingsForm(forms.Form):
         re_val = Calendar().ptc.re_values
         re_val['sep'] = '[\s/,.-]+'
         re_val['month_bit'] = '(%(months)s|%(shortmonths)s|\d\d?)' % re_val
+
+        month_match = re.match('\s*(?P<month>%(month_bit)s)\s*$' % re_val, start)
+        if month_match:
+            month = month_match.group('month')
+            month = int(Calendar().ptc.MonthOffsets.get(month, month))
+            self.cleaned_data['start_accuracy'] = 'month'
+            return datetime.date(datetime.date.today().year, month, 1)
+
         month_match = re.match('\s*((?P<month>%(month_bit)s)%(sep)s(?P<year>\d{4})|(?P<year2>\d{4})%(sep)s(?P<month2>%(month_bit)s))\s*$' % re_val, start)
         if month_match:
             year = month_match.group('year') or month_match.group('year2')
@@ -348,7 +356,8 @@ class FinishAddSightingsForm(forms.Form):
         parse = Calendar().parse(start)
         if parse[1] == 0:
             raise forms.ValidationError("I'm afraid we couldn't parse that date; please try again.")
-        return datetime.date(parse[0][:3])
+        self.cleaned_data['start_accuracy'] = 'day'
+        return datetime.date(*parse[0][:3])
 
 def lookup_xapian_or_django_id(id):
     if id.startswith('s'):
