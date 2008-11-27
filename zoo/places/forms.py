@@ -33,12 +33,17 @@ class PlaceFacilityEditForm(forms.ModelForm):
 # UBER FORMS!
 
 class PlaceOpeningUberForm(UberForm):
+    model = PlaceOpening
     parts = [('main', PlaceOpeningEditForm)]
+    relation = 'place_id'
 
 class PlaceFacilityUberForm(UberForm):
+    model = PlaceFacility
     parts = [('main', PlaceFacilityEditForm)]
+    relation = 'place_id'
 
 class PlaceUberForm(UberForm):
+    model = Place
     parts = [
         ('main', PlaceEditForm),
         ('facility', PlaceFacilityUberForm,

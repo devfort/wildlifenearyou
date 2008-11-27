@@ -134,30 +134,58 @@ def all_countries(request):
     })
 
 from zoo.places.forms import PlaceUberForm
-from zoo.changerequests.models import ChangeRequestGroup, ChangeAttributeRequest
+from zoo.changerequests.models import ChangeRequestGroup, \
+     ChangeAttributeRequest, CreateObjectRequest
 
 def place_edit(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
 
+    from django.contrib.contenttypes.models import ContentType
+
     if request.method == 'POST':
         uf = PlaceUberForm(place, request.POST)
 
         if uf.is_valid():
-            print request.POST.keys()
+            print "VALID"
             if 'save all' in request.POST.get('submit', '').lower():
-                changes = uf.changes()
-                if changes:
-                    crg = ChangeRequestGroup.objects.create()
+                adds, changes, deletions = uf.modifications()
 
+                crg = None
+                def get_or_create_group(crg=crg):
+                    if crg is None:
+                        crg = ChangeRequestGroup.objects.create()
+                    return crg
+                        
+                if changes and 0:
                     for (obj, attrname), (oldval, newval) in changes.iteritems():
                         ChangeAttributeRequest.objects.create(
-                            group=crg,
+                            group=get_or_create_group(),
                             content_object=obj,
                             attribute=attrname,
                             old_value=oldval,
                             new_value=newval,
                         )
+                if adds:
+                    def create_add_request(uf, data, parent_ret):
+                        if uf.parent_uform:
+                            #    'place'        Place object
+                            print "data[%r] = %r" % (uf.relation, uf.parent_uform.instance.id)
+                            data[uf.relation] = uf.parent_uform.instance.id
+
+                        ct = ContentType.objects.get_for_model(uf.model)
+
+                        cor = CreateObjectRequest.objects.create(
+                            group=get_or_create_group(),
+                            attributes=data,
+                            parent=parent_ret,
+                            reverse_relation=uf.relation or '',
+                            content_type=ct,
+                        )
+
+                        return cor
+                    
+                    uf.mapadds(create_add_request)
 
         else:
             print "INVALID"

@@ -39,16 +39,26 @@ class DeletedException(Exception):
     pass
 
 class UberForm(object):
-    def __init__(self, instance=None, data=None, prefix="", new_form_counter=None):
+
+    model = None
+    parts = []
+    relation = None
+
+    def __init__(self, instance=None, data=None, prefix="",
+                 form_id=None, parent_uform=None):
         if prefix:
             prefix += '-'
 
         self.instance = instance
         self.deleted = False
+        print parent_uform
+        self.parent_uform = parent_uform
+        self.form_id = form_id
+        
         if instance:
             prefix += '%s' % instance.pk
         else:
-            prefix += 'new%s' % new_form_counter
+            prefix += 'new%s' % form_id
 
         self.delete_form = DeleteForm(data=data,
                                       prefix=prefix)
@@ -87,9 +97,8 @@ class UberForm(object):
                     # do this now so we can see the count,
                     # and increment it if necessary
                     assert esf.is_valid(), (esf.errors, data)
-                    new_ids = esf.cleaned_data['new_ids'].split(',')
-                    print new_ids
-                    new_ids = map(int, new_ids)
+                    new_ids = [int(x) for x in esf.cleaned_data['new_ids'].split(',')
+                               if x]
                     new_ids.sort()
                     
                     if esf.cleaned_data['add']:
@@ -100,23 +109,26 @@ class UberForm(object):
                         new_ids.append(max_id + 1)
 
                 for obj in objects:
-                    suf = sub_uber_form_klass(obj, data, sub_prefix)
+                    suf = sub_uber_form_klass(obj, data, prefix=sub_prefix,
+                                              parent_uform=self)
                     subuforms.append(suf)
 
                 deleted_ids = set()
                 for form_id in new_ids:
                     try:
-                        suf = sub_uber_form_klass(None, data, sub_prefix, form_id)
+                        suf = sub_uber_form_klass(None, data,
+                                                  prefix=sub_prefix,
+                                                  form_id=form_id,
+                                                  parent_uform=self)
                         subuforms.append(suf)
                     except DeletedException:
-                        deleted_ids.add(form_counter)
+                        deleted_ids.add(form_id)
 
                 new_ids = sorted(set(new_ids) - deleted_ids)
 
                 esf = ExtraSubForm(initial={'new_ids': ','.join(str(x) for x in new_ids),
                                             'add': ''},
                                    prefix=sub_prefix)
-
 
                 form_sd[name] = {
                     'subuforms': subuforms,
@@ -128,25 +140,23 @@ class UberForm(object):
     def render_deleted(self):
         forms = []
 
-        self.forall_forms(lambda f: forms.append(f))
+        self.forall_forms(lambda f: forms.append(f), include_adds=True)
         out = []
         for form in forms:
             for f in form:
                 out.append(f.as_hidden())
 
-        from pprint import pprint
-        pprint(out)
-
         return mark_safe('\n'.join(out))
 
-    def forall_forms(self, func):
+    def forall_forms(self, func, include_adds=False):
         for name, f in self.boundforms.iteritems():
             if isinstance(f, dict):
                 suf = f.get('subuforms')
                 if suf:
                     for uf in suf:
-                        uf.forall_forms(func)
-                func(f['addform'])
+                        uf.forall_forms(func, include_adds)
+                if include_adds:
+                    func(f['addform'])
             else:
                 func(f)
 
@@ -175,8 +185,32 @@ class UberForm(object):
         return [f for f in self
                 if not isinstance(f, dict)]
 
-    def changes(self):
+
+    def mapadds(self, func, parent_ret=None):
+        # (parent_id, cor_id) = createobjectrequest(self...)
+
+        subuforms = []
+        data = {}
+
+        for name, f in self.boundforms.iteritems():
+            if isinstance(f, dict):
+                subuforms.extend(f.get('subuforms', []))
+            else:
+                data.update(f.cleaned_data)
+
+        my_ret = None
+        if not self.instance:
+            my_ret = func(self, data, parent_ret)
+
+        
+        for uf in subuforms:
+            uf.mapadds(func, my_ret)
+        
+
+    def modifications(self):
+        adds = SortedDict()
         changes = SortedDict()
+        deletions = SortedDict()
 
         def get_changes(uf):
             if uf.instance:
@@ -191,11 +225,16 @@ class UberForm(object):
                                 (oldval, val)
             else:
                 # new object
-                pass
-        
+                for f in uf.immediate_forms():
+                    print uf.parent_uform
+                    newdata = dict(f.cleaned_data.iteritems())
+                    newdata[uf.relation] = uf.parent_uform.instance
+                    
+                    adds[(uf.parent_uform.instance, uf.parent_uform.form_id)] = newdata
+
         self.forall_uf(get_changes)
 
-        return changes
+        return adds, changes, deletions
 
 
     def __getitem__(self, name):
@@ -203,8 +242,4 @@ class UberForm(object):
 
     def __iter__(self):
         return self.boundforms.itervalues()
-
-    parts = []
-
-
 

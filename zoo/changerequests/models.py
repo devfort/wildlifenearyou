@@ -111,6 +111,12 @@ class ChangeRequest(models.Model):
                 s += u' applied at %s' % self.applied_at
         return s
 
+def pkify(obj):
+    if isinstance(obj, models.Model):
+        return obj.pk
+    else:
+        return obj
+
 class ChangeAttributeRequest(ChangeRequest):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
@@ -122,12 +128,6 @@ class ChangeAttributeRequest(ChangeRequest):
     new_value = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
-        def pkify(obj):
-            if isinstance(obj, models.Model):
-                return obj.pk
-            else:
-                return obj
-
         self.old_value = pkify(self.old_value)
         self.new_value = pkify(self.new_value)
 
@@ -215,6 +215,12 @@ class CreateObjectRequest(ChangeRequest):
 
         super(CreateObjectRequest, self).apply(user)
         return instance
+
+    def save(self, *args, **kwargs):
+        for key in self.attributes.keys():
+            self.attributes[key] = pkify(self.attributes[key])
+
+        super(CreateObjectRequest, self).save(*args, **kwargs)
 
     def get_attributes_display(self):
         return dict([
