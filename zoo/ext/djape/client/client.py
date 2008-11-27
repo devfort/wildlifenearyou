@@ -21,7 +21,7 @@ class Client(object):
     FreeTextQuery = query.FreeTextQuery
     GeoDistanceQuery = query.GeoDistanceQuery
 
-    def __init__(self, base_url, default_db_name=None):
+    def __init__(self, base_url, default_db_name=None, default_prefix=None):
         """Create a client.
         
         Doesn't make a connection to anything until it's used.
@@ -31,6 +31,9 @@ class Client(object):
          - `default_db_name`: the default database name to use.  (This is
            merely a convenience - this may be used instead of supplying the
            name to every call.)
+         - `default_prefix`: if not empty, is prepended to all database names
+           used by this class, unless that have their own "default_prefix"
+           setting.
 
         The time taken for the last call made is available in the
         `last_elapsed_time` member (this is set to None if not available).
@@ -38,6 +41,10 @@ class Client(object):
         """
         self.base_url = base_url
         self.default_db_name = default_db_name
+
+        if default_prefix == '':
+            default_prefix = None
+        self.default_prefix = default_prefix
 
         self.last_elapsed_time = None
 
@@ -95,6 +102,8 @@ class Client(object):
             db_name = self.default_db_name
         if db_name is None:
             raise Invalid('Missing db_name')
+        if self.default_prefix is not None:
+            db_name = self.default_prefix + '_' + db_name
 
         req = {
             'q': simplejson.dumps(query.to_params()),
@@ -201,6 +210,8 @@ class Client(object):
             db_name = self.default_db_name
         if db_name is None:
             raise errors.SearchClientError('Missing db_name')
+        if self.default_prefix is not None:
+            db_name = self.default_prefix + '_' + db_name
 
         if overwrite:
             overwrite = '1'
@@ -229,6 +240,8 @@ class Client(object):
             db_name = self.default_db_name
         if db_name is None:
             raise errors.SearchClientError('Missing db_name')
+        if self.default_prefix is not None:
+            db_name = self.default_prefix + '_' + db_name
 
         req = {
             'db_name': db_name,
@@ -246,6 +259,8 @@ class Client(object):
             db_name = self.default_db_name
         if db_name is None:
             raise errors.SearchClientError('Missing db_name')
+        if self.default_prefix is not None:
+            db_name = self.default_prefix + '_' + db_name
 
         return self._doreq('add/' + db_name, data={'doc': [doc.as_json()]})
 
@@ -259,6 +274,8 @@ class Client(object):
             db_name = self.default_db_name
         if db_name is None:
             raise errors.SearchClientError('Missing db_name')
+        if self.default_prefix is not None:
+            db_name = self.default_prefix + '_' + db_name
 
         return self._doreq('add/' + db_name, data={'doc': [doc.as_json() for doc in docs]})
 
