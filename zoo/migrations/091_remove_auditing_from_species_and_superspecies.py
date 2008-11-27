@@ -18,16 +18,16 @@ migration = m.Compound([
         'animals', 'superspecies', 'modified_at', 'datetime NOT NULL'
     ),
     m.DropColumn(
-        'animals', 'species', 'created_by', 'integer NOT NULL', 'auth_user'
+        'animals', 'species', 'created_by', 'integer NOT NULL',
     ),
     m.DropColumn(
-        'animals', 'species', 'modified_by', 'integer NOT NULL', 'auth_user'
+        'animals', 'species', 'modified_by', 'integer NOT NULL',
     ),
     m.DropColumn(
-        'animals', 'superspecies', 'created_by', 'integer NOT NULL', 'auth_user'
+        'animals', 'superspecies', 'created_by', 'integer NOT NULL',
     ),
     m.DropColumn(
-        'animals', 'superspecies', 'modified_by', 'integer NOT NULL', 'auth_user'
+        'animals', 'superspecies', 'modified_by', 'integer NOT NULL',
     ),
 ])
 
