@@ -200,6 +200,8 @@ def parse_query_spec(db, subq, spell=False):
             return db.query_parse(spell_corrected, **opts), spell_corrected
 
         return db.query_parse(query_text, **opts), None
+    if subq[0] == 'all':
+        return db.query_all(), None
 
     raise ValidationError("Invalid query specification - unknown query type '%s'" % subq[0])
 
