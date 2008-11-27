@@ -12,13 +12,13 @@ jQuery(function($) {
 	
 	//	Automatically clear default text in input fields when they are focused
 	$("input[type='text']").focus(function() {
-		if ($(this).val() == this.defaultValue) {
+		if (($(this).val() == this.defaultValue) && (!$(this).hasClass('ignore-default'))) {
 			$(this).val('');
 		}
 	});
 	//	Reinstate the default value if nothing has been entered.
 	$("input[type='text']").blur(function() {
-		if ($(this).val() == '') {
+		if (($(this).val() == '') && (!$(this).hasClass('ignore-default'))) {
 			$(this).val(this.defaultValue);
 		}
 	});

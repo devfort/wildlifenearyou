@@ -203,7 +203,7 @@ a.add:active,
 .add {
 	padding-left: 20px;
 	background-image: url(/static/img/icons/add.gif);
-	background-position: 0.15em left;
+	background-position: left 0.15em;
 	background-repeat: no-repeat;
 }
 
