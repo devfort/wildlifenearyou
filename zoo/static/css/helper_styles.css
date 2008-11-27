@@ -195,3 +195,6 @@ h1 i.scientific {
 .optional {
 	font-size: 0.8571em;
 }
+.hasJS .noscript {
+	display: none;
+}

@@ -130,6 +130,8 @@ ul.currency li {
 
 /* @end */
 
+/* @group Suggest Changes */
+
 .suggest-changes {
 	background-color: #e2f1f9;
 	border: solid 1px #d8e7ef;
@@ -143,6 +145,10 @@ ul.currency li {
 	display: block;
 }
 
+/* @end */
+
+/* @group Microformats */
+
 p.url {
 	margin: 0;
 	text-transform: uppercase;
@@ -154,3 +160,130 @@ p.address {
 p.tel {
 	margin-top: 0;
 }
+
+/* @end */
+
+/* @group select replacement */
+
+.replaced {
+	display: none;
+}
+.selectReplacement {
+	cursor: pointer;
+	background-color: white;
+	list-style: none;
+	position: relative;
+	width: 110px;
+	height: 20px;
+	margin: 0;
+	padding:0;
+	background: transparent url(/static/img/icons/starselect.gif) -110px 0 no-repeat;
+	overflow: hidden;
+}
+.selectReplacement li {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+.selectReplacement li a:link,
+.selectReplacement li a:visited,
+.selectReplacement li a:hover,
+.selectReplacement li a:active,
+.selectReplacement li a:focus {
+	display: block;
+	position: absolute;
+	width: 22px;
+	height: 20px;
+	text-indent: -9999px;
+	overflow: hidden;
+	outline: none;
+	left: 0;
+}
+ul.worst {
+	background-position: -88px 0;
+}
+ul.bad {
+	background-position: -66px 0;
+}
+ul.fair {
+	background-position: -44px 0;
+}
+ul.good {
+	background-position: -22px 0;
+}
+ul.best {
+	background-position: 0 0;
+}
+.selectReplacement li.worst a:link, 
+.selectReplacement li.worst a:visited, 
+.selectReplacement li.worst a:hover, 
+.selectReplacement li.worst a:active, 
+.selectReplacement li.worst a:focus {
+	left: 0;
+	z-index: 6;
+}
+.selectReplacement li.bad a:link, 
+.selectReplacement li.bad a:visited, 
+.selectReplacement li.bad a:hover, 
+.selectReplacement li.bad a:focus, 
+.selectReplacement li.bad a:active {
+	left: 22px;
+	z-index: 5;
+}
+.selectReplacement li.fair a:link, 
+.selectReplacement li.fair a:visited, 
+.selectReplacement li.fair a:hover, 
+.selectReplacement li.fair a:focus, 
+.selectReplacement li.fair a:active {
+	left: 44px;
+	z-index: 4;
+}
+.selectReplacement li.good a:link,
+.selectReplacement li.good a:visited,
+.selectReplacement li.good a:hover,
+.selectReplacement li.good a:focus,
+.selectReplacement li.good a:active {
+	left: 66px;
+	z-index: 3;
+}
+.selectReplacement li.best a:link, 
+.selectReplacement li.best a:visited, 
+.selectReplacement li.best a:hover, 
+.selectReplacement li.best a:focus, 
+.selectReplacement li.best a:active {
+	left: 88px;
+	z-index: 2;
+}
+.selectReplacement li a:hover,
+.selectReplacement li a:focus{
+	background: transparent url(/static/img/icons/starselect_single.gif) left top repeat-x;
+	left: 0;
+}
+
+.selectReplacement li.worst a:hover,
+.selectReplacement li.worst a:focus {
+	width: 22px;
+	left: 0;
+}
+.selectReplacement li.bad a:hover,
+.selectReplacement li.bad a:focus {
+	width: 44px;
+	left: 0;
+}
+.selectReplacement li.fair a:hover,
+.selectReplacement li.fair a:focus {
+	width: 66px;
+	left: 0;
+}
+.selectReplacement li.good a:hover,
+.selectReplacement li.good a:focus{
+	width: 88px;
+	left: 0;
+}
+.selectReplacement li.best a:hover,
+.selectReplacement li.best a:focus {
+	width: 110px;
+	left: 0;
+}
+
+/* @end */
