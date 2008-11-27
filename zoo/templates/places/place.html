@@ -4,6 +4,7 @@
 
 {% block extra_head %}
 <!-- <script type="text/javascript" src="/static/js/species-adding.js"></script> -->
+<script type="text/javascript" src="/static/js/gallery.js"></script>
 <script type="text/javascript">
 function anyEmptyOnes() {
     return jQuery('#see-more-animals div:visible :text').filter(function() {
@@ -227,7 +228,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 </div>
 {% endfor %}
 
-<div class="photos">
+<div class="gallery">
 	<a href="/photourl"><img src="/static/img/site-images/sample_mid_photo.gif"></a>
 	<div class="slideshow">
 		<ul id="thumbnails">

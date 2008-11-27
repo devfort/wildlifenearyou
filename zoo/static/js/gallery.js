@@ -16,8 +16,8 @@ jQuery(function($) {
 
 		this.thumbnails = $('#thumbnails');
 
-		this.thumbnails.before('<div class="arrow" id="gallery-left-arrow"><a href="#"><img src="images/buttons/gallery-arrow-left.gif" alt="back" /></a></div>');
-		this.thumbnails.after('<div class="arrow" id="gallery-right-arrow"><a href="#"><img src="images/buttons/gallery-arrow-right.gif" alt="forward" /></a></div>');
+		this.thumbnails.before('<div class="arrow" id="gallery-left-arrow"><a href="#"><img src="/static/img/icons/buttons_arrow_left.png" alt="back" /></a></div>');
+		this.thumbnails.after('<div class="arrow" id="gallery-right-arrow"><a href="#"><img src="/static/img/icons/buttons_arrow_right.png" alt="forward" /></a></div>');
 
 		this.checkArrowVisibility = function() {
 			if (this.offset == 0) {
@@ -38,7 +38,7 @@ jQuery(function($) {
 	$('#gallery-right-arrow a').click( function() {
 		if (!$(':animated').length) {
 			var x = parseInt(gallery.thumbnails.css('left'),10);
-			x = x - 245;
+			x = x - 76;
 			gallery.thumbnails.animate( {
 				left : x
 			}, 'normal');
@@ -51,7 +51,7 @@ jQuery(function($) {
 	$('#gallery-left-arrow a').click( function() {
 		if (!$(':animated').length) {
 			var x = parseInt(gallery.thumbnails.css('left'),10);
-			x = x + 245;
+			x = x + 76;
 			gallery.thumbnails.animate( {
 				left : x
 			}, 'normal');

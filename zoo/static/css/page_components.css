@@ -299,3 +299,88 @@ div#ajax-feedback-form {
 	padding-right: 1em;
 }
 /* @end */
+
+/* @group Image gallery */
+
+.gallery {
+	margin-top: 5px;
+	background-color: #E2F1F9;
+	text-align: center;
+	margin-bottom: 1.37em;
+	padding: 1em;
+}
+.hasJS .gallery {
+	position: relative;
+	margin-bottom: 0;
+}
+.hasJS .gallery .slideshow {
+	height: 75px;
+	width: 228px;
+ 	padding: 0 25px;
+	overflow: hidden;
+	position: relative;
+	margin: 5px auto 0 auto;
+}
+.hasJS .gallery .minimal {
+	padding-left: 0;
+}
+.hasJS .gallery .slideshow #thumbnails {
+	left: 0;
+	width: 9999px;
+	position: relative;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+.hasJS .gallery. slideshow #thumbnails a {
+	display: block;
+	width: 75px;
+	height: 75px;
+}
+.gallery .slideshow .arrow {
+	position: absolute;
+	top: 0;
+	background: #E2F1F9;
+	z-index: 9999;
+	width: 17px;
+	height: 75px;
+}
+.gallery .slideshow .arrow a:link,
+.gallery .slideshow .arrow a:visited,
+.gallery .slideshow .arrow a:hover,
+.gallery .slideshow .arrow a:focus,
+.gallery .slideshow .arrow a:active {
+	display: block;
+	height: 40px;
+	padding-top: 30px;
+}
+.gallery .slideshow #gallery-left-arrow {
+	/* background: #fff url('/static/img/icons/buttons_arrow_left.png') 0 0 no-repeat; */
+	left: 0;
+	padding-right: 10px;
+}
+.gallery .slideshow #gallery-right-arrow {
+	/* background: #fff url('/static/img/icons/buttons_arrow_right.png') 10px 0 no-repeat; */
+	right: 0;
+	padding-left: 10px;
+}
+.gallery .slideshow ul li {
+	list-style: none;
+	position: relative;
+	float: left;
+	margin-right: 1px;
+}
+.hasJS .gallery a.toggler {
+	position: absolute;
+	bottom: 0.5em;
+	padding-bottom: 0.3333em;
+	right: 0;
+}
+.hasJS .gallery a.displaying {
+	bottom: 0;
+	padding-bottom: 0.8333em;
+	border-bottom: 1px solid #CCBA7F;
+}
+
+/* @end */
+
