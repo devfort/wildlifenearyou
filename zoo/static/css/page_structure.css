@@ -4,6 +4,10 @@
 	max-width: 100%;
 	margin: 0 auto;
 }
+.wrapper {
+	padding: 0 1em;
+}
+
 .header {
 	background-image: url(/static/img/bg/header.png);
 	background-repeat: repeat-x;
@@ -70,17 +74,15 @@
 
 .primary {
     float: left;
-    width: 59%;
-    margin-left: 1%;
+    width: 60%;
     display: inline;
 }
 
 .secondary {
     float: right;
-    width: 33%;
+    width: 34%;
     display: inline;
     margin-top: 2.7em;
-    margin-right: 1%;
 }
 .secondary h2:first-child,
 .secondary h3:first-child {
