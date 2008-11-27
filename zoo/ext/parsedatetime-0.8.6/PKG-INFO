@@ -1,0 +1,17 @@
+Metadata-Version: 1.0
+Name: parsedatetime
+Version: 0.8.6
+Summary: Parse human-readable date/time expressions
+Home-page: http://code-bear.com/code/parsedatetime/
+Author: Mike Taylor and Darshana Chhajed
+Author-email: bear@code-bear.com
+License: http://www.apache.org/licenses/LICENSE-2.0
+Description: UNKNOWN
+Platform: Any
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Library
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Text Processing
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
