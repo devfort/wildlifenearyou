@@ -14,6 +14,9 @@
 
 {% if q and not results %}
 <p>I'm afraid your search returned no results. Try something else?</p>
+{% if request.user.is_staff %}
+    <p>If you're a developer, try running <samp>./manage.py reindex_places</samp></p>
+{% endif %}
 {% endif %}
 
 {% if results %}
