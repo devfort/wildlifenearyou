@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% if q %}: "{{ q }}"{% endif %}{% endblock %}
+
+{% block primary_content %}
+<h1>Search{% if q %}: "{{ q }}"{% endif %}</h1>
+
+<form action="/search/" method="GET">
+    <p>
+        <input type="text" name="q" value="{{ q }}">
+        <input type="submit" value="Search">
+    </p>
+</form>
+
+{% if q and not results %}
+<p>I'm afraid your search returned no results. Try something else?</p>
+{% endif %}
+
+{% if results %}
+    <ol>
+    {% for result in results %}
+        <li>{{ result }}</li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
+{% endblock %}
+
+{% block secondary_content %}
+<!-- We could put the species search results here -->
+{% endblock %}
