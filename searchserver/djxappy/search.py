@@ -245,6 +245,7 @@ def search(request, db_name):
         'doc_count': db.get_doccount(),
     }
 
+    sort_by = None
     if len(params['q']) == 0:
         q = db.query_all()
     else:
@@ -259,13 +260,26 @@ def search(request, db_name):
 
         opts = query_defn.get('opts')
         if opts is not None:
-            validate_dict_entries(opts, ('sort_by',),
+            validate_dict_entries(opts, ('sort_by', 'sort_by_distance'),
                                   'Invalid search option: %s')
-            # FIXME - handle sort_by in opts
-            raise ValidationError("query opts not yet implemented")
+            if 'sort_by' in opts and 'sort_by_distance' in opts:
+                raise ValidationError("At most one of 'sort_by' and "
+                                      "'sort_by_distance' may be specified.")
+            if 'sort_by' in opts:
+                raise ValidationError("sort_by not yet implemented")
+
+            if 'sort_by_distance' in opts:
+                sort_by_distance = opts['sort_by_distance']
+                if len(sort_by_distance) != 1:
+                    raise ValidationError("sort_by_distance can currently only contain one location")
+                sort_by_distance = sort_by_distance[0]
+                if len(sort_by_distance) != 2:
+                    raise ValidationError("sort_by_distance must contain instances of (fieldname, location)")
+                sort_by = db.SortByGeolocation(*sort_by_distance)
 
     res = q.search(int(params['start_rank'][0]),
-                   int(params['end_rank'][0]))
+                   int(params['end_rank'][0]),
+                   sortby=sort_by)
 
     if len(res) == 0:
         if len(params['q']) != 0 and params['spell_correct'][0] == 'auto':
@@ -275,7 +289,8 @@ def search(request, db_name):
                                               spell=True)
 
             res = q.search(int(params['start_rank'][0]),
-                           int(params['end_rank'][0]))
+                           int(params['end_rank'][0]),
+                           sortby=sort_by)
             if len(res) != 0:
                 retval['spell_corrected'] = True
                 retval['spellcorr_q'] = corrected_q

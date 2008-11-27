@@ -25,7 +25,24 @@ class Query(object):
         """Set the field to sort by.
 
         """
-        self.opts['sort_by'] = [(fieldname, ascending)]
+        self.opts['sort_by'] = [(field_name, ascending)]
+        try:
+            del self.opts['sort_by_distance']
+        except KeyError:
+            pass
+
+    def sort_by_distance(self, field_name, centre, ascending=True):
+        """Set sorting to be by distance from centre.
+
+        `field_name` is the field name to get coordinates from.
+        `centre` is the location to calculate distances from.
+
+        """
+        self.opts['sort_by_distance'] = [(field_name, centre)]
+        try:
+            del self.opts['sort_by']
+        except KeyError:
+            pass
 
     def to_params(self):
         opts = copy(self.opts)
