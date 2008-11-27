@@ -131,7 +131,12 @@ class Sighting(AuditedModel):
             species at this place
         """, related_name = 'sightings'
     )
-
+    
+    def save(self, *args, **kwargs):
+        super(Sighting, self).save(*args, **kwargs)
+        # re-index the place in Xapian
+        self.place.save()
+    
     def __unicode__(self):
         ret = u'Sighting of %s at %s' % (self.species.common_name, self.place)
         if self.trip:

@@ -1,5 +1,6 @@
 from django.conf import settings
 from djape.client import Client, Query
+from django.db import models
 
 class NotFound(Exception):
     pass
@@ -35,12 +36,41 @@ def make_searcher(dbname, latlon_fields=[]):
             yield doc_from_result_item(item, latlon_fields)
     return search
 
+def make_db_searcher(dbname, db_prefix=None):
+    # A DB searcher knows that the results will be just search_ids, but each
+    # one will be something like "places.Place:34" - it looks up the model
+    # and uses .in_bulk(ids) to load those ORM objects, then returns them
+    client = Client(settings.XAPIAN_BASE_URL, dbname, db_prefix)
+    def search(q, num=0):
+        results = client.search(Query(q), end_rank=num)
+        search_ids = [
+            item['id'] for item in results['items']
+        ]
+        to_grab = {}
+        for search_id in search_ids:
+            model_key, id = search_id.split(':')
+            to_grab.setdefault(model_key, []).append(id)
+        grabbed = {}
+        # Now do an in_bulk query for each of the model_keys in to_grab
+        for model_key, ids in to_grab.items():
+            klass = models.get_model(*model_key.split('.'))
+            for id, obj in klass.objects.in_bulk(ids).items():
+                grabbed['%s:%s' % (model_key, id)] = obj
+        # Finally, return objects for the search_ids in the correct order
+        return [grabbed[search_id] for search_id in search_ids]
+    
+    return search
+
+
 search_locations = make_searcher(
     settings.XAPIAN_LOCATION_DB, latlon_fields = ['latlon']
 )
 lookup_location = make_lookup(
     settings.XAPIAN_LOCATION_DB, latlon_fields = ['latlon']
 )
-
 search_species = make_searcher(settings.XAPIAN_SPECIES_DB)
 lookup_species = make_lookup(settings.XAPIAN_SPECIES_DB)
+
+search_places = make_db_searcher(
+    'placeinfo', settings.XAPIAN_PERSONAL_PREFIX
+)

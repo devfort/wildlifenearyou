@@ -42,7 +42,9 @@ class AutoCreatedAndModifiedFields:
         set_current_user(request.user)
 
 # Hook up searchify/djape magic
-from searchify import initialise, TestClient
+from searchify import initialise
 from djape.client import Client
-c = Client(settings.XAPIAN_BASE_URL, 't')
-#initialise(c)
+c = Client(
+    settings.XAPIAN_BASE_URL, 'placeinfo', settings.XAPIAN_PERSONAL_PREFIX
+)
+initialise(c)

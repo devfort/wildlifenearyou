@@ -1,7 +1,5 @@
 from zoo.shortcuts import render
-#from zoo.search import search_places
-def search_places(q):
-    pass
+from zoo.search import search_places
 
 def search(request):
     q = request.GET.get('q', '')
