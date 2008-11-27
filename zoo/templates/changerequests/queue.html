@@ -21,11 +21,10 @@
   <p>The moderation request you just attempted to apply now conflicts with the current data - you will either have to force this change or delete the change altogether.</p>
  {% endif %}
 
- <ol>
  {% for crg in change_request_groups %}
   {% with crg.get_pending_changerequests as pending_changes %}
-   <li>
-   {{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a> {{ crg.created_at|timesince }} ago:
+
+  <h3 title="Requested {{ crg.created_at|timesince }} ago">{{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a></h3>
 
    <ul>
    {% for cr in pending_changes %}
@@ -95,7 +94,6 @@
    </li>
   {% endwith %}
  {% endfor %}
- </ol>
 {% else %}
  <p>Nothing to moderate.</p>
 {% endif %}
