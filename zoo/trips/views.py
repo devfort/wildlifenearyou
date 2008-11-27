@@ -324,6 +324,7 @@ class FinishAddSightingsForm(forms.Form):
     def clean_start(self):
         start = self.cleaned_data['start'].lower()
         if start == '':
+            self.cleaned_data['start_accuracy'] = 'day'
             return start
 
         m = re.match('\s*(\d{4})\s*$', start)
