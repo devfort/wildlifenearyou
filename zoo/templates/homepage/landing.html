@@ -52,10 +52,16 @@ jQuery(function($) {
 		{% endif %}
 		</div>
 		<div class="secondary">
+			{% if not user.is_authenticated %}
 			<div class="signup">
 				<h2>Sign up NOW</h2>
 				<p>Already a user? <a href="">&raquo; Log in now</a></p>
-			</div>			
+				<form action="/register/" method="POST">
+					{{ reg_form.as_p }}
+					<input type="submit" value="Register" />
+				</form>				
+			</div>	
+			{% endif %}		
 		</div>
 	</div>
 </div>

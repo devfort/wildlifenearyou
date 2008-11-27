@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpRespons
 from zoo.shortcuts import render
 
 from zoo.places.models import Place
+from zoo.accounts.forms import RegistrationForm
 
 def landing(request):
     places_with_sightings = Place.objects.filter(sighting__isnull=False)
@@ -10,6 +11,9 @@ def landing(request):
     else:
         random_zoo = None
         
+    reg_form = RegistrationForm()
+        
     return render(request, 'homepage/landing.html', {
         'random_zoo': random_zoo,
+        'reg_form': reg_form,
     })
