@@ -13,6 +13,7 @@ import shutil
 import time
 import traceback
 import xappy
+import xapian # For calling the latlong code directly
 
 def render_result_as_json(result):
     """Render a result structure to JSON and return it from the request.
@@ -246,6 +247,8 @@ def search(request, db_name):
     }
 
     sort_by = None
+    distance_centre = None
+    distance_centre_field = None
     if len(params['q']) == 0:
         q = db.query_all()
     else:
@@ -276,6 +279,9 @@ def search(request, db_name):
                 if len(sort_by_distance) != 2:
                     raise ValidationError("sort_by_distance must contain instances of (fieldname, location)")
                 sort_by = db.SortByGeolocation(*sort_by_distance)
+                distance_centre = xapian.LatLongCoords()
+                distance_centre.insert(xapian.LatLongCoord.parse_latlong(sort_by_distance[1]))
+                distance_centre_field = sort_by_distance[0]
 
     res = q.search(int(params['start_rank'][0]),
                    int(params['end_rank'][0]),
@@ -297,6 +303,9 @@ def search(request, db_name):
                 retval['spell_corrected'] = True
                 retval['spellcorr_q'] = corrected_q
 
+    if distance_centre is not None:
+        distance_metric = xapian.GreatCircleMetric()
+
     items = []
     for item in res:
         itemres = {
@@ -304,6 +313,14 @@ def search(request, db_name):
             'id': (item.id),
             'data': (item.data),
         }
+        if distance_centre is not None:
+            val = item.get_value(distance_centre_field, 'loc')
+            doc_coords = xapian.LatLongCoords.unserialise(val)
+            distance = distance_metric(distance_centre, doc_coords)
+            itemres['geo_distance'] = {
+                distance_centre_field: distance,
+            }
+
         relevant_data = int(params['relevant_data'][0])
         if relevant_data > 0:
             reldata = item.relevant_data(relevant_data)
