@@ -61,6 +61,10 @@ try:
     initialise()
 
 except:
-    print "ERROR IN MIDDLEWARE INITIALISATION; DYING"
-    import os
-    os._exit(-1)
+    try:
+        import traceback
+        traceback.print_exc()
+        print "ERROR IN MIDDLEWARE INITIALISATION; DYING"
+    finally:
+        import os
+        os._exit(-1)
