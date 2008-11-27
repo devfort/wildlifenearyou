@@ -49,7 +49,6 @@ def search(request):
         'location_results': location_results,
     })
 
-
 from zoo.shortcuts import render_json
 from zoo.search import search_locations
 def location_complete(request):
