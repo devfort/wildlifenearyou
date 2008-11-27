@@ -6,7 +6,7 @@
 
 {% block primary_content %}
 
-<img align="right" src="/faces/{{ profile.user|lower }}.png" alt="{{ profile.user }}'s Avatar" width="175" height="175" />
+{{ profile.avatar_img }}
 
 <h1>{{ profile.user|title }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
 {% if profile.badges.all %}
@@ -54,7 +54,7 @@
 	{% endfor %}
 	</ol>
 	<p><a href="{% url tripbook profile.user %}">More...</a></p>
-	
+
 	{% else %}
 	<p>
 		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been anywhere yet.

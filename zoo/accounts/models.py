@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
+from django.utils.safestring import mark_safe
 
 import zoo.utils
 from zoo.utils import attrproperty
@@ -47,6 +48,10 @@ class Profile(models.Model):
 
     email_validated = models.BooleanField(null=False, blank=False, default=False)
     featured = models.BooleanField(null=False, blank=False, default=False)
+
+    def avatar_img(self):
+        return mark_safe('<img src="/faces/%s.png" alt="%s\'s Avatar" width="175" height="175" />' % (self.user.username.lower(), self.user.username))
+
 
     @models.permalink
     def get_absolute_url(self):
@@ -163,9 +168,9 @@ class Profile(models.Model):
         if Comment.objects.filter(content_type = pct, object_pk__in = photo_ids).exclude(user = self.user).count() > 0:
             percent += 5
         if self.user.selectedfaceparts.count() > 0: percent += 10 # avatar / profile picture
-        
+
         # avatar
-        
+
         if self.user.favourite_species.all().count() > 0: percent += 5
         if self.user.created_sighting_set.count() > 10: percent += 5
         if self.user.photos.filter(is_visible=True).count() > 10: percent += 5
