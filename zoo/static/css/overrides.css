@@ -46,17 +46,35 @@
 	margin-bottom: -50em;
 }
 
+.column h2 {
+	margin-top: 1em;
+}
+
 .inner {
-	padding-left: 15px;
+	padding-left: 1em;
+}
+
+.inner h3 {
+	margin-bottom: 0.6em;	
+}
+
+.inner p {
+	margin-bottom: 1em;
+}
+
+.first .inner blockquote {
+	clear: both;
 }
 
 .inner img {
+	margin-right: 10px;
+	margin-bottom: 10px;
 	float: left;
 }
 
-.column h2 {
-	margin-top: 10px;
-}
+
+
+
 
 .first {
 	margin-left: 0;
