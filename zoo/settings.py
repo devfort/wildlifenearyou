@@ -115,11 +115,6 @@ INSTALLED_APPS = [
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
 
-XAPIAN_BASE_URL = 'http://10.0.1.205/xapian/'
-XAPIAN_SPECIES_DB = 'species'
-XAPIAN_LOCATION_DB = 'locations'
-XAPIAN_LOCATION_SEARCH_URL = 'http://10.0.1.205/xapian/search/simontestdb/'
-
 CACHE_BACKEND = 'dummy:///'
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -133,7 +128,24 @@ except ImportError:
 
 EMAIL_FROM = 'zoo@example.com'
 
+XAPIAN_BASE_URL = 'http://10.0.1.205/xapian/'
+XAPIAN_LOCATION_DB = 'locations' # It's safe to share the locations DB
+
+XAPIAN_PERSONAL_PREFIX = ''
 try:
     from local_settings import *
 except ImportError:
     pass
+
+assert XAPIAN_PERSONAL_PREFIX, """
+    You need to create a XAPIAN_PERSONAL_PREFIX setting in your 
+    local_settings.py file - it should be your username. This will be used for
+    search index files created on our shared search web service server, but 
+    because these indexes will reference your local Django database IDs it's
+    important that you don't end up talking to someone else's search index.
+"""
+
+# Everyone needs their own species index, since once we create a local 
+# record of a species in the animal_species table we write the ID from that
+# record back to the search index.
+XAPIAN_SPECIES_DB = '%s_species' % XAPIAN_PERSONAL_PREFIX
