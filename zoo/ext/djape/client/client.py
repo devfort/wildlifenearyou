@@ -131,7 +131,7 @@ class Client(object):
         res = self._doreq('listdbs')
         return res['db_names']
 
-    def newdb(self, fields, overwrite=False, db_name=None):
+    def newdb(self, fields, overwrite=False, allow_reopen=False, db_name=None):
         """Create a new database.
         
         Returns an error if the database already exists.
@@ -144,6 +144,10 @@ class Client(object):
          - `overwrite` is a bool; if True, an existing database of that name
            will be overwritten.  Defaults to False, if False an existing
            database will cause an error.
+         - `allow_reopen` is a bool; if True, an existing database of that name
+           will be reopened if the configuration matches the newly supplied
+           configuration _exactly_.  Otherwise, an existing database will cause
+           an error.  (Mustn't be specified if `overwrite` also is.)
 
         The dictionaries contain the following:
 
@@ -201,10 +205,16 @@ class Client(object):
         else:
             overwrite = '0'
 
+        if allow_reopen:
+            allow_reopen = '1'
+        else:
+            allow_reopen = '0'
+
         req = {
             'db_name': db_name,
             'fields': simplejson.dumps(list(fields)),
-            'overwrite': overwrite
+            'overwrite': overwrite,
+            'allow_reopen': allow_reopen,
         }
 
         return self._doreq('newdb', data=req)

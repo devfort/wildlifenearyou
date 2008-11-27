@@ -1,3 +1,6 @@
+# TODO - tests
+# TODO - change default server location (ie, remove "xapian/" prefix)
+# TODO - add api versioning
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -384,40 +387,70 @@ def newdb(request):
     If the database already exists:
      - if overwrite is 1, replaces the database completely with a new one
        (deleting all the contents).
-     - otherwise, returns an error.
+     - if allow_reopen is 1, allows the database to be reopened, but only if
+       the supplied configuration is identical.  Otherwise gives an error.
 
     Supported parameters:
 
      - `db_name`: contains the name of the database.
      - `fields`: the field parameters (see the client for documentation for
        now: major FAIL, FIXME)
-     - `overwrite`: if 1, the database already exists, instead of returning an
-       error, remove it and create it anew. (doesn't affect behaviour if
+     - `overwrite`: if 1, and the database already exists, instead of returning
+       an error, remove it and create it anew. (doesn't affect behaviour if
        database doesn't exist).  defaults to 0.
+     - `allow_reopen`: if 1, and the database already exists, check if the
+       supplied configuration is identical.  Otherwise, gives an error.
  
     """
     params = validate_params(request.POST, {
                              'db_name': (1, 1, '^\w+$', None),
                              'fields': (1, 1, None, None),
                              'overwrite': (1, 1, '^[01]$', [0]),
+                             'allow_reopen': (1, 1, '^[01]$', [0]),
                              })
+    overwrite = params['overwrite'][0] == '1'
+    allow_reopen = params['allow_reopen'][0] == '1'
+
+    if overwrite and allow_reopen:
+        raise ValidationError('"overwrite" and "allow_reopen" must not both be specified')
+
     db_name = params['db_name'][0]
     db_path = os.path.realpath(get_db_path(db_name))
 
+    db = None
+
     if os.path.exists(db_path):
-        if params['overwrite'][0] != '1':
-            raise DatabaseExistsError("The path for '%s' is already in use" % db_path)
-        else:
+        if overwrite:
             shutil.rmtree(db_path)
+        elif allow_reopen:
+            if not os.path.exists(os.path.dirname(db_path)):
+                os.makedirs(os.path.dirname(db_path))
+            db = xappy.IndexerConnection(db_path)
+            try:
+                oldconfig = simplejson.loads(db.get_metadata('_xappyclient_config'))
+                config = simplejson.loads(params['fields'][0])
+                if oldconfig != config:
+                    raise DatabaseExistsError("The path for '%s' is already in use, and the configuration does not match" % db_path)
+                else:
+                    return {'ok': 1}
+            except:
+                db.close()
+                raise
+        else:
+            raise DatabaseExistsError("The path for '%s' is already in use" % db_path)
 
     if not os.path.exists(os.path.dirname(db_path)):
         os.makedirs(os.path.dirname(db_path))
-
     db = xappy.IndexerConnection(db_path)
+
     try:
         try:
             # Set up the field actions from fields
             config = simplejson.loads(params['fields'][0])
+
+            # Store the field configuration.
+            db.set_metadata('_xappyclient_config', simplejson.dumps(config))
+
             # FIXME -perhaps we should validate here?
             for settings in config:
                 validate_dict_entries(settings, valid_field_config_keys,
