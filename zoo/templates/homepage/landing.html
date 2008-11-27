@@ -1,6 +1,7 @@
 {% extends base %}
 
 {% load humanize %}
+{% load thumbnail %}
 
 {% block title %}Welcome to SEDF App{% endblock %}
 
@@ -124,7 +125,11 @@ jQuery(function($) {
 	    <h2>Featured Animal</h2>
 	    {% if featured.species %}
 	    {% with featured.species as species %}
-	    <img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO animal name">
+	    {% with species.random_photo as photo %}
+	    {% if photo %}
+	    <img src="{% thumbnail photo.photo 75x75 crop %}" alt="{{ species.common_name }}">
+	    {% endif %}
+	    {% endwith %}
 	    <p><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
 	    <blockquote><p>{{ species.description }}</p></blockquote>
 	    {% comment %}
