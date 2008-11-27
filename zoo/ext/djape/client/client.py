@@ -121,6 +121,13 @@ class Client(object):
             req['hl'] = simplejson.dumps(hl)
 
         return self._doreq('search/' + db_name, qs=req)
+    
+    def parse_latlong(self, latlong_string):
+        """Attempt to parse a latitude/longitude coordinate, and return it (as
+        a pair of integers).
+
+        """
+        return self._doreq('parse_latlong', qs={'latlong_string': latlong_string})
 
     def get(self, ids, db_name=None):
         """Get a document, or documents.
