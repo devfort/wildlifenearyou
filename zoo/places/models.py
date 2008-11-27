@@ -94,7 +94,7 @@ class Place(AuditedModel):
         for attr in (
             'address_line_1', 'address_line_2', 'town', 'state', 'zip'
             ):
-            val = unicode(getattr(self, attr, None))
+            val = unicode(getattr(self, attr, '') or '')
             if val:
                 bits.append(val)
         return ', '.join(bits)
