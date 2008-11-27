@@ -17,17 +17,26 @@ class SubmitInput(forms.Widget):
         return super(SubmitInput, self).value_from_datadict(data, files, name)
 
 class DeleteForm(forms.Form):
-    delete = forms.BooleanField(required=False)
+    delete = forms.BooleanField(required=False,
+                                widget=SubmitInput(attrs={'value':"Delete"}))
+
+class UndeleteForm(forms.Form):
+    undelete = forms.BooleanField(required=False,
+                                  widget=SubmitInput(attrs={'value':"Undo deletion"}))
 
 class ExtraSubForm(forms.Form):
     add = forms.BooleanField(required=False,
                              widget=SubmitInput(attrs={'value':"Add"}))
-    count = forms.IntegerField(required=True,
-                               widget=forms.HiddenInput)
+    new_ids = forms.CharField(required=False,
+                              widget=forms.HiddenInput)
 
     def __unicode__(self):
         return mark_safe(u''.join(unicode(bf) for bf in self))
 
+class DeletedException(Exception):
+    """This is thrown when a subform (for a new record, not an existing one)
+    discovers that it has been deleted"""
+    pass
 
 class UberForm(object):
     def __init__(self, instance=None, data=None, prefix="", new_form_counter=None):
@@ -35,6 +44,7 @@ class UberForm(object):
             prefix += '-'
 
         self.instance = instance
+        self.deleted = False
         if instance:
             prefix += '%s' % instance.pk
         else:
@@ -42,6 +52,20 @@ class UberForm(object):
 
         self.delete_form = DeleteForm(data=data,
                                       prefix=prefix)
+
+        self.undelete_form = UndeleteForm(data=data,
+                                          prefix=prefix)
+
+        if data:
+            assert self.delete_form.is_valid()
+            self.deleted = self.delete_form.cleaned_data['delete']
+
+            if self.deleted:
+                if instance:
+                    pass
+                else:
+                    # bail out!
+                    raise DeletedException
 
         form_sd = SortedDict()
 
@@ -57,27 +81,42 @@ class UberForm(object):
                 subuforms = []
                 sub_prefix = "%s__%s" % (prefix, name)
 
-                extra_count = 0
+                new_ids = ''
                 if data:
                     esf = ExtraSubForm(data=data, prefix=sub_prefix)
                     # do this now so we can see the count,
                     # and increment it if necessary
-                    assert esf.is_valid(), esf.errors
-                    extra_count = esf.cleaned_data['count']
+                    assert esf.is_valid(), (esf.errors, data)
+                    new_ids = esf.cleaned_data['new_ids'].split(',')
+                    print new_ids
+                    new_ids = map(int, new_ids)
+                    new_ids.sort()
+                    
                     if esf.cleaned_data['add']:
-                        extra_count += 1
-
-                esf = ExtraSubForm(initial={'count': extra_count,
-                                            'add': ''},
-                                   prefix=sub_prefix)
+                        try:
+                            max_id = max(new_ids)
+                        except ValueError:
+                            max_id = 1
+                        new_ids.append(max_id + 1)
 
                 for obj in objects:
                     suf = sub_uber_form_klass(obj, data, sub_prefix)
                     subuforms.append(suf)
 
-                for form_counter in range(1, extra_count + 1):
-                    suf = sub_uber_form_klass(None, data, sub_prefix, form_counter)
-                    subuforms.append(suf)
+                deleted_ids = set()
+                for form_id in new_ids:
+                    try:
+                        suf = sub_uber_form_klass(None, data, sub_prefix, form_id)
+                        subuforms.append(suf)
+                    except DeletedException:
+                        deleted_ids.add(form_counter)
+
+                new_ids = sorted(set(new_ids) - deleted_ids)
+
+                esf = ExtraSubForm(initial={'new_ids': ','.join(str(x) for x in new_ids),
+                                            'add': ''},
+                                   prefix=sub_prefix)
+
 
                 form_sd[name] = {
                     'subuforms': subuforms,
@@ -86,6 +125,20 @@ class UberForm(object):
 
         self.boundforms = form_sd
 
+    def render_deleted(self):
+        forms = []
+
+        self.forall_forms(lambda f: forms.append(f))
+        out = []
+        for form in forms:
+            for f in form:
+                out.append(f.as_hidden())
+
+        from pprint import pprint
+        pprint(out)
+
+        return mark_safe('\n'.join(out))
+
     def forall_forms(self, func):
         for name, f in self.boundforms.iteritems():
             if isinstance(f, dict):
@@ -93,6 +146,7 @@ class UberForm(object):
                 if suf:
                     for uf in suf:
                         uf.forall_forms(func)
+                func(f['addform'])
             else:
                 func(f)
 
@@ -136,8 +190,8 @@ class UberForm(object):
                             changes[(uf.instance, name)] = \
                                 (oldval, val)
             else:
-                pass
                 # new object
+                pass
         
         self.forall_uf(get_changes)
 

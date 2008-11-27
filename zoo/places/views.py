@@ -156,18 +156,20 @@ def place_edit(request, country_code, slug):
         uf = PlaceUberForm(place, request.POST)
 
         if uf.is_valid():
-            changes = uf.changes()
-            if changes:
-                crg = ChangeRequestGroup.objects.create()
+            print request.POST.keys()
+            if 'save all' in request.POST.get('submit', '').lower():
+                changes = uf.changes()
+                if changes:
+                    crg = ChangeRequestGroup.objects.create()
 
-                for (obj, attrname), (oldval, newval) in changes.iteritems():
-                    ChangeAttributeRequest.objects.create(
-                        group=crg,
-                        content_object=obj,
-                        attribute=attrname,
-                        old_value=oldval,
-                        new_value=newval,
-                    )
+                    for (obj, attrname), (oldval, newval) in changes.iteritems():
+                        ChangeAttributeRequest.objects.create(
+                            group=crg,
+                            content_object=obj,
+                            attribute=attrname,
+                            old_value=oldval,
+                            new_value=newval,
+                        )
 
         else:
             print "INVALID"

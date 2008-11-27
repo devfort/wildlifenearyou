@@ -1,31 +1,48 @@
 
-from django.forms import ModelForm
+from django import forms
 from zoo.forms import UberForm
-from zoo.places.models import Place, PlaceOpening
+from zoo.places.models import Place, PlaceOpening, PlaceFacility
 
 
-class PlaceEditForm(ModelForm):
+class PlaceEditForm(forms.ModelForm):
     class Meta:
         model = Place
         fields = ['known_as', 'legal_name', 'description', 'url',
-                  'country']
+                  'country', 'address_line_1', 'address_line_2',
+                  'town', 'state', 'zip', 'phone', 'price_notes']
 
 
-class PlaceOpeningEditForm(ModelForm):
+class PlaceOpeningEditForm(forms.ModelForm):
     class Meta:
         model = PlaceOpening
         fields = ['start_date', 'end_date', 'days_of_week']
 
+class PlaceOpeningEditForm(forms.ModelForm):
+    class Meta:
+        model = PlaceOpening
+        fields = ['start_date', 'end_date', 'days_of_week']
+
+class PlaceFacilityEditForm(forms.ModelForm):
+    class Meta:
+        model = PlaceFacility
+        fields = ['facility', 'specific_desc']
+
+    specific_desc = forms.CharField(label='Description',
+                                    required=False)
+
 # UBER FORMS!
 
 class PlaceOpeningUberForm(UberForm):
-    parts = [
-        ('main', PlaceOpeningEditForm),
-        ]
+    parts = [('main', PlaceOpeningEditForm)]
+
+class PlaceFacilityUberForm(UberForm):
+    parts = [('main', PlaceFacilityEditForm)]
 
 class PlaceUberForm(UberForm):
     parts = [
         ('main', PlaceEditForm),
+        ('facility', PlaceFacilityUberForm,
+         lambda instance: instance.place_facilities.all()),
         ('opening', PlaceOpeningUberForm,
          lambda instance: instance.placeopening_set.all()),
         ]

@@ -9,10 +9,28 @@
 check/discover the information.</p>
 
 <form action="{{ path }}" method="post">
+{% if form.deleted %}
 <div>
-{{ form.delete_form.as_p }}
+{{ form.undelete_form.undelete }}
+{{ form.render_deleted }}
+</div>
+{% else %}
+<div>
+{{ form.delete_form.delete }}
 {{ form.main.as_p }}
-Open Hours:
+
+Facilities:
+{% for f in form.facility.subuforms %}
+<div class="nested-edit">
+{{ f.delete_form.as_p }}
+{{ f.main.as_p }}
+</div>
+{% endfor %}
+<p>
+Add more facilities: {{ form.facility.addform }}
+</p>
+
+Opening Hours:
 {% for o in form.opening.subuforms %}
 <div class="nested-edit">
 {{ o.delete_form.as_p }}
@@ -23,8 +41,10 @@ Open Hours:
 Add more detailed opening hours: {{ form.opening.addform }}
 </p>
 
-<input type="submit" name="submit" value="Save all proposed changes">
 </div>
+{% endif %}
+<input type="submit" name="submit" value="Save all proposed changes">
+
 </form>
 
 {% endblock %}
