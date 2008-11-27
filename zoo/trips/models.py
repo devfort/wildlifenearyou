@@ -25,6 +25,7 @@ class Trip(AuditedModel):
         help_text="A title for this trip. At least one of name or date must be provided."
     )
     description = models.TextField(blank=True)
+    rating = models.CharField(max_length=1, null=True, blank=True, choices=[ (i,i) for i in range(1,6) ])
     species = models.ManyToManyField(Species, through='Sighting')
 
     class Meta:
