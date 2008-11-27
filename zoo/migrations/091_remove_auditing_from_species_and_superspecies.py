@@ -4,16 +4,8 @@ if settings.DATABASE_ENGINE == 'mysql':
 elif settings.DATABASE_ENGINE == 'sqlite3':
     from dmigrations.sqlite3 import migrations as m
 
+# Just do species
 migration = m.Compound([
-    m.Migration(
-        sql_up = ['''
-            ALTER TABLE animals_superspecies 
-            DROP FOREIGN KEY created_by_id_refs_id_5a9fbc3b;
-        ''', '''
-            ALTER TABLE animals_superspecies 
-            DROP FOREIGN KEY modified_by_id_refs_id_5a9fbc3b;
-        '''], sql_down = [""]
-    ),
     m.DropColumn(
         'animals', 'species', 'created_at', 'datetime NOT NULL'
     ),
@@ -21,22 +13,10 @@ migration = m.Compound([
         'animals', 'species', 'modified_at', 'datetime NOT NULL'
     ),
     m.DropColumn(
-        'animals', 'superspecies', 'created_at', 'datetime NOT NULL'
+        'animals', 'species', 'created_by', 'integer NOT NULL', 'auth_user'
     ),
     m.DropColumn(
-        'animals', 'superspecies', 'modified_at', 'datetime NOT NULL'
-    ),
-    m.DropColumn(
-        'animals', 'species', 'created_by', 'integer NOT NULL',
-    ),
-    m.DropColumn(
-        'animals', 'species', 'modified_by', 'integer NOT NULL',
-    ),
-    m.DropColumn(
-        'animals', 'superspecies', 'created_by', 'integer NOT NULL',
-    ),
-    m.DropColumn(
-        'animals', 'superspecies', 'modified_by', 'integer NOT NULL',
+        'animals', 'species', 'modified_by', 'integer NOT NULL', 'auth_user'
     ),
 ])
 
