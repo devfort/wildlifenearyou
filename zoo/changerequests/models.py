@@ -18,6 +18,9 @@ class ChangeRequestGroup(models.Model):
         User, null=True, blank=True, related_name='created_changerequests'
     )
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __unicode__(self):
         return u'Change group created at %s by %s' % (
                 self.created_at, self.created_by

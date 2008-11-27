@@ -30,12 +30,14 @@ def moderation_queue(request):
     else:
         form = ChangeRequestActionForm()
 
+    
+
     return render(request, 'changerequests/queue.html', {
         'form': form,
         'change_request_groups':
             ChangeRequestGroup.objects.filter(
                 changerequest__applied_by__isnull=True
-            ),
+            ).distinct(),
         'total_pending_change_requests':
             ChangeRequest.objects.filter(applied_by__isnull=True).count(),
     })
