@@ -8,8 +8,9 @@
 
 {% block content %}
 
-{% load trip_sightings %}
-	{% trip_sightings trip 'h1' 'h2' '' %}
+<h1>{{ trip.compact_title }}</h1>
+{% with trip.sightings.all as sightings %}
+        {% regroup sightings by place.known_as as sightings_by_place %}
     
     
     <!-- TODO: Users should see their OWN photos even if they have not 
@@ -29,6 +30,56 @@
     <form enctype="multipart/form-data" action="{{ request.path }}upload/" method="POST">
         <p><input type="file" name="photo" id="id_photo"> <input type="submit" value="Upload"></p>
     </form>
+
+        {% with sightings_by_place|length as sl %}
+        {% ifequal 1 sl %}
+                <p>A trip to {% for place in sightings_by_place %}{% for sighting in place.list|slice:":1" %}           
+                        <a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
+                {% endfor %}{% endfor %} with {{ trip.sightings.all.count }} sighting{{ trip.sightings.all.count|pluralize }}</p>
+
+                <p class="description">
+                {{ trip.description }}
+                </p>
+
+                {% for place in sightings_by_place %}
+                        <h2>Sighting{{ trip.sightings.all.count|pluralize }}</h2>
+                        <ul>
+                                {% for sighting in place.list %}
+                                        <li><a href="{% url place-species-view sighting.place.country.country_code,sighting.place.slug,sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+                                {% endfor %}
+                        </ul>
+                {% endfor %}
+        {% else %}
+                <p>A trip with {{ trip.sightings.all.count }} sighting{{ trip.sightings.all.count|pluralize }}</p>
+
+                <p class="description">
+                {{ trip.description }}
+                </p>
+
+                <h2>Sightings</h2>
+                {% for place in sightings_by_place %}
+                        <h2>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
+                {% endfor %}</h2>
+                <p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
+
+                <ul>
+                        {% for sighting in place.list %}
+                        <li><a href="{% url place-species-view sighting.place.country.country_code,sighting.place.slug,sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+                        {% endfor %}
+                </ul>
+                {% endfor %}
+        {% endifequal %}
+        {% endwith %}
+{% endwith %}
+
+<h2>Photos</h2>
+
+{% for photo in trip.visible_photos.all %}
+<div>
+<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
+</div>
+{% endfor %}
+
 
 	<h2>Trip Rating</h2>
 	{% if rating.on %}

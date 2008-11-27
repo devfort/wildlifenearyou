@@ -37,7 +37,6 @@ class Trip(AuditedModel):
         elif self.end is None and self.start:
             self.end = self.start
         return super(Trip,self).save(args, kwargs)
-        
     
     def get_absolute_url(self):
         return self.urls.absolute
@@ -81,9 +80,9 @@ class Trip(AuditedModel):
         date = self.start
         if date is not None:
             if self.start_accuracy == 'year':
-                date = u'in %s' % self.start.year
+                date = u' in %s' % self.start.year
             elif self.start_accuracy == 'month':
-                date = u'in %s' % dateformat.format(self.start, 'F Y')
+                date = u' in %s' % dateformat.format(self.start, 'F Y')
             else:
                 date = u'%s' % dateformat.format(self.start, 'jS F Y')
             
@@ -118,6 +117,11 @@ class Trip(AuditedModel):
         
         # Multiple conditions allowed here
         return u'%s%s%s' % (name, place, date)
+
+    def compact_title(self):
+        name = self.name or 'A trip'
+        date = self.formatted_date()
+        return u'%s%s' % (name, date)
 
     @staticmethod
     def get_average_rating(place):
@@ -167,6 +171,9 @@ class Sighting(AuditedModel):
         super(Sighting, self).save(*args, **kwargs)
         # re-index the place in Xapian
         self.place.save()
+
+    def visible_photos(self):
+        return self.photos.filter(is_visible = True)
     
     def __unicode__(self):
         ret = u'Sighting of %s at %s' % (self.species.common_name, self.place)
