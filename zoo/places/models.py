@@ -78,6 +78,10 @@ class Place(AuditedModel):
     gridref = models.CharField(max_length=8, null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
+    def latlon(self):
+        if self.longitude is None or self.latitude is None:
+            return ''
+        return "%f %f" % (self.longitude, self.latitude)
 
     def get_absolute_url(self):
         return self.urls.absolute
@@ -106,7 +110,7 @@ class Place(AuditedModel):
                   },
                   { # Searching for the place address.
                     'field_name': 'address',
-                    'django_fields': [lambda inst: inst.address()],
+                    'django_fields': [lambda inst: [inst.address()]],
                   },
                   { # Searching for the animals in a place.
                     # This expression should return all the common names of the
@@ -118,7 +122,7 @@ class Place(AuditedModel):
                   },
                   { # Location of the place.
                     'field_name': 'latlong',
-                    'django_fields': [lambda inst: "%f %f" % (inst.longitude, inst.latitude)],
+                    'django_fields': [lambda inst: [inst.latlon()]],
                   },
                  ]
 
