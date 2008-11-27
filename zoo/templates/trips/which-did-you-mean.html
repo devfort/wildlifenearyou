@@ -6,7 +6,7 @@
 
 <h1>Add your sightings</h1>
 
-<form action="{{ request.path }}" method="POST">
+<form action="{{ request.path }}" method="GET">
 {{ form.as_p }}
 <p><input type="submit" value="Continue">
 {% for hidden in hiddens %}

@@ -81,7 +81,7 @@ saw_selection_key_re = re.compile('^saw_selection_\d+$')
 def add_sightings(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
-    # request.POST will contain:
+    # request.GET will contain:
     #   saw_1, saw_2, ... = text strings the user said they saw
     #   saw_id_1, saw_id_2, ... = IDs of things we have resolved
     #   saw_selection_1, ... = IDs of things they have picked from our UI
@@ -104,21 +104,21 @@ def add_sightings(request, country_code, slug):
     
     # The collection of verified sighted species IDs
     saw_id_set = set(
-        value for key, value in request.POST.items()
+        value for key, value in request.GET.items()
         if saw_id_key_re.match(key)
     )
     
     # Text items we haven't resolved yet
     saw_dict = dict([
         (int(key.replace('saw_', '')), value)
-        for key, value in request.POST.items()
+        for key, value in request.GET.items()
         if saw_key_re.match(key) and value.strip()
     ])
     
     # Selections for those (IDs should match IDs in the saw dict above)
     saw_selection_dict = dict([
         (int(key.replace('saw_selection_', '')), value)
-        for key, value in request.POST.items()
+        for key, value in request.GET.items()
         if saw_selection_key_re.match(key)
     ])
     

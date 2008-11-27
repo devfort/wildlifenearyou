@@ -19,8 +19,10 @@
     {% with trip.visible_photos.all as photos %}
     {% if photos %}
     <h2>Photos from this trip</h2>
-    {% for photo in trip.visible_photos.all %}
-    <a href="{{ photo.get_absolute_url }}">{{ photo.photo.thumbnail_tag }}</a>
+    <div>
+    {% for photo in photos %}
+    <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
+    </div>
     {% endfor %}
     <h2>Got any more?</h2>
     {% else %}
@@ -71,15 +73,6 @@
         {% endifequal %}
         {% endwith %}
 {% endwith %}
-
-<h2>Photos</h2>
-
-{% for photo in trip.visible_photos.all %}
-<div>
-<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
-</div>
-{% endfor %}
-
 
 	<h2>Trip Rating</h2>
 	{% if rating.on %}

@@ -100,7 +100,7 @@ jQuery(function($) {
 <div id="see-more-animals"><a name="addsightings"></a>
     <h3 class="add">Did you see more animals?</h3>
     <p>What did you see?</p>
-    <form action="{{ request.path }}add-sightings/" method="POST">
+    <form action="{{ request.path }}add-sightings/" method="GET">
         <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></div>
         <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw_2" id="saw_2"> <span class="optional">(optional)</span></div>
         <div><input type="submit" value="Add my animals"></div>
