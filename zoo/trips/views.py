@@ -283,7 +283,7 @@ def finish_add_sightings(request, country_code, slug, ids):
                 whos_trip += "'"
             else:
                 whos_trip += "'s"
-        whos_trip += ' trip to %s' % place
+        whos_trip += ' trip'
         form = FinishAddSightingsForm(initial = {'name': whos_trip})
     
     return render(request, 'trips/why-not-add-to-you-tripbook.html', {
