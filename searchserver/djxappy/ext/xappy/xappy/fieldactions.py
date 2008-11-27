@@ -165,10 +165,11 @@ def _act_geolocation(fieldname, doc, field, context):
     """Perform the GEOLOCATION action.
 
     """
-    coords = xapian.LatLongCoords.unserialise(doc.get_value(fieldname, 'loc'))
-    coord = xapian.LatLongCoord.parse_latlong(field.value)
-    coords.insert(coord)
-    doc.add_value(fieldname, coords.serialise(), 'loc')
+    if field.value != '':
+        coords = xapian.LatLongCoords.unserialise(doc.get_value(fieldname, 'loc'))
+        coord = xapian.LatLongCoord.parse_latlong(field.value)
+        coords.insert(coord)
+        doc.add_value(fieldname, coords.serialise(), 'loc')
 
 def _act_index_freetext(fieldname, doc, field, context, weight=1,
                         language=None, stop=None, spell=False,
