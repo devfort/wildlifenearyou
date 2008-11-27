@@ -86,6 +86,7 @@ class ChangeRequest(models.Model):
         self.applied_at = datetime.datetime.now()
         self.applied_by = user
         self.save()
+        return None
 
     def save(self, *args, **kwargs):
         self.subclass = self.__class__.__name__
@@ -205,7 +206,8 @@ class CreateObjectRequest(ChangeRequest):
             instance.slug = get_slug()
 
         instance.save()
-        return super(CreateObjectRequest, self).apply(user)
+        super(CreateObjectRequest, self).apply(user)
+        return instance
 
     def get_attributes_display(self):
         return dict([
