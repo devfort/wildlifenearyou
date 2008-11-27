@@ -353,7 +353,14 @@ class FinishAddSightingsForm(forms.Form):
         parse = Calendar().parse(start)
         if parse[1] == 0:
             raise forms.ValidationError("I'm afraid we couldn't parse that date; please try again.")
+
         self.cleaned_data['start_accuracy'] = 'day'
+        # Bit of a hack
+        if re.search('year', start):
+            self.cleaned_data['start_accuracy'] = 'year'
+        elif re.search('month', start):
+            self.cleaned_data['start_accuracy'] = 'month'
+
         return datetime.date(*parse[0][:3])
 
 def lookup_xapian_or_django_id(id):
