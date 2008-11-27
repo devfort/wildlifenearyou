@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
+import zoo.animals.models
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -97,6 +98,29 @@ class Place(AuditedModel):
     
     def visible_photos(self):
         return self.photos.filter(is_visible = True)
+
+    class Searchable:
+        fields = [{ # Searching for places by name.
+                    'field_name': 'place',
+                    'django_fields': ['legal_name', 'known_as'],
+                  },
+                  { # Searching for the place address.
+                    'field_name': 'address',
+                    'django_fields': [lambda inst: inst.address()],
+                  },
+                  { # Searching for the animals in a place.
+                    # This expression should return all the common names of the
+                    # species sighted in the place.  Repeated sightings of a
+                    # particular species will result in duplicated entries,
+                    # which will correspond to a higher weight.
+                    'field_name': 'species',
+                    'django_fields': [lambda inst: zoo.animals.models.Species.objects.filter(sighting__place=inst).values_list('common_name', flat=True)],
+                  },
+                  { # Location of the place.
+                    'field_name': 'latlong',
+                    'django_fields': [lambda inst: "%f %f" % (inst.longitude, inst.latitude)],
+                  },
+                 ]
 
     def most_recent_trips(self):
         from zoo.trips.models import Trip
