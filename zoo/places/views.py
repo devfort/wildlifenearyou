@@ -92,7 +92,8 @@ def place_summary(request, country_code, slug):
     return render(request, 'places/place_summary.html', {
         'place': place,
         'species_list': species_list,
-    })
+    },
+                  base='base_print.html')
 
 def place_species(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)

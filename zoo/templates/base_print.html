@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>{% block title %}{% endblock %} - Print version</title>
+    <script type="text/javascript" src="/static/js/jquery-1.2.6.js"></script>
+	<!--
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+		google.load("jquery", "1");
+		</script>
+	-->
+    <script type="text/javascript" src="/static/js/global.js"></script>
+    <link rel="stylesheet" href="/static/css/general.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/helper_styles.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/page_structure.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/page_components.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/overrides.css" type="text/css">
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="/static/css/ie.css">
+    <![endif]-->
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="header">
+    <div class="contents">
+    <div class="wrapper">
+	<p class="heading">{% ifequal request.path '/' %}NAMEOFTHESITE{% else %}<a href="/">NAMEOFTHESITE</a>{% endifequal %}
+    <span>Can I Keep It?</span></p>
+	<ul>
+	  {% comment %} This has to all be on one line. {% endcomment %}
+	  <li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a> ({{ user.get_profile.percentage_complete }}% complete)</li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?next={{ request.path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.path|urlencode }}" id="feedback-link">Send Feedback!</a></li>
+	</ul>
+    <form action="/search/" method="GET" accept-charset="utf-8">
+        <div>
+			<label for="search_term">Look for</label>
+			<input type="text" name="q" id="search_term" value="">
+			<input type="submit" value="search">
+		</div>
+    </form>
+    </div>
+    </div>
+</div>
+<div class="main">
+<div class="contents">
+<div class="wrapper">
+	{% block content %}
+
+	<div class="primary">
+		{% block primary_content %}
+		{% endblock %}
+	</div>
+
+	<div class="secondary">
+		{% block secondary_content %}
+		{% endblock %}
+
+	</div>
+
+	{% endblock %}
+</div>
+</div>
+</div>
+
+<div class="footer">
+	<p style="float:right">Our sharp-eyed animal lovers have spotted {{ total_num_of_species }} species</p>
+	<p>&copy; <a href="{% url flatpage "colophon/" %}">SEDF</a>
+	| <a href="{% url flatpage "about/" %}">About</a>
+	| <a href="{% url flatpage "contact/" %}">Contact</a>
+</p>
+</div>
+</body>
+</html>
