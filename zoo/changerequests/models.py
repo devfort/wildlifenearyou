@@ -206,6 +206,10 @@ class CreateObjectRequest(ChangeRequest):
             instance.slug = get_slug()
 
         instance.save()
+
+        for child in self.children():
+            child.apply(user)
+
         super(CreateObjectRequest, self).apply(user)
         return instance
 
