@@ -10,18 +10,24 @@ from itertools import chain
 
 from zoo.fields import JSONField
 
+def get_pretty_field_key(val):
+    if val.endswith('_id'):
+        return val[:-3]
+    return val
+
+def get_pretty_field_value(val, instance, attribute):
+    if not attribute.endswith('_id'):
+        return val
+
+    klass = instance.content_type.model_class()
+    dummy_obj = klass()
+    setattr(dummy_obj, attribute, val)
+    return getattr(dummy_obj, attribute[:-3])
+
 def reformat_foreign_keys(fn):
     def wrapper(self, *args, **kwargs):
         val = fn(self, *args, **kwargs)
-
-        # Nicer way?
-        if not self.attribute.endswith('_id'):
-            return val
-
-        klass = self.content_type.model_class()
-        dummy_obj = klass()
-        setattr(dummy_obj, self.attribute, val)
-        return getattr(dummy_obj, self.attribute[:-3])
+        return get_pretty_field_value(val, self, self.attribute)
     return wrapper
 
 class ChangeRequestGroup(models.Model):
@@ -144,9 +150,7 @@ class ChangeAttributeRequest(ChangeRequest):
         return self.new_value
 
     def get_attribute_display(self):
-        if self.attribute.endswith('_id'):
-            return self.attribute[:-3]
-        return self.attribute
+        return get_pretty_field_key(self.attribute)
 
     def apply(self, user=None):
         obj = self.content_object
