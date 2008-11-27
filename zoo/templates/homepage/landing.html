@@ -122,8 +122,8 @@ jQuery(function($) {
 	    {% with featured.species as species %}
 	    <img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO animal name">
 	    <p><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+	    <blockquote><p>{{ species.description }}</p></blockquote>
 	    {% comment %}
-	    <blockquote cite=""><p>Tigers are so cute and fluffy but have big sharp teeth and don't like their fur being rubbed up the wrong way, you'll lose a limb. Mmmm tasty.</p></blockquote>
 	    <h3>Your nearest Tiger</h3>
 	    <p><a href="">Nearest Tiger address</a></p>
 	    {% endcomment %}
