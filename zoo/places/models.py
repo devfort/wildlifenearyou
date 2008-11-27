@@ -70,6 +70,8 @@ class Place(AuditedModel):
 
     price_notes = models.TextField(null=True, blank=True)
 
+    featured = models.BooleanField(null=False, blank=False, default=False)
+
     def popularity(self):
         """
         Currently just calculated using number of species seen at
@@ -352,14 +354,14 @@ class PlaceOpening(models.Model):
 # Seriously. We named this so you'd think about it. If you do anything with this, you could cause the end of the universe.
 class PlaceSpeciesSolelyForLinking(models.Model):
     """
-    Do not use this except for linking other entities in to a particular 
-    species at a zoo. Before you DO use it, have a long hard think about 
+    Do not use this except for linking other entities in to a particular
+    species at a zoo. Before you DO use it, have a long hard think about
     whether the sightings table would be a better place to link to.
-    
-    This was created because Django's comment system has to have a concrete 
+
+    This was created because Django's comment system has to have a concrete
     object to connect to. We hope to never use it for anything else.
-    
-    This is NOT how we know if a species exists at a zoo; that is entirely 
+
+    This is NOT how we know if a species exists at a zoo; that is entirely
     derived from sightings (trips.Sighting).
     """
     place = models.ForeignKey(Place)

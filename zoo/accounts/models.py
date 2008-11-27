@@ -46,6 +46,7 @@ class Profile(models.Model):
     percentage_complete = models.IntegerField(null=False, blank=False, default=0) # see recalculate_percentage_complete()
 
     email_validated = models.BooleanField(null=False, blank=False, default=False)
+    featured = models.BooleanField(null=False, blank=False, default=False)
 
     @models.permalink
     def get_absolute_url(self):

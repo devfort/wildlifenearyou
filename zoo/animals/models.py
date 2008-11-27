@@ -58,6 +58,8 @@ class Species(AbstractSpecies):
 
         return 1 - (1 / (num_of_sightings + 1))
 
+    featured = models.BooleanField(null=False, blank=False, default=False)
+
     class Meta:
         verbose_name_plural = 'species'
 
