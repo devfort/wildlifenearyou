@@ -28,6 +28,10 @@
 	margin: 0;
 	text-align: left;
 }
+.header p.heading img {
+                        position: relative;
+                        top: 3px;
+                    }
 .header span {
 	color: #5c822f;
 	font-style: italic;
