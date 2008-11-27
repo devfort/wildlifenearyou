@@ -7,9 +7,11 @@ jQuery(function($) {
 	$('body').addClass('hasJS');
 
 
+	// add classes to odd table rows
+	$('table tbody tr:nth-child(odd)').addClass('odd');
+	
 	//	Automatically clear default text in input fields when they are focused
 	$("input[type='text']").focus(function() {
-		console.log('focus');
 		if ($(this).val() == this.defaultValue) {
 			$(this).val('');
 		}
@@ -134,25 +136,9 @@ jQuery(function($) {
 		}
 
 	});
-
-	
-});
-
-
-
-// add classes to odd table rows
-$('table tbody tr:nth-child(odd)').addClass('odd');
-
-jQuery(window).load(function() {
-	// Crazyweird fix lets us style abbr using CSS in IE - do NOT run onDomReady, must be onload
-	document.createElement('abbr');
-});
-
-jQuery(function($){
 	
 	// addSizes was written by Natalie Downe 
 	// http://natbat.net/2008/Aug/27/addSizes/
-	
 	// Copyright (c) 2008, Natalie Downe under the BSD license
 	// http://www.opensource.org/licenses/bsd-license.php
 	
@@ -198,4 +184,11 @@ jQuery(function($){
 			}
 		});
 	});
+});
+
+
+
+jQuery(window).load(function() {
+	// Crazyweird fix lets us style abbr using CSS in IE - do NOT run onDomReady, must be onload
+	document.createElement('abbr');
 });
