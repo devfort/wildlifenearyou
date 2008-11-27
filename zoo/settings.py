@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     'django.contrib.comments',
     'schedule', # from zoo.ext
     'zoo.feedback',
+    'zoo.freebase',
 ]
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')

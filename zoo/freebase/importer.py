@@ -15,7 +15,6 @@ def import_from_file(filepath = FILEPATH):
 
 def import_into_xapian():
     client = Client(settings.XAPIAN_BASE_URL, settings.XAPIAN_SPECIES_DB)
-    client.deldb() #if we want to delete it first
     client.newdb([{
         'field_name': 'common_name',
         'store': True,
@@ -24,7 +23,7 @@ def import_into_xapian():
         'field_name': 'scientific_name',
         'store': True,
         'freetext': {}
-    }])
+    }], overwrite=True) # replaces existing index if there is one
     # We have a database!
     
     # Now we create documents
@@ -42,7 +41,7 @@ def import_into_xapian():
         ])
         # client.add(doc) - would work here
         queue.append(doc)
-        if len(queue) >= 10000:
+        if len(queue) >= 1000:
             client.bulkadd(queue)
             queue = []
             print "Imported %d" % count
