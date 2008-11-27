@@ -90,6 +90,23 @@
 							</form>
 						{% endcase %}
 
+						{% case "CreateObjectRequest" %}
+						  Create a {{ crs.content_type }} object with the following properties:
+							{{ crs.attributes }}
+							
+							<form action="{% url admin-moderation %}" method="post">
+								<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+								<input type="hidden" name="action" value="apply"/>
+								<input type="submit" value="Apply change"/>
+							</form>
+
+							<form action="{% url admin-moderation %}" method="post">
+								<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+								<input type="hidden" name="action" value="delete"/>
+								<input type="submit" value="Delete change request"/>
+							</form>
+						{% endcase %}
+
 						{% defaultcase %}
 							<strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass: {{ cr.subclass }}
 						{% enddefaultcase %}
