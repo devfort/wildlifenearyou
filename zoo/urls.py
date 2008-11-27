@@ -44,6 +44,9 @@ urlpatterns = patterns('',
     url(r'^profile/$', accounts.profile_default,
         name='accounts-default'),
 
+    url(r'^search/$', 'zoo.search.views.search',
+        name='search'),
+
     # User accounts stuff
     url(r'^login/$', 'accounts.views.login', {
         'template_name': 'accounts/login.html'
@@ -111,7 +114,7 @@ urlpatterns = patterns('',
         name="geonames-autocomplete"),
 
     (r'^comments/', include('django.contrib.comments.urls')),
-    (r'^feedback/$', 'zoo.feedback.views.submit'),
+    url(r'^feedback/$', 'zoo.feedback.views.submit', name='feedback'),
 
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
