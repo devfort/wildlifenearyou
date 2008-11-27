@@ -238,7 +238,9 @@ def get_uid(instance):
     if hasattr(instance.Searchable, 'get_uid'):
         return instance.Searchable.get_uid(instance)
     else:
-        return instance._meta.db_table + ':' + str(instance.pk)
+        return '%s.%s:%s' % (
+            instance._meta.app_label, instance._meta.object_name, instance.pk
+        )
 
 # Given a Django model instance, return a unique identifier and a dict of search fields mapping to list of data.
 # Can be overridden.
