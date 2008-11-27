@@ -75,22 +75,18 @@ a:link, button.link span {
 	text-decoration: underline;
 }
 a:visited {
-	color: #1057ae;
+	color: #92278f;
 	text-decoration: underline;
 }
 a:hover, 
 a:focus, 
 button.link:hover,
 button.link:focus span {
-	color: #FFFFFF; 
-	text-decoration: none;
-	background-color: #0063DC;
+	color: #000000; 
 }
 a:active,  
 button.link:active span {
-	color: #FFFFFF; 
-	text-decoration: none; 
-	background-color: #0259C4; 
+	color: #000000; 
 }
 
 /* @group Font sizes */
@@ -110,7 +106,8 @@ p, ul, ol, dl, address, table, pre, fieldset {
 }
 
 h1 {
-	font-size: 2em;
+	font-size: 2.8571em;
+	font-weight: normal;
 	line-height: 1.125em;  /* 27px */
 	margin-top:1.125em;	   /* 27px */
 	margin-bottom: 0.75em; /* 18px */
@@ -118,7 +115,7 @@ h1 {
     margin-bottom: 0;
 }
 h2 { 
-	font-size: 1.125em;   /* 18px */ 
+	font-size: 1.5714em;   /* 18px */ 
 	margin-top:1.5em;	   /* 27px */
 	margin-bottom: 0.5em;  /* 9px */	
 }

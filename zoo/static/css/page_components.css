@@ -15,21 +15,28 @@ div#see-more-animals p {
 
 /* @group Cloud on species page */
 
+.species_list {
+	list-style-type: none;
+	margin-left: 0;
+	padding: 0;
+}
+.species_list li {
+	display: inline;
+}
+.species_list li a {
+	text-decoration: none;
+}
 .cloud-quad-0 {
     font-size: 1em;
 }
 .cloud-quad-1 {
-    font-size: 1.29em;
+    font-size: 1.2857em;
 }
 .cloud-quad-2 {
-    font-size: 1.71em;
+    font-size: 1.7143em;
 }
 .cloud-quad-3 {
-    font-size: 2.14em;
-}
-.seen {
-    color: #cc0000;
-    background-color: #ffffff;
+    font-size: 2.1429em;
 }
 
 /* @end */
@@ -110,8 +117,13 @@ ul.currency li {
 	display: block;
 }
 
-p.address {
+p.url {
 	margin: 0;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+p.address {
+	margin: 0.8571em 0 0;
 }
 p.tel {
 	margin-top: 0;

@@ -37,12 +37,16 @@
 	border-right: solid 1px #7d965f;
 }
 .header ul li a:link, 
-.header ul li a:visited, 
+.header ul li a:visited {
+	color: #0063dc;
+	text-decoration: none;
+}
 .header ul li a:active, 
 .header ul li a:focus, 
 .header ul li a:hover {
-	text-decoration: none;
+	color: black;
 }
+
 .header form {
 	display: inline;
 	text-transform: uppercase;
@@ -61,7 +65,7 @@
 	background-position: top left;
 	width: 100%;
 	overflow: hidden;
-	padding-top: 1em;
+	padding-top: 2em;
 }
 
 .primary {
@@ -74,6 +78,7 @@
     float: right;
     width: 34%;
     display: inline;
+    margin-top: 2.7em;
 }
 .secondary h2:first-child,
 .secondary h3:first-child {
@@ -89,7 +94,7 @@
     border-top: solid 1em #ffffff;
 }
 .footer p {
-    text-align: center;
+    text-align: left;
     color: #534741;
     background-color: #c6ddab;
     padding: 1em;
