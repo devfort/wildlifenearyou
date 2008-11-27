@@ -32,7 +32,7 @@
 	<a href="/">
 	<img src="/static/img/icons/art_zoopedia_logo.png" alt="Zoopedia"></a>
 	{% endifequal %}
-    <span>Can I Keep It?</span></p>
+    <span>We love wildlife!{#Can I Keep It?#}</span></p>
 	<ul>
 	  {% comment %} This has to all be on one line. {% endcomment %}
 	  <li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a> <span class="meta">({{ user.get_profile.percentage_complete }}% complete)</span></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Sign Up!</a></li><li><a href="{% url accounts-login %}?next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Send Feedback!</a></li>
