@@ -159,7 +159,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
     {% if directions %}
 	<h2>Directions</h2>
 	{% for direction in directions %}
-    	<h3>By {{ direction.mode }}</h3>
+    	<h3 class="direction_{{direction.mode}}">By {{ direction.mode }}</h3>
 		<p>{{ direction.route }}</p>
 	{% endfor %}
     {% endif %}

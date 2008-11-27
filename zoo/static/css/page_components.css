@@ -109,6 +109,25 @@ ul.currency li {
 	margin-bottom: 0.5em;
 }
 
+.direction_Car {
+	background-image: url(/static/img/icons/direction_car.png);
+	background-repeat: no-repeat;
+	padding-left: 25px;
+	min-height: 20px;
+}
+.direction_Bike {
+	background-image: url(/static/img/icons/direction_bike.png);
+	background-repeat: no-repeat;
+	padding-left: 25px;
+	min-height: 20px;
+}
+.direction_Bus {
+	background-image: url(/static/img/icons/direction_bus.png);
+	background-repeat: no-repeat;
+	padding-left: 25px;
+	min-height: 20px;
+}
+
 /* @end */
 
 .suggest-changes {
