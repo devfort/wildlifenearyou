@@ -113,11 +113,11 @@ class Place(AuditedModel):
             { # Searching for places by name.
                 'field_name': 'place',
                 'django_fields': ['legal_name', 'known_as'],
-                'config': {'store': True},
+                'config': {'store': True, 'freetext': {'language': 'en'}},
             }, { # Searching for the place address.
                 'field_name': 'address',
                 'django_fields': [lambda inst: [inst.address()]],
-                'config': {'store': True},
+                'config': {'store': True, 'freetext': {'language': 'en'}},
             }, { # Searching for the animals in a place.
                 # This expression should return all the common names of the
                 # species sighted in the place.  Repeated sightings of a
