@@ -256,11 +256,14 @@ ul.best {
 	z-index: 2;
 }
 .selectReplacement li a:hover,
-.selectReplacement li a:focus{
+.selectReplacement li a:focus {
 	background: transparent url(/static/img/icons/starselect_single.gif) left top repeat-x;
 	left: 0;
 }
 
+.selectReplacement li a:active {
+	background: none;
+}
 .selectReplacement li.worst a:hover,
 .selectReplacement li.worst a:focus {
 	width: 22px;
