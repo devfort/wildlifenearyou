@@ -60,7 +60,8 @@ class Place(AuditedModel):
     state = models.CharField(max_length=250, null=True, blank=True)
     zip = models.CharField(max_length=50, null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
-    gridref = models.CharField(max_length=8, null=True, blank=True)
+    
+    price_notes = models.TextField(null=True, blank=True)
 
     def address(self):
         bits = []
@@ -72,7 +73,8 @@ class Place(AuditedModel):
                 bits.append(val)
         return ', '.join(bits)
 
-    # long and lot for mapping
+    #mapping stuff - and Grid Ref for reserves
+    gridref = models.CharField(max_length=8, null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
 

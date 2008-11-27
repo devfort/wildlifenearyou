@@ -135,15 +135,17 @@ jQuery(function($) {
 		<ul class="currency">
         {% for price in prices %}
 			<li class="currency_{{ price.currency.currency_code }}">{{ price.type|title }}:
+{% ifequal price.value 0 %}Free{% else %}
 {% ifequal price.currency.currency_code 'GBP' %}
 &pound;{% endifequal %}{%ifequal price.currency.currency_code 'EUR' %}
 &euro;{% endifequal %}{%ifequal price.currency.currency_code 'YEN' %}
 &yen;{% endifequal %}{%ifequal price.currency.currency_code 'USD' %}
-${% endifequal %}{{ price.value }}
+${% endifequal %}{{ price.value }}{% endifequal %}
         {% endfor %}
 		</ul>
     {% endif %}
 {% endwith %}
+{% if place.price_notes %}<p>{{ place.price_notes }}</p>{% endif %}
 
 
 <h2>Facilities</h2>
