@@ -86,9 +86,8 @@ def paste_transparent(dest, position, src):
     mask = rgba[3]
     rgb_src = Image.merge('RGB', rgba[:3])
     dest.paste(rgb_src, position, mask)
-        
 
-def profile_image(request, username):
+def profile_image(request, username, just_the_image_please=False):
     user = get_object_or_404(User, username=username)
     parts = [p.part for p in user.selectedfaceparts.all()]
     
@@ -99,14 +98,23 @@ def profile_image(request, username):
     for part in parts:
         im2 = Image.open(part.image.path)
         paste_transparent(im, None, im2)
-
-    response = HttpResponse(content_type = 'image/png')
-
-    if im:
-        im.save(response, format = 'png')
-    else:
-        return HttpResponseRedirect('/static/img/default_face.png')
     
+    if just_the_image_please:
+        return im
+    
+    if not im:
+        return HttpResponseRedirect('/static/img/default_face.png')
+    response = HttpResponse(content_type = 'image/png')
+    im.save(response, format = 'png')
+    return response
+
+def profile_image_resized(request, username, width=30, height=30):
+    im = profile_image(request, username, just_the_image_please=True)
+    if not im:
+        return HttpResponseRedirect('/static/img/default_face.png')
+    im.thumbnail((width, height), Image.ANTIALIAS) # modifies in place
+    response = HttpResponse(content_type = 'image/png')
+    im.save(response, format = 'png')
     return response
 
 class XmlResponse(HttpResponse):

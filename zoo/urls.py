@@ -103,6 +103,10 @@ urlpatterns = patterns('',
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
     (r'^faces/profile.xml$', faces.profile_xml),
     (r'^faces/(\w+).png$', faces.profile_image),
+    (r'^faces/small/(\w+).png$', faces.profile_image_resized, {
+        'width': 30,
+        'height': 30,
+    }),
     (r'^faces/users/(\w+).xml$', faces.profile_image_xml),
     (r'^faces/update/$', faces.update),
 
