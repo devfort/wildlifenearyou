@@ -7,7 +7,7 @@ from django.forms.util import flatatt
 class SubmitInput(forms.Widget):
     def render(self, name, value, attrs=None):
         final_attrs = self.build_attrs(attrs, type='submit', name=name)
-        return mark_safe(u'<input%s />' % flatatt(final_attrs))
+        return mark_safe(u'<input%s>' % flatatt(final_attrs))
 
     def value_from_datadict(self, data, files, name):
         if name not in data:
