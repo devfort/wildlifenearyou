@@ -39,9 +39,12 @@ def make_searcher(dbname, latlon_fields=[]):
 def make_db_searcher(dbname, db_prefix=None):
     # A DB searcher knows that the results will be just search_ids, but each
     # one will be something like "places.Place:34" - it looks up the model
-    # and uses .in_bulk(ids) to load those ORM objects, then returns them
+    # and uses .in_bulk(ids) to load those ORM objects, then returns them.
     client = Client(settings.XAPIAN_BASE_URL, dbname, db_prefix)
-    def search(q, num=0):
+    def search(q, num=0, details=False):
+        # If details=True, it returns a tuple pair - the first item is the 
+        # results list it would normally return, the second is the full Xapian
+        # results object.
         results = client.search(Query(q), end_rank=num)
         search_ids = [
             item['id'] for item in results['items']
@@ -57,7 +60,11 @@ def make_db_searcher(dbname, db_prefix=None):
             for id, obj in klass.objects.in_bulk(ids).items():
                 grabbed['%s:%s' % (model_key, id)] = obj
         # Finally, return objects for the search_ids in the correct order
-        return [grabbed[search_id] for search_id in search_ids]
+        objects = [grabbed[search_id] for search_id in search_ids]
+        if not details:
+            return objects
+        else:
+            return objects, results
     
     return search
 
