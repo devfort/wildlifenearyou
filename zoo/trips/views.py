@@ -318,9 +318,8 @@ class FinishAddSightingsForm(forms.Form):
     def clean_start(self):
         start = self.cleaned_data['start'].lower()
         if re.match('\s*\d{4}\s*$', start):
-            self.cleaned_data['start'] = '%s-01-01' % start
             self.cleaned_data['start_accuracy'] = 'year'
-            return
+            return datetime.date(int(year), 1, 1)
 
         re_val = Calendar().ptc.re_values
         re_val['sep'] = '[\s/,.-]+'
@@ -330,9 +329,8 @@ class FinishAddSightingsForm(forms.Form):
             year = month_match.group('year') or month_match.group('year2')
             month = month_match.group('month') or month_match.group('month2')
             month = int(Calendar().ptc.MonthOffsets.get(month, month))
-            self.cleaned_data['start'] = '%s-%02d-01' % (year, month)
             self.cleaned_data['start_accuracy'] = 'month'
-            return
+            return datetime.date(int(year), month, 1)
 
         day_match = re.match('\s*((?P<day>\d\d?)(%(daysuffix)s)?%(sep)s(?P<month>%(month_bit)s)%(sep)s(?P<year>\d{4})|(?P<year2>\d{4})%(sep)s(?P<month2>%(month_bit)s)%(sep)s(?P<day2>\d\d?)(%(daysuffix)s)?)\s*$' % re_val, start)
         if day_match:
@@ -340,14 +338,13 @@ class FinishAddSightingsForm(forms.Form):
             month = day_match.group('month') or day_match.group('month2')
             day = day_match.group('day') or day_match.group('day2')
             month = int(Calendar().ptc.MonthOffsets.get(month, month))
-            self.cleaned_data['start'] = '%s-%02d-%02s' % (year, month, day)
             self.cleaned_data['start_accuracy'] = 'day'
-            return
+            return datetime.date(int(year), month, int(day))
 
         parse = Calendar().parse(start)
         if parse[1] == 0:
             raise forms.ValidationError("I'm afraid we couldn't parse that date; please try again.")
-        self.cleaned_data['start'] = '%d-%02d-%02d' % parse[0][:3]
+        return datetime.date(parse[0][:3])
 
 def lookup_xapian_or_django_id(id):
     if id.startswith('s'):
