@@ -17,6 +17,7 @@
 <body>
 <div class="header">
     <div class="contents">
+    <div class="wrapper">
 	<p class="heading">{% ifequal request.path '/' %}NAMEOFTHESITE{% else %}<a href="/">NAMEOFTHESITE</a>{% endifequal %}
     <span>Can I Keep It?</span></p>
 	<ul>
@@ -30,7 +31,8 @@
 			<input type="submit" value="Go">
 		</div>
     </form>
-	</div>
+    </div>
+    </div>
 </div>
 <div class="main">
 <div class="contents">

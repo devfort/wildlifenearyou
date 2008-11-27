@@ -4,15 +4,17 @@
 	max-width: 100%;
 	margin: 0 auto;
 }
-.wrapper {
+.main .wrapper {
 	padding: 0 1em;
+}
+.header .wrapper {
+	padding: 0.8em 0.8em 0.8em 1em;
 }
 
 .header {
 	background-image: url(/static/img/bg/header.png);
 	background-repeat: repeat-x;
 	background-position: bottom left;
-	padding: 0.8em 0.8em 0.8em 0;
 }
 .header .contents {
 	text-align: right;
@@ -20,7 +22,7 @@
 .header p.heading {
 	float: left;
 	width: 15em;
-	margin: 0 0 0 1em;
+	margin: 0;
 	text-align: left;
 }
 .header span {
