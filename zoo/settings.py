@@ -72,7 +72,7 @@ MIDDLEWARE_CLASSES = [
 ROOT_URLCONF = 'zoo.urls'
 
 AUTH_PROFILE_MODULE = 'accounts.profile'
-LOGIN_REDIRECT_URL = '/welcome/'
+LOGIN_REDIRECT_URL = '/profile/'
 LOGIN_URL = '/login/'
 
 TEMPLATE_DIRS = (

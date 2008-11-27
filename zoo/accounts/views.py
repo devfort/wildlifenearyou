@@ -14,12 +14,6 @@ from django import forms
 from zoo.accounts.models import Profile
 from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm, UserEditProfileBitsForm
 
-def welcome(request):
-    # Just to show people that they are logged in, really
-    return render(request, 'accounts/welcome.html', {
-        'user': request.user,
-    })
-
 def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
     if request.user.is_authenticated():
         return Redirect('/')
