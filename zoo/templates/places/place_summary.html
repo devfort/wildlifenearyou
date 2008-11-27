@@ -2,66 +2,6 @@
 
 {% block title %}{{ place.known_as }}{% endblock %}
 
-{% block extra_head %}
-<!-- <script type="text/javascript" src="/static/js/species-adding.js"></script> -->
-<script type="text/javascript">
-function anyEmptyOnes() {
-    return jQuery('#see-more-animals div:visible :text').filter(function() {
-        return $(this).val() == '';
-    }).length > 0;
-}
-
-function unusedSawId() {
-    var i = 1;
-    var saw_id = 'saw_' + i;
-    while ($('#' + saw_id).length) {
-        i += 1;
-        saw_id = 'saw_' + i;
-    }
-    return saw_id;
-}
-
-jQuery(function($) {
-    function doWeNeedMoreBoxes() {
-        var $this = $(this);
-        if ($this.val()) {
-            // Only do something if this is the last empty one
-            if (anyEmptyOnes()) {
-                return;
-            }
-            if (!$this.parent().hasClass('and-a')) {
-                $('div#see-more-animals .and-a').show();
-            } else {
-                // Clone an existing .and-a
-                var and_a = $(
-                    'div#see-more-animals .and-a'
-                ).eq(0).clone();
-                var unused_id = unusedSawId();
-                and_a.find('input').val('').attr({
-                    'id': unused_id,
-                    'name': unused_id
-                });
-                and_a.find('label').attr('for', unused_id);
-                and_a.insertBefore('#see-more-animals :submit');
-                setupSawBoxes();
-            }
-        }
-    }
-    function setupSawBoxes() {
-        $('div#see-more-animals input[name^=saw]').unbind('keyup').keyup(
-            doWeNeedMoreBoxes
-        );
-    }
-    // Set up the I saw a form bit
-    if (anyEmptyOnes()) {
-        $('div#see-more-animals .and-a').hide()
-    }
-    setupSawBoxes();
-    doWeNeedMoreBoxes();
-});
-</script>
-{% endblock %}
-
 {% block primary_content %}
 
 <h1>{{ place.known_as }}</h1>
@@ -93,17 +33,6 @@ jQuery(function($) {
 </ul>
 <p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">&raquo; All species</a></p>
 {% endif %}
-
-<div id="see-more-animals"><a name="addsightings">
-    <h3 class="add">Did you see more animals?</h3>
-    <p>What did you see?</p>
-    <form action="{{ request.path }}add-sightings/" method="POST">
-        <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></div>
-        <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw_2" id="saw_2"> <span class="optional">(optional)</span></div>
-        <div><input type="submit" value="Add my animals"></div>
-    </form>
-</div>
-
 
 {% if dates %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
@@ -187,83 +116,5 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
     </ul>
     {% endif %}
 {% endwith %}
-
-{% with place.extras.all as extras %}
-	<h2>Extras</h2>
-	<ul>
-		{% for extra in place.extras.all %}
-		<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
-		{% endfor %}
-		<li><a href="{{ place.urls.summary }}">Zoo summary sheet</a></li>
-	</ul>
-{% endwith %}
-
-{% endblock %}
-
-{% block secondary_content %}
-
-
-<h2>Average Trip Rating</h2>
-{% if rating.on %}
-<p class="rating" title="{{ rating.on|length }} out of 5 stars">
-{% for i in rating.on %}
-<img src="/static/img/icons/starselect_single.gif" alt="">
-{% endfor %}
-{% for i in rating.off %}
-<img src="/static/img/icons/starselect_off.png" alt="">
-{% endfor %}
-</p>
-{% else %}
-<p>No-one has yet rated a trip to this place. <br /><a href="#addsightings" class="add">Add your sightings</a></p>
-{% endif %}
-
-<p><a href="" class="button">&raquo; Support your zoo!</a></p>
-
-<h2>Photos</h2>
-
-{% for photo in place.visible_photos.all %}
-<div>
-<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
-</div>
-{% endfor %}
-
-<div class="photos">
-	<a href="/photourl"><img src="/static/img/site-images/sample_mid_photo.gif"></a>
-	<div class="slideshow">
-		<ul id="thumbnails">
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
-			<li><a href="/static/img/site-images/sample_thumbnail.gif"><img src="/static/img/site-images/sample_thumbnail.gif" alt="" /></a></li>
-		</ul><!-- /#thumbnails -->
-	</div><!-- /.slideshow -->
-</div>
-
-{% if not user.is_anonymous %}
-<p><a class="add" href="upload/">Upload a photo you took here!</a></p>
-{% else %}
-<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add your own photos to this zoo</p>
-{% endif %}
-
-{% if place.most_recent_trips_with_desc %}
-<h2>Zoo Tripbook entries</h2>
-<ul>
-{% for trip in place.most_recent_trips_with_desc|slice:":5" %}
-	<li>
-	<blockquote>{{ trip.description|truncatewords:10 }}</blockquote>
-	<p>&mdash; <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by }}</a></p>
-{% endfor %}
-</ul>
-{% endif %}
-
-<h2>Comments</h2>
-{% with place as object %}
-    {% include "comments/_comments.html" %}
-{% endwith %}
-
-<p class="suggest-changes">
-	Found incorrect information on the page?
-	<a href="{{ place.urls.suggest_changes }}">Let us know! You won’t hurt our feelings.</a>
-</p>
 
 {% endblock %}
