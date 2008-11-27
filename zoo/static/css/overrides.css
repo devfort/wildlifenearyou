@@ -15,7 +15,9 @@
 /* @group homepage */
 
 .signup {
-	
+	padding: 1em;
+	background-color: #E2F1F9;
+	border: solid 1px #D8E7EF;
 }
 
 .interaction {
@@ -28,6 +30,12 @@
 .map {
 	background-color: #FFFFFF;
 	padding: 1em 0;
+}
+
+.map .wrapper {
+	background-image: url(/static/img/bg/animals_small.gif);
+	background-repeat: no-repeat;
+	background-position: bottom right;
 }
 
 .map img {
