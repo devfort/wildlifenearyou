@@ -155,7 +155,9 @@ class Client(object):
             'field_name': # field name (required)
             'type':  # One of 'text', 'date', 'geo', 'float' (default=text)
             'store': # boolean (default=False), whether to store in document data (for 'display')
-            'spelling_word_source': # boolean (default=False), whether to use for building the spelling dictionary
+            'spelling_word_source': # boolean (default=True), whether to use for building the spelling dictionary
+                                    # Note - currently, only used if the field
+                                    # is indexed as freetext.
             'collapsible': # boolean (default=False), whether to use for collapsing
             'sortable': # boolean (default=False), whether to allow sorting on the field
             'range_searchable': # boolean (default=False), whether to allow range searches on the field
