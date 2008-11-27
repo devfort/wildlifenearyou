@@ -143,6 +143,11 @@ class ChangeAttributeRequest(ChangeRequest):
     def get_new_value(self):
         return self.new_value
 
+    def get_attribute_display(self):
+        if self.attribute.endswith('_id'):
+            return self.attribute[:-3]
+        return self.attribute
+
     def apply(self, user=None):
         obj = self.content_object
         setattr(obj, self.attribute, self.new_value)

@@ -33,7 +33,7 @@
     <li>
      {% switch cr.subclass %}
       {% case "ChangeAttributeRequest" %}
-       Change the &ldquo;{{ crs.attribute }}&rdquo; attribute
+       Change the &ldquo;{{ crs.get_attribute_display }}&rdquo; attribute
         on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
         from &ldquo;<em>{{ crs.get_old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.get_new_value }}</em>&rdquo;
 
