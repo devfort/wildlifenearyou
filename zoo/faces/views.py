@@ -49,6 +49,9 @@ def profile_images_xml(request):
                 partlist.append(p)
     return XmlResponse(ET.tostring(profileImages))
 
+def profile_xml(request):
+    return profile_image_xml(request, request.user.username)
+
 def profile_image_xml(request, username):
     user = get_object_or_404(User, username=username)
     parts = [p.part for p in user.selectedfaceparts.all()]
