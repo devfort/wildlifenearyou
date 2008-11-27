@@ -2,6 +2,10 @@
 
 {% block title %}Add your sightings{% endblock %}
 
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/star-select-replace.js"></script>
+{% endblock %}
+
 {% block primary_content %}
 
 <h1>Tell us about your trip</h1>
@@ -26,6 +30,18 @@
     {{ form.description.label_tag }} (optional)
     {{ form.description }}
 </p>
+	<div class="select-container container">
+		<label for="review-rating">Your rating of this trip</label>
+		<select id="review-rating" name="review-rating">
+			<option></option>
+			<option value="1" class="worst">*</option>
+			<option value="2" class="bad">**</option>
+			<option value="3" class="fair">***</option>
+			<option value="4" class="good">****</option>
+			<option value="5" class="best">*****</option>
+		</select>
+		<input class="noscript" type="submit" value="save">
+	</div>
 <p>
     <input type="submit" name="save-trip" value="Save my trip report">
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

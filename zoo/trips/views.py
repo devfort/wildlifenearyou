@@ -4,14 +4,16 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect as Redirect
 from django.contrib.auth.decorators import login_required
+from django import forms
+
+import datetime
+from parsedatetime.parsedatetime import Calendar
 
 from zoo.shortcuts import render
 from zoo.trips.models import Trip, Sighting
 from zoo.accounts.models import Profile
 from zoo.animals.forms import SpeciesField
-
 from zoo.search import NotFound, lookup_species, search_species
-from django import forms
 
 @login_required
 def tripbook_default(request):
@@ -253,7 +255,8 @@ def finish_add_sightings(request, country_code, slug, ids):
                 name = form.cleaned_data['name'],
                 start = form.cleaned_data['start'],
                 start_accuracy = 'day', # TODO: figure this out properly
-                description = form.cleaned_data['description']
+                description = form.cleaned_data['description'],
+                rating = form.cleaned_data['review-rating'],
             )
             trip.save()
             # created_by should happen automatically
@@ -294,10 +297,23 @@ def finish_add_sightings(request, country_code, slug, ids):
 
 class FinishAddSightingsForm(forms.Form):
     name = forms.CharField(max_length=100, label='Trip title')
-    start = forms.DateField(required = False, label='Trip date')
+    start = forms.CharField(required = False, label='Trip date')
     description = forms.CharField(required = False, widget=forms.Textarea,
         label='Notes'
     )
+
+    def __init__(self, *args, **kwargs):
+        super(FinishAddSightingsForm, self).__init__(*args, **kwargs)
+        self.fields['review-rating'] = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
+
+    def clean_start(self):
+        start = self.cleaned_data['start']
+        print start
+        parse1 = Calendar().parse(start)
+        parse2 = Calendar().parse(start, sourceTime = datetime.datetime.now() + datetime.timedelta(days=365+45))
+	print parse1
+	print parse2
+
 
 def lookup_xapian_or_django_id(id):
     if id.startswith('s'):
