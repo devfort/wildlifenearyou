@@ -14,6 +14,13 @@
 
 /* @group homepage */
 
+#home .footer {
+	background-image: none;
+	margin-top: 0;
+	padding-top: 0;
+	border-top: 0;
+}
+
 .signup {
 	padding: 1em;
 	background-color: #E2F1F9;

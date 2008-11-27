@@ -29,6 +29,8 @@ jQuery(function($) {
 </script>
 {% endblock %}
 
+{% block extra_body %}id="home"{% endblock %}
+
 {% block vanilla %}
 
 {% if user.is_superuser %}{% include "homepage/dev.html" %}{% endif %}
