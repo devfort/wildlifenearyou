@@ -61,9 +61,6 @@ try:
     initialise()
 
 except:
-    print("ERROR IN MIDDLEWARE INITIALISATION - I WANT TO DIE, BUT DJANGO "
-          "WON'T LET ME")
-    import time
-    while 1:
-        print "sleeping for 60 seconds, please put me out of my misery"
-        time.sleep(60)
+    print "ERROR IN MIDDLEWARE INITIALISATION; DYING"
+    import os
+    os._exit(-1)
