@@ -179,8 +179,9 @@ def parse_freetext_opts(opts):
             xapopts['default_op'] = xappy.Query.OP_AND
         elif int(defop) == 1:
             xapopts['default_op'] = xappy.Query.OP_OR
-    if opt in ('allow', 'deny', 'default_allow', 'default_deny'):
-        xapopts[opt] = opts[opt]
+    for opt in ('allow', 'deny', 'default_allow', 'default_deny'):
+        if opt in opts:
+            xapopts[opt] = opts[opt]
     return xapopts
 
 def parse_query_spec(db, subq, spell=False):
