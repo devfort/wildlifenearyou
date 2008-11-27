@@ -97,7 +97,7 @@ jQuery(function($) {
 <p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">&raquo; All species</a></p>
 {% endif %}
 
-<div id="see-more-animals"><a name="addsightings">
+<div id="see-more-animals"><a name="addsightings"></a>
     <h3 class="add">Did you see more animals?</h3>
     <p>What did you see?</p>
     <form action="{{ request.path }}add-sightings/" method="POST">
@@ -106,7 +106,6 @@ jQuery(function($) {
         <div><input type="submit" value="Add my animals"></div>
     </form>
 </div>
-
 
 {% if dates %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
