@@ -313,7 +313,7 @@ class FinishAddSightingsForm(forms.Form):
         
         super(FinishAddSightingsForm, self).__init__(*args, **kwargs)
         self.fields['review-rating'] = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
-        self.fields['user_trips'] = forms.ChoiceField(required = False, choices=[ (trip.id, trip.name) for trip in trips ])
+        self.fields['user_trips'] = forms.ChoiceField(required = False, choices=[ (trip.id, trip.title) for trip in trips ])
 
     def clean_start(self):
         start = self.cleaned_data['start']
