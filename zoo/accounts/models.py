@@ -37,6 +37,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, unique=True)
     badges = models.ManyToManyField(Badge, through=ProfileBadge)
     biography = models.TextField(null=False, blank=True)
+    url = models.URLField(null=False, blank=True, verify_exists=False)
 
     email_validated = models.BooleanField(null=False, blank=False, default=False)
 

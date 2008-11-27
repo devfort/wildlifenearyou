@@ -92,7 +92,7 @@ class OurAuthenticationForm(AuthenticationForm):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['biography']
+        fields = ['biography', 'url']
 
 class UserEditProfileBitsForm(forms.ModelForm):
     class Meta:
