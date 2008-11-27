@@ -45,10 +45,10 @@ jQuery(function($) {
 			<p> Welcome back. View your <a href="{% url accounts-default %}">profile</a> or <a href="{% url accounts-logout %}">logout</a>?</p>
 		{% else %}
 			<h1>Hello there,</h1>
-		    <p>We're very happy that you've decided to drop by.</p>
+		    <p>We&rsquo;re very happy that you&rsquo;ve decided to drop by.</p>
 			<p>This is a community site about zoos &amp; the vast amount of amazing creatures that inhabit our beloved Planet.</p>
 
-			<p>We're relying on you, yes YOU to make this site truly awesome (we're not just saying that!)! Share your experiences and create your animal passport, to personalize your visit.</p>
+			<p>We&rsquo;re relying on you, yes YOU to make this site truly awesome (we&rsquo;re not just saying that!)! Share your experiences and create your animal passport, to personalize your visit.</p>
 			<p>How exciting is that! Come on in, be a part of it and <a href="{% url accounts-register %}">sign up now!</a></p>
 			 <!-- ><a href="{% url accounts-logout %}">login</a>, otherwise you can <a href="{% url accounts-register %}">register</a>.</p> -->
 		{% endif %}
@@ -89,7 +89,7 @@ jQuery(function($) {
 		<div class="wrapper">
 			<img src="/static/img/site-images/map_placeholder.gif" alt="world map">
 			<h2>Currently</h2>
-			<p>We're listing {{ num_of_places|intcomma }} zoos and places of animal interest.</p>
+			<p>We&rsquo;re listing {{ num_of_places|intcomma }} zoos and places of animal interest.</p>
 		</div>
 	</div>
 </div>

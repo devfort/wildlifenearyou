@@ -15,7 +15,7 @@
 <form action="{{ request.path }}" method="POST">
 {% ifnotequal tcount 0 %}
 <h2>Want to add these sightings to an existing trip?</h2>
-<p>We show you all the trips you've been on to {{ place.known_as }}.</p>
+<p>We show you all the trips you&rsquo;ve been on to {{ place.known_as }}.</p>
 	{{ form.user_trips.errors }}
 	{{ form.user_trips.label_tag }}
 	{{ form.user_trips }}

@@ -1,10 +1,10 @@
 {% extends base %}
 
-{% block title %}{{ profile.user }}'s Tripbook{% endblock %}
+{% block title %}{{ profile.user }}&rsquo;s Tripbook{% endblock %}
 
 {% block content %}
 {% load trip_sightings %}
-<h1>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Trip Book</h1>
+<h1>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Trip Book</h1>
 
 <div id="my_trips">
 	{% if tripbook %}
@@ -13,7 +13,7 @@
 	{% endfor %}
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been on any trips yet.
+		{% ifequal profile.user user %}You haven&rsquo;t{% else %}This user hasn&rsquo;t{% endifequal %} been on any trips yet.
 		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
 	</p>
 	{% endif %}

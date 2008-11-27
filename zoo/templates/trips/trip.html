@@ -58,7 +58,7 @@
                 {{ trip.description }}
                 </p>
 
-                <h2>Sightings</h2>
+                <h2>Sighting{{ s }}</h2>
                 {% for place in sightings_by_place %}
                         <h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
                 {% endfor %}</h3>
@@ -85,7 +85,7 @@
 	{% endfor %}
 	</p>
 	{% else %}
-	<p>You haven't rated this trip yet, don't worry though, you can do this by editing the trip.</p>
+	<p>You haven&rsquo;t rated this trip yet; don&rsquo;t worry though, you can do this by editing the trip.</p>
 	{% endif %}
 	
 {% endblock %}

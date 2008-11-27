@@ -23,13 +23,13 @@
 {% if profile.biography %}
 {{ profile.biography|linebreaks}}
 {% else %}
-<p>You don't seem to have filled in your Bio yet, why not do that now and tell us a bit about yourself?</p>
+<p>You don&rsquo;t seem to have filled in your Bio yet, why not do that now and tell us a bit about yourself?</p>
 {% endif  %}
 </div>
 
 <div id="animal_passport">
 	<h2>Animal Passport</h2>
-	<p>The Animal Passport contains all of the animals you have said you have spotted on a trip to a place.  Animals you think live at a place won't show here.</p>
+	<p>The Animal Passport contains all of the animals you have said you have spotted on a trip to a place.  Animals you think live at a place won&rsquo;t show here.</p>
 	{% if profile.passport.seen_species %}
 	<ol>
 	{% for species in profile.passport.seen_species %}
@@ -38,15 +38,15 @@
 	</ol>
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You apparently haven't{% else %}This user hasn't{% endifequal %} spotted any animals yet.
+		{% ifequal profile.user user %}You apparently haven&rsquo;t{% else %}This user hasn&rsquo;t{% endifequal %} spotted any animals yet.
 		{% ifequal profile.user user %}Spot now?{% endifequal %}
 	</p>
 	{% endif %}
 </div>
 
 <div id="my_trips">
-	<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Most Recent Trips</h2>
-	{% ifequal profile.user user %}<p>To add a trip <a href="{% url search %}" title="Look for something">look for</a> a place and then on it's page tell us the animals you saw.</p>{% endifequal %}
+	<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Most Recent Trips</h2>
+	{% ifequal profile.user user %}<p>To add a trip <a href="{% url search %}" title="Look for something">look for</a> a place, and then on its page tell us the animals you saw.</p>{% endifequal %}
 	{% if profile.user.created_trip_set.all %}
 	<ol>
 	{% for trip in profile.user.created_trip_set.all|slice:":5" %}
@@ -57,7 +57,7 @@
 
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You haven't{% else %}This user hasn't{% endifequal %} been anywhere yet.
+		{% ifequal profile.user user %}You haven&rsquo;t{% else %}This user hasn&rsquo;t{% endifequal %} been anywhere yet.
 		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
 	</p>
 	{% endif %}
@@ -79,7 +79,7 @@
 	</ol>
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You don't{% else %}This user doesn't{% endifequal %} have any favourite animals yet.
+		{% ifequal profile.user user %}You don&rsquo;t{% else %}This user doesn&rsquo;t{% endifequal %} have any favourite animals yet.
 		{% ifequal profile.user user %}Pick some?{% else %}Suggest some?{% endifequal %}
 	</p>
 	{% endif %}
@@ -91,7 +91,7 @@
 {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 
 {% if profile.user.comment_comments.all %}
-<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Comments:</h2>
+<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Comments:</h2>
 {% for comment in profile.user.comment_comments.all %}
 <div class="comment">
 {{ comment.comment|linebreaks }}
