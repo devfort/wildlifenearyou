@@ -321,9 +321,10 @@ class FinishAddSightingsForm(forms.Form):
 
     def clean_start(self):
         start = self.cleaned_data['start'].lower()
-        if re.match('\s*\d{4}\s*$', start):
+        m = re.match('\s*(\d{4})\s*$', start)
+        if m:
             self.cleaned_data['start_accuracy'] = 'year'
-            return datetime.date(int(year), 1, 1)
+            return datetime.date(int(m.group(1)), 1, 1)
 
         re_val = Calendar().ptc.re_values
         re_val['sep'] = '[\s/,.-]+'
