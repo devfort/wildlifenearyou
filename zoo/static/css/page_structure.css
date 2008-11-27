@@ -7,6 +7,9 @@
 .main .wrapper {
 	padding: 0 1em;
 }
+
+/* @group Header */
+
 .header .wrapper {
 	padding: 0.8em 0.8em 0.8em 1em;
 }
@@ -66,6 +69,10 @@
 	display: inline;
 }
 
+/* @end */
+
+/* @group Main */
+
 .main {
 	clear: both;
 	background-color: #ffffff;
@@ -95,6 +102,10 @@
     margin-top: 0;
 }
 
+/* @end */
+
+/* @group Footer */
+
 .footer {
 	padding-top: 312px;
 	background-image: url(/static/img/bg/animals.png);
@@ -110,3 +121,5 @@
     padding: 1em;
     margin: 0;
 }
+
+/* @end */
