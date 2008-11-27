@@ -13,7 +13,7 @@ def species(request, slug):
     except Species.DoesNotExist:
         # eggs
         species = get_object_or_404(SuperSpecies, slug=slug)
-        t = loader.get_template('species/%s.html' % species.type)
+        t = loader.get_template('animals/%s.html' % species.type)
         c = Context({'species': species})
         return HttpResponse(t.render(c), status=species.status)
 
@@ -24,7 +24,7 @@ def species(request, slug):
     except ValueError, e:
         pass
 
-    return render(request, 'species/species.html', {
+    return render(request, 'animals/species.html', {
         'species': species,
         'favourited': species.has_favourited(request.user),
         'hit_parade': hit_parade,
@@ -32,7 +32,7 @@ def species(request, slug):
     })
 
 def all_species(request):
-    return render(request, 'species/all_species.html', {
+    return render(request, 'animals/all_species.html', {
         'all_species': Species.objects.all().order_by('common_name'),
     })
 
@@ -52,6 +52,6 @@ def species_latin(request, latin_name):
     return HttpResponseRedirect(species.urls.absolute)
 
 def all_species_latin(request):
-    return render(request, 'species/all_species_latin.html', {
+    return render(request, 'animals/all_species_latin.html', {
         'all_species': Species.objects.all().order_by('latin_name'),
     })
