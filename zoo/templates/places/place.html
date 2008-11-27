@@ -102,6 +102,7 @@ jQuery(function($) {
 </div>
 
 
+{% if dates %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
 {% for date_ranges in opening_times %}
 	<h3>{{ date_ranges.0|safe }}</h3>
@@ -126,34 +127,38 @@ jQuery(function($) {
 		{% endif %}
 	{% endfor %}
 	</dl>
+	{% endfor %}
 {% endfor %}
-{% endfor %}
+{% endif %}
 
-<h2 class="">Price</h2>
 {% with place.price.all as prices %}
     {% if prices %}
-		<ul class="currency">
-        {% for price in prices %}
-			<li class="currency_{{ price.currency.currency_code }}">{{ price.type|title }}:
+	<h2 class="">Price</h2>
+	<ul class="currency">
+	{% for price in prices %}
+		<li class="currency_{{ price.currency.currency_code }}">{{ price.type|title }}:
 {% ifequal price.value 0 %}Free{% else %}
 {% ifequal price.currency.currency_code 'GBP' %}
 &pound;{% endifequal %}{%ifequal price.currency.currency_code 'EUR' %}
 &euro;{% endifequal %}{%ifequal price.currency.currency_code 'YEN' %}
 &yen;{% endifequal %}{%ifequal price.currency.currency_code 'USD' %}
 ${% endifequal %}{{ price.value }}{% endifequal %}
-        {% endfor %}
-		</ul>
+	{% endfor %}
+	</ul>
     {% endif %}
+	{% if place.price_notes %}<p>{{ place.price_notes }}</p>{% endif %}
 {% endwith %}
-{% if place.price_notes %}<p>{{ place.price_notes }}</p>{% endif %}
 
-
-<h2>Facilities</h2>
-<ul class="facilities">
-{% for placefacility in place.place_facilities.all %}
-<li><img alt="" src="{{ placefacility.facility.icon.url }}">{{ placefacility.desc }}</li>
-{% endfor %}
-</ul>
+{% with place.place_facilities.all as facilities %}
+	{% if facilities %}
+	<h2>Facilities</h2>
+	<ul class="facilities">
+		{% for facility in facilities %}
+		<li><img alt="" src="{{ placefacility.facility.icon.url }}">{{ placefacility.desc }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+{% endwith %}
 
 {% with place.direction.all as directions %}
     {% if directions %}
@@ -181,14 +186,17 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
     {% endif %}
 {% endwith %}
 
-<h2>Extras</h2>
-
-<ul>
-{% for extra in place.extras.all %}
-<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
-{% endfor %}
-<li><a href="">Zoo summary sheet</a></li>
-</ul>
+{% with place.extras.all as extras %}
+	{% if extras %}
+	<h2>Extras</h2>
+	<ul>
+		{% for extra in place.extras.all %}
+		<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
+		{% endfor %}
+		<li><a href="">Zoo summary sheet</a></li>
+	</ul>
+	{% endif %}
+{% endwith %}
 
 {% endblock %}
 
