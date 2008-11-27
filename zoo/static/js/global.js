@@ -214,15 +214,20 @@ jQuery(function($) {
                 'type': 'POST',
                 'data': data,
                 'success': function(html) {
+                    var height = div.height();
                     var newDiv = $(html);
                     div.replaceWith(newDiv);
                     wireUpForm(newDiv);
-                    setTimeout(function() {
-                        newDiv.slideUp('slow', function() {
-                            newDiv.remove();
-                            feedback_showing = false;
-                        });
-                    }, 2000);
+                    var newHeight = newDiv.height();
+                    /* If does NOT contain an errorlist, close after a delay */
+                    if (!newDiv.find('ul.errorlist').length) {
+                        setTimeout(function() {
+                            newDiv.slideUp('slow', function() {
+                                newDiv.remove();
+                                feedback_showing = false;
+                            });
+                        }, 2000);
+                    }
                 },
                 'error': function() {
                     alert('Your feedback could not be recorded');
@@ -242,7 +247,7 @@ jQuery(function($) {
         // Not showing; show the feedback form
         feedback_showing = true;
         $.get(this.href, function(html) {
-            var div = $(html).hide().insertAfter('.header').slideDown('slow');
+            var div = $(html).hide().insertAfter('.header').slideDown('fast');
             wireUpForm(div);
         });
         return false;
