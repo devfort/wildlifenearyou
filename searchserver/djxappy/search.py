@@ -215,6 +215,8 @@ def search(request, db_name):
      - `matches_estimated`: estimated number of matches.
      - `matches_upper_bound`: upper bound on number of matches.
      - `doc_count`: number of documents in database.
+     - `has_more_results`: true if the search has more results (at a lower
+       rank) than have been displayed.
 
     """
     params = validate_params(request.GET, {
@@ -276,6 +278,7 @@ def search(request, db_name):
         'matches_lower_bound': res.matches_lower_bound,
         'matches_estimated': res.matches_estimated,
         'matches_upper_bound': res.matches_upper_bound,
+        'has_more_results': res.more_matches,
     })
     return retval
 
