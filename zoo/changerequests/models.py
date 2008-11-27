@@ -12,8 +12,8 @@ from zoo.fields import JSONField
 
 def get_pretty_field_key(val):
     if val.endswith('_id'):
-        return val[:-3]
-    return val
+        val = val[:-3]
+    return val.replace('_', ' ').capitalize()
 
 def get_pretty_field_value(val, instance, attribute):
     if not attribute.endswith('_id'):
