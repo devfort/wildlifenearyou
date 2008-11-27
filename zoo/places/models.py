@@ -5,7 +5,6 @@ from django.db.models.signals import post_save
 
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
-import zoo.animals.models
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -37,6 +36,12 @@ class Currency(models.Model):
 
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.currency_code)
+
+def _species_for_place(place):
+    from zoo.animals.models import Species # Avoid circular import
+    return Species.objects.filter(
+        sighting__place = place
+    ).values_list('common_name', flat=True)
 
 class Place(AuditedModel):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
@@ -118,7 +123,8 @@ class Place(AuditedModel):
                     # particular species will result in duplicated entries,
                     # which will correspond to a higher weight.
                     'field_name': 'species',
-                    'django_fields': [lambda inst: zoo.animals.models.Species.objects.filter(sighting__place=inst).values_list('common_name', flat=True)],
+                    'django_fields': [_species_for_place], # see above
+                    'config': {'freetext': {'language': 'en'}} # stemming
                   },
                   { # Location of the place.
                     'field_name': 'latlong',
