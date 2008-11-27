@@ -2,7 +2,9 @@
 
 {% if user and not user.is_anonymous %}
 {% get_comment_form for object as form %}
+{% with request.path as comment_next %}
 {% include "comments/_comment_form.html" %}
+{% endwith %}
 {% else %}
 <p>You need to <a href="/login/?next={{ request.path }}">log in</a> to post comments.</p>
 {% endif %}

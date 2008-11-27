@@ -71,10 +71,13 @@
 }
 .header form label {
 	margin-right: 0.3em;
+                     margin-bottom: 0;
+                     display: inline;
 }
 .header form div {
 	display: inline;
 }
+
 
 /* @end */
 

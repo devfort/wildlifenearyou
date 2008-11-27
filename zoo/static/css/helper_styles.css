@@ -36,8 +36,10 @@ form fieldset .container {
 /* @group Labels */
 
 label {
-	font-weight: bold;
-	cursor: pointer;
+  display: block;
+  margin-bottom: 0.2em;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .meta-label {
@@ -175,6 +177,10 @@ h1 a:hover {
 	font-family: Calibri, "Helvetica Neue", sans-serif;
 }
 
+.meta { 
+        font-size: 0.8em;
+}
+
 h2 .meta {
     font-size: 0.6364em;
     font-style: italic;
@@ -221,6 +227,10 @@ a.add:active,
 	padding: 1em;
 	color: black;
 	
+}
+
+.hidden { 
+          display: none;
 }
 
 .notusing {

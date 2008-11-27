@@ -1,20 +1,21 @@
 {% load comments i18n %}
 <form action="{% comment_form_target %}" method="post">
-    <div{% if form.comment.errors %} class="error"{% endif %}>
+    <div class="container textarea-container{% if form.comment.errors %} error{% endif %}">
         {{ form.comment.errors }}
-        <div><label for="id_comment">Add Your Comment</label></div>
-        <div>{{ form.comment }}</div>
+        <label for="id_comment">Add Your Comment</label>
+        {{ form.comment }}
+
     </div>
-    <p style="display: none">
+    <div class="hidden">
         {{ form.honeypot.errors }}
         {{ form.honeypot.label_tag }} {{ form.honeypot }}
-    </p>
-    <p>
+    </div>
+    <div class="container button-container">
         {{ form.content_type }}
         {{ form.object_pk }}
         {{ form.timestamp }}
         {{ form.security_hash }}
-        <input type="hidden" name="next" value="{{ request.path }}#comments">
+        <input type="hidden" name="next" value="{{ comment_next }}#comments">
         <input type="submit" value="Save">
-    </p>
+    </div>
 </form>

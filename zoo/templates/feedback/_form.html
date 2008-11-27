@@ -1,0 +1,11 @@
+    <div class="container textarea-container">
+        {{ form.body.errors }}
+        {{ form.body }}
+    </div>
+    {% if form.email %}
+    <div class="container text-container">
+        {{ form.email.errors }}
+        <label for="id_email">Your e-mail address:</label> {{ form.email }}
+        (optional, we&rsquo;ll need it to send you a reply)
+    </div>
+    {% endif %}

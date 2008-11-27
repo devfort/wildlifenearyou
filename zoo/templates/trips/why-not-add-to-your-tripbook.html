@@ -24,19 +24,19 @@
 {% endifnotequal %}
 
 <h2>A New Trip</h2>
-<div class="container">
+<div class="container text-container">
     {{ form.name.errors }}
     {{ form.name.label_tag }}
     {{ form.name }}
     to {{ place }}
 </div>
-<div class="container">
+<div class="container text-container">
     {{ form.start.errors }}
     {{ form.start.label_tag }}
     {{ form.start }}
-    <br>(optional, as accurate as you can remember; e.g. &ldquo;13/4/2007&rdquo;, &ldquo;November 2005&rdquo;)
+    <p class="meta">(optional, as accurate as you can remember; e.g. &ldquo;13/4/2007&rdquo;, &ldquo;November 2005&rdquo;)</p>
 </div>
-<div class="container">
+<div class="container textarea-container">
     {{ form.description.errors }}
     {{ form.description.label_tag }} (optional)
     {{ form.description }}
