@@ -163,6 +163,21 @@ def validate_params(requestobj, constraints):
 def get_db_path(dbname):
     return os.path.join(settings.XAPPY_DATABASE_DIR, dbname)
 
+def parse_freetext_opts(opts):
+    """Validate and parse the options for a freetext query.
+
+    """
+    validate_dict_entries(opts, ('default_op',),
+                            'Invalid item in freetext query options: %s')
+    xapopts = {}
+    if 'default_op' in xapopts:
+        defop = xapopts['default_op']
+        if int(defop) == 0:
+            xapopts['default_op'] = xappy.Query.OP_AND
+        elif int(defop) == 1:
+            xapopts['default_op'] = xappy.Query.OP_OR
+    return xapopts
+
 def parse_query_spec(db, subq, spell=False):
     if subq is None:
         return db.query_all()
@@ -179,10 +194,11 @@ def parse_query_spec(db, subq, spell=False):
         opts = {}
         if not isinstance(query_text, basestring):
             query_text, opts = query_text
-
+            opts = parse_freetext_opts(opts)
         if spell:
             spell_corrected = db.spell_correct(query_text)
             return db.query_parse(spell_corrected, **opts), spell_corrected
+
         return db.query_parse(query_text, **opts), None
 
     raise ValidationError("Invalid query specification - unknown query type '%s'" % subq[0])

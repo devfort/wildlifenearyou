@@ -12,18 +12,20 @@ class Query(object):
     OP_AND = 0
     OP_OR = 1
 
-    def __init__(self, text=None):
+    def __init__(self, part=None):
         """Create the query object.
 
-        If `text` is supplied, it is treated as a text string, and is
-        equivalent to setting the query definition to FreeTextQuery(text).
+        If `part` is a string, it is equivalent to setting the query definition
+        to FreeTextQuery(text).
 
         """
         self.opts = {}
-        self.part = None
+        if isinstance(part, basestring):
+            part = FreeTextQuery(part)
+        self.part = part
 
-        if text is not None:
-            self.part = FreeTextQuery(text)
+        if part is not None:
+            self.part = FreeTextQuery(part)
 
     def sort_by(self, field_name, ascending=True):
         """Set the field to sort by.
@@ -80,6 +82,7 @@ class FreeTextQuery(QueryPart):
         self.opts = opts
 
     def to_params(self):
+        print self.text
         return ['freetext', (self.text, self.opts)]
 
 class GeoDistanceQuery(QueryPart):
