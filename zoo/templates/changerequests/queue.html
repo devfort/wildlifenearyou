@@ -7,124 +7,124 @@
 <h1>Moderation overview</h1>
 
 <dl>
-	<dt>Number of pending change groups</dt>
-	<dd>{{ change_request_groups|length }}</dd>
+ <dt>Number of pending change groups</dt>
+ <dd>{{ change_request_groups|length }}</dd>
 
-	<dt>Total number of change requests<dt>
-	<dd>{{ total_pending_change_requests }}</dd>
+ <dt>Total number of change requests<dt>
+ <dd>{{ total_pending_change_requests }}</dd>
 </dl>
 
 {% if change_request_groups %}
-	<h2>Queue</h2>
+ <h2>Queue</h2>
 
-	{% if form.non_field_errors %}
-		<p>The moderation request you just attempted to apply now conflicts with the current data - you will either have to force this change or delete the change altogether.</p>
-	{% endif %}
+ {% if form.non_field_errors %}
+  <p>The moderation request you just attempted to apply now conflicts with the current data - you will either have to force this change or delete the change altogether.</p>
+ {% endif %}
 
-	<ol>
-	{% for crg in change_request_groups %}
-		{% with crg.get_pending_changerequests as pending_changes %}
-			<li>
-			{{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a> {{ crg.created_at|timesince }} ago:
+ <ol>
+ {% for crg in change_request_groups %}
+  {% with crg.get_pending_changerequests as pending_changes %}
+   <li>
+   {{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a> {{ crg.created_at|timesince }} ago:
 
-			<ul>
-			{% for cr in pending_changes %}
-			{% with cr.get_real as crs %}
-				<li>
-					{% switch cr.subclass %}
-						{% case "ChangeAttributeRequest" %}
-							Change the &ldquo;{{ crs.attribute }}&rdquo; attribute
-								on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
-								from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
+   <ul>
+   {% for cr in pending_changes %}
+   {% with cr.get_real as crs %}
+    <li>
+     {% switch cr.subclass %}
+      {% case "ChangeAttributeRequest" %}
+       Change the &ldquo;{{ crs.attribute }}&rdquo; attribute
+        on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
+        from &ldquo;<em>{{ crs.old_value }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.new_value }}</em>&rdquo;
 
-								{% if crs.conflicts %}
-									<strong>(change conflicts)</strong>
-								{% endif %}
+        {% if crs.conflicts %}
+         <strong>(change conflicts)</strong>
+        {% endif %}
 
-							{% if crs.conflicts %}
-								<form action="{% url admin-moderation %}" method="post">
-									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-									<input type="hidden" name="action" value="force"/>
-									<input type="submit" value="Force change"/>
-								</form>
-							{% else %}
-								<form action="{% url admin-moderation %}" method="post">
-									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-									<input type="hidden" name="action" value="apply"/>
-									<input type="submit" value="Apply change"/>
-								</form>
-							{% endif %}
+       {% if crs.conflicts %}
+        <form action="{% url admin-moderation %}" method="post">
+         <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+         <input type="hidden" name="action" value="force"/>
+         <input type="submit" value="Force change"/>
+        </form>
+       {% else %}
+        <form action="{% url admin-moderation %}" method="post">
+         <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+         <input type="hidden" name="action" value="apply"/>
+         <input type="submit" value="Apply change"/>
+        </form>
+       {% endif %}
 
-							<form action="{% url admin-moderation %}" method="post">
-								<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-								<input type="hidden" name="action" value="delete"/>
-								<input type="submit" value="Delete change request"/>
-							</form>
-						{% endcase %}
+       <form action="{% url admin-moderation %}" method="post">
+        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+        <input type="hidden" name="action" value="delete"/>
+        <input type="submit" value="Delete change request"/>
+       </form>
+      {% endcase %}
 
-						{% case "DeleteObjectRequest" %}
-							Delete
-						
-							{% if crs.content_object %}
-								the <em>{{ crs.content_object }}</em>
-							{% else %}
-								an <em>already deleted</em>
-							{% endif %}
-							
-							{{ crs.content_type }}.
+      {% case "DeleteObjectRequest" %}
+       Delete
+      
+       {% if crs.content_object %}
+        the <em>{{ crs.content_object }}</em>
+       {% else %}
+        an <em>already deleted</em>
+       {% endif %}
+       
+       {{ crs.content_type }}.
 
-							{% if crs.conflicts %}
-								<strong>(conflicting change: object already deleted)</strong>
-							{% else %}
-								<form action="{% url admin-moderation %}" method="post">
-									<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-									<input type="hidden" name="action" value="apply"/>
-									<input type="submit" value="Apply change"/>
-								</form>
-							{% endif %}
+       {% if crs.conflicts %}
+        <strong>(conflicting change: object already deleted)</strong>
+       {% else %}
+        <form action="{% url admin-moderation %}" method="post">
+         <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+         <input type="hidden" name="action" value="apply"/>
+         <input type="submit" value="Apply change"/>
+        </form>
+       {% endif %}
 
-							<form action="{% url admin-moderation %}" method="post">
-								<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-								<input type="hidden" name="action" value="delete"/>
-								<input type="submit" value="Delete change request"/>
-							</form>
-						{% endcase %}
+       <form action="{% url admin-moderation %}" method="post">
+        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+        <input type="hidden" name="action" value="delete"/>
+        <input type="submit" value="Delete change request"/>
+       </form>
+      {% endcase %}
 
-						{% case "CreateObjectRequest" %}
-						  Create a {{ crs.content_type }} object with the following properties:
-							{{ crs.attributes }}
-							
-							<form action="{% url admin-moderation %}" method="post">
-								<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-								<input type="hidden" name="action" value="apply"/>
-								<input type="submit" value="Apply change"/>
-							</form>
+      {% case "CreateObjectRequest" %}
+        Create a {{ crs.content_type }} object with the following properties:
+       {{ crs.attributes }}
+       
+       <form action="{% url admin-moderation %}" method="post">
+        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+        <input type="hidden" name="action" value="apply"/>
+        <input type="submit" value="Apply change"/>
+       </form>
 
-							<form action="{% url admin-moderation %}" method="post">
-								<input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
-								<input type="hidden" name="action" value="delete"/>
-								<input type="submit" value="Delete change request"/>
-							</form>
-						{% endcase %}
+       <form action="{% url admin-moderation %}" method="post">
+        <input type="hidden" name="changerequest" value="{{ cr.pk }}"/>
+        <input type="hidden" name="action" value="delete"/>
+        <input type="submit" value="Delete change request"/>
+       </form>
+      {% endcase %}
 
-						{% defaultcase %}
-							<strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass: {{ cr.subclass }}
-						{% enddefaultcase %}
+      {% defaultcase %}
+       <strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass: {{ cr.subclass }}
+      {% enddefaultcase %}
 
-					{% endswitch %}
+     {% endswitch %}
 
-				</li>
+    </li>
 
-			{% endwith %}
-			{% endfor %}
-			</ul>
+   {% endwith %}
+   {% endfor %}
+   </ul>
 
-			</li>
-		{% endwith %}
-	{% endfor %}
-	</ol>
+   </li>
+  {% endwith %}
+ {% endfor %}
+ </ol>
 {% else %}
-	<p>Nothing to moderate.</p>
+ <p>Nothing to moderate.</p>
 {% endif %}
 
 {% endblock %}
