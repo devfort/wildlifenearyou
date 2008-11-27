@@ -147,7 +147,23 @@ class Place(AuditedModel):
     def most_recent_trips_with_desc(self):
         trips = self.most_recent_trips().exclude(description='')
         return trips
-
+    
+    def most_common_animal(self):
+        "The animal with the most sightings"
+        from zoo.animals.models import Species
+        species_ids = list(
+            self.sighting_set.values_list('species', flat=True)
+        )
+        if not species_ids:
+            return None
+        counts = dict([
+            (species_id, species_ids.count(species_id))
+            for species_id in species_ids
+        ])
+        pairs = counts.items()
+        pairs.sort(key = lambda p: p[1], reverse=True)
+        return Species.objects.get(pk = pairs[0][0])
+    
     def __unicode__(self):
         return self.known_as
 

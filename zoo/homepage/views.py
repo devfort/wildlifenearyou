@@ -4,8 +4,9 @@ from zoo.shortcuts import render
 from zoo.places.models import Place
 
 def landing(request):
-    if Place.objects.all():
-        random_zoo = Place.objects.all().order_by('?')[0]
+    places_with_sightings = Place.objects.filter(sighting__isnull=False)
+    if places_with_sightings.count():
+        random_zoo = places_with_sightings.order_by('?')[0]
     else:
         random_zoo = None
         
