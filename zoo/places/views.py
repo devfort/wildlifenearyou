@@ -66,7 +66,8 @@ def place(request, country_code, slug):
     trips = Trip.objects.filter(sightings__place=place)
     total_rating = 0
     for trip in trips:
-        total_rating += int(trip.rating)
+        if trip.rating:
+            total_rating += int(trip.rating)
     rating = int( (total_rating + 0.0) / len(trips) + 0.5 )
     rating = {
         'on': [ 1 for x in range(rating) ],
