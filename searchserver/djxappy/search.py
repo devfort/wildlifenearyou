@@ -266,12 +266,14 @@ def search(request, db_name):
                 retval['spellcorrected'] = True
                 retval['spellcorr_q'] = corrected_q
 
-    items = list({
-             'rank': (item.rank),
-             'id': (item.id),
-             'data': (item.data),
-             }
-             for item in res)
+    items = []
+    for item in res:
+        items.append({
+            'rank': (item.rank),
+            'id': (item.id),
+            'data': (item.data),
+            'relevant_data': (item.relevant_data(5)),
+        })
 
     retval.update({
         'items': items,
