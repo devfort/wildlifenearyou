@@ -25,7 +25,7 @@
     <form action="/search/" method="GET" accept-charset="utf-8">
         <div>
 			<label for="search_term">Look for</label>
-			<input type="text" name="search" id="search_term" value="NOT WIRED UP"> 
+			<input type="text" name="search" id="search_term" value="NOT WIRED UP">
 			<input type="submit" value="Go">
 		</div>
     </form>
@@ -34,7 +34,7 @@
 <div class="main">
 <div class="contents">
 	{% block content %}
-	
+
 	<div class="primary">
 		{% block primary_content %}
 		{% endblock %}
@@ -43,6 +43,7 @@
 	<div class="secondary">
 		{% block secondary_content %}
 		{% endblock %}
+
 	</div>
 
 	{% endblock %}
@@ -50,10 +51,11 @@
 </div>
 
 <div class="footer">
-	<p style="float:right">Our sharp eyed users have spotted XXX species</p>
+	<p style="float:right">Our sharp eyed users have spotted {{ total_num_of_species }} species</p>
 	<p>&copy; <a href="{% url flatpage "colophon/" %}">SEDF</a>
 	| <a href="{% url flatpage "about/" %}">About</a>
-	| <a href="{% url flatpage "contact/" %}">Contact</a></p>
+	| <a href="{% url flatpage "contact/" %}">Contact</a>
+</p>
 </div>
 </body>
 </html>

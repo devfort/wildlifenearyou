@@ -85,6 +85,7 @@ TEMPLATE_DIRS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.auth',
+    'zoo.context_processors.standard',
 )
 
 INSTALLED_APPS = [
