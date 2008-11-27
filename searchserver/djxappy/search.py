@@ -162,9 +162,10 @@ def validate_params(requestobj, constraints):
 def get_db_path(dbname):
     return os.path.join(settings.XAPPY_DATABASE_DIR, dbname)
 
-def parse_query_spec(db, subq):
+def parse_query_spec(db, subq, spell=False):
     if subq is None:
         return db.query_all()
+
     if not isinstance(subq, (list, tuple)):
         raise ValidationError("Invalid query specification - expected [query_type, parameters], didn't get a list (got %r)" % subq)
     if len(subq) != 2:
@@ -173,7 +174,10 @@ def parse_query_spec(db, subq):
     # Handle the different types of subq.  Convert this to a dict lookup if we
     # end up with lots.
     if subq[0] == 'freetext':
-        return db.query_parse(subq[1])
+        if spell:
+            spell_corrected = db.spell_correct(subq[1])
+            return db.query_parse(spell_corrected), spell_corrected
+        return db.query_parse(subq[1]), None
 
     raise ValidationError("Invalid query specification - unknown query type '%s'" % subq[0])
 
@@ -235,8 +239,7 @@ def search(request, db_name):
         validate_dict_entries(query_defn, ('opts', 'query'),
                               'Invalid item in query definition: %s')
 
-
-        q = parse_query_spec(db, query_defn.get('query'))
+        q, ignore = parse_query_spec(db, query_defn.get('query'))
 
         opts = query_defn.get('opts')
         if opts is not None:
@@ -250,10 +253,10 @@ def search(request, db_name):
 
     if len(res) == 0:
         if len(params['q']) != 0:
+            query_defn = simplejson.loads(params['q'][0])
             # Try spell correcting
-            corrected_q = [db.spell_correct(subq) for subq in params['q']]
-            qs = [db.query_parse(subq) for subq in corrected_q]
-            q = db.query_composite(xappy.SearchConnection.OP_OR, qs)
+            q, corrected_q = parse_query_spec(db, query_defn.get('query'),
+                                           spell=True)
 
             res = q.search(int(params['start_rank'][0]),
                            int(params['end_rank'][0]))
@@ -470,7 +473,7 @@ def newdb(request):
                 if settings.get('store', False):
                     db.add_field_action(field_name, xappy.FieldActions.STORE_CONTENT)
 
-                #spelling_word_source = settings.get('spelling_word_source', False)
+                spelling_word_source = settings.get('spelling_word_source', True)
                 #collapsible = settings.get('collapsible', False)
                 #sortable = settings.get('sortable', False)
                 #range_searchable = settings.get('range_searchable', False)
@@ -526,6 +529,9 @@ def newdb(request):
                     phrase = freetext_params.get('enable_phrase_search', True)
                     if not phrase:
                         opts['nopos'] = True
+
+                    if spelling_word_source:
+                        opts['spell'] = True
 
                     index_groups = freetext_params.get('index_groups',
                         ['_FIELD_INDEX', '_GENERAL_INDEX'])
