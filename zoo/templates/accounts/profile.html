@@ -4,10 +4,11 @@
 
 {% block title %}{{ profile.user|title }}{% endblock %}
 
-{% block content %}
+{% block primary_content %}
+
+<img align="right" src="/faces/{{ profile.user|lower }}.png" alt="{{ profile.user }}'s Avatar" width="175" height="175" />
 
 <h1>{{ profile.user|title }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
-<img src="/faces/{{ profile.user|lower }}.png" alt="{{ profile.user }}'s Avatar" width="175" height="175" />
 {% if profile.badges.all %}
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
@@ -25,11 +26,6 @@
 <p>You don't seem to have filled in your Bio yet, why not do that now and tell us a bit about yourself?</p>
 {% endif  %}
 </div>
-
-{% for photo in profile.user.photos.all %}
-<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
-{% endfor %}
-{% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 
 <div id="animal_passport">
 	<h2>Animal Passport</h2>
@@ -67,6 +63,10 @@
 	{% endif %}
 </div>
 
+{% endblock %}
+
+{% block secondary_content %}
+
 <div id="favourite_species">
 	<h2>Favourite Animals</h2>
 	{% if profile.user.favourite_species.all %}
@@ -85,6 +85,10 @@
 	{% endif %}
 </div>
 
+{% for photo in profile.user.photos.all %}
+<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
+{% endfor %}
+{% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 
 {% if profile.user.comment_comments.all %}
 <h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}'s{% endifequal %} Comments:</h2>
