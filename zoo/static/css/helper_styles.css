@@ -209,6 +209,20 @@ a.add:active,
 
 /* @end */
 
+.notification {
+	background-color: #CBE3B7;
+	padding: 1em;
+	color: black;
+	
+}
+
+.error {
+	background-color: #E3C6B7;
+	padding: 1em;
+	color: black;
+	
+}
+
 .notusing {
 	background-color: #E185E9;	
 }
