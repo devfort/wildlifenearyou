@@ -6,33 +6,12 @@
 <script type="text/javascript" src="/static/js/star-select-replace.js"></script>
 {% endblock %}
 
-{% block content %}
+{% block primary_content %}
 
 <h1>{{ trip.compact_title }}</h1>
 {% with trip.sightings.all as sightings %}
         {% regroup sightings by place.known_as as sightings_by_place %}
     
-    
-    <!-- TODO: Users should see their OWN photos even if they have not 
-        yet been moderated, with a visual indication of this e.g. red border
-    -->
-    {% with trip.visible_photos.all as photos %}
-    {% if photos %}
-    <h2>Photos from this trip</h2>
-    <div>
-    {% for photo in photos %}
-    <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{{ photo.created_by.get_profile.urls.absolute }}">{{ photo.created_by|title }}</a>
-    {% endfor %}
-    </div>
-    <h2>Got any more?</h2>
-    {% else %}
-    <h2>Take any photos?</h2>
-    {% endif %}
-    {% endwith %}
-    <form enctype="multipart/form-data" action="{{ request.path }}upload/" method="POST">
-        <p><input type="file" name="photo" id="id_photo"> <input type="submit" value="Upload"></p>
-    </form>
-
         {% with sightings_by_place|length as sl %}
         {% ifequal 1 sl %}
                 <p>A trip to {% for place in sightings_by_place %}{% for sighting in place.list|slice:":1" %}           
@@ -74,6 +53,10 @@
         {% endwith %}
 {% endwith %}
 
+{% endblock %}
+
+{% block secondary_content %}
+
 	<h2>Trip Rating</h2>
 	{% if rating.on %}
 	<p class="rating" title="{{ rating.on|length }} out of 5 stars">
@@ -87,5 +70,25 @@
 	{% else %}
 	<p>You haven&rsquo;t rated this trip yet; don&rsquo;t worry though, you can do this by editing the trip.</p>
 	{% endif %}
+
+        <!-- TODO: Users should see their OWN photos even if they have not 
+            yet been moderated, with a visual indication of this e.g. red border
+        -->
+        {% with trip.visible_photos.all as photos %}
+        {% if photos %}
+        <h2>Photos from this trip</h2>
+        <div>
+        {% for photo in photos %}
+        <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{{ photo.created_by.get_profile.urls.absolute }}">{{ photo.created_by|title }}</a>
+        {% endfor %}
+        </div>
+        <h2>Got any more?</h2>
+        {% else %}
+        <h2>Take any photos?</h2>
+        {% endif %}
+        {% endwith %}
+        <form enctype="multipart/form-data" action="{{ request.path }}upload/" method="POST">
+            <p><input type="file" name="photo" id="id_photo"> <input type="submit" value="Upload"></p>
+        </form>
 	
 {% endblock %}
