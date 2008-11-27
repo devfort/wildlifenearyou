@@ -30,8 +30,6 @@ def moderation_queue(request):
     else:
         form = ChangeRequestActionForm()
 
-    
-
     return render(request, 'changerequests/queue.html', {
         'form': form,
         'change_request_groups':
