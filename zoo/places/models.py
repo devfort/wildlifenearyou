@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import pluralize
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.core.urlresolvers import reverse
 
 from zoo.utils import attrproperty
 from zoo.models import AuditedModel
@@ -115,6 +116,8 @@ class Place(AuditedModel):
     def urls(self, name):
         if name == 'absolute':
             urlname = 'place'
+        elif name == 'summary':
+            urlname = 'place-summary'
         elif name == 'suggest_changes':
             urlname = 'place-edit'
         else:
@@ -166,7 +169,7 @@ class Place(AuditedModel):
     def most_recent_trips_with_desc(self):
         trips = self.most_recent_trips().exclude(description='')
         return trips
-    
+
     def most_common_animal(self):
         "The animal with the most sightings"
         from zoo.animals.models import Species
@@ -182,7 +185,7 @@ class Place(AuditedModel):
         pairs = counts.items()
         pairs.sort(key = lambda p: p[1], reverse=True)
         return Species.objects.get(pk = pairs[0][0])
-    
+
     def __unicode__(self):
         return self.known_as
 

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from django.utils import dateformat
-    
+
 from zoo.shortcuts import render
 from zoo.places.models import Place, Country, PlaceOpening, PlaceSpeciesSolelyForLinking
 from zoo.animals.models import Species
@@ -81,6 +81,17 @@ def place(request, country_code, slug):
         'species_list': species_list,
         'opening_times': times_sorted,
         'rating' : rating,
+    })
+
+def place_summary(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+
+    species_list = place.get_species(request.user)
+
+    return render(request, 'places/place_summary.html', {
+        'place': place,
+        'species_list': species_list,
     })
 
 def place_species(request, country_code, slug):

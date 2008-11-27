@@ -146,6 +146,8 @@ urlpatterns = patterns('',
         name='place'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>.*?)/suggest-changes$', 'zoo.places.views.place_edit',
         name='place-edit'),
+    url(r'^(?P<country_code>\w{2})/(?P<slug>.*?)/summary$', 'zoo.places.views.place_summary',
+        name='place-summary'),
 
     url(r'^places/$', 'zoo.places.views.all_places',
         name='places'),
@@ -156,7 +158,7 @@ urlpatterns = patterns('',
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/add-sightings/$',
         'zoo.trips.views.add_sightings',
         name='place-add-sightings'),
-    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/' + 
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/' +
             'add-sightings/(?P<ids>[xs].*?)/$',
         'zoo.trips.views.finish_add_sightings',
         name='place-finish-add-sightings'),

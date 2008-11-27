@@ -110,10 +110,10 @@ jQuery(function($) {
 {% for date_ranges in opening_times %}
 	<h3>{{ date_ranges.0|safe }}</h3>
 
-	{% for section_title, days in date_ranges.1.items %} 
-	 	{% if section_title %} 
-	 	<h4>{{ section_title }}</h4> 
-	 	{% endif %} 
+	{% for section_title, days in date_ranges.1.items %}
+	 	{% if section_title %}
+	 	<h4>{{ section_title }}</h4>
+	 	{% endif %}
 
 	<dl>
 	{% for day in days %}
@@ -189,15 +189,13 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 {% endwith %}
 
 {% with place.extras.all as extras %}
-	{% if extras %}
 	<h2>Extras</h2>
 	<ul>
 		{% for extra in place.extras.all %}
 		<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
 		{% endfor %}
-		<li><a href="#">Zoo summary sheet</a></li>
+		<li><a href="{{ place.urls.summary }}">Zoo summary sheet</a></li>
 	</ul>
-	{% endif %}
 {% endwith %}
 
 {% endblock %}
@@ -249,13 +247,13 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 
 {% if place.most_recent_trips_with_desc %}
 <h2>Zoo Tripbook entries</h2>
-<ul> 
-{% for trip in place.most_recent_trips_with_desc|slice:":5" %} 
-	<li> 
-	<blockquote>{{ trip.description|truncatewords:10 }}</blockquote> 
-	<p>&mdash; <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by }}</a></p> 
-{% endfor %} 
-</ul> 
+<ul>
+{% for trip in place.most_recent_trips_with_desc|slice:":5" %}
+	<li>
+	<blockquote>{{ trip.description|truncatewords:10 }}</blockquote>
+	<p>&mdash; <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by }}</a></p>
+{% endfor %}
+</ul>
 {% endif %}
 
 <h2>Comments</h2>
