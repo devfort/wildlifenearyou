@@ -48,7 +48,7 @@ class Profile(models.Model):
     # FIXME: also have a signal attached to all models that affect this
     def save(self, *args, **kwargs):
         self.recalculate_percentage_complete()
-        return super(Profile,self).save(args, kwargs)
+        return super(Profile,self).save(*args, **kwargs)
 
     def recalculate_percentage_complete(self):
         self.percentage_complete = self._percentage_complete()
