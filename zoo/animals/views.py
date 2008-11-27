@@ -26,9 +26,10 @@ def species(request, slug):
         hit_parade = FavouriteSpecies.hit_parade().index(species) + 1
     except ValueError, e:
         pass
-    
+
     # If we have the user's location, find the nearest animal of this species
     description, (latitude, longitude) = location_from_request(request)
+    nearest = None
     if description:
         try:
             nearest = nearest_places_with_species(
@@ -36,7 +37,7 @@ def species(request, slug):
             )[0]
         except IndexError:
             nearest = None
-    
+
     return render(request, 'animals/species.html', {
         'species': species,
         'favourited': species.has_favourited(request.user),
