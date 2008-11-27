@@ -25,7 +25,7 @@ class Trip(AuditedModel):
         help_text="A title for this trip. At least one of name or date must be provided."
     )
     description = models.TextField(blank=True)
-    rating = models.CharField(max_length=1, null=True, blank=True, choices=[ (i,i) for i in range(1,6) ])
+    rating = models.CharField(max_length=1, blank=True, choices=[ (i,i) for i in range(1,6) ])
     species = models.ManyToManyField(Species, through='Sighting')
 
     class Meta:
@@ -121,21 +121,18 @@ class Trip(AuditedModel):
 
     @staticmethod
     def get_average_rating(place):
-        trips = Trip.objects.filter(sightings__place=place)
+        trips = Trip.objects.filter(sightings__place=place, rating__gt=0).distinct()
         return Trip.calculate_rating_average(trips)
 
     @staticmethod
     def get_my_average_rating_for_place(user, place):
-        trips = Trip.objects.filter(sightings__place=place,created_by=user)
+        trips = Trip.objects.filter(sightings__place=place,created_by=user, rating__gt=0).distinct()
         return Trip.calculate_rating_average(trips)
 
     @staticmethod
     def calculate_rating_average(trips):
-        total_rating = 0
+        total_rating = sum([ int(trip.rating) for trip in trips if trip.rating ])
         rating = 0
-        for trip in trips:
-            if trip.rating:
-                total_rating += int(trip.rating)
         if len(trips):
             rating = int( (total_rating + 0.0) / len(trips) + 0.5 )
         rating = {
