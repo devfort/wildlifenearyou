@@ -1,11 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.template.defaultfilters import slugify
+from django.contrib.contenttypes.models import ContentType
 
-from zoo.fields import JSONField
 
 import datetime
+from itertools import chain
+
+from zoo.fields import JSONField
 
 class ChangeRequestGroup(models.Model):
     """
@@ -139,7 +142,37 @@ class CreateObjectRequest(ChangeRequest):
 
     def apply(self, user=None):
         klass = self.content_type.model_class()
-        klass.objects.create(**self.attributes)
+        instance = klass(**self.attributes)
+
+        if hasattr(instance, 'slug') and hasattr(instance, 'get_slug_suggestions'):
+            def get_slug():
+                slug = ""
+
+                # Get slug suggestions from model
+                for suggestion in instance.get_slug_suggestions():
+                    # Don't append blank strings, None etc.
+                    if not suggestion:
+                        continue
+
+                    if slug:
+                        slug += "-"
+
+                    slug += slugify(suggestion)
+                    if klass.objects.filter(slug=slug).count() == 0:
+                        return slug
+
+                if slug:
+                    slug += "-"
+
+                for i in range(2, 1000):
+                    num_slug = "%s%d" % (slug, i)
+                    if klass.objects.filter(slug=num_slug).count() == 0:
+                        return num_slug
+
+                assert False, "Slug suggestions exhuasted"
+            instance.slug = get_slug()
+
+        instance.save()
         return super(CreateObjectRequest, self).apply(user)
 
     def conflicts(self):
