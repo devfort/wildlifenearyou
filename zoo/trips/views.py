@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect as Redirect
 from django.contrib.auth.decorators import login_required
 
 from zoo.shortcuts import render
-from zoo.trips.models import Trip
+from zoo.trips.models import Trip, Sighting
 from zoo.accounts.models import Profile
 from zoo.animals.forms import SpeciesField
 
@@ -237,8 +237,15 @@ def finish_add_sightings(request, country_code, slug, ids):
     
     if request.method == 'POST':
         if request.POST.get('just-sightings'):
-            assert False, "Just save the sightings from saw_%"
-        
+            for id in saw_id_set:
+                # Look up the id
+                species = lookup_xapian_or_django_id(id)
+                if species: # None if it was somehow invalid
+                    Sighting.objects.create(
+                        species = species,
+                        place = place
+                    )
+            return Redirect(place.get_absolute_url())
         
         form = FinishAddSightingsForm(request.POST)
         if form.is_valid():
