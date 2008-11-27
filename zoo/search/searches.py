@@ -36,6 +36,35 @@ def make_searcher(dbname, latlon_fields=[]):
             yield doc_from_result_item(item, latlon_fields)
     return search
 
+def make_near_searcher(dbname, latlon_fields=[]):
+    """Make a searcher which returns things near a coordinate or named
+    location.
+
+    Tries to find a place.  If successful, returns a list of items near it.
+
+    """
+    client = Client(settings.XAPIAN_BASE_URL, dbname)
+
+    def get_place_coordinate(place_string):
+        coords = client.parse_latlong(place_string)
+        if coords['ok'] == 1:
+            return "%f %f" % (coords['latitude'], coords['longitude'])
+
+        locations = search_locations(place_string)
+        if locations:
+            return iter(results).next()['latlon']
+
+        return None
+
+    def search(q, place):
+        get_place_coordinate(place)
+        FIXME
+
+        results = client.search(Query(q), end_rank=num)
+        for item in results['items']:
+            yield doc_from_result_item(item, latlon_fields)
+    return search
+
 def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
     # A DB searcher knows that the results will be just search_ids, but each
     # one will be something like "places.Place:34" - it looks up the model
@@ -82,10 +111,16 @@ def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
 def make_db_deleter(dbname, prefix=None):
     client = Client(settings.XAPIAN_BASE_URL, dbname, prefix)
     def delete_database():
-        client.deldb()
+        try:
+            client.deldb()
+        except client.SearchClientError:
+            pass
     return delete_database
 
 search_locations = make_searcher(
+    settings.XAPIAN_LOCATION_DB, latlon_fields = ['latlon']
+)
+search_near = make_near_searcher(
     settings.XAPIAN_LOCATION_DB, latlon_fields = ['latlon']
 )
 lookup_location = make_lookup(
@@ -111,5 +146,3 @@ search_known_species = make_db_searcher(
 delete_known_species = make_db_deleter(
     'known_species', settings.XAPIAN_PERSONAL_PREFIX
 )
-
-
