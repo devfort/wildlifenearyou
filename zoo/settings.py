@@ -67,7 +67,7 @@ MIDDLEWARE_CLASSES = [
     'zoo.middleware.OnlyLowercaseUrls',
     'zoo.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
--]
+]
 
 ROOT_URLCONF = 'zoo.urls'
 
