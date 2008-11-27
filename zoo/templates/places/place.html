@@ -95,7 +95,7 @@ jQuery(function($) {
 {% endif %}
 
 <div id="see-more-animals">
-    <h3 class="add">Did you see more animals?</h3>
+    <h3 class="add"><a name="addsightings">Did you see more animals?</h3>
     <p>What did you see?</p>
     <form action="{{ request.path }}add-sightings/" method="POST">
         <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></div>
@@ -207,6 +207,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 
 
 <h2>Average Trip Rating</h2>
+{% if rating.on %}
 <p class="rating" title="{{ rating.on|length }} out of 5 stars">
 {% for i in rating.on %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
@@ -215,6 +216,9 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 <img src="/static/img/icons/starselect_off.png" alt="">
 {% endfor %}
 </p>
+{% else %}
+<p>No-one has yet rated a trip to this place. <a href="#addsightings">Add your sightings</a></p>
+{% endif %}
 
 <p><a href="" class="button">&raquo; Support your zoo!</a></p>
 
