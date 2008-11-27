@@ -1,9 +1,12 @@
 
 
-
 jQuery(function($) {
 	
 	
+	// add JavaScript class for styling
+	$('body').addClass('hasJS');
+
+
 	//	Automatically clear default text in input fields when they are focused
 	$("input[type='text']").focus(function() {
 		console.log('focus');
@@ -17,7 +20,7 @@ jQuery(function($) {
 			$(this).val(this.defaultValue);
 		}
 	});
-	
+
 	//	Make the targets of internal links toggleable.
 	$('a.toggler').each(function() {
 		//	Get the id of the target of each internal link.
@@ -134,9 +137,6 @@ jQuery(function($) {
 
 	
 });
-
-// add JavaScript class for styling
-$('body').addClass('hasJS');
 
 
 
