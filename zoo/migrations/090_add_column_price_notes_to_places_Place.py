@@ -4,4 +4,4 @@ if settings.DATABASE_ENGINE == 'mysql':
 elif settings.DATABASE_ENGINE == 'sqlite3':
     from dmigrations.sqlite3 import migrations as m
 import datetime
-migration = m.AddColumn('places', 'Place', 'price_notes', 'longtext NULL')
+migration = m.AddColumn('places', 'place', 'price_notes', 'longtext NULL')
