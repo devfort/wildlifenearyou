@@ -51,10 +51,9 @@ class UberForm(object):
 
         self.instance = instance
         self.deleted = False
-        print parent_uform
         self.parent_uform = parent_uform
         self.form_id = form_id
-        
+
         if instance:
             prefix += '%s' % instance.pk
         else:
@@ -228,14 +227,12 @@ class UberForm(object):
 
                         val = normalize(val)
                         oldval = normalize(oldval)
-                        print val, oldval, val==oldval
                         if val != oldval:
                             changes[(uf.instance, name)] = \
                                 (oldval, val)
             else:
                 # new object
                 for f in uf.immediate_forms():
-                    print uf.parent_uform
                     newdata = dict(f.cleaned_data.iteritems())
                     newdata[uf.relation] = uf.parent_uform.instance
 
