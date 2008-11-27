@@ -105,7 +105,7 @@ class Place(AuditedModel):
     def latlon(self):
         if self.longitude is None or self.latitude is None:
             return ''
-        return "%f %f" % (self.longitude, self.latitude)
+        return "%f %f" % (self.latitude, self.longitude)
 
     def get_absolute_url(self):
         return self.urls.absolute
