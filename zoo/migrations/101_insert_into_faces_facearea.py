@@ -6,7 +6,7 @@ elif settings.DATABASE_ENGINE == 'sqlite3':
 import datetime
 migration = m.InsertRows(
     table_name = 'faces_facearea',
-    columns = [u'id', u'name', u'description', u'category_id', u'order', u'is_small'],
+    columns = [u'id', u'name', u'description', u'category_id', u'`order`', u'is_small'],
     insert_rows = ((33L, u'Hair (top)', u'', 1L, 3L, 0),
  (34L, u'Hair (bottom)', u'', 1L, 2L, 0),
  (35L, u'Lips', u'', 2L, 4L, 1),
