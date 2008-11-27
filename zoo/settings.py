@@ -51,7 +51,7 @@ MEDIA_URL = '/static/uploaded/'
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '6p-br^04irwt=+&4dnarwhal_!p4&t=u+h1+#$xrvr0n6=+o^d'
+SECRET_KEY = '6p-br^04irwt=+&4dag12(-7_!p4&t=u+h1+#$xrvr0n6=+o^d'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -140,14 +140,14 @@ except ImportError:
     pass
 
 assert XAPIAN_PERSONAL_PREFIX, """
-    You need to create a XAPIAN_PERSONAL_PREFIX setting in your
+    You need to create a XAPIAN_PERSONAL_PREFIX setting in your 
     local_settings.py file - it should be your username. This will be used for
-    search index files created on our shared search web service server, but
+    search index files created on our shared search web service server, but 
     because these indexes will reference your local Django database IDs it's
     important that you don't end up talking to someone else's search index.
 """
 
-# Everyone needs their own species index, since once we create a local
+# Everyone needs their own species index, since once we create a local 
 # record of a species in the animal_species table we write the ID from that
 # record back to the search index.
 XAPIAN_SPECIES_DB = '%s_species' % XAPIAN_PERSONAL_PREFIX
