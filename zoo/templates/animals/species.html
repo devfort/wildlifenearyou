@@ -31,7 +31,6 @@
     <li><a href="{{ place.urls.absolute }}">{{ place }}</a></li>
     {% endfor %}
 </ul>
-
 {% endif %}
 
 <!-- TODO add in profile icons here of people who have favourited it -->
@@ -45,10 +44,10 @@
 {% block secondary_content %}
 
 
-{% if species.photo_set.all.count %}
+{% if species.visible_photos %}
 <h2>Photos</h2>
 <ul>
-  {% for photo in species.photo_set.all|slice:":30" %}
+  {% for photo in species.visible_photos|slice:":30" %}
   <li><a href="{{ photo.urls.absolute }}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
   {% endfor %}
 </ul>
