@@ -6,6 +6,8 @@ def search(request):
     q = request.GET.get('q', '')
     results = None
     species_results = None
+    results_info = None
+    species_results_info = None
     if q:
         results, results_info = search_places(q, details=True)
         species_results, species_results_info = search_known_species(
