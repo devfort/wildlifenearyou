@@ -24,6 +24,7 @@ div#see-more-animals form {
 }
 .species_list li {
 	display: inline;
+	vertical-align: middle;
 }
 .species_list li a {
 	text-decoration: none;
@@ -309,9 +310,14 @@ div#ajax-feedback-form {
 	margin-bottom: 1.37em;
 	padding: 1em;
 }
+.gallery img {
+	max-width: 100%;
+}
 .hasJS .gallery {
 	position: relative;
-	margin-bottom: 0;
+}
+.gallery .slideshow {
+	margin: 5px auto 0 auto;
 }
 .hasJS .gallery .slideshow {
 	height: 75px;
@@ -319,7 +325,6 @@ div#ajax-feedback-form {
  	padding: 0 25px;
 	overflow: hidden;
 	position: relative;
-	margin: 5px auto 0 auto;
 }
 .hasJS .gallery .minimal {
 	padding-left: 0;
@@ -328,6 +333,8 @@ div#ajax-feedback-form {
 	left: 0;
 	width: 9999px;
 	position: relative;
+}
+.gallery .slideshow #thumbnails {
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
