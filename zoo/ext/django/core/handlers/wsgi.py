@@ -224,8 +224,18 @@ class WSGIHandler(base.BaseHandler):
         if self._request_middleware is None:
             self.initLock.acquire()
             # Check that middleware is still uninitialised.
-            if self._request_middleware is None:
-                self.load_middleware()
+            try:
+                if self._request_middleware is None:
+                    self.load_middleware()
+            except:
+                try:
+                    print 'middleware load failure: EXITING IMMEDIATELY'
+                    import traceback
+                    traceback.print_exc()
+                except:
+                    pass
+                import os
+                os._exit(-1)
             self.initLock.release()
 
         set_script_prefix(base.get_script_name(environ))
