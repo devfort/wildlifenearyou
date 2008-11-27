@@ -8,9 +8,11 @@ def submit(request):
         form = form_class(request.POST)
         if form.is_valid():
             feedback = form.save(commit = False)
-            feedback.from_page = request.REQUEST.get('from-page', '')
-            feedback.ip_address = request.META.get('REMOTE_ADDR', '')
-            feedback.user_agent = request.META.get('USER_AGENT', '')[:255]
+            feedback.from_page = request.REQUEST.get('from-page', '')[:255]
+            feedback.ip_address = request.META.get('REMOTE_ADDR', '')[:40]
+            feedback.user_agent = request.META.get(
+                'HTTP_USER_AGENT', ''
+            )[:255]
             if not request.user.is_anonymous():
                 feedback.user = request.user
             feedback.save()
