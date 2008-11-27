@@ -201,10 +201,10 @@ def search(request, db_name):
      - `end_rank` is the rank at the end of the range of matching documents to
        return.  This is exclusive, so the result with this rank will not be
        returned.  Defaults to 10.
-     - `relevant_data` is a boolean: if True, only relevant data items will be
-       returned.  Defaults to False.
-     - `summarise` is a length: if specified and non 0, returned data will be
-       summarised to the length supplied.
+     - `relevant_data` is an int: if non 0, return some data items (up to
+       number given in parameter) which are relevant.  Defaults to 0.
+     - `summarise` is an int: if specified and non 0, returned data (in `data`)
+       will be summarised to the length supplied.
      - `hl` is a pair of tags used for marking relevant items in the summarised
        data. 
 
@@ -216,7 +216,8 @@ def search(request, db_name):
         - `rank`: rank of result - 0 is best
         - `id`: id of result
         - `data`: data of result, which is a dict, keyed by name, contents is a
-          list of values.  If "relevant_data"
+          list of all values stored in the document.
+        - `relevant_data`
      - `matches_lower_bound`: lower bound on number of matches.
      - `matches_estimated`: estimated number of matches.
      - `matches_upper_bound`: upper bound on number of matches.
@@ -229,8 +230,8 @@ def search(request, db_name):
                              'q': (0, 1, '^.*$', []),
                              'start_rank': (1, 1, '^\d+$', ['0']),
                              'end_rank': (1, 1, '^\d+$', ['10']),
-                             'spellcorrect': (1, 1, '^never|auto|always$', ['auto']),
-                             'relevant_data': (1, 1, '^[01]$', ['0']),
+                             'spell_correct': (1, 1, '^never|auto|always$', ['auto']),
+                             'relevant_data': (1, 1, '^\d+$', ['0']),
                              'summarise': (0, 1, '^\d+$', ['0']),
                              'hl': (0, 1, None, ['["<span class=\\"relevant\\">","</span>"]']),
                              })
@@ -250,7 +251,7 @@ def search(request, db_name):
         validate_dict_entries(query_defn, ('opts', 'query'),
                               'Invalid item in query definition: %s')
 
-        if params['spellcorrect'][0] == 'always':
+        if params['spell_correct'][0] == 'always':
             q, ignore = parse_query_spec(db, query_defn.get('query'), spell=True)
         else:
             q, ignore = parse_query_spec(db, query_defn.get('query'))
@@ -266,7 +267,7 @@ def search(request, db_name):
                    int(params['end_rank'][0]))
 
     if len(res) == 0:
-        if len(params['q']) != 0 and params['spellcorrect'][0] == 'auto':
+        if len(params['q']) != 0 and params['spell_correct'][0] == 'auto':
             # Try spell correcting
             query_defn = simplejson.loads(params['q'][0])
             q, corrected_q = parse_query_spec(db, query_defn.get('query'),
@@ -275,17 +276,31 @@ def search(request, db_name):
             res = q.search(int(params['start_rank'][0]),
                            int(params['end_rank'][0]))
             if len(res) != 0:
-                retval['spellcorrected'] = True
+                retval['spell_corrected'] = True
                 retval['spellcorr_q'] = corrected_q
 
     items = []
     for item in res:
-        items.append({
+        itemres = {
             'rank': (item.rank),
             'id': (item.id),
             'data': (item.data),
-            'relevant_data': (item.relevant_data(5)),
-        })
+        }
+        relevant_data = int(params['relevant_data'][0])
+        if relevant_data > 0:
+            reldata = item.relevant_data(relevant_data)
+            itemres['relevant_data'] = reldata
+
+        summarise = int(params['summarise'][0])
+        hl = simplejson.loads(params['hl'][0])
+
+        if summarise > 0:
+            summary = {}
+            for field in item.data.iterkeys():
+                summary[field] = [item.summarise(field, summarise, hl)]
+            itemres['data'] = summary
+
+        items.append(itemres)
 
     retval.update({
         'items': items,
