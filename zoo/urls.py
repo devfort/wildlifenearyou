@@ -78,9 +78,6 @@ urlpatterns = patterns('',
     url(r'^register/validated/$', 'accounts.views.validate_email_success',
         name='validate-email-success'),
 
-    url(r'^welcome/$', accounts.welcome,
-        name='accounts-welcome'),
-
     url(r'^profile/(?P<username>\w+)/$', accounts.profile,
         name='accounts-profile'),
     url(r'^profile/(?P<username>\w+)/edit/$', accounts.profile_edit,
