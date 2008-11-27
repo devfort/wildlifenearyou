@@ -19,7 +19,11 @@
 {% if results %}
     <ol>
     {% for result in results %}
-        <li>{{ result }}</li>
+        <li>
+            <h4><a href="{{ result.get_absolute_url }}">{{ result }}</a></h4>
+            <p>{{ result.description }}</p>
+            
+        </li>
     {% endfor %}
     </ol>
 {% endif %}
