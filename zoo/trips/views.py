@@ -212,7 +212,7 @@ def add_sightings(request, country_code, slug):
         hiddens.append(
             {'name': 'saw_%s' % i, 'value': saw_id}
         )
-    
+        
     return render(request, 'trips/which-did-you-mean.html', {
         'form': form,
         'hiddens': hiddens,
@@ -249,17 +249,22 @@ def finish_add_sightings(request, country_code, slug, ids):
                     )
             return Redirect(place.get_absolute_url())
         
-        form = FinishAddSightingsForm(request.POST)
+        form = FinishAddSightingsForm(request.POST, user=request.user)
         if form.is_valid():
-            trip = Trip(
-                name = form.cleaned_data['name'],
-                start = form.cleaned_data['start'],
-                start_accuracy = 'day', # TODO: figure this out properly
-                description = form.cleaned_data['description'],
-                rating = form.cleaned_data['review-rating'],
-            )
-            trip.save()
-            # created_by should happen automatically
+            if request.POST.get('add-to-existing'):
+                # if the user chose this option they want to add this sighting to an existing trip of theirs
+                trip = Trip.objects.get(id=form.cleaned_data['user_trips'])
+            else:           
+                # create a new trip
+                trip = Trip(
+                    name = form.cleaned_data['name'],
+                    start = form.cleaned_data['start'],
+                    start_accuracy = 'day', # TODO: figure this out properly
+                    description = form.cleaned_data['description'],
+                    rating = form.cleaned_data['review-rating'],
+                )
+                trip.save()
+                # created_by should happen automatically
             
             # Now we finally add the sightings!
             for id in saw_id_set:
@@ -287,9 +292,9 @@ def finish_add_sightings(request, country_code, slug, ids):
             else:
                 whos_trip += "'s"
         whos_trip += ' trip'
-        form = FinishAddSightingsForm(initial = {'name': whos_trip})
-    
-    return render(request, 'trips/why-not-add-to-you-tripbook.html', {
+        form = FinishAddSightingsForm(initial = {'name': whos_trip}, user=request.user)
+        
+    return render(request, 'trips/why-not-add-to-your-tripbook.html', {
         'hiddens': hiddens,
         'place': place,
         'form': form,
@@ -303,8 +308,12 @@ class FinishAddSightingsForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        trips = user.created_trip_set.all()
+        
         super(FinishAddSightingsForm, self).__init__(*args, **kwargs)
         self.fields['review-rating'] = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
+        self.fields['user_trips'] = forms.ChoiceField(required = False, choices=[ (trip.id, trip.name) for trip in trips ])
 
     def clean_start(self):
         start = self.cleaned_data['start']

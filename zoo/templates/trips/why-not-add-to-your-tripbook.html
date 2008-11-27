@@ -13,6 +13,14 @@
 <p>Why not write about your trip in your tripbook? You can upload your photos too.</p>
 
 <form action="{{ request.path }}" method="POST">
+<h2>An existing trip</h2>
+	{{ form.user_trips.errors }}
+	{{ form.user_trips.label_tag }}
+	{{ form.user_trips }}
+
+    <input type="submit" name="add-to-existing" value="Add to my trip">
+
+<h2>A New Trip</h2>
 <p>
     {{ form.name.errors }}
     {{ form.name.label_tag }}
