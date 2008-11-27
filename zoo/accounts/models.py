@@ -81,9 +81,34 @@ class Profile(models.Model):
 
     send_validation_email.alters_data = True
 
+    def send_password_key_email(self):
+        body = render_to_string('emails/password_key.txt',
+                                {'user': self.user,
+                                 'url': self.password_key_url_for_user()
+                                 })
+
+        import smtplib
+        try:
+            zoo.utils.send_mail(
+                'You can change your password', body,
+                settings.EMAIL_FROM, [self.user.email],
+                fail_silently=False
+            )
+        except smtplib.SMTPException:
+            # TODO: handle failed email sending
+            pass
+
+    send_password_key_email.alters_data = True
+
     def email_validation_url_for_user(self):
         (hash, days) = self._generate_user_hash(self.user.username)
         return reverse('validate-email',
+                       args=(self.user.username, days, hash,)
+                       )
+
+    def password_key_url_for_user(self):
+        (hash, days) = self._generate_user_hash(self.user.username)
+        return reverse('recover-password',
                        args=(self.user.username, days, hash,)
                        )
 

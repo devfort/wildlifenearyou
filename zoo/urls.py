@@ -52,6 +52,19 @@ urlpatterns = patterns('',
         'next_page': '/login/'
     }, name='accounts-logout'),
 
+    url(r'^forgotten_password/$', 'accounts.views.forgotten_password',
+        name='forgotten-password'),
+    url(r'^password_key_sent/$', 'accounts.views.password_key_sent',
+        name='password-key-sent'),
+    url(r'^recover_password/([a-z0-9]{1,})/([a-f0-9]+)/([a-f0-9]{32})/$', 'accounts.views.recover_password',
+        name='recover-password'),
+    url(r'^change_password/$', 'django.contrib.auth.views.password_change', {
+            'template_name': 'accounts/change_password.html'
+        }, name='change-password'),
+    url(r'^change_password_done/$', 'django.contrib.auth.views.password_change_done', {
+            'template_name': 'accounts/change_password_done.html'
+        }, name='change-password-done'),
+
     url(r'^register/$', accounts.register,
         name='accounts-register'),
     url(r'^register/complete/$', accounts.registration_complete,

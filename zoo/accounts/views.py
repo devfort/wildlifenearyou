@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect as Redirect
+from django import forms
 
 from zoo.accounts.models import Profile
 from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm, UserEditProfileBitsForm
@@ -82,6 +83,57 @@ def validate_email_success(request):
             raise Http404
 
     return render(request, 'accounts/email_validated.html', {})
+
+class ForgottenPassword(forms.Form):
+    username_or_email = forms.CharField(max_length=75)
+
+    def clean_username_or_email(self):
+        submitted = self.cleaned_data['username_or_email']
+        try:
+            if '@' in submitted:
+                what_submitted = "email address"
+                user = User.objects.get(email=submitted)
+            else:
+                what_submitted = "username"
+                user = User.objects.get(username=submitted)
+        except User.DoesNotExist:
+            raise forms.ValidationError("The %s you submitted wasn't found. Please check it and try again!" % what_submitted)
+        return user
+
+def forgotten_password(request):
+    if request.user.is_authenticated():
+        return Redirect('/')
+
+    if request.method == 'POST':
+        form = ForgottenPassword(data=request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['username_or_email']
+            user.get_profile().send_password_key_email()
+            return Redirect(reverse('password-key-sent'))
+    else:
+        form = ForgottenPassword()
+
+    return render(request, 'accounts/forgotten_password.html', {
+        'form': form,
+    })
+
+def recover_password(request, username, days, hash):
+    if request.user.is_authenticated():
+        return Redirect('/')
+
+    user = get_object_or_404(User, username=username)
+    if user.get_profile().hash_is_valid(days, hash):
+        user.backend='django.contrib.auth.backends.ModelBackend'
+        from django.contrib.auth import login
+        login(request, user)
+        return Redirect(reverse('change-password'))
+    else:
+        return Redirect('/')
+
+def password_key_sent(request):
+    if request.user.is_authenticated():
+        return Redirect('/')
+    return render(request, 'accounts/password_key_sent.html', {})
 
 @login_required
 def profile_default(request):
