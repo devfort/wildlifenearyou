@@ -55,8 +55,8 @@ jQuery(function($) {
 			{% if not user.is_authenticated %}
 			<div class="signup">
 				<h2>Sign up NOW</h2>
-				<p>Already a user? <a href="">&raquo; Log in now</a></p>
-				<form action="/register/" method="POST">
+				<p>Already a user? <a href="{% url accounts-login %}">&raquo; Log in now</a></p>
+				<form action="{% url accounts-register %}" method="POST">
 					{{ reg_form.as_p }}
 					<input type="submit" value="Register" />
 				</form>				
