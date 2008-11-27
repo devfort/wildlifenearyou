@@ -216,8 +216,9 @@ def search(request, db_name):
         - `rank`: rank of result - 0 is best
         - `id`: id of result
         - `data`: data of result, which is a dict, keyed by name, contents is a
-          list of all values stored in the document.
-        - `relevant_data`
+          list of all values stored in the document, (or just the relevant
+          ones, possibly summarised and highlighted, if `relevant_data` and/or
+          `summarise` were supplied).
      - `matches_lower_bound`: lower bound on number of matches.
      - `matches_estimated`: estimated number of matches.
      - `matches_upper_bound`: upper bound on number of matches.
@@ -233,7 +234,7 @@ def search(request, db_name):
                              'spell_correct': (1, 1, '^never|auto|always$', ['auto']),
                              'relevant_data': (1, 1, '^\d+$', ['0']),
                              'summarise': (0, 1, '^\d+$', ['0']),
-                             'hl': (0, 1, None, ['["<span class=\\"relevant\\">","</span>"]']),
+                             'hl': (0, 1, None, [None]),
                              })
 
     db = xappy.SearchConnection(get_db_path(db_name))
@@ -292,12 +293,21 @@ def search(request, db_name):
             itemres['relevant_data'] = reldata
 
         summarise = int(params['summarise'][0])
-        hl = simplejson.loads(params['hl'][0])
+        hl = params['hl'][0]
+        if hl == '' or hl is None:
+            hl = None
+        else:
+            hl = simplejson.loads(hl)
 
         if summarise > 0:
             summary = {}
             for field in item.data.iterkeys():
                 summary[field] = [item.summarise(field, summarise, hl)]
+            itemres['data'] = summary
+        elif hl is not None:
+            summary = {}
+            for field in item.data.iterkeys():
+                summary[field] = [item.highlight(field, hl)]
             itemres['data'] = summary
 
         items.append(itemres)
