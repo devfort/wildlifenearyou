@@ -109,40 +109,33 @@ class Place(AuditedModel):
         return self.photos.filter(is_visible = True)
 
     class Searchable:
-        fields = [{ # Searching for places by name.
-                    'field_name': 'place',
-                    'django_fields': ['legal_name', 'known_as'],
-                    'config': {
-                        'store': True
-                    }
-                  },
-                  { # Searching for the place address.
-                    'field_name': 'address',
-                    'django_fields': [lambda inst: [inst.address()]],
-                    'config': {
-                        'store': True
-                    }
-                  },
-                  { # Searching for the animals in a place.
-                    # This expression should return all the common names of the
-                    # species sighted in the place.  Repeated sightings of a
-                    # particular species will result in duplicated entries,
-                    # which will correspond to a higher weight.
-                    'field_name': 'species',
-                    'django_fields': [_species_for_place], # see above
-                    'config': {
-                        'freetext': {'language': 'en'}, # stemming
-                        'store': True
-                    }
-                  },
-                  { # Location of the place.
-                    'field_name': 'latlong',
-                    'django_fields': [lambda inst: [inst.latlon()]],
-                    'config': {
-                        'store': True
-                    }
-                  },
-                 ]
+        fields = [
+            { # Searching for places by name.
+                'field_name': 'place',
+                'django_fields': ['legal_name', 'known_as'],
+                'config': {'store': True},
+            }, { # Searching for the place address.
+                'field_name': 'address',
+                'django_fields': [lambda inst: [inst.address()]],
+                'config': {'store': True},
+            }, { # Searching for the animals in a place.
+                # This expression should return all the common names of the
+                # species sighted in the place.  Repeated sightings of a
+                # particular species will result in duplicated entries,
+                # which will correspond to a higher weight.
+                'field_name': 'species',
+                'django_fields': [_species_for_place], # see above
+                'config': {
+                    'freetext': {'language': 'en'},
+                    'store': True,
+                } # enable stemming
+            }, { # Location of the place.
+                'field_name': 'latlon',
+                'django_fields': [lambda inst: [inst.latlon()]],
+                'config': {'type': 'geo', 'geo': {}, 'store': True}
+            }
+        ]
+        xapian_index = 'placeinfo'
 
     def most_recent_trips(self):
         from zoo.trips.models import Trip
