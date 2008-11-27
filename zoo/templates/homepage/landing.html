@@ -15,7 +15,7 @@
 
 <script type="text/javascript">
 jQuery(function($) {
-    $("#id_location").autocomplete('{% url geonames-autocomplete %}', {
+    $("#id_location").autocomplete('{% url location-complete %}', {
         parse: function(data) {
             return $.map(eval('(' + data + ')')['results'], function(row) {
                 return {

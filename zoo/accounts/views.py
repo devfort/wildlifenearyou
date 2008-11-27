@@ -8,7 +8,6 @@ from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect as Redirect
 from django import forms
 
 from zoo.accounts.models import Profile
@@ -168,23 +167,48 @@ def all_profiles(request):
         'all_users': User.objects.all(),
     })
 
+from zoo.utils import location_from_request
 def set_location(request):
     """
     Logged in users use this view to set the location on their profile - 
     anonymous users get a cookie instead
     """
     from zoo.search import search_locations
+    (current_location, (lat, lon)) = location_from_request(request)
+    
+    print current_location, lat, lon
+    
     location = request.POST.get('location', '')
     msg = ''
+    
     if location:
-        # Set their location to the first result
         results = list(search_locations(location))
         if len(results):
             result = results[0]
-            description = results['description']
-            msg = 'Your location has been set to "%s"' % description
+            description = result['description']
+            msg = 'Your location is set to <strong>%s</strong>' % description
+            current_location = description
+            # Set their location
+            if not request.user.is_anonymous():
+                profile = request.user.get_profile()
+                profile.location = description
+                profile.latitude = result['latlon'][0]
+                profile.longitude = result['latlon'][1]
+                profile.save()
+            else:
+                # Set it in a cookie instead
+                response = Redirect('/set-location/?done')
+                response.set_cookie(
+                    key = 'location', 
+                    value = '%s:%f,%f' % tuple(
+                        [description] + result['latlon']
+                    ),
+                    path = '/',
+                )
+                return response
         else:
-            msg = 'No matches for "%s"' % location
+            msg = 'No matches for your search'
     return render(request, 'accounts/set_location.html', {
         'msg': msg,
+        'current_location': current_location,
     })

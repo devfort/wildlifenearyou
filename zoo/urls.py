@@ -120,7 +120,7 @@ urlpatterns = patterns('',
 
     (r'^set-location/$', 'zoo.accounts.views.set_location'),
     url(r'location-complete/$', 'zoo.search.views.location_complete',
-        name="location-autocomplete"),
+        name="location-complete"),
 
     (r'^comments/', include('django.contrib.comments.urls')),
     url(r'^feedback/$', 'zoo.feedback.views.submit', name='feedback'),

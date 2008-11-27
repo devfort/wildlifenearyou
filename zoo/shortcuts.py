@@ -8,8 +8,6 @@ Redirect = HttpResponseRedirect
 
 def render(request, template_name, context=None, base=None):
     context = context or {}
-    # Do they have a current location cookie?
-    context['current_location'] = request.COOKIES.get('current_location', '')
     context['base'] = base or 'base.html'
     context['path'] = request.path
     return render_to_response(

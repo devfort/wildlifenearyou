@@ -1,0 +1,19 @@
+{% extends base %}
+
+{% block title %}Set your location{% endblock %}
+
+{% block content %}
+
+<h1>Set your location</h1>
+
+{% if msg %}<p class="notification">{{ msg|safe }}</p>{% endif %}
+
+{% if current_location %}<p>Your current location is {{ current_location }}</p>{% endif %}
+
+<form action="/set-location/" method="POST">
+<p><input type="text" size="30" name="location"> <input type="submit" value="Set location"></p>
+</form>
+
+<p>Your location is kept private. We only use it to show animals and places near you.</p>
+
+{% endblock %}

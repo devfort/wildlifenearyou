@@ -216,10 +216,10 @@ a.add:active,
 /* @end */
 
 .notification {
+	margin-top: 1.357em;
 	background-color: #CBE3B7;
 	padding: 1em;
 	color: black;
-	
 }
 
 .error {
