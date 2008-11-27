@@ -94,8 +94,8 @@ jQuery(function($) {
 <p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">&raquo; All species</a></p>
 {% endif %}
 
-<div id="see-more-animals">
-    <h3 class="add"><a name="addsightings">Did you see more animals?</h3>
+<div id="see-more-animals"><a name="addsightings">
+    <h3 class="add">Did you see more animals?</h3>
     <p>What did you see?</p>
     <form action="{{ request.path }}add-sightings/" method="POST">
         <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></div>
@@ -217,7 +217,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 {% endfor %}
 </p>
 {% else %}
-<p>No-one has yet rated a trip to this place. <a href="#addsightings">Add your sightings</a></p>
+<p>No-one has yet rated a trip to this place. <a href="#addsightings" class="add">Add your sightings</a></p>
 {% endif %}
 
 <p><a href="" class="button">&raquo; Support your zoo!</a></p>
