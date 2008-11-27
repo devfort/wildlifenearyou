@@ -31,18 +31,36 @@ class Photo(models.Model):
         User, related_name = 'photos_moderated', null=True, blank=True,
     )
     moderated_at = models.DateTimeField(null=True, blank=True)
-
+    
+    # WARNING: Denormalisation ahoy! We have a bit of a tough one here: 
+    # photos are encouraged to have 0 or more sightings, and a sighting 
+    # relates a photo to both a place, a trip AND a species.
+    # 
+    # BUT... many of these relationships are optional - a sighting doesn't 
+    # have to be associated with a trip (though it does have to be with a 
+    # species). Even worse, a photo might be taken that associates with just 
+    # a trip or just a place (e.g. "Me next to the Zoo entrance").
+    #
+    # So it's unavoidable that there will be multiple paths to a photo from a 
+    # place and a trip. We're just going to have to suck it up.
+    # 
+    # One thing we will NOT do is allow photos to be directly related to 
+    # species. If you want to upload a photo of a Zebra, it has to go against 
+    # a sighting... which means it has to be associated with a place as well.
+    # This   discourage people from uploading random stock photos (a bit)
+    
     # Photos can optionally relate to a trip and/or a place
     trip = models.ForeignKey(Trip, null=True, blank=True,
         related_name='photos'
     )
     place = models.ForeignKey(Place, null = True, blank = True,
-        related_name='photos'
+        related_name='photos', help_text = """
+        Normally a photo would be associated with a place THROUGH a sighting
+        - but if you take a picture of yourself next to the cotswald wildlife
+        center sign that's a PLACE thing, not a SIGHTING thing.
+        """
     )
-
-    # There may be several species in a single photo
-    contained_species = models.ManyToManyField(Species, blank=True)
-
+    
     def __unicode__(self):
         return self.title or unicode(self.photo)
     
