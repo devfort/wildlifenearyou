@@ -113,15 +113,15 @@ class ChangeAttributeRequest(ChangeRequest):
         super(ChangeAttributeRequest, self).save(*args, **kwargs)
 
     def conflicts(self):
-        obj = self.content_object
-        cur_value = getattr(obj, self.attribute)
-
-        if self.old_value != cur_value:
+        if self.old_value != self.get_current_value():
             # The current value of the field does not match the old value, thus
             # there is a conflict.
             return True
 
         return False
+
+    def get_current_value(self):
+        return getattr(self.content_object, self.attribute)
 
     def apply(self, user=None):
         obj = self.content_object
