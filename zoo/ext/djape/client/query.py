@@ -65,7 +65,7 @@ class FreeTextQuery(QueryPart):
     """A query which searches for some free text.
 
     """
-    def __init__(self, text=None):
+    def __init__(self, text=None, **opts):
         """Create a query object.
 
         `text` is a free text, non field-specific, query string.
@@ -73,9 +73,10 @@ class FreeTextQuery(QueryPart):
 
         """
         self.text = text
+        self.opts = opts
 
     def to_params(self):
-        return ['freetext', self.text]
+        return ['freetext', (self.text, self.opts)]
 
 class GeoDistanceQuery(QueryPart):
     def __init__(self, centre=None):

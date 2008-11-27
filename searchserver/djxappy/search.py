@@ -175,10 +175,15 @@ def parse_query_spec(db, subq, spell=False):
     # Handle the different types of subq.  Convert this to a dict lookup if we
     # end up with lots.
     if subq[0] == 'freetext':
+        query_text = subq[1]
+        opts = {}
+        if not isinstance(query_text, basestring):
+            query_text, opts = query_text
+
         if spell:
-            spell_corrected = db.spell_correct(subq[1])
-            return db.query_parse(spell_corrected), spell_corrected
-        return db.query_parse(subq[1]), None
+            spell_corrected = db.spell_correct(query_text)
+            return db.query_parse(spell_corrected, **opts), spell_corrected
+        return db.query_parse(query_text, **opts), None
 
     raise ValidationError("Invalid query specification - unknown query type '%s'" % subq[0])
 
