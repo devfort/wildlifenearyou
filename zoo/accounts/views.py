@@ -170,17 +170,15 @@ def all_profiles(request):
 from zoo.utils import location_from_request
 def set_location(request):
     """
-    Logged in users use this view to set the location on their profile - 
+    Logged in users use this view to set the location on their profile -
     anonymous users get a cookie instead
     """
     from zoo.search import search_locations
     (current_location, (lat, lon)) = location_from_request(request)
-    
-    print current_location, lat, lon
-    
+
     location = request.POST.get('location', '')
     msg = ''
-    
+
     if location:
         results = list(search_locations(location))
         if len(results):
@@ -199,7 +197,7 @@ def set_location(request):
                 # Set it in a cookie instead
                 response = Redirect('/set-location/?done')
                 response.set_cookie(
-                    key = 'location', 
+                    key = 'location',
                     value = '%s:%f,%f' % tuple(
                         [description] + result['latlon']
                     ),
