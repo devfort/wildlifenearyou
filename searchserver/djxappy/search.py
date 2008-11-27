@@ -446,13 +446,17 @@ def parse_latlong(request):
 
     Takes a single querystring parameter.
 
-    Returns {'ok': 1, 'latitude': latitude, 'longitude': longitude}
+    Returns {'ok': 1, 'latitude': latitude, 'longitude': longitude} if it could
+    parse, or {'ok': 0} if it couldn't.
 
     """
     params = validate_params(request.GET, {
                              'latlong_string': (1, 1, '^.*$', None),
                              })
-    coord = xapian.LatLongCoord.parse_latlong(params['latlong_string'][0])
+    try:
+        coord = xapian.LatLongCoord.parse_latlong(params['latlong_string'][0])
+    except xapian.LatLongParserError, e:
+        return {'ok': 0}
     return {'ok': 1, 'latitude': coord.latitude, 'longitude': coord.longitude}
 
 valid_field_config_keys = set((
