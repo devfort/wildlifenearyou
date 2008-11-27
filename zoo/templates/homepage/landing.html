@@ -31,6 +31,84 @@ jQuery(function($) {
 
 {% block vanilla %}
 
-{% include "homepage/dev.html" %}
+{% if user.is_superuser %}{% include "homepage/dev.html" %}{% endif %}
+
+<div class="contents">
+	<div class="wrapper">
+	{% if user.is_authenticated %}
+	    <h1>Well hey {{ user.username|title }}</h1>
+		<p> welcome back. View your <a href="{% url accounts-default %}">profile</a> or <a href="{% url accounts-logout %}">logout</a>?</p>
+	{% else %}
+		<h1>Hello there,</h1>
+	    <p>We're very happy that you've decided to drop by.</p>
+		<p>This is a community site about zoos &amp; the vast amount of amazing creatures that inhabit our beloved Planet.</p>
+
+		<p>We're relying on you, yes YOU to make this site truly awesome (we're not just saying that!)! Share your experiences and create your animal passport, to personalize your visit.</p>
+		<p>How exciting is that! Come on in, be a part of it and <a href="{% url accounts-register %}">sign up now!</a></p>
+		 <!-- ><a href="{% url accounts-logout %}">login</a>, otherwise you can <a href="{% url accounts-register %}">register</a>.</p> -->
+	{% endif %}
+	</div>
+</div>
+<div class="interaction">
+	<div class="contents">
+		<div class="wrapper">
+		    <form action="/search/" method="GET">
+		        <div class="container">
+					<label for="q">Look for</label>
+					<div>
+						<input type="text" id="q" name="q" size="50">
+			            <input type="submit" value="&raquo; Search">
+						<p>Try "Lions near London", "Tigers" or why not try and find your favourite animal</p>
+					</div>
+					
+		        </div>
+		    </form>
+		</div>
+	</div>
+</div>
+<div class="map">
+	<div class="contents">
+		<div class="wrapper">
+			<img src="/static/img/site-images/map_placeholder.gif" alt="world map">
+			<h2>Currently</h2>
+			<p>We're listing TODO zoos and places of animal interest.</p>
+		</div>
+	</div>
+</div>
+<div class="features">
+	<div class="contents">
+		<div class="wrapper">
+			<div class="shrinkwrap">
+				<div class="column first">
+					<h2>Featured Zoo</h2>
+					<img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO zoo name">
+					<p><a href="">Zoo address details</a></p>
+					<blockquote cite=""><p>Tra lalalala description otters owls monkeys woooo!</p></blockquote>
+					<h3>Animals Spotted</h3>
+					<p><a href="">Bears</a>, <a href="">Tiger</a>, <a href="">Owls</a>, <a href="">Lemurs</a>, <a href="">Gorillas</a>, <a href="">Monkeys</a>, <a href="">Narwhals</a></p>
+					<p><a href="">&raquo; Show me more animals</a></p>
+				</div>
+				<div class="column">
+					<h2>Featured Animal</h2>
+					<img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO animal name">
+					<p><a href="">Tiger</a></p>
+					<blockquote cite=""><p>Tigers are so cute and fluffy but have big sharp teeth and don't like their fur being rubbed up the wrong way, you'll lose a limb. Mmmm tasty.</p></blockquote>
+					<h3>Your nearest Tiger</h3>
+					<p><a href="">Nearest Tiger address</a></p>
+				</div>
+				<div class="column">
+					<h2>Featured Animal spotter</h2>
+						<img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO username">
+						<p><a href="">Nat</a></p>
+						<blockquote cite=""><p>Bio info: Loves Narwhals and has been spotted trying to use the keyboard when Mazz isn't looking!!! Bad Nat :D </p></blockquote>
+						<h3>Animals they have seen</h3>
+						<p><a href="">Bears</a>, <a href="">Tiger</a>, <a href="">Owls</a>, <a href="">Lemurs</a>, <a href="">Gorillas</a>, <a href="">Monkeys</a>, <a href="">Narwhals</a></p>
+						<h3>Recent Trip Book Entries</h3>
+						<blockquote class="quote" cite=""><p>I went to Narwhal city and it was fricking awesome, Narwhals and Narwhal flavoured Ice Cream, Fuck Yeah!</p></blockquote>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}
