@@ -37,13 +37,13 @@
         {% for f in form.facility.subuforms %}
             {% if f.deleted %}
                 <div>
-                    {{ f.undelete_form.undelete }}
                     {{ f.render_deleted }}
+                    {{ f.undelete_form.undelete }}
                 </div>
             {% else %}
                 <div class="nested-edit">
-                {{ f.delete_form.as_p }}
                 {{ f.main.as_p }}
+                {{ f.delete_form.as_p }}
                 </div>
             {% endif %}
         {% endfor %}
@@ -59,8 +59,8 @@
 
         {% for o in form.opening.subuforms %}
         <div class="nested-edit">
-            {{ o.delete_form.as_p }}
             {{ o.main.as_p }}
+            {{ o.delete_form.as_p }}
         </div>
         {% endfor %}
 
