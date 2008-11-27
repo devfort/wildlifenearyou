@@ -427,7 +427,9 @@ def newdb(request):
                 os.makedirs(os.path.dirname(db_path))
             db = xappy.IndexerConnection(db_path)
             try:
-                oldconfig = simplejson.loads(db.get_metadata('_xappyclient_config'))
+                oldconfig = db.get_metadata('_xappyclient_config')
+                if oldconfig != '':
+                    oldconfig = simplejson.loads(oldconfig)
                 config = simplejson.loads(params['fields'][0])
                 if oldconfig != config:
                     raise DatabaseExistsError("The path for '%s' is already in use, and the configuration does not match" % db_path)
