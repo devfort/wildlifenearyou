@@ -24,9 +24,6 @@ class Query(object):
             part = FreeTextQuery(part)
         self.part = part
 
-        if part is not None:
-            self.part = FreeTextQuery(part)
-
     def sort_by(self, field_name, ascending=True):
         """Set the field to sort by.
 
@@ -67,6 +64,16 @@ class QueryPart(object):
     def to_params(self):
         raise NotImplementedError('Implement this method in subclass.')
 
+class AllQuery(QueryPart):
+    """A query which returns all the documents.
+
+    May usefully be combined, or sorted.
+
+    """
+
+    def to_params(self):
+        return ['all', None]
+
 class FreeTextQuery(QueryPart):
     """A query which searches for some free text.
 
@@ -80,6 +87,7 @@ class FreeTextQuery(QueryPart):
         """
         self.text = text
         self.opts = opts
+        QueryPart.__init__(self)
 
     def to_params(self):
         print self.text
@@ -93,6 +101,7 @@ class GeoDistanceQuery(QueryPart):
 
         """
         self.centre = centre
+        QueryPart.__init__(self)
 
     def to_params(self):
         return ['geodistance', self.centre]
