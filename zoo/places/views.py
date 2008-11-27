@@ -149,15 +149,16 @@ def place_edit(request, country_code, slug):
         if uf.is_valid():
             print "VALID"
             if 'save all' in request.POST.get('submit', '').lower():
-                adds, changes, deletions = uf.modifications()
+                changes, deletions = uf.modifications()
 
-                crg = None
-                def get_or_create_group(crg=crg):
-                    if crg is None:
-                        crg = ChangeRequestGroup.objects.create()
-                    return crg
+                crg = [None]
+                def get_or_create_group():
+                    # bad scoping! no binding.
+                    if crg[0] is None:
+                        crg[0] = ChangeRequestGroup.objects.create()
+                    return crg[0]
                         
-                if changes and 0:
+                if changes:
                     for (obj, attrname), (oldval, newval) in changes.iteritems():
                         ChangeAttributeRequest.objects.create(
                             group=get_or_create_group(),
@@ -166,17 +167,16 @@ def place_edit(request, country_code, slug):
                             old_value=oldval,
                             new_value=newval,
                         )
-                if adds:
-                    def create_add_request(uf, data, parent_ret):
-                        if uf.parent_uform:
-                            #    'place'        Place object
-                            print "data[%r] = %r" % (uf.relation, uf.parent_uform.instance.id)
-                            data[uf.relation] = uf.parent_uform.instance.id
+
+                def create_add_request(uf, data, parent_ret):
+                    if uf.parent_uform:
+                        #    'place'        Place object
+                        data[uf.relation] = uf.parent_uform.instance.id
 
                         ct = ContentType.objects.get_for_model(uf.model)
-
+                        group = get_or_create_group()
                         cor = CreateObjectRequest.objects.create(
-                            group=get_or_create_group(),
+                            group=group,
                             attributes=data,
                             parent=parent_ret,
                             reverse_relation=uf.relation or '',
@@ -185,7 +185,9 @@ def place_edit(request, country_code, slug):
 
                         return cor
                     
-                    uf.mapadds(create_add_request)
+                uf.mapadds(create_add_request)
+
+                return HttpResponseRedirect(place.urls.changes_suggested)
 
         else:
             print "INVALID"
@@ -196,3 +198,11 @@ def place_edit(request, country_code, slug):
         'place': place,
         'form': uf,
     })
+
+def place_edit_done(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+
+    return render(request, 'places/place_edit_done.html', {
+        'place': place,
+        })

@@ -208,10 +208,16 @@ class UberForm(object):
         
 
     def modifications(self):
-        adds = SortedDict()
         changes = SortedDict()
         deletions = SortedDict()
 
+        def normalize(value):
+            if isinstance(value, models.Model):
+                return value.pk
+            if value == None:
+                return ''
+            return value
+                
         def get_changes(uf):
             if uf.instance:
                 # existing
@@ -219,7 +225,10 @@ class UberForm(object):
                 for f in uf.immediate_forms():
                     for name, val in f.cleaned_data.iteritems():
                         oldval = instance_dict[name]
-                        
+
+                        val = normalize(val)
+                        oldval = normalize(oldval)
+                        print val, oldval, val==oldval
                         if val != oldval:
                             changes[(uf.instance, name)] = \
                                 (oldval, val)
@@ -229,12 +238,10 @@ class UberForm(object):
                     print uf.parent_uform
                     newdata = dict(f.cleaned_data.iteritems())
                     newdata[uf.relation] = uf.parent_uform.instance
-                    
-                    adds[(uf.parent_uform.instance, uf.parent_uform.form_id)] = newdata
 
         self.forall_uf(get_changes)
 
-        return adds, changes, deletions
+        return changes, deletions
 
 
     def __getitem__(self, name):

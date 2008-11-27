@@ -122,6 +122,8 @@ class Place(AuditedModel):
             urlname = 'place-summary'
         elif name == 'suggest_changes':
             urlname = 'place-edit'
+        elif name == 'changes_suggested':
+            urlname = 'place-edit-done'
         else:
             raise AttributeError, 'No such url "%s"' % name
         return (urlname, (), {

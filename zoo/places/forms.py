@@ -20,7 +20,7 @@ class PlaceOpeningEditForm(forms.ModelForm):
 class PlaceOpeningEditForm(forms.ModelForm):
     class Meta:
         model = PlaceOpening
-        fields = ['start_date', 'end_date', 'days_of_week']
+        fields = ['start_date', 'end_date', 'days_of_week', 'times', 'closed', 'section']
 
 class PlaceFacilityEditForm(forms.ModelForm):
     class Meta:
@@ -35,12 +35,12 @@ class PlaceFacilityEditForm(forms.ModelForm):
 class PlaceOpeningUberForm(UberForm):
     model = PlaceOpening
     parts = [('main', PlaceOpeningEditForm)]
-    relation = 'place_id'
+    relation = 'place'
 
 class PlaceFacilityUberForm(UberForm):
     model = PlaceFacility
     parts = [('main', PlaceFacilityEditForm)]
-    relation = 'place_id'
+    relation = 'place'
 
 class PlaceUberForm(UberForm):
     model = Place

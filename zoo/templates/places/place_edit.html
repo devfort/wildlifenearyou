@@ -4,8 +4,9 @@
 
 {% block content %}
 <h1>{{ place.known_as }} - Suggest Changes</h1>
+<a href="{{ place.urls.absolute }}">Cancel and go back to viewing {{ place.known_as }}</a>
 
-<p>XXX Some copy about ringing or visiting a zoo (or its website) to
+<p>TODO Some copy about ringing or visiting a zoo (or its website) to
 check/discover the information.</p>
 
 <form action="{{ path }}" method="post">
@@ -21,10 +22,17 @@ check/discover the information.</p>
 
 Facilities:
 {% for f in form.facility.subuforms %}
+{% if f.deleted %}
+<div>
+{{ f.undelete_form.undelete }}
+{{ f.render_deleted }}
+</div>
+{% else %}
 <div class="nested-edit">
 {{ f.delete_form.as_p }}
 {{ f.main.as_p }}
 </div>
+{% endif %}
 {% endfor %}
 <p>
 Add more facilities: {{ form.facility.addform }}

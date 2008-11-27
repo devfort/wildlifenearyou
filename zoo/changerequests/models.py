@@ -117,6 +117,20 @@ def pkify(obj):
     else:
         return obj
 
+def norm_attr_name_to_id(model, name):
+    # normalizes 'place' to 'place_id' for example
+
+    try:
+        field = model._meta.get_field(name)
+    except models.FieldDoesNotExist:
+        # seems redundant, but forces a check for the field's
+        # existence.
+        if name.endswith('_id'):
+            name = name[:-3]
+        field = model._meta.get_field(name)
+
+    return field.attname
+
 class ChangeAttributeRequest(ChangeRequest):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
@@ -130,6 +144,9 @@ class ChangeAttributeRequest(ChangeRequest):
     def save(self, *args, **kwargs):
         self.old_value = pkify(self.old_value)
         self.new_value = pkify(self.new_value)
+
+        model = self.content_type.model_class()
+        self.attribute = norm_attr_name_to_id(model, self.attribute)
 
         super(ChangeAttributeRequest, self).save(*args, **kwargs)
 
@@ -217,8 +234,11 @@ class CreateObjectRequest(ChangeRequest):
         return instance
 
     def save(self, *args, **kwargs):
-        for key in self.attributes.keys():
-            self.attributes[key] = pkify(self.attributes[key])
+
+        model = self.content_type.model_class()
+        self.attributes = dict((norm_attr_name_to_id(model, name),
+                                pkify(value))
+                               for name, value in self.attributes.iteritems())
 
         super(CreateObjectRequest, self).save(*args, **kwargs)
 
