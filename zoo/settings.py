@@ -112,6 +112,7 @@ INSTALLED_APPS = [
     'schedule', # from zoo.ext
     'zoo.feedback',
     'zoo.freebase',
+    'zoo.search',
 ]
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
