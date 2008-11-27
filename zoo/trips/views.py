@@ -249,7 +249,7 @@ def finish_add_sightings(request, country_code, slug, ids):
                     )
             return Redirect(place.get_absolute_url())
         
-        form = FinishAddSightingsForm(request.POST, user=request.user)
+        form = FinishAddSightingsForm(request.POST, user=request.user, place=place)
         if form.is_valid():
             if request.POST.get('add-to-existing'):
                 # if the user chose this option they want to add this sighting to an existing trip of theirs
@@ -292,12 +292,15 @@ def finish_add_sightings(request, country_code, slug, ids):
             else:
                 whos_trip += "'s"
         whos_trip += ' trip'
-        form = FinishAddSightingsForm(initial = {'name': whos_trip}, user=request.user)
+        form = FinishAddSightingsForm(initial = {'name': whos_trip}, user=request.user, place=place)
+        
+    tcount = request.user.created_trip_set.all().filter(sightings__place=place).distinct().count()
     
     return render(request, 'trips/why-not-add-to-your-tripbook.html', {
         'hiddens': hiddens,
         'place': place,
         'form': form,
+        'tcount': tcount,
     })
 
 class FinishAddSightingsForm(forms.Form):
@@ -309,7 +312,8 @@ class FinishAddSightingsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
-        trips = user.created_trip_set.all()
+        place = kwargs.pop('place')
+        trips = user.created_trip_set.all().filter(sightings__place=place).distinct()
 
         super(FinishAddSightingsForm, self).__init__(*args, **kwargs)
         self.fields['review-rating'] = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
