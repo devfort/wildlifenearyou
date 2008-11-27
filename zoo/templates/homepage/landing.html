@@ -1,5 +1,7 @@
 {% extends base %}
 
+{% load humanize %}
+
 {% block title %}Welcome to SEDF App{% endblock %}
 
 {% block extra_head %}
@@ -87,7 +89,7 @@ jQuery(function($) {
 		<div class="wrapper">
 			<img src="/static/img/site-images/map_placeholder.gif" alt="world map">
 			<h2>Currently</h2>
-			<p>We're listing TODO zoos and places of animal interest.</p>
+			<p>We're listing {{ num_of_places|intcomma }} zoos and places of animal interest.</p>
 		</div>
 	</div>
 </div>

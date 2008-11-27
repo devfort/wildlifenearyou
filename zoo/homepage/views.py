@@ -29,6 +29,7 @@ def landing(request):
     profiles = Profile.objects.filter(featured=True)
     featured['profile'] = profiles.count() > 0 and profiles[0] or None
 
+    num_of_places = Place.objects.count()
 
     if featured['place']:
         # Have to do this as django template method calls can't take params.
@@ -37,5 +38,6 @@ def landing(request):
     return render(request, 'homepage/landing.html', {
         'random_zoo': random_zoo,
         'featured': featured,
+        'num_of_places': num_of_places,
         'reg_form': reg_form,
     })
