@@ -18,6 +18,7 @@ class Client(object):
     Field = field.Field 
     Query = query.Query
     QueryPart = query.QueryPart
+    AllQuery = query.AllQuery
     FreeTextQuery = query.FreeTextQuery
     GeoDistanceQuery = query.GeoDistanceQuery
 
