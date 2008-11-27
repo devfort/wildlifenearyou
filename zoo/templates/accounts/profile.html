@@ -13,8 +13,13 @@
 
 {% ifequal profile.user user %}<p><a href="{% url accounts-profile-edit profile.user %}">Edit your profile</a></p>{% endifequal %}
 
-<div>
+<div id="bio">
+<h2>Bio</h2>
+{% if profile.biography%}
 {{ profile.biography|linebreaks}}
+{% else %}
+<p>You don't seem to have filled in your Bio yet, why not do that now and tell us a bit about yourself?</p>
+{% endif  %}
 </div>
 
 {% for photo in profile.user.photos.all %}
