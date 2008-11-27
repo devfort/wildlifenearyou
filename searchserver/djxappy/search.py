@@ -167,15 +167,20 @@ def parse_freetext_opts(opts):
     """Validate and parse the options for a freetext query.
 
     """
-    validate_dict_entries(opts, ('default_op',),
-                            'Invalid item in freetext query options: %s')
+    validate_dict_entries(opts, ('default_op',
+                                 'allow', 'deny',
+                                 'default_allow', 'default_deny',
+                                ),
+                          'Invalid item in freetext query options: %s')
     xapopts = {}
-    if 'default_op' in xapopts:
-        defop = xapopts['default_op']
+    if 'default_op' in opts:
+        defop = opts['default_op']
         if int(defop) == 0:
             xapopts['default_op'] = xappy.Query.OP_AND
         elif int(defop) == 1:
             xapopts['default_op'] = xappy.Query.OP_OR
+    if opt in ('allow', 'deny', 'default_allow', 'default_deny'):
+        xapopts[opt] = opts[opt]
     return xapopts
 
 def parse_query_spec(db, subq, spell=False):
