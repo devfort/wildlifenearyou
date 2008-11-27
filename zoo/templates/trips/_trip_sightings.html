@@ -4,7 +4,9 @@
 
 	{% with sightings_by_place|length as sl %}
 {% ifequal 1 sl %}
-	<p>A trip to {% for place in sightings_by_place %}{{ place.grouper }}{% endfor %} with {{ trip.sightings.all.count }} sighting{{ trip.sightings.all.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
+	<p>A trip to {% for place in sightings_by_place %}{% for sighting in place.list %}		
+		<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
+		{% endfor %}{% endfor %} with {{ trip.sightings.all.count }} sighting{{ trip.sightings.all.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
 
 	{% for place in sightings_by_place %}
 	<{{htag2}}>Sighting{{ trip.sightings.all.count|pluralize }}</{{htag2}}>
