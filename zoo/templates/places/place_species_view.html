@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ place.known_as }} - {{ species.common_name }}{% endblock %}
+
+{% block content %}
+
+<h1><a href='{{ place.urls.absolute }}'>{{ place.known_as }}</a> - <a href='{{ species.urls.absolute }}'>{{ species.common_name }}</a></h1>
+
+<h2>Who saw this?</h2>
+
+<p>Why the following people, of course.</p>
+
+<ul>
+{% for sighter in sighters %}
+<li><a href='{{ sighter.get_profile.urls.absolute }}'>{{ sighter.username }}</a></li>
+{% endfor %}
+</ul>
+
+<h2>Photos</h2>
+
+<p>Of {{ species.common_name }} at {{ place.known_as }}.</p>
+
+{% for photo in place_species.visible_photos.all %}
+<div>
+<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
+</div>
+{% endfor %}
+
+<h2>Comments</h2>
+{% with place as object %}
+    {% include "comments/_comments.html" %}
+{% endwith %}
+
+{% endblock %}

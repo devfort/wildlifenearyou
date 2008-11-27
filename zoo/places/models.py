@@ -256,3 +256,19 @@ class PlaceOpening(models.Model):
             days_of_week = 'all days'
         times = self.times or 'All day'
         return "%s%s, %s %s %s-%s %s" % (section, self.place, closed, days_of_week, start_date, end_date, times)
+
+# Seriously. We named this so you'd think about it. If you do anything with this, you could cause the end of the universe.
+class PlaceSpeciesSolelyForLinking(models.Model):
+    """
+    Do not use this except for linking other entities into place (eg: photos, comments).
+    This is not how we know if a species exists at a zoo; that is entirely derived from sightings (trips.Sighting).
+    """
+    place = models.ForeignKey(Place)
+    species = models.ForeignKey('animals.Species')
+    
+    def visible_photos(self):
+        from zoo.photos.models import Photo
+        return Photo.objects.filter(place=self.place).filter(contained_species=self.species).filter(is_visible = True)
+
+    class Meta:
+        db_table = 'places_placespecies'

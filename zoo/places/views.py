@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
 from django.utils import dateformat
     
 from zoo.shortcuts import render
-from zoo.places.models import Place, Country, PlaceOpening
+from zoo.places.models import Place, Country, PlaceOpening, PlaceSpeciesSolelyForLinking
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
 
@@ -103,6 +103,25 @@ def place_species(request, country_code, slug):
     return render(request, 'places/place_species.html', {
         'place': place,
         'species_list': species_list,
+    })
+
+def place_species_view(request, country_code, slug, species_slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+    species = get_object_or_404(Species, slug=species_slug)
+    place_species_list = PlaceSpeciesSolelyForLinking.objects.filter(place=place).filter(species=species)
+    if len(place_species_list)==0:
+        # auto-create here
+        place_species = None
+    else:
+        place_species = place_species_list[0]
+    sighters = [s.created_by for s in Sighting.objects.filter(species=species).filter(place=place).all()]
+
+    return render(request, 'places/place_species_view.html', {
+    'place': place,
+    'place_species': place_species,
+    'species': species,
+    'sighters': sighters,
     })
 
 def all_places(request):
