@@ -187,6 +187,63 @@ jQuery(function($) {
 });
 
 
+/* Funky feedback form effect */
+jQuery(function($) {
+    var feedback_showing = false;
+    function hideFeedback() {
+        $('#ajax-feedback-form').slideUp('fast', function() {
+            $('#ajax-feedback-form').remove();
+            feedback_showing = false;
+        });
+        return false;
+    }
+    
+    function wireUpForm(div) {
+        // Hook up the 'cancel' button
+        div.find('input[name=close]').click(hideFeedback);
+        // Wire up the form to do an Ajax submit
+        div.find('form').submit(function() {
+            var data = $(this).serialize(); // A query string style thing
+            $.ajax({
+                'url': this.action,
+                'type': 'POST',
+                'data': data,
+                'success': function(html) {
+                    var newDiv = $(html);
+                    div.replaceWith(newDiv);
+                    wireUpForm(newDiv);
+                    setTimeout(function() {
+                        newDiv.slideUp('slow', function() {
+                            newDiv.remove();
+                            feedback_showing = false;
+                        });
+                    }, 2000);
+                },
+                'error': function() {
+                    alert('Your feedback could not be recorded');
+                    div.remove();
+                    feedback_showing = false;
+                }
+            });
+            return false;
+        });
+    }
+    
+    $('#feedback-link').click(function() {
+        if (feedback_showing) {
+            hideFeedback();
+            return false;
+        }
+        // Not showing; show the feedback form
+        feedback_showing = true;
+        $.get(this.href, function(html) {
+            var div = $(html).hide().insertAfter('.header').slideDown('slow');
+            wireUpForm(div);
+        });
+        return false;
+    });
+});
+
 
 jQuery(window).load(function() {
 	// Crazyweird fix lets us style abbr using CSS in IE - do NOT run onDomReady, must be onload

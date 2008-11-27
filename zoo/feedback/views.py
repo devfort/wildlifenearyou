@@ -8,8 +8,9 @@ def submit(request):
         form = form_class(request.POST)
         if form.is_valid():
             feedback = form.save(commit = False)
-            feedback.from_page = request.REQUEST.get('from_page', '')
+            feedback.from_page = request.REQUEST.get('from-page', '')
             feedback.ip_address = request.META.get('REMOTE_ADDR', '')
+            feedback.user_agent = request.META.get('USER_AGENT', '')[:255]
             if not request.user.is_anonymous():
                 feedback.user = request.user
             feedback.save()
@@ -28,6 +29,5 @@ def submit(request):
     
     return render(request, template, {
         'form': form,
-        'from_page': request.REQUEST.get('from_page', ''),
-        'form_class': str(repr(form_class)),
+        'from_page': request.REQUEST.get('from-page', ''),
     })

@@ -291,3 +291,11 @@ ul.best {
 }
 
 /* @end */
+
+/* @group Ajax */
+div#ajax-feedback-form {
+	text-align: left;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+/* @end */
