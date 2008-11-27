@@ -13,11 +13,20 @@ def submit(request):
             if not request.user.is_anonymous():
                 feedback.user = request.user
             feedback.save()
-            return render(request, 'feedback/thanks.html')
+            if request.is_ajax():
+                template = 'feedback/thanks_ajax.html'
+            else:
+                template = 'feedback/thanks.html'
+            return render(request, template)
     else:
         form = form_class()
     
-    return render(request, 'feedback/submit.html', {
+    if request.is_ajax():
+        template = 'feedback/submit_ajax.html'
+    else:
+        template = 'feedback/submit.html'
+    
+    return render(request, template, {
         'form': form,
         'from_page': request.REQUEST.get('from_page', ''),
         'form_class': str(repr(form_class)),

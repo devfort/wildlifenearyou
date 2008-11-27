@@ -1,0 +1,19 @@
+<div id="ajax-feedback-form">
+    <h2>Send us feedback</h2>
+    <form action="/feedback/" method="POST">
+    <p>
+        {{ form.body.errors }}
+        {{ form.body }}
+    </p>
+    {% if form.email %}
+    <p>
+        {{ form.email.errors }}
+        <label for="id_email">Your e-mail address:</label> {{ form.email }}
+        (optional, we'll need it to send you a reply)
+    </p>
+    {% endif %}
+    <p><input type="submit" value="Send">
+        <input type="hidden" name="from_page" value="{{ from_page }}">
+    </p>
+    </form>
+</div>
