@@ -108,7 +108,6 @@ class Client(object):
         if self.default_prefix is not None:
             db_name = self.default_prefix + '_' + db_name
 
-        hl = simplejson.dumps(hl)
         req = {
             'q': simplejson.dumps(query.to_params()),
             'start_rank': start_rank,
@@ -116,8 +115,9 @@ class Client(object):
             'spell_correct': spell_correct,
             'relevant_data': relevant_data,
             'summarise': summarise,
-            'hl': hl,
         }
+        if hl is not None:
+            req['hl'] = simplejson.dumps(hl)
 
         return self._doreq('search/' + db_name, qs=req)
 
