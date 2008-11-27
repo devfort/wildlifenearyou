@@ -1,5 +1,5 @@
 from zoo.shortcuts import render
-from zoo.search import search_places, search_known_species
+from zoo.search import search_places, search_known_species, search_locations
 from pprint import pformat
 from djape.client import Query
 
@@ -13,12 +13,14 @@ def search(request):
     species_results_info = None
     results_corrected_q = None
     species_results_corrected_q = None
+    location_results = None
     
     if q:
         results, results_info, results_corrected_q = \
             search_places(q, details=True, latlon=near)
         species_results, species_results_info, species_results_corrected_q = \
             search_known_species(q, details=True, default_op=Query.OP_OR)
+        location_results = search_locations(q, 3)
         # Annotate results with a special species list that has a flag on 
         # any species which came up in the species results as well
         for result in results:
@@ -43,4 +45,5 @@ def search(request):
         'species_results': species_results,
         'species_results_info': pformat(species_results_info),
         'species_results_corrected_q': species_results_corrected_q,
+        'location_results': location_results,
     })
