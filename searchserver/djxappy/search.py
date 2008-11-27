@@ -280,6 +280,7 @@ def search(request, db_name):
     res = q.search(int(params['start_rank'][0]),
                    int(params['end_rank'][0]),
                    sortby=sort_by)
+    retval['_orig_xapian_query'] = str(q._get_xapian_query())
 
     if len(res) == 0:
         if len(params['q']) != 0 and params['spell_correct'][0] == 'auto':
@@ -291,6 +292,7 @@ def search(request, db_name):
             res = q.search(int(params['start_rank'][0]),
                            int(params['end_rank'][0]),
                            sortby=sort_by)
+            retval['_spellcorrected_xapian_query'] = str(q._get_xapian_query())
             if len(res) != 0:
                 retval['spell_corrected'] = True
                 retval['spellcorr_q'] = corrected_q
