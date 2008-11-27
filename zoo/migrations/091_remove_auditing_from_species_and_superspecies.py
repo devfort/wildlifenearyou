@@ -5,6 +5,15 @@ elif settings.DATABASE_ENGINE == 'sqlite3':
     from dmigrations.sqlite3 import migrations as m
 
 migration = m.Compound([
+    m.Migration(
+        sql_up = ['''
+            ALTER TABLE animals_superspecies 
+            DROP FOREIGN KEY created_by_id_refs_id_5a9fbc3b;
+        ''', '''
+            ALTER TABLE animals_superspecies 
+            DROP FOREIGN KEY modified_by_id_refs_id_5a9fbc3b;
+        '''], sql_down = [""]
+    ),
     m.DropColumn(
         'animals', 'species', 'created_at', 'datetime NOT NULL'
     ),
