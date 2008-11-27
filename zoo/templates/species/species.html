@@ -21,7 +21,7 @@
 	<p class="add">{% favourite_toggler "add" species.slug request.path %}</p>
 	{% endif %}
 {% else %}
-	<p><a href="{% url accounts-login %}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
+	<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
 {% endif %}
 
 {% if species.seen_at %}
