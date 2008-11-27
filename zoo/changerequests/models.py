@@ -208,7 +208,10 @@ class CreateObjectRequest(ChangeRequest):
         instance.save()
 
         for child in self.children():
-            child.apply(user)
+            child_instance = child.apply(user)
+            if child.reverse_relation:
+                reverse = getattr(child_instance, child.reverse_relation)
+                reverse.add(instance)
 
         super(CreateObjectRequest, self).apply(user)
         return instance
