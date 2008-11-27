@@ -42,7 +42,13 @@ class AbstractSpecies(models.Model):
 
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
-
+    
+    def visible_photos(self):
+        from zoo.photos.models import Photo
+        return Photo.objects.filter(
+            sightings__species = self, is_visible = True
+        ).distinct()
+    
     def has_favourited(self, user):
         if not user.is_authenticated():
             return False

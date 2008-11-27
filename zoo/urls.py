@@ -88,6 +88,10 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<username>\w+)/photos/(?P<photo_id>\d+)/edit/$',
         'zoo.photos.views.edit_photo',
         name='photo-edit'),
+    url(r'^profile/(?P<username>\w+)/photos/(?P<photo_id>\d+)/set-species/$',
+        'zoo.photos.views.set_species',
+        name='photo-set-species'),
+
 
     url(r'^profile/(?P<username>\w+)/tripbook/$', 'zoo.trips.views.tripbook',
         name='tripbook'),

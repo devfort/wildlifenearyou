@@ -106,6 +106,29 @@ def edit_photo(request, username, photo_id):
         'photo': photo,
     })
 
+@login_required
+def set_species(request, username, photo_id):
+    from zoo.trips.models import Sighting
+    if username != request.user.username:
+        raise HttpResponseForbidden
+    # Should be POSTed to with a list of 'saw' values
+    photo = get_object_or_404(Photo, id=photo_id, created_by=request.user)
+    assert photo.trip, \
+        "A photo should have a trip if you're trying to add sightings to it"
+    # The sightings should already exist on that trip, just hook up the photo
+    for id in request.POST.getlist('saw'):
+        print "Processing species ID %s" % id
+        # Silently discard IDs that do not correspond with sightings
+        try:
+            sighting = photo.trip.sightings.get(species__id = id)
+            print "  Found sighting %s" % sighting
+        except Sighting.DoesNotExist:
+            print "  Could not find matching sighting"
+            continue
+        assert request.user == sighting.created_by
+        photo.sightings.add(sighting)
+    return HttpResponseRedirect(photo.get_absolute_url())
+
 class PhotoEditForm(forms.ModelForm):
     class Meta:
         model = Photo

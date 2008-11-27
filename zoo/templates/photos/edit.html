@@ -2,14 +2,14 @@
 
 {% block title %}Edit photo details{% endblock %}
 
-{% block content %}
+{% block primary_content %}
 
 <h1>Edit photo details</h1>
 
 <form method="post" action="{{ request.path }}">
 {{ form.title.errors }}
-{{ form.title.label_tag }} {{ form.title }}
-<input type="submit" value="Save changes"></p>
+{{ form.title.label_tag }}: {{ form.title }}
+<input type="submit" value="Save title"></p>
 </form>
 
 {% load thumbnail %}
@@ -23,6 +23,23 @@
 <p>Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></p>
 {% endif %}
 
-
 {% endblock %}
 
+{% block secondary_content %}
+
+<h2>Species in this photo</h2>
+
+<p>These are from your trip:</p>
+
+<form action="../set-species/" method="POST">
+<ul>
+{% for species in photo.trip.species.all %}
+<li><input type="checkbox" name="saw" value="{{ species.id }}" id="s{{ species.id }}"> <label for="s{{ species.id }}">{{ species }}</label></li>
+{% endfor %}
+</ul>
+<p><input type="submit" value="These animals are in this photo">
+</form>
+
+<p><a href="#">Add more</a> animals if you've missed any</p>
+
+{% endblock %}
