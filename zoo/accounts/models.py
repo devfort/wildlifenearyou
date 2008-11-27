@@ -177,7 +177,6 @@ class Profile(models.Model):
 
 # presave hook to update profile percentage completion
 def profilecalc_postsave(sender, **kwargs):
-    print 'postsave'
     instance = kwargs['instance']
     user = None
     if sender==Profile:
