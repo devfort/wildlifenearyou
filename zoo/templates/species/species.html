@@ -11,14 +11,14 @@
 <h1>{{ species.common_name }} <i class="scientific">({{ species.latin_name }})</i></h1>
 
 {% if species.description %}
-<p>{{ species.description }}</p>
+<p class="intro">{{ species.description }}</p>
 {% endif %}
 
 {% if request.user.is_authenticated %}
 	{% if favourited %}
 	<p>This is one of your favourite animals! {% favourite_toggler "remove" species.slug request.path %}</a></p>
 	{% else %}
-	<p>{% favourite_toggler "add" species.slug request.path %}</p>
+	<p class="add">{% favourite_toggler "add" species.slug request.path %}</p>
 	{% endif %}
 {% else %}
 	<p><a href="{% url accounts-login %}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
@@ -34,21 +34,25 @@
 
 {% endif %}
 
-<p>Favourited by {{ favourites }} {{ favourites|pluralize:"person,people" }}
+<!-- TODO add in profile icons here of people who have favourited it -->
+<p>Favourited by <strong>{{ favourites }}</strong> {{ favourites|pluralize:"person,people" }}
 {% if hit_parade %}
-&mdash; <a href="{% url hit-parade %}">{{ hit_parade|ordinal }} most favourited animal</a></p>
+&mdash; currently the <a href="{% url hit-parade %}">{{ hit_parade|ordinal }} most favourited animals</a></p>
 {% endif %}
 
 {% endblock %}
 
 {% block secondary_content %}
 
+
+{% if species.photo_set.all.count %}
 <h2>Photos</h2>
 <ul>
   {% for photo in species.photo_set.all|slice:":30" %}
   <li><a href="{{ photo.urls.absolute }}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
   {% endfor %}
 </ul>
+{% endif %}
 
 <h2>Comments</h2>
 {% with species as object %}
