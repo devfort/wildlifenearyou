@@ -48,6 +48,9 @@ def login(request, template_name='registration/login.html', redirect_field_name=
 login = never_cache(login)
 
 def register(request):
+    if request.user.is_authenticated():
+        return Redirect('/')
+
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
