@@ -59,9 +59,9 @@ jQuery(function($) {
 				<form action="{% url accounts-register %}" method="POST">
 					{{ reg_form.as_p }}
 					<input type="submit" value="Register" />
-				</form>				
-			</div>	
-			{% endif %}		
+				</form>
+			</div>
+			{% endif %}
 		</div>
 	</div>
 </div>
@@ -76,7 +76,7 @@ jQuery(function($) {
 			            <input type="submit" value="&raquo; Search">
 						<p>Try "Lions near London", "Tigers" or why not try and find your favourite animal</p>
 					</div>
-					
+
 		        </div>
 		    </form>
 		</div>
@@ -92,45 +92,70 @@ jQuery(function($) {
 	</div>
 </div>
 <div class="features">
-	<div class="contents">
-		<div class="wrapper">
-			<div class="shrinkwrap">
-				<div class="column first">
-					<div class="inner">
-						<h2>Featured Zoo</h2>
-						<img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO zoo name">
-						<p><a href="">Zoo address details</a></p>
-						<blockquote cite=""><p>Tra lalalala description otters owls monkeys woooo!</p></blockquote>
-						<h3>Animals Spotted</h3>
-						<p><a href="">Bears</a>, <a href="">Tiger</a>, <a href="">Owls</a>, <a href="">Lemurs</a>, <a href="">Gorillas</a>, <a href="">Monkeys</a>, <a href="">Narwhals</a></p>
-						<p><a href="">&raquo; Show me more animals</a></p>
-					</div>
-				</div>
-				<div class="column">
-					<div class="inner">
-						<h2>Featured Animal</h2>
-						<img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO animal name">
-						<p><a href="">Tiger</a></p>
-						<blockquote cite=""><p>Tigers are so cute and fluffy but have big sharp teeth and don't like their fur being rubbed up the wrong way, you'll lose a limb. Mmmm tasty.</p></blockquote>
-						<h3>Your nearest Tiger</h3>
-						<p><a href="">Nearest Tiger address</a></p>
-					</div>
-				</div>
-				<div class="column">
-					<div class="inner">
-						<h2>Featured Animal spotter</h2>
-						<img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO username">
-						<p><a href="">Nat</a></p>
-						<blockquote cite=""><p>Bio info: Loves Narwhals and has been spotted trying to use the keyboard when Mazz isn't looking!!! Bad Nat :D </p></blockquote>
-						<h3>Animals they have seen</h3>
-						<p><a href="">Bears</a>, <a href="">Tiger</a>, <a href="">Owls</a>, <a href="">Lemurs</a>, <a href="">Gorillas</a>, <a href="">Monkeys</a>, <a href="">Narwhals</a></p>
-						<h3>Recent Trip Book Entries</h3>
-						<blockquote class="quote" cite=""><p>I went to Narwhal city and it was fricking awesome, Narwhals and Narwhal flavoured Ice Cream, Fuck Yeah!</p></blockquote>
-					</div>
-				</div>
-			</div>
-		</div>
+  <div class="contents">
+    <div class="wrapper">
+      <div class="shrinkwrap">
+	<div class="column first">
+	  <div class="inner">
+	    <h2>Featured Zoo</h2>
+	    {% if featured.place %}
+	    {% with featured.place as place %}
+	    {% if place.visible_photos.all %}
+	    {{ place.visible_photos.all.0.thumb_75 }}
+	    {% endif %}
+	    <p><a href="{% url place place.country.country_code,place.slug %}">{{ place.known_as }}</a></p>
+	    <p>{{ place.address }}</p>
+	    <blockquote cite=""><p>{{ place.description }}</p></blockquote>
+	    <h3>Animals Spotted</h3>
+	    <p>{% for species in place.species %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+	    <p><a href="{{ place.urls.species }}">&raquo; Show me more animals</a></p>
+	    {% endwith %}
+	    {% else %}
+	    There is no currently featured zoo. Why not suggest one?
+	    {% endif %}
+	  </div>
 	</div>
+	<div class="column">
+	  <div class="inner">
+	    <h2>Featured Animal</h2>
+	    {% if featured.species %}
+	    {% with featured.species as species %}
+	    <img src="/static/img/site-images/sample_thumbnail.gif" alt="TODO animal name">
+	    <p><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+	    {% comment %}
+	    <blockquote cite=""><p>Tigers are so cute and fluffy but have big sharp teeth and don't like their fur being rubbed up the wrong way, you'll lose a limb. Mmmm tasty.</p></blockquote>
+	    <h3>Your nearest Tiger</h3>
+	    <p><a href="">Nearest Tiger address</a></p>
+	    {% endcomment %}
+	    {% endwith %}
+	    {% else %}
+	    There is no currently featured animal. Why not suggest one?
+	    {% endif %}
+	  </div>
+	</div>
+	<div class="column">
+	  <div class="inner">
+	    <h2>Featured Animal spotter</h2>
+	    {% if featured.profile %}
+	    {% with featured.profile as profile %}
+	    {{ profile.avatar_img }}
+	    <p><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></p>
+	    <blockquote cite=""><p>{{ profile.biography }}</p></blockquote>
+{% comment %}
+	    <h3>Animals they have seen</h3>
+	    <p><a href="">Bears</a>, <a href="">Tiger</a>, <a href="">Owls</a>, <a href="">Lemurs</a>, <a href="">Gorillas</a>, <a href="">Monkeys</a>, <a href="">Narwhals</a></p>
+	    <h3>Recent Trip Book Entries</h3>
+	    <blockquote class="quote" cite=""><p>I went to Narwhal city and it was fricking awesome, Narwhals and Narwhal flavoured Ice Cream, Fuck Yeah!</p></blockquote>
+{% endcomment %}
+	    {% endwith %}
+	    {% else %}
+	    There is no currently featured spotter. Why not suggest one?
+	    {% endif %}
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
