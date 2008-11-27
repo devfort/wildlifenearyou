@@ -174,13 +174,12 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 {% endwith %}
 
 <!--
-<h2>Events</h2>
+<h2>Events at ...</h2>
 -->
 
 {% with place.news.all as news %}
     {% if news %}
-	<h2>News</h2>
-    <h3>News about {{ place.known_as }}</h3>
+	<h2>News about {{ place.known_as }}</h2>
     <ul>
     {% for story in news %}
         <li>{{ story.story_date|date:"jS M Y" }}: <a href="{{ story.url }}">{{ story.headline }}</a></li>
@@ -196,7 +195,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 		{% for extra in place.extras.all %}
 		<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
 		{% endfor %}
-		<li><a href="">Zoo summary sheet</a></li>
+		<li><a href="#">Zoo summary sheet</a></li>
 	</ul>
 	{% endif %}
 {% endwith %}
@@ -217,7 +216,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 {% endfor %}
 </p>
 {% else %}
-<p>No-one has yet rated a trip to this place. <a href="#addsightings" class="add">Add your sightings</a></p>
+<p>No-one has yet rated a trip to this place. <br /><a href="#addsightings" class="add">Add your sightings</a></p>
 {% endif %}
 
 <p><a href="" class="button">&raquo; Support your zoo!</a></p>
