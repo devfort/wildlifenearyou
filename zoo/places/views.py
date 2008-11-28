@@ -33,7 +33,7 @@ def place(request, country_code, slug):
                 else:
                     date_range = u'%s &mdash; %s' % (date, dateformat.format(end_date, 'jS F Y'))
             else:
-                date_range = u'%s' % start_date
+                date_range = u'%s' % dateformat.format(start_date, 'jS F Y')
         elif start_date:
             date_range = u'%s &mdash;' % dateformat.format(start_date, 'jS F Y')
         elif end_date:

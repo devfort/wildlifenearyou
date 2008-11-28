@@ -108,7 +108,7 @@ jQuery(function($) {
     <p>You can also use this to tell us if you know that {{ place.known_as }} has a particular animal (such as sharks), but we haven't listed it. (We won't assume you've seen them in this case!)</p>
 </div>
 
-{% if dates %}
+{% if opening_times %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
 {% for date_ranges in opening_times %}
 	<h3>{{ date_ranges.0|safe }}</h3>
