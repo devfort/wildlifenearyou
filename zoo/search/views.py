@@ -27,12 +27,12 @@ def search_split(request, what, near):
             )
     
     results, results_info, results_corrected_q = search_places(
-        what or SEARCH_ALL, details=True, latlon=(lat, lon)
+        what or SEARCH_ALL, details=True, latlon=(lat, lon), num=20
     )
     
     species_results, species_results_info, species_results_corrected_q = \
         search_known_species(
-            what, details=True, default_op=Query.OP_OR
+            what, details=True, default_op=Query.OP_OR,
     )
 
     return render(request, 'search/search_split.html', {
@@ -62,7 +62,7 @@ def search_single(request, q, bypass=False):
     
     if q:
         results, results_info, results_corrected_q = \
-            search_places(q, details=True)
+            search_places(q, details=True, num=20)
         species_results, species_results_info, species_results_corrected_q = \
             search_known_species(q, details=True, default_op=Query.OP_OR)
 
