@@ -14,8 +14,8 @@
 {% ifequal profile.user user %}
 <p><a href="{% url accounts-profile-edit profile.user %}">Edit your profile</a> |
 {% if profile.location %}
-Your location, not publicly viewable, is currently {{ profile.location }}.
-<a href="/set-location/">Edit your location</a>
+Your location is currently {{ profile.location }} &ndash;
+<a href="/set-location/">edit your location</a>.
 {% else %}
 <a href="/set-location/">Set your location</a> to find animals near you
 {% endif %}
