@@ -99,7 +99,7 @@ class UberForm(object):
                     new_ids = [int(x) for x in esf.cleaned_data['new_ids'].split(',')
                                if x]
                     new_ids.sort()
-                    
+
                     if esf.cleaned_data['add']:
                         try:
                             max_id = max(new_ids)
