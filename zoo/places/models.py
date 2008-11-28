@@ -387,3 +387,19 @@ class PlaceSpeciesSolelyForLinking(models.Model):
 
     class Meta:
         db_table = 'places_placespecies'
+
+    def __unicode__(self):
+        return unicode(self.species.common_name) + ' at ' + unicode(self.place)
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('place-species-view', (), {
+            'country_code': self.place.country.country_code.lower(),
+            'slug': self.place.slug,
+            'species_slug': self.species.slug,
+        })
+
+    @attrproperty
+    def urls(self, name):
+        if name == 'absolute':
+            return self.get_absolute_url()
