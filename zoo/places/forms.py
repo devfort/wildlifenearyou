@@ -1,8 +1,7 @@
-
 from django import forms
+
 from zoo.forms import UberForm
 from zoo.places.models import Place, PlaceOpening, PlaceFacility
-
 
 class PlaceEditForm(forms.ModelForm):
     class Meta:
@@ -51,4 +50,3 @@ class PlaceUberForm(UberForm):
         ('opening', PlaceOpeningUberForm,
          lambda instance: instance.placeopening_set.all()),
         ]
-
