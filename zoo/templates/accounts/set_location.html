@@ -16,4 +16,11 @@
 
 <p>Your location is kept private. We only use it to show animals and places near you.</p>
 
+{% if current_location %}
+<form action="/set-location/delete/" method="POST">
+<input type="hidden" name="delete_location" value="1">
+<p><input type="submit" value="Delete your location"></p>
+</form>
+{% endif %}
+
 {% endblock %}

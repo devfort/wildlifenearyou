@@ -169,6 +169,28 @@ def all_profiles(request):
         'all_users': User.objects.all(),
     })
 
+def delete_location(request):
+    """Remove location"""
+    if not request.user.is_anonymous():
+        profile = request.user.get_profile()
+        profile.location = ''
+        profile.latitude = None
+        profile.longitude = None
+        profile.save()
+    else:
+        response = Redirect('/set-location/?done')
+        response.set_cookie(
+            key = 'location',
+            value = '',
+            path = '/',
+        )
+        return response
+    msg = 'Your location has been removed.'
+    return render(request, 'accounts/set_location.html', {
+        'msg': msg,
+        'current_location': '',
+    })
+
 from zoo.utils import location_from_request
 def set_location(request):
     """

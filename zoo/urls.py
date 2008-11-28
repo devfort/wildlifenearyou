@@ -119,6 +119,7 @@ urlpatterns = patterns('',
     (r'^photos/$', photos.all),
 
     (r'^set-location/$', 'zoo.accounts.views.set_location'),
+    (r'^set-location/delete/$', 'zoo.accounts.views.delete_location'),
     url(r'location-complete/$', 'zoo.search.views.location_complete',
         name="location-complete"),
 

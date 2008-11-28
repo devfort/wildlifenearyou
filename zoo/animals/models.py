@@ -34,6 +34,11 @@ class AbstractSpecies(models.Model):
         if name == 'absolute':
             return self.get_absolute_url()
 
+    def article(self):
+        if self.common_name[0] in ('a','e','i','o','u','A','E','I','O','U'):
+            return 'an'
+        return 'a'
+
     def __unicode__(self):
         return '%s (%s)' % (self.common_name, self.latin_name)
 
