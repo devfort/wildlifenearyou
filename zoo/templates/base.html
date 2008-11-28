@@ -73,7 +73,11 @@
 </div>
 
 <div class="footer">
-	<p style="float:right">Our sharp-eyed animal lovers have spotted {{ total_num_of_species|intcomma }} species</p>
+	<p style="float:right">{% ifequal rand 1 %}
+Your nearest <a href="{{ random_animal.url }}">{{ random_animal.name }}</a> is {{ random_animal.dist }} miles away, at <a href="{{ random_animal.place_url }}">{{ random_animal.place_name }}</a>.
+{% else %}
+Our sharp-eyed animal lovers have spotted {{ total_num_of_species|intcomma }} species.
+{% endifequal %}</p>
 	<p>&copy; <a href="{% url flatpage "colophon/" %}">SEDF</a>
 	| <a href="{% url flatpage "about/" %}">About</a>
 	| <a href="{% url flatpage "contact/" %}">Contact</a>
