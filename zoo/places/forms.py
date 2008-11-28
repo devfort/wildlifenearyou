@@ -29,7 +29,7 @@ class PlaceFacilityEditForm(forms.ModelForm):
     specific_desc = forms.CharField(label='Description',
                                     required=False)
 
-# UBER FORMS!
+# Uber form instances
 
 class PlaceOpeningUberForm(UberForm):
     model = PlaceOpening
