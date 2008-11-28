@@ -55,9 +55,10 @@
         {% endfor %}
 
         <p>
-        {{ form.facility.addform }}
+            {{ form.facility.addform }}
         </p>
-    
+        <span id="form-facility"></span>
+
         <h2>Opening hours</h2>
         <p class="suggest-changes">
             You can associate opening hours for {{ place }}. If you are unsure about the opening hours, just don't worry about them!
@@ -71,9 +72,10 @@
         {% endfor %}
 
         <p>
-        {{ form.opening.addform }}
-	    </p>
-
+            {{ form.opening.addform }}
+        </p>
+        <span id="form-opening"></span>
+        
 	    <hr>
 
 	    <p>

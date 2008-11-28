@@ -252,6 +252,11 @@ jQuery(function($) {
         });
         return false;
     });
+
+    $('#jump_to_form').each(function() {
+        var elem_name = '#form-' + $(this).val();
+	$('html,body').animate({scrollTop: $(elem_name).offset().top + 350}, 500); 
+    });
 });
 
 
