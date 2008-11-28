@@ -101,4 +101,7 @@ def import_into_xapian():
         client.bulkadd(queue)
 
 def make_description(row):
-    return u'%(place_name)s, %(admin_name2)s' % row
+    description = row['place_name']
+    if row['admin_name2']:
+        description += ', ' + row['admin_name2']
+    return description
