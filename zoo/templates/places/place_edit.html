@@ -3,6 +3,7 @@
 {% block title %}Suggest changes to {{ place }}{% endblock %}
 
 {% block content %}
+
 <h1>Suggest changes to {{ place }}</h1>
 
 <p class="suggest-changes">
@@ -12,6 +13,11 @@
 </p>
 
 <form action="{{ path }}" method="post">
+
+{% if form.jump_to_id %}
+<input type="hidden" name="jump_to_id" id="jump_to_id" value="{{ form.jump_to_id }}">
+{% endif %}
+
 <div>
     {% if form.deleted %}
         {{ form.render_deleted }}
