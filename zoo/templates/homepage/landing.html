@@ -76,7 +76,7 @@ jQuery(function($) {
                             {% endfor %}
                             </ol>
                             {% endif %}
-                            
+
                             {% if recent_sightings %}
                             <h2>Latest sightings</h2>
                             <ol>
@@ -153,10 +153,10 @@ jQuery(function($) {
 	    {% endwith %}
 	    <p><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
 	    <blockquote><p>{{ species.description }}</p></blockquote>
-	    {% comment %}
-	    <h3>Your nearest Tiger</h3>
-	    <p><a href="">Nearest Tiger address</a></p>
-	    {% endcomment %}
+	    <h3>Your nearest {{ species.common_name }}</h3>
+	    {% if species.nearest %}
+	    <p><a href="{{ species.nearest.urls.absolute }}">{{ species.nearest }}</a> ({{ species.nearest.distance_miles|floatformat }} miles away)</p>
+	    {% endif %}
 	    {% endwith %}
 	    {% else %}
 	    There is no currently featured animal. Why not suggest one?

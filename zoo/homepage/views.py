@@ -7,6 +7,7 @@ from zoo.animals.models import Species
 from zoo.trips.models import Sighting
 from zoo.accounts.models import Profile
 from zoo.photos.models import Photo
+from zoo.utils import location_from_request
 
 def landing(request):
     places_with_sightings = Place.objects.filter(sighting__isnull=False)
@@ -40,6 +41,13 @@ def landing(request):
     if featured['place']:
         # Have to do this as django template method calls can't take params.
         featured['place'].species = featured['place'].get_species(limit=10)
+
+    if featured['species']:
+        location, (lat, lon) = location_from_request(request)
+        from zoo.search import nearest_places_with_species as npws
+        nearest_species = npws(featured['species'].common_name, (lat, lon))
+        if nearest_species:
+            featured['species'].nearest = nearest_species[0]
 
     return render(request, 'homepage/landing.html', {
         'random_zoo': random_zoo,
