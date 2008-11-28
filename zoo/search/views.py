@@ -24,12 +24,20 @@ def search_split(request, what, location):
             return search_single(request, '%s near %s' % (what, location), bypass=True )
 
     results, results_info, results_corrected_q = search_places(what, details=True, latlon=(lat, lon))
-    results = list(results)
+
+    species_results, species_results_info, species_results_corrected_q = \
+        search_known_species(what, details=True, default_op=Query.OP_OR)
+
     return render(request, 'search/search_split.html', {
         'what': what,
         'location': location,
         'location_used': location_used,
         'results': results,
+        'results_info': pformat(results_info),
+        'results_corrected_q': results_corrected_q,
+        'species_results': species_results,
+        'species_results_info': pformat(species_results_info),
+        'species_results_corrected_q': species_results_corrected_q,
     })
 
 def search_single(request, q, bypass=False):
