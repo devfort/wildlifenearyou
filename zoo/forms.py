@@ -33,9 +33,6 @@ class ExtraSubForm(forms.Form):
     def __unicode__(self):
         return mark_safe(u''.join(unicode(bf) for bf in self))
 
-    def get_id(self):
-        return id(self)
-
 class DeletedException(Exception):
     """This is thrown when a subform (for a new record, not an existing one)
     discovers that it has been deleted"""
@@ -46,7 +43,7 @@ class UberForm(object):
     model = None
     parts = []
     relation = None
-    jump_to_id = None
+    jump_to_form = None
 
     def __init__(self, instance=None, data=None, prefix="",
                  form_id=None, parent_uform=None):
@@ -105,7 +102,7 @@ class UberForm(object):
                     new_ids.sort()
 
                     if esf.cleaned_data['add']:
-                        self.jump_to_id = esf.get_id()
+                        self.jump_to_form = name
                         try:
                             max_id = max(new_ids)
                         except ValueError:
