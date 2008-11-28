@@ -47,50 +47,16 @@ jQuery(function($) {
 		    <h1>Well hey {{ user.username|title }}</h1>
 			<p> Welcome back. View your <a href="{% url accounts-default %}">profile</a> or <a href="{% url accounts-logout %}">logout</a>?</p>
 		{% else %}
-			<h1>Hello there,</h1>
-		    <p>We&rsquo;re very happy that you&rsquo;ve decided to drop by.</p>
-			<p>This is a community site about zoos &amp; the vast amount of amazing creatures that inhabit our beloved Planet.</p>
+			<h1>Hello there.</h1>
+		    <p>We&rsquo;re very happy that you&rsquo;ve decided to drop
+by. This is a community site about zoos &amp; the vast amount of amazing
+creatures that inhabit our beloved Planet.</p>
 
 			<p>We&rsquo;re relying on you, yes YOU to make this site truly awesome (we&rsquo;re not just saying that!)! Share your experiences and create your animal passport, to personalize your visit.</p>
 			<p>How exciting is that! Come on in, be a part of it and <a href="{% url accounts-register %}">sign up now!</a></p>
+
 		{% endif %}
-		</div>
-		<div class="secondary">
-			{% if not user.is_authenticated %}
-			<div class="signup">
-				<h2>Sign up NOW</h2>
-				<p>Already a user? <a href="{% url accounts-login %}">&raquo; Log in now</a></p>
-				<form action="{% url accounts-register %}" method="POST">
-					{{ reg_form.as_p }}
-					<input type="submit" value="Register" />
-				</form>
-			</div>
-                        {% else %}
 
-                            {% if recent_sightings_favourites %}
-                            <h2>Latest sightings of your favourite animals</h2>
-                            <ol>
-                            {% for sighting in recent_sightings_favourites|slice:":10" %}
-                            <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
-                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place|title }}</a>
-                            {% endfor %}
-                            </ol>
-                            {% endif %}
-
-                            {% if recent_sightings %}
-                            <h2>Latest sightings</h2>
-                            <ol>
-                            {% for sighting in recent_sightings|slice:":10" %}
-                            <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
-                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place|title }}</a>
-                            {% endfor %}
-                            </ol>
-                            {% endif %}
-
-			{% endif %}
-		</div>
-	</div>
-</div>
 <div class="interaction">
 	<div class="contents">
 		<div class="wrapper">
@@ -108,15 +74,64 @@ jQuery(function($) {
 		</div>
 	</div>
 </div>
-<div class="map">
-	<div class="contents">
-		<div class="wrapper">
-			<img src="/static/img/site-images/map_placeholder.gif" alt="world map">
-			<h2>Currently</h2>
-			<p>We&rsquo;re listing {{ num_of_places|intcomma }} zoos and places of animal interest.</p>
+
+			{% if user.is_authenticated %}
+                            {% if recent_sightings_favourites %}
+                            <h2>Latest sightings of your favourite animals</h2>
+                            <ol>
+                            {% for sighting in recent_sightings_favourites|slice:":10" %}
+                            <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
+                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place|title }}</a>
+                            {% endfor %}
+                            </ol>
+                            {% endif %}
+			{% endif %}
+
+		</div>
+		<div class="secondary">
+			{% if not user.is_authenticated %}
+			<div class="signup">
+				<h2>Sign up NOW</h2>
+				<p>Already a member? <a href="{% url accounts-login %}">&raquo; Log in now</a></p>
+				<form action="{% url accounts-register %}" method="POST">
+				<p>I love animals. Sure, I&rsquo;ll try this out!
+					<input type="submit" value="Register"></p>
+				</form>
+			</div>
+
+			<p style="margin-top:1em; margin-bottom:0" align="center"><img src="/static/img/site-images/map_placeholder.gif" alt="world map" width="300" style="border: solid 1px #cccccc"></p>
+
+                        {% else %}
+
+                            {% if recent_sightings %}
+                            <h2>Latest sightings</h2>
+                            <ol>
+                            {% for sighting in recent_sightings|slice:":10" %}
+                            <li><a href="{{ sighting.species.urls.absolute }}">{{ sighting.species.common_name }}</a>
+                            at <a href="{{ sighting.place.urls.absolute }}">{{ sighting.place|title }}</a>
+                            {% endfor %}
+                            </ol>
+                            {% endif %}
+
+			{% endif %}
+
 		</div>
 	</div>
 </div>
+
+<div class="map">
+	<div class="contents">
+		<div class="wrapper">
+			<img style="padding-right: 1em; margin-bottom: 1em" src="/static/img/desktop_narwhal.jpeg" alt="Giant featured photo" width="585" height="325">
+			<div class="secondary">
+			<h2>Currently</h2>
+			<p>We&rsquo;re listing {{ num_of_places|intcomma }} zoos and places of animal interest.</p>
+			</div>
+
+		</div>
+	</div>
+</div>
+
 <div class="features">
   <div class="contents">
     <div class="wrapper">

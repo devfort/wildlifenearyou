@@ -19,7 +19,8 @@ def landing(request):
     reg_form = RegistrationForm()
 
     recent_sightings = Sighting.objects.order_by('-created_at')
-    if request.user:
+    recent_sightings_favourites = None
+    if request.user.is_authenticated():
         favourite_animals = Species.objects.filter(favourited=request.user)
         recent_sightings_favourites = Sighting.objects.filter(species__in=favourite_animals).order_by('-created_at')
 
