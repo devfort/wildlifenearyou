@@ -5,7 +5,7 @@
 {% block content %}
 <form action="/login/" method="POST">
 {{ form.as_p }}
-<p><a href="{% url forgotten-password %}">I&rsquo;ve forgotten my password, send help!</a></p>
+<p><a href="{% url forgotten-password %}">I&rsquo;ve forgotten my password, please send help!</a></p>
 <p><input type="submit" value="Login"></p>
 <input type="hidden" name="next" value="{{ next }}">
 </form>
