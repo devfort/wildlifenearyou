@@ -163,7 +163,7 @@ class UberForm(object):
 
     def forall_uf(self, func):
         func(self)
-        
+
         for name, f in self.boundforms.iteritems():
             if isinstance(f, dict):
                 suf = f.get('subuforms')
@@ -203,10 +203,10 @@ class UberForm(object):
         if not self.instance:
             my_ret = func(self, data, parent_ret)
 
-        
+
         for uf in subuforms:
             uf.mapadds(func, my_ret)
-        
+
 
     def modifications(self):
         changes = SortedDict()
@@ -218,7 +218,7 @@ class UberForm(object):
             if value == None:
                 return ''
             return value
-                
+
         def get_changes(uf):
             if uf.instance:
                 # existing
@@ -248,4 +248,3 @@ class UberForm(object):
 
     def __iter__(self):
         return self.boundforms.itervalues()
-
