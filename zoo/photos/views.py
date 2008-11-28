@@ -76,7 +76,7 @@ def upload_trip(request, username, trip_id):
             photo.save()
             # Redirect them straight to the edit page for that photo
             return HttpResponseRedirect(photo.get_absolute_url() + 'edit/')
-    
+
     form = PhotoOnlyForm()
     return render(request, 'photos/single_upload.html', {
         'form': form,
