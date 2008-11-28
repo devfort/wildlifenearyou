@@ -6,25 +6,25 @@ from zoo.places.models import Place, PlaceOpening, PlaceFacility
 class PlaceEditForm(forms.ModelForm):
     class Meta:
         model = Place
-        fields = ['known_as', 'legal_name', 'description', 'url',
-                  'country', 'address_line_1', 'address_line_2',
-                  'town', 'state', 'zip', 'phone', 'price_notes']
-
-
-class PlaceOpeningEditForm(forms.ModelForm):
-    class Meta:
-        model = PlaceOpening
-        fields = ['start_date', 'end_date', 'days_of_week']
+        fields = ('known_as', 'legal_name', 'description', 'url', 'country',
+           'address_line_1', 'address_line_2', 'town', 'state', 'zip', 'phone',
+           'price_notes')
 
 class PlaceOpeningEditForm(forms.ModelForm):
     class Meta:
         model = PlaceOpening
-        fields = ['start_date', 'end_date', 'days_of_week', 'times', 'closed', 'section']
+        fields = ('start_date', 'end_date', 'days_of_week')
+
+class PlaceOpeningEditForm(forms.ModelForm):
+    class Meta:
+        model = PlaceOpening
+        fields = ('start_date', 'end_date', 'days_of_week', 'times', 'closed',
+            'section')
 
 class PlaceFacilityEditForm(forms.ModelForm):
     class Meta:
         model = PlaceFacility
-        fields = ['facility', 'specific_desc']
+        fields = ('facility', 'specific_desc')
 
     specific_desc = forms.CharField(label='Description',
                                     required=False)
