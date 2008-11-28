@@ -1,14 +1,14 @@
 from django import forms
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 
 from models import Photo
 from zoo.shortcuts import render
+from zoo.trips.models import Trip
 from zoo.places.models import Place
 from zoo.animals.forms import SpeciesField
-from zoo.trips.models import Trip
 
 @login_required
 def upload(request, place=None, redirect_to=None):

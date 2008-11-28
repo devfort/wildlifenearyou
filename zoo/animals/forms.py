@@ -1,5 +1,5 @@
-from zoo.search_picker import SearchPickerField
 from models import Species
+from zoo.search_picker import SearchPickerField
 
 class SpeciesField(SearchPickerField):
     pick_one_text = '-- pick a species --'
