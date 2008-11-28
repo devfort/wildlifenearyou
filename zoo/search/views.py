@@ -7,9 +7,9 @@ from djape.client import Query, Client
 from zoo.shortcuts import render
 from zoo.search import search_places, search_known_species, search_near, search_locations
 
-def search_split(request, what, location):
+def search_split(request, what, near):
     # First, let us look up the location
-    locations = search_locations(location)
+    locations = search_locations(near)
     locations = list(locations)
     if locations:
         location_used = locations[0]
@@ -17,11 +17,11 @@ def search_split(request, what, location):
     else:
         location_used = None
         c = Client(settings.XAPIAN_BASE_URL, settings.XAPIAN_PERSONAL_PREFIX)
-        result = c.parse_latlong(location)
+        result = c.parse_latlong(near)
         if result['ok']:
             lat, lon = result['latitude'], result['longitude']
         else:
-            return search_single(request, '%s near %s' % (what, location), bypass=True )
+            return search_single(request, '%s near %s' % (what, near), bypass=True )
 
     results, results_info, results_corrected_q = search_places(what, details=True, latlon=(lat, lon))
 
@@ -30,7 +30,7 @@ def search_split(request, what, location):
 
     return render(request, 'search/search_split.html', {
         'what': what,
-        'location': location,
+        'near': near,
         'location_used': location_used,
         'results': results,
         'results_info': pformat(results_info),
@@ -91,13 +91,13 @@ def search_single(request, q, bypass=False):
 def search(request):
     q = request.GET.get('q', '')
     what = request.GET.get('what', '')
-    location = request.GET.get('location', '')
-    if what and location:
-        return search_split(request, what, location)
+    near = request.GET.get('near', '')
+    if what and near:
+        return search_split(request, what, near)
     elif what:
         return search_single(request, what)
-    elif location:
-        return search_single(request, location)
+    elif near:
+        return search_single(request, near)
     else:
         return search_single(request, q)
 

@@ -34,7 +34,7 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 {% if location_results %}
 <ul>
     {% for location in location_results %}
-    <li>Did you mean places <a href="/search/?near={{ location.latlon|urlencode }}">near {{ location.description }}</a>?</li>
+    <li>Did you mean places <a href="/search/?near={{ location.description|urlencode }}">near {{ location.description }}</a>?</li>
     {% endfor %}
 </ul>
 {% endif %}

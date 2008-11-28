@@ -1,16 +1,16 @@
 {% extends base %}
 
-{% block title %}Search: &ldquo;{{ what }}&rdquo; near &ldquo;{{ location }}&rdquo;{% endblock %}
+{% block title %}Search: &ldquo;{{ what }}&rdquo; near &ldquo;{{ near }}&rdquo;{% endblock %}
 
 {% block search_form %}{% endblock %}
 
 {% block primary_content %}
-<h1>Search: &ldquo;{{ what }}&rdquo; near &ldquo;{{ location }}&rdquo;</h1>
+<h1>Search: &ldquo;{{ what }}&rdquo; near &ldquo;{{ near }}&rdquo;</h1>
 
 <form action="/search/" method="GET">
     <div class="container text-container">
         <input type="text" name="what" value="{{ what }}" size="20">
-        near <input type="text" name="location" value="{{ location }}" size="25">
+        near <input type="text" name="near" value="{{ near }}" size="25">
         <input type="submit" value="Search">
     </div>
 </form>
