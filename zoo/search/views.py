@@ -1,12 +1,42 @@
+from django.conf import settings
+
+import re
+from pprint import pformat
+from djape.client import Query, Client
+
 from zoo.shortcuts import render
 from zoo.search import search_places, search_known_species, search_near, search_locations
-from pprint import pformat
-from djape.client import Query
 
-def search(request):
-    q = request.GET.get('q', '')
-    near = request.GET.get('near', None)
-    
+def search_split(request, what, location):
+    # First, let us look up the location
+    locations = search_locations(location)
+    locations = list(locations)
+    if locations:
+        location_used = locations[0]
+        lat, lon = location_used['latlon']
+    else:
+        location_used = None
+        c = Client(settings.XAPIAN_BASE_URL, settings.XAPIAN_PERSONAL_PREFIX)
+        result = c.parse_latlong(location)
+        if result['ok']:
+            lat, lon = result['latitude'], result['longitude']
+        else:
+            return search_single(request, '%s near %s' % (what, location), bypass=True )
+
+    results, results_info, results_corrected_q = search_places(what, details=True, latlon=(lat, lon))
+    results = list(results)
+    return render(request, 'search/search_split.html', {
+        'what': what,
+        'location': location,
+        'location_used': location_used,
+        'results': results,
+    })
+
+def search_single(request, q, bypass=False):
+    m = re.match('(.*?)\s+(?:near|in)\s+(.*)$', q)
+    if m and not bypass:
+        return search_split(request, *m.groups())
+
     results = None
     species_results = None
     results_info = None
@@ -17,10 +47,11 @@ def search(request):
     
     if q:
         results, results_info, results_corrected_q = \
-            search_places(q, details=True, latlon=near)
+            search_places(q, details=True)
         species_results, species_results_info, species_results_corrected_q = \
             search_known_species(q, details=True, default_op=Query.OP_OR)
-        near_results = search_near('', q)
+
+        #near_results = search_near('', q)
         location_results = search_locations(q, 3)
         # Annotate results with a special species list that has a flag on 
         # any species which came up in the species results as well
@@ -48,6 +79,19 @@ def search(request):
         'species_results_corrected_q': species_results_corrected_q,
         'location_results': location_results,
     })
+
+def search(request):
+    q = request.GET.get('q', '')
+    what = request.GET.get('what', '')
+    location = request.GET.get('location', '')
+    if what and location:
+        return search_split(request, what, location)
+    elif what:
+        return search_single(request, what)
+    elif location:
+        return search_single(request, location)
+    else:
+        return search_single(request, q)
 
 from zoo.shortcuts import render_json
 from zoo.search import search_locations
