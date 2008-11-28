@@ -2,6 +2,8 @@ from django.conf import settings
 from djape.client import Client, Query, FreeTextQuery
 from django.db import models
 
+SEARCH_ALL = object()
+
 class NotFound(Exception):
     pass
 
@@ -70,7 +72,7 @@ def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
     # one will be something like "places.Place:34" - it looks up the model
     # and uses .in_bulk(ids) to load those ORM objects, then returns them.
     client = Client(settings.XAPIAN_BASE_URL, dbname, db_prefix)
-    def search(q, num=0, details=False, latlon=False, 
+    def search(q=None, num=0, details=False, latlon=False, 
             default_op=Query.OP_AND, search_field=None):
         # If details=True, it returns a tuple pair - the first item is the 
         # results list it would normally return, the second is the full Xapian
@@ -80,9 +82,13 @@ def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
         }
         if search_field:
             kwargs['default_allow'] = search_field
-        q = FreeTextQuery(q, **kwargs)
+        
         query = Query()
-        query.part = q
+        if q is SEARCH_ALL:
+            query.part = client.AllQuery()
+        else:
+            query.part = FreeTextQuery(q, **kwargs)
+        
         annotate_with_distances = False
         if latlon and latlon_fields:
             if not isinstance(latlon, basestring): # deal with (lat, lon) 

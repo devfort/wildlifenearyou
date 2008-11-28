@@ -5,7 +5,7 @@
 {% block search_form %}{% endblock %}
 
 {% block primary_content %}
-<h1>Search: &ldquo;{{ what }}&rdquo; near &ldquo;{{ near }}&rdquo;</h1>
+<h1>Search: {% if what %}&ldquo;{{ what }}&rdquo;{% else %}Everything{% endif %} near &ldquo;{{ near }}&rdquo;</h1>
 
 <form action="/search/" method="GET">
     <div class="container text-container">

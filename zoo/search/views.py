@@ -5,7 +5,8 @@ from pprint import pformat
 from djape.client import Query, Client
 
 from zoo.shortcuts import render
-from zoo.search import search_places, search_known_species, search_near, search_locations
+from zoo.search import search_places, search_known_species, search_near, \
+    search_locations, SEARCH_ALL
 
 def search_split(request, what, near):
     # First, let us look up the location
@@ -21,12 +22,18 @@ def search_split(request, what, near):
         if result['ok']:
             lat, lon = result['latitude'], result['longitude']
         else:
-            return search_single(request, '%s near %s' % (what, near), bypass=True )
-
-    results, results_info, results_corrected_q = search_places(what, details=True, latlon=(lat, lon))
-
+            return search_single(
+                request, '%s near %s' % (what, near), bypass=True
+            )
+    
+    results, results_info, results_corrected_q = search_places(
+        what or SEARCH_ALL, details=True, latlon=(lat, lon)
+    )
+    
     species_results, species_results_info, species_results_corrected_q = \
-        search_known_species(what, details=True, default_op=Query.OP_OR)
+        search_known_species(
+            what, details=True, default_op=Query.OP_OR
+    )
 
     return render(request, 'search/search_split.html', {
         'what': what,
@@ -97,7 +104,7 @@ def search(request):
     elif what:
         return search_single(request, what)
     elif near:
-        return search_single(request, near)
+        return search_split(request, '', near)
     else:
         return search_single(request, q)
 
