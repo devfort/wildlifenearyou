@@ -156,6 +156,12 @@ class ChangeAttributeRequest(ChangeRequest):
         cur_val = getattr(self.content_object, self.attribute)
         old_val = self.old_value
 
+        if type(cur_val) in (int, long):
+            try:
+                old_val = long(old_val)
+            except ValueError:
+                pass
+
         return old_val != cur_val
 
     @reformat_foreign_keys
