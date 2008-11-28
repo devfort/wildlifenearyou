@@ -1,11 +1,11 @@
 {% extends base %}
 
-{% block title %}Search{% if q %}: "{{ q }}"{% endif %}{% endblock %}
+{% block title %}Search{% if q %}: &ldquo;{{ q }}&rdquo;{% endif %}{% endblock %}
 
 {% block search_form %}{% endblock %}
 
 {% block primary_content %}
-<h1>Search{% if q %}: "{{ q }}"{% endif %}</h1>
+<h1>Search{% if q %}: &ldquo;{{ q }}&rdquo;{% endif %}</h1>
 
 <form action="/search/" method="GET">
     <div class="container text-container">
@@ -26,7 +26,7 @@
 {% if q and results and results_corrected_q %}
 
 <div class="information">
-We couldn&rsquo;t find any results for {{ q }}, so we thought you might like these results for {{ results_corrected_q }}.
+We couldn&rsquo;t find any results for {{ q }}, so we thought you might like these results for &ldquo;{{ results_corrected_q }}&rdquo;.
 </div>
 
 {% endif %}

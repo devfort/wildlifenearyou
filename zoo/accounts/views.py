@@ -11,7 +11,9 @@ from django.core.urlresolvers import reverse
 from django import forms
 
 from zoo.accounts.models import Profile
+from zoo.animals.models import Species
 from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm, UserEditProfileBitsForm
+from zoo.search import nearest_places_with_species
 
 def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
     if request.user.is_authenticated():
@@ -183,15 +185,20 @@ def set_location(request):
         results = list(search_locations(location))
         if len(results):
             result = results[0]
+            (lat, lon) = result['latlon']
             description = result['description']
-            msg = 'Your location is set to <strong>%s</strong>' % description
+            msg = 'Your location has been set to <strong>%s</strong>.' % description
+            random_animal = Species.objects.order_by('?')[0]
+            nearest = nearest_places_with_species(random_animal.common_name, (lat, lon))
+            if nearest:
+                msg += ' As an example, your nearest %s is %s miles away.' % (random_animal.common_name, int(nearest[0].distance_miles))
             current_location = description
             # Set their location
             if not request.user.is_anonymous():
                 profile = request.user.get_profile()
                 profile.location = description
-                profile.latitude = result['latlon'][0]
-                profile.longitude = result['latlon'][1]
+                profile.latitude = lat
+                profile.longitude = lon
                 profile.save()
             else:
                 # Set it in a cookie instead

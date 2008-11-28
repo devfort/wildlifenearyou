@@ -15,9 +15,9 @@
 <p><a href="{% url accounts-profile-edit profile.user %}">Edit your profile</a> |
 {% if profile.location %}
 Your location, not publicly viewable, is currently {{ profile.location }}.
-<a href="/edit-location/">Edit your location</a>
+<a href="/set-location/">Edit your location</a>
 {% else %}
-<a href="/edit-location/">Set your location</a> to find animals near you
+<a href="/set-location/">Set your location</a> to find animals near you
 {% endif %}
 </p>
 {% endifequal %}

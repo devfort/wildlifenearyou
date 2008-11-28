@@ -86,7 +86,7 @@ def make_db_searcher(dbname, db_prefix=None, latlon_fields=[]):
         annotate_with_distances = False
         if latlon and latlon_fields:
             if not isinstance(latlon, basestring): # deal with (lat, lon) 
-                latlon = ' '.join(latlon)
+                latlon = ' '.join(map(str, latlon))
             query.sort_by_distance(latlon_fields[0], latlon)
             annotate_with_distances = True
         results = client.search(query, end_rank=num)
