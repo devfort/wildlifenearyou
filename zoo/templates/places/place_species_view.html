@@ -11,8 +11,8 @@
 <p>Why the following people, of course.</p>
 
 <ul>
-{% for sighter in sighters %}
-<li><a href="{{ sighter.get_profile.urls.absolute }}">{{ sighter.username }}</a></li>
+{% for sighting in sightings %}
+<li><a href="{{ sighting.created_by.get_profile.urls.absolute }}">{{ sighting.created_by.username }}</a> {% if sighting.trip %} on <a href="{{ sighting.trip.get_absolute_url }}">{{ sighting.trip }}</a>{% else %} reported on {{ sighting.created_at|date:"jS F Y" }}{% endif %}</li>
 {% endfor %}
 </ul>
 
