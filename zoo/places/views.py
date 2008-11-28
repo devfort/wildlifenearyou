@@ -106,7 +106,7 @@ def place_species_view(request, country_code, slug, species_slug):
         place_species.save()
     else:
         place_species = place_species_list[0]
-    
+
     sightings = Sighting.objects.filter(
         species=species
     ).filter(place=place)
@@ -205,7 +205,7 @@ def place_edit_done(request, country_code, slug):
     return render(request, 'places/place_edit_done.html', {
         'place': place,
         })
-        
+
 def support(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
@@ -213,4 +213,3 @@ def support(request, country_code, slug):
     return render(request, 'places/place_support.html', {
         'place': place,
         })
-    
