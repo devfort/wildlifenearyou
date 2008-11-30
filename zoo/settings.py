@@ -67,7 +67,10 @@ MIDDLEWARE_CLASSES = [
     'zoo.middleware.OnlyLowercaseUrls',
     'zoo.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'zoo.prelaunch_middleware.PreLaunchMiddleware',
 ]
+PRELAUNCH_PASSWORD = 'tigers'
+
 
 ROOT_URLCONF = 'zoo.urls'
 
