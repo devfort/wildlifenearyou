@@ -15,6 +15,8 @@ import traceback
 import xappy
 import xapian # For calling the latlong code directly
 
+api_version = r'0/'
+
 def render_result_as_json(result):
     """Render a result structure to JSON and return it from the request.
 
@@ -210,6 +212,20 @@ def parse_query_spec(db, subq, spell=False):
         return db.query_all(), None
 
     raise ValidationError("Invalid query specification - unknown query type '%s'" % subq[0])
+
+@jsonreturning
+@timed
+@errchecked
+def latestapi(request):
+    """Return information about the API version.
+
+    Returns a JSON string holding a dict with 'latest_version' set to the
+    latest version for the API.
+
+    """
+    return {
+        'latest_version': api_version,
+    }
 
 @jsonreturning
 @timed

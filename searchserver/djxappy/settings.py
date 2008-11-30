@@ -72,7 +72,7 @@ INSTALLED_APPS = (
 )
 
 XAPPY_DATABASE_DIR = 'xappydbs' # Path to directory holding xappy databases
-BASEURL = 'xapian/' # Base URL of service
+BASEURL = 'search/' # Base URL of service
 
 try:
     from local_settings import *

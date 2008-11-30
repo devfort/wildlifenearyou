@@ -2,6 +2,8 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 import os
 
+import search
+
 urlpatterns = patterns('',
     # Example:
     # (r'^djxappy/', include('djxappy.apps.foo.urls.foo')),
@@ -9,22 +11,24 @@ urlpatterns = patterns('',
     # Uncomment this for admin:
 #     (r'^admin/', include('django.contrib.admin.urls')),
 
+    ('^' + settings.BASEURL + r'latestapi', "search.latestapi"),
+
     # Searching
-    ('^' + settings.BASEURL + r'search/(?P<db_name>\w+)', "search.search"),
-    ('^' + settings.BASEURL + r'get/(?P<db_name>\w+)', "search.get"),
-    ('^' + settings.BASEURL + r'parse_latlong', "search.parse_latlong"),
+    ('^' + settings.BASEURL + search.api_version + r'search/(?P<db_name>\w+)', "search.search"),
+    ('^' + settings.BASEURL + search.api_version + r'get/(?P<db_name>\w+)', "search.get"),
+    ('^' + settings.BASEURL + search.api_version + r'parse_latlong', "search.parse_latlong"),
 
     # Database admin stuff
-    ('^' + settings.BASEURL + r'listdbs', "search.listdbs"),
-    ('^' + settings.BASEURL + r'newdb', "search.newdb"),
-    ('^' + settings.BASEURL + r'deldb', "search.deldb"),
+    ('^' + settings.BASEURL + search.api_version + r'listdbs', "search.listdbs"),
+    ('^' + settings.BASEURL + search.api_version + r'newdb', "search.newdb"),
+    ('^' + settings.BASEURL + search.api_version + r'deldb', "search.deldb"),
 
     # Adding documents
-    ('^' + settings.BASEURL + r'add/(?P<db_name>\w+)', "search.add"),
-    ('^' + settings.BASEURL + r'bulkadd/(?P<db_name>\w+)', "search.bulkadd"),
+    ('^' + settings.BASEURL + search.api_version + r'add/(?P<db_name>\w+)', "search.add"),
+    ('^' + settings.BASEURL + search.api_version + r'bulkadd/(?P<db_name>\w+)', "search.bulkadd"),
     
     # API explorer
-    ('^' + settings.BASEURL + r'api-explorer/(?P<path>.*)$', 
+    ('^' + settings.BASEURL + search.api_version + r'api-explorer/(?P<path>.*)$', 
         'django.views.static.serve', {
             'document_root': os.path.join(
                 os.path.dirname(__file__), 'api-explorer'
