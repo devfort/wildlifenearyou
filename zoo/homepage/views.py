@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseServerError
 from zoo.shortcuts import render
+from django.conf import settings
 
 from zoo.places.models import Place
 from zoo.accounts.forms import RegistrationForm
@@ -49,7 +50,12 @@ def landing(request):
         nearest_species = npws(featured['species'].common_name, (lat, lon))
         if nearest_species:
             featured['species'].nearest = nearest_species[0]
-
+    
+    if settings.SEARCH_ENABLED:
+        default_search = ''
+    else:
+        default_search = 'SEARCH CURRENTLY DISABLED'
+    
     return render(request, 'homepage/landing.html', {
         'random_zoo': random_zoo,
         'featured': featured,
@@ -57,4 +63,5 @@ def landing(request):
         'reg_form': reg_form,
         'recent_sightings': recent_sightings,
         'recent_sightings_favourites': recent_sightings_favourites,
+        'default_search': default_search,
     })

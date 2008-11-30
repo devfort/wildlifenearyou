@@ -59,8 +59,9 @@ try:
     post_save.connect(profilecalc_postsave)
 
     ##### Hook up searchify/djape magic
-    from searchify import initialise
-    initialise()
+    if settings.SEARCH_ENABLED:
+        from searchify import initialise
+        initialise()
 
 except:
     try:

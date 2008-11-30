@@ -64,7 +64,7 @@ creatures that inhabit our beloved Planet.</p>
 		        <div class="container">
 					<label for="q">Look for</label>
 					<div>
-						<input type="text" id="q" name="q" size="50">
+						<input type="text" id="q" name="q" size="50" value="{{ default_search }}">
 			            <input type="submit" value="Search">
 						<p>Try "Lions near London", "Tigers" or why not try and find your favourite animal?</p>
 					</div>
@@ -74,6 +74,9 @@ creatures that inhabit our beloved Planet.</p>
 		</div>
 	</div>
 </div>
+
+<p>We don't have browse or search hooked up yet, so try <a href="/places/">our list of places</a></p>
+
 
 			{% if user.is_authenticated %}
                             {% if recent_sightings_favourites %}
