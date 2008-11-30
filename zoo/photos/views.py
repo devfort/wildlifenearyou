@@ -117,13 +117,13 @@ def set_species(request, username, photo_id):
         "A photo should have a trip if you're trying to add sightings to it"
     # The sightings should already exist on that trip, just hook up the photo
     for id in request.POST.getlist('saw'):
-        print "Processing species ID %s" % id
+        #print "Processing species ID %s" % id
         # Silently discard IDs that do not correspond with sightings
         try:
             sighting = photo.trip.sightings.get(species__id = id)
-            print "  Found sighting %s" % sighting
+            #print "  Found sighting %s" % sighting
         except Sighting.DoesNotExist:
-            print "  Could not find matching sighting"
+            #print "  Could not find matching sighting"
             continue
         assert request.user == sighting.created_by
         photo.sightings.add(sighting)

@@ -30,15 +30,17 @@ def attrproperty(getter_function):
 
 def send_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None):
     from django.core.mail import send_mail
-    if settings.DEBUG:
-        print """Sending email to %s from %s
-
-subject: %s
-body:
-%s
-""" % (recipient_list, from_email, subject, message)
-    else:
-        send_mail(subject, message, from_email, recipient_list, fail_silently=False, auth_user=None, auth_password=None)
+#    if settings.DEBUG:
+#        print """Sending email to %s from %s
+#
+#subject: %s
+#body:
+#%s
+#""" % (recipient_list, from_email, subject, message)
+#    else:
+    send_mail(subject, message, from_email, recipient_list,
+        fail_silently=False, auth_user=None, auth_password=None
+    )
 
 def location_from_request(request):
     """
