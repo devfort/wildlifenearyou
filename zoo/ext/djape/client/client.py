@@ -48,8 +48,9 @@ class Client(object):
         self.default_prefix = default_prefix
 
         self.last_elapsed_time = None
+        self.apiversion = None
 
-    def _doreq(self, path, qs=None, data=None):
+    def _doreq(self, path, qs=None, data=None, versioned=True):
         """Perform a request to path.
 
         If qs is supplied, format as a querystring, and append to the path
@@ -57,7 +58,10 @@ class Client(object):
         be strings, or lists (in which latter case, multiple instances will be
         sent).
 
-        If data is supplied it is a dictionary of fields which are sent as a POST request.
+        If data is supplied it is a dictionary of fields which are sent as a
+        POST request.
+
+        If versioned is True, uses the versioned form of the request path.
 
         """
         if qs is not None:
@@ -70,6 +74,9 @@ class Client(object):
                 vals = filter(None, vals)
                 args.append((field, vals))
             path += '?' + urllib.urlencode(args, doseq=1)
+
+        if versioned:
+            path = "%s/" % self._get_apiversion() + path
 
         if data is None:
             fd = urllib2.urlopen(self.base_url + path)
@@ -86,8 +93,18 @@ class Client(object):
             self.last_elapsed_time = None
         if 'error' in res:
             raise errors.SearchClientError(res['error'], res.get('type', 'Search error'))
-            
+
         return res
+
+    def _get_apiversion(self):
+        """Get the latest API version if it's not already been requested.
+
+        """
+        if self.apiversion is not None:
+            return self.apiversion
+        res = self._doreq('latestapi', versioned=False)
+        self.apiversion = int(res['latest_version'])
+        return self.apiversion
 
     def search(self, query, start_rank=None, end_rank=None,
                spell_correct=None, relevant_data=None,
@@ -105,7 +122,7 @@ class Client(object):
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise Invalid('Missing db_name')
+            raise NameError('Missing db_name')
         if self.default_prefix is not None:
             db_name = self.default_prefix + '_' + db_name
 
@@ -140,7 +157,7 @@ class Client(object):
         if db_name is None:
             db_name = self.default_db_name
         if db_name is None:
-            raise Invalid('Missing db_name')
+            raise NameError('Missing db_name')
 
         if isinstance(ids, basestring):
             ids = (ids,)

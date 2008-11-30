@@ -15,7 +15,7 @@ import traceback
 import xappy
 import xapian # For calling the latlong code directly
 
-api_version = r'0/'
+api_version = 0
 
 def render_result_as_json(result):
     """Render a result structure to JSON and return it from the request.
@@ -224,7 +224,7 @@ def latestapi(request):
 
     """
     return {
-        'latest_version': api_version,
+        'latest_version': str(api_version),
     }
 
 @jsonreturning
