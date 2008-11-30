@@ -67,7 +67,6 @@ MIDDLEWARE_CLASSES = [
     'zoo.middleware.OnlyLowercaseUrls',
     'zoo.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'zoo.prelaunch_middleware.PreLaunchMiddleware',
 ]
 PRELAUNCH_PASSWORD = 'tigers'
 
@@ -144,6 +143,9 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+if PRELAUNCH_PASSWORD:
+    MIDDLEWARE_CLASSES += ['zoo.prelaunch_middleware.PreLaunchMiddleware',]
 
 assert XAPIAN_PERSONAL_PREFIX, """
     You need to create a XAPIAN_PERSONAL_PREFIX setting in your
