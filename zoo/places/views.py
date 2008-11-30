@@ -17,6 +17,7 @@ def place(request, country_code, slug):
     species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE)
 
     opening_times = {}
+    single = {}
     for opening in place.placeopening_set.all():
 
         start_date = opening.start_date or ''
@@ -34,6 +35,7 @@ def place(request, country_code, slug):
                     date_range = u'%s &mdash; %s' % (date, dateformat.format(end_date, 'jS F Y'))
             else:
                 date_range = u'%s' % dateformat.format(start_date, 'jS F Y')
+                single[date_range] = True
         elif start_date:
             date_range = u'%s &mdash;' % dateformat.format(start_date, 'jS F Y')
         elif end_date:
@@ -61,7 +63,7 @@ def place(request, country_code, slug):
         else:
             arr[0] = gen_day_dict()
 
-    times_sorted = [ (key, opening_times[key]) for key in sorted(opening_times.keys()) ]
+    times_sorted = [ (key, opening_times[key], single.get(key, False)) for key in sorted(opening_times.keys()) ]
 
     return render(request, 'places/place.html', {
         'place': place,

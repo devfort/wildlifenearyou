@@ -123,9 +123,9 @@ jQuery(function($) {
 		{% if day %}
 			{% if day.name %}
 				<dt>{{ day.name }}</dt>
-			{% else %}
+			{% else %}{% if not date_ranges.2 %}
 				<dt>Every day</dt>
-			{% endif %}
+			{% endif %}{% endif %}
 			<dd>
 				{% if day.closed %}Closed{% endif %}
 				{{ day.times }}
