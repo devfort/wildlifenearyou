@@ -259,9 +259,10 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 <ol class="comments">
 {% for trip in place.most_recent_trips_with_desc|slice:":5" %}
 	<li >
-	<blockquote>{{ trip.description|truncatewords:10 }}</blockquote>
-	<p class="posted-by">&mdash; <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by }}</a></p>
-	<img src="{% url profile-image-resized request.user.username %}" alt="{{ request.user.username }} avatar" height="30" width="30">
+	<blockquote><p>{{ trip.description|truncatewords:10 }}</p></blockquote>
+	<p class="posted-by">
+	<img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
+<a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
 {% endfor %}
 </ol>
 {% endif %}
