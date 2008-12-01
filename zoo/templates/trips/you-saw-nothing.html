@@ -1,0 +1,13 @@
+{% extends base %}
+
+{% block title %}Add your sightings{% endblock %}
+
+{% block primary_content %}
+
+<h1>Add your sightings</h1>
+
+<p>
+        I'm sorry, it looks like we haven't been able to match up what you saw with our list of animals. That probably means that we're missing some - there are an awful lot of animals out there! You can <a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}">send us feedback</a> so we can add in the animals you've seen - we'd really appreciate it!
+</p>
+
+{% endblock %}

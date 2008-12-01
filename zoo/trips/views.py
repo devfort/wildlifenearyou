@@ -109,6 +109,12 @@ def add_sightings(request, country_code, slug):
         if not value:
             del saw_dict[key]
     
+    # If we have neither saw_ids nor remaining saw_dict members,
+    # ie we have no useful questions to ask left, but we've got not useful answers either,
+    # then we give up
+    if not saw_id_set and not saw_dict:
+        return render(request, 'trips/you-saw-nothing.html', {})
+        
     # If we just have saw_ids, we can get right on with adding the sightings
     if saw_id_set and not saw_dict:
         return Redirect(
