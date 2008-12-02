@@ -210,10 +210,12 @@ def set_location(request):
             (lat, lon) = result['latlon']
             description = result['description']
             msg = 'Your location has been set to <strong>%s</strong>.' % description
-            random_animal = Species.objects.order_by('?')[0]
-            nearest = nearest_places_with_species(random_animal.common_name, (lat, lon))
-            if nearest:
+            try:
+                random_animal = Species.objects.order_by('?')[0]
+                nearest = nearest_places_with_species(random_animal.common_name, (lat, lon))
                 msg += ' As an example, your nearest <a href="%s">%s</a> is %s miles away, at <a href="%s">%s</a>.' % (random_animal.urls.absolute, random_animal.common_name, int(nearest[0].distance_miles+0.5), nearest[0].urls.absolute, nearest[0])
+            except IndexError:
+                nearest = None
             current_location = description
             # Set their location
             if not request.user.is_anonymous():

@@ -7,15 +7,15 @@ from zoo.search import nearest_places_with_species
 from random import randint
 
 def standard(request):
-    num = cache.get('total_num_of_species')
-    if not num:
-        num = Species.objects.all().count()
-        cache.set('total_num_of_species', num, 60)
+    num_species = cache.get('total_num_of_species')
+    if not num_species:
+        num_species = Species.objects.all().count()
+        cache.set('total_num_of_species', num_species, 60)
 
     rand = randint(1, 2)
     location, (lat, lon) = location_from_request(request)
     animal = None
-    if location and rand==1:
+    if location and rand==1 and num_species > 0:
         animal = cache.get('footer_stat_nearest_%s' % location)
         if not animal:
             random_animal = Species.objects.order_by('?')[0]
@@ -35,7 +35,7 @@ def standard(request):
         rand = 2
 
     return {'base': 'base.html',
-            'total_num_of_species': num,
+            'total_num_of_species': num_species,
             'rand': rand,
             'random_animal': animal
     }
