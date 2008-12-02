@@ -15,6 +15,7 @@ class Command(BaseCommand):
             raise CommandError("Command doesn't accept any arguments")
         
         import zoo.middleware # To turn on the Searchify magic
+        searches.delete_known_species()
         for species in Species.objects.all():
             species.save()
             print "Re-indexed %s" % species

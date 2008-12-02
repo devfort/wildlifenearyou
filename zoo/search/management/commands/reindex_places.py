@@ -15,6 +15,7 @@ class Command(BaseCommand):
             raise CommandError("Command doesn't accept any arguments")
         
         import zoo.middleware # To turn on the Searchify magic
+        searches.delete_places()
         for place in Place.objects.all():
             place.save()
             print "Re-indexed %s" % place
