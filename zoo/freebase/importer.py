@@ -22,7 +22,11 @@ def import_into_xapian():
     }, {
         'field_name': 'scientific_name',
         'store': True,
-        'freetext': {}
+        'freetext': {'language': 'en'} # Remove when stemming bug is fixed
+    }, {
+        'field_name': 'freebase_id',
+        'store': True,
+        'freetext': {'language': 'en'}
     }], overwrite=True) # replaces existing index if there is one
     # We have a database!
     
@@ -38,6 +42,7 @@ def import_into_xapian():
         doc.extend([
             ('common_name', row['name']),
             ('scientific_name', row['scientific_name']),
+            ('freebase_id', row['id']),
         ])
         # client.add(doc) - would work here
         queue.append(doc)

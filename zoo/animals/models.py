@@ -47,7 +47,8 @@ class AbstractSpecies(models.Model):
 
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
-
+    freebase_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    
     def visible_photos(self):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
