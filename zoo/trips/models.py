@@ -52,6 +52,12 @@ class Trip(AuditedModel):
         else:
             raise AttributeError, name
     
+    def sighting_count(self):
+        return self.sightings.count() + self.inexact_sightings.count()
+    
+    def all_sightings(self):
+        return list(self.sightings.all()) + list(self.inexact_sightings.all())
+    
     # THIS MUST BE static. It does not act on an instance and is called from
     # the profile model
     @staticmethod

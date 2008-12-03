@@ -6,10 +6,10 @@
 {% ifequal 1 sl %}
 	<p>A trip to {% for place in sightings_by_place %}{% for sighting in place.list|slice:":1" %}		
 		<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
-		{% endfor %}{% endfor %} with {{ trip.sightings.all.count }} animal  sighting{{ trip.sightings.all.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
+		{% endfor %}{% endfor %} with {{ trip.sighting_count }} animal  sighting{{ trip.sighting_count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
 
 	{% for place in sightings_by_place %}
-	<h{{htag2}}>Sighting{{ trip.sightings.all.count|pluralize }}</h{{htag2}}>
+	<h{{htag2}}>Sighting{{ trip.sighting_count|pluralize }}</h{{htag2}}>
 	<ul>
 		{% for sighting in place.list %}
 		<li><a href="{% url species sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
@@ -17,7 +17,7 @@
 	</ul>
 	{% endfor %}
 {% else %}
-	<p>A trip {% ifnotequal trip.formatted_date '' %} taken {{ trip.formatted_date }}{% endifnotequal %} with {{ trip.sightings.all.count }} animal sighting{{ trip.sightings.all.count|pluralize }} </p>
+	<p>A trip {% ifnotequal trip.formatted_date '' %} taken {{ trip.formatted_date }}{% endifnotequal %} with {{ trip.sighting_count }} animal sighting{{ trip.sighting_count|pluralize }} </p>
 
 	<p class="description">
 	{{ trip.description }}

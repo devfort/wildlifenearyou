@@ -212,7 +212,7 @@ def finish_add_sightings_to_place(request, country_code, slug):
     """
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
-    saw_id_set = set(request.GET.getlist('saw'))
+    saw_id_set = set(request.REQUEST.getlist('saw'))
     hiddens = []
     for i, saw_id in enumerate(saw_id_set):
         hiddens.append(

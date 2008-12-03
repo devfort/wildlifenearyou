@@ -9,35 +9,39 @@
 {% block primary_content %}
 
 <h1>{{ trip.compact_title }}</h1>
-{% with trip.sightings.all as sightings %}
+{% with trip.all_sightings as sightings %}
         {% regroup sightings by place.known_as as sightings_by_place %}
     
         {% with sightings_by_place|length as sl %}
         {% ifequal 1 sl %}
                 <p>A trip to {% for place in sightings_by_place %}{% for sighting in place.list|slice:":1" %}           
                         <a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
-                {% endfor %}{% endfor %} with {{ trip.sightings.all.count }} animal sighting{{ trip.sightings.all.count|pluralize }}</p>
+                {% endfor %}{% endfor %} with {{ trip.sighting_count }} animal sighting{{ trip.sighting_count|pluralize }}</p>
 
                 <p class="description">
                 {{ trip.description }}
                 </p>
 
                 {% for place in sightings_by_place %}
-                        <h2>Sighting{{ trip.sightings.all.count|pluralize }}</h2>
+                        <h2>Sighting{{ trip.sighting_count|pluralize }}</h2>
                         <ul>
                                 {% for sighting in place.list %}
+                                    {% if sighting.species.slug %}
                                         <li><a href="{% url place-species-view sighting.place.country.country_code,sighting.place.slug,sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+                                    {% else %}
+                                        <li>{{ sighting.species }}</li>
+                                    {% endif %}
                                 {% endfor %}
                         </ul>
                 {% endfor %}
         {% else %}
-                <p>A trip with {{ trip.sightings.all.count }} sighting{{ trip.sightings.all.count|pluralize }}</p>
+                <p>A trip with {{ trip.sighting_count }} sighting{{ trip.sighting_count|pluralize }}</p>
 
                 <p class="description">
                 {{ trip.description }}
                 </p>
 
-                <h2>Sighting{{ trip.sightings.all.count|pluralize }}</h2>
+                <h2>Sighting{{ trip.sighting_count|pluralize }}</h2>
                 {% for place in sightings_by_place %}
                         <h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
                 {% endfor %}</h3>
@@ -45,7 +49,10 @@
 
                 <ul>
                         {% for sighting in place.list %}
-                        <li><a href="{% url place-species-view sighting.place.country.country_code,sighting.place.slug,sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+                        {% if sight.species.slug %}<li><a href="{% url place-species-view sighting.place.country.country_code,sighting.place.slug,sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+                        {% else %}
+                        <li>{{ sighting.species }}</li>
+                        {% endif %}
                         {% endfor %}
                 </ul>
                 {% endfor %}
