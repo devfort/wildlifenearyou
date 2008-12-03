@@ -403,3 +403,33 @@ def lookup_xapian_or_django_id(id):
             return obj
     else:
         return None
+
+@login_required
+def trip_delete(request, username, trip_id):
+    user = get_object_or_404(User, username=username)
+    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
+    assert user != trip.created_by, "You can only delete your own trips!"
+    if request.POST.get('confirm_delete'):
+        # Delete the sightings for the trip
+        for sighting in list(trip.sightings.all()):
+            # First, unlink any photos attached to this sighting
+            for photo in list(sighting.photos.all()):
+                photo.sighting = None
+                photo.trip = None
+                photo.save()
+            sighting.delete()
+        for inexact_sighting in list(trip.inexact_sightings.all()):
+            inexact_sighting.delete()
+        
+        # Delete the trip
+        places = list(trip.places.all())
+        trip.delete()
+        # Re-index each place
+        for place in places:
+            place.save()
+        
+        return Redirect('/profile/%s/' % username)
+    
+    return render(request, 'trips/trip_delete.html', {
+        'trip': trip,
+    })

@@ -1,0 +1,16 @@
+{% extends base %}
+
+{% block title %}Really delete {{ trip.title }}?{% endblock %}
+
+{% block primary_content %}
+
+<h1>Delete {{ trip.compact_title }}</h1>
+
+<p>There's no going back!</p>
+
+<form action="{{ request_path }}" method="POST">
+    <p><input type="submit" name="confirm_delete" value="Delete this trip"></p>
+</form>
+
+
+{% endblock %}
