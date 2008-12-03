@@ -1,0 +1,41 @@
+{% extends base %}
+
+{% block title %}Which animals did you see?{% endblock %}
+
+{% block primary_content %}
+<style type="text/css">
+ul li label { display: inline; font-weight: normal; }
+ul li i.scientific { font-size: 0.85em; }
+ul li { list-style-type: none; }
+</style>
+
+<h1>Which animals did you see?</h1>
+
+<form action="{{ request.path }}" method="GET">
+{% for section in sections %}
+<h2>{{ section.search }}<input type="hidden" name="saw.{{ section.id }}.s" value="{{ section.search }}"></h2>
+{% if section.options %}<p>I know the exact species, it was a...</p>
+    <ul>
+    {% for option in section.options %}
+    <li><input {% if option.checked %}checked="checked"{% endif %}type="radio" name="saw.{{ section.id }}.o" value="{{ option.id }}" id="choice_{{ option.label_id }}"> <label for="choice_{{ option.label_id }}">{{ option.common_name }} <i class="scientific">({{ option.scientific_name }})</i></label></li>
+    {% endfor %}
+    </ul>
+<p>Or...</p>
+{% endif %}
+<ul>
+<li><input type="radio" name="saw.{{ section.id }}.o" value="search-again" id="choice_{{ section.id }}_search_again"> <label for="choice_{{ section.id }}_search_again">Try again</label> with <input type="text" value="{{ section.search }}" name="saw.{{ section.id }}.r"> instead</li>
+<li><input type="radio" name="saw.{{ section.id }}.o" value="as-is" id="choice_{{ section.id }}_as_is"> <label for="choice_{{ section.id }}_as_is">{% if section.options %}It wasn't any of those, j{% else %}J{% endif %}ust save "<em>{{ section.search }}</em>" for the moment</label></li>
+<li><input type="radio" name="saw.{{ section.id }}.o" value="cancel" id="choice_{{ section.id }}_cancel"> <label for="choice_{{ section.id }}_cancel">Actually I didn&#39;t see a "<em>{{ section.search }}</em>"</label></label></li>
+</ul>
+{% endfor %}
+
+<p><label for="choice_{{ bonus_label_id }}_bonus">I also saw a</label> <input type="text" name="saw.{{ bonus_label_id }}.s" id="choice_{{ bonus_label_id }}_bonus"></p>
+
+<p><input type="submit" value="Continue">
+{% for hidden in hiddens %}
+<input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
+{% endfor %}
+</p>
+</form>
+
+{% endblock %}

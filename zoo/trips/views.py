@@ -6,11 +6,11 @@ from django.http import HttpResponseRedirect as Redirect
 from django.contrib.auth.decorators import login_required
 from django import forms
 
-import datetime
+import datetime, urllib
 from parsedatetime.parsedatetime import Calendar
 
 from zoo.shortcuts import render
-from zoo.trips.models import Trip, Sighting
+from zoo.trips.models import Trip, Sighting, InexactSighting
 from zoo.accounts.models import Profile
 from zoo.animals.forms import SpeciesField
 from zoo.search import NotFound, lookup_species, search_species
@@ -57,169 +57,153 @@ saw_key_re = re.compile('^saw_\d+$')
 saw_id_key_re = re.compile('^saw_id_\d+$')
 saw_selection_key_re = re.compile('^saw_selection_\d+$')
 
-
 @login_required
-def add_sightings(request, country_code, slug):
+def pick_sightings_for_place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
-    # request.GET will contain:
-    #   saw_1, saw_2, ... = text strings the user said they saw
-    #   saw_id_1, saw_id_2, ... = IDs of things we have resolved
-    #   saw_selection_1, ... = IDs of things they have picked from our UI
-    # 
-    # Our aim is to change all of the saw_%s in to saw_id_%s
-    # 
-    # Every round-trip to the server that results in a saw_section will remove
-    # an item from the saw_% list and add an item to the saw_id_% list
-    # 
-    # Just keep on looping around until they've got them all right, or 
-    # they've given up on some of the ones that don't have any matches.
-    # 
-    # The IDs in saw_selection_% come in two forms - s% and x%
-    #   s% means "this is a Species object ID (in our local db table)"
-    #   x% means "this is a Xapian ID" (in our Xapian index)
-    # 
-    # When we finally submit, any x% ids will result in an insert in to our 
-    # species table since they will represent animals that we don't officially
-    # know anything about yet.
-    
-    # The collection of verified sighted species IDs
-    saw_id_set = set(
-        value for key, value in request.GET.items()
-        if saw_id_key_re.match(key)
-    )
-    
-    # Text items we haven't resolved yet
-    saw_dict = dict([
-        (int(key.replace('saw_', '')), value)
-        for key, value in request.GET.items()
-        if saw_key_re.match(key) and value.strip()
-    ])
-    
-    # Selections for those (IDs should match IDs in the saw dict above)
-    saw_selection_dict = dict([
-        (int(key.replace('saw_selection_', '')), value)
-        for key, value in request.GET.items()
-        if saw_selection_key_re.match(key)
-    ])
-    
-    # Now remove animals from saw_dict if we have flagged them as 
-    # "maybe I didn't see X" by putting an empty value in saw_selection_dict
-    for key, value in saw_selection_dict.items():
-        if not value:
-            del saw_dict[key]
-    
-    # If we have neither saw_ids nor remaining saw_dict members,
-    # ie we have no useful questions to ask left, but we've got not useful answers either,
-    # then we give up
-    if not saw_id_set and not saw_dict:
-        return render(request, 'trips/you-saw-nothing.html', {})
-        
-    # If we just have saw_ids, we can get right on with adding the sightings
-    if saw_id_set and not saw_dict:
-        return Redirect(
-            request.path + ('-'.join(saw_id_set)) + '/'
-        )
-        #return finish_add_sightings(request, place, saw_id_set)
-    
-    # If there's a saw_dict and they've picked an option for everything on it 
-    # as represented in saw_selection_dict, we should sanity check each of 
-    # their selections and then add the sightings
-    #
-    # We track which ones have been successfully looked up by removing them 
-    # from saw_dict and adding them to the saw_id_set. If saw_dict is 
-    # empty at the end then we've got them all!
-    if saw_dict and saw_selection_dict:
-        # They've picked some things
-        
-        # We'll iterate over IDs that are present in both dictionaries
-        keys = [key for key in saw_dict if key in saw_selection_dict]
-        
-        for key in keys:
-            string = saw_dict[key]
-            selected_id = saw_selection_dict[key]
-            
-            # Look up selected_id
-            if selected_id.startswith('x'):
-                x_id = selected_id[1:]
-                # Look it up in Xapian
-                try:
-                    doc = lookup_species(x_id)
-                    saw_id_set.add(selected_id)
-                    del saw_dict[key] # remove from saw_list
-                except NotFound:
-                    # This will only happen if a Xapian re-index occurs in 
-                    # between the user loading and submitting the form - 
-                    # so just ignore that key for the moment
-                    del saw_selection_dict[key]
-                    continue
-            elif selected_id.startswith('s'):
-                dj_id = selected_id.replace[1:]
-                try:
-                    species = Species.object.get(pk = dj_id)
-                except Species.DoesNotExist:
-                    found_them_all = False
-                    continue
-                saw_id_set.add(selected_id)
-                del saw_dict[key] # remove from saw_list
-            else:
-                # Someone has been messing around with form vars - ignore
-                continue
-        if not saw_dict:
-            return Redirect(
-                request.path + ('-'.join(saw_id_set)) + '/'
-            )
+    return pick_sightings(request, '/%s/%s/add-sightings/' % (
+        country_code.lower(), slug
+    ))
 
-    
-    # If we get here, there are at least some "saw" text entries that need to 
-    # be disambiguated. Show a form.
-    form = forms.Form()
-    for key, string in saw_dict.items():
-        if not string.strip():
-            continue
-        results = search_species(string)
-        if not results:
-            continue
-        choices = [((
-                r.get('django_id') and 's%s' % r['django_id'] 
-                or ('x%s' % r['search_id'])
-            ), u'%s (%s)' % (r['common_name'], r['scientific_name']))
-            for r in results
-        ]
-        if len(choices)==0:
-            choices = [('', "Sorry - we don't know anything about \"%s\"; you can send feedback to tell us all about it!" % string)]
-        else:
-            if string[0] in ('a','e','i','o','u'):
-                article = 'an'
-            else:
-                article = 'a'
-            choices += [('', "Actually I didn't see %s %s" % (article, string))]
-        form.fields['saw_selection_%s' % key] = forms.ChoiceField(
-            choices = choices,
-            widget = forms.RadioSelect
-        )
-    
-    # Assemble the hidden variables
-    hiddens = [
-        {'name': 'saw_%s' % key, 'value': value}
-        for key, value in saw_dict.items()
-    ]
-    # Add existing saw_ids in as more hidden form fields
-    for i, saw_id in enumerate(saw_id_set):
-        hiddens.append(
-            {'name': 'saw_%s' % i, 'value': saw_id}
-        )
-    
-    return render(request, 'trips/which-did-you-mean.html', {
-        'form': form,
-        'hiddens': hiddens,
-        'saw_id_set': repr(saw_id_set),
-        'saw_selection_dict': repr(saw_selection_dict),
-        'saw_dict': repr(saw_dict),
-    })
+from django.utils.datastructures import DotExpandedDict
 
 @login_required
-def finish_add_sightings(request, country_code, slug, ids):
+def pick_sightings(request, redirect_to):
+    """
+    A replacement for the old add_sightings view. This one is designed to 
+    sit in between two different parts of the interface. It narrows down
+    the list of entered text to concrete species as before, then forwards 
+    the user on to the redirect_to URL with concrete species IDs attached.
+    
+    For example, the resulting redirect may look like this:
+    
+    /gb/london-zoo/add-trip/?saw=x:2ab1&saw=s:123&saw=A+baby+tiger
+    
+    Note that there are now three types of saw IDs:
+    
+       x:* = a Xapian search ID
+       s:* = an animals_species table ID
+       *   = free text not matched in our database
+    
+    Our sightings recording mechanism is now expected to be able to deal with 
+    free text, which will be turned in to an InexactSighting record.
+    
+    The INPUT to this view should start off as something like this:
+    
+    ../pick-sightings/?saw.1.s=tiger&saw.2.s=pony
+    
+    If there are any ?saw= items, the view redirects straight away turning
+    them in to that format. So, the easiest way to get started with the 
+    process is to send someone to:
+    
+    ../pick-sightings/?saw=tiger&saw=pony
+    
+    If called with no arguments, starts off with an empty "I saw" form
+    
+    """
+    if request.GET.getlist('saw'):
+        # Convert ?saw= arguments to ?saw.1.s= type things
+        return Redirect(request.path + '?' + urllib.urlencode([
+            ('saw.%d.s' % i, saw.strip())
+            for i, saw in enumerate(request.GET.getlist('saw'))
+            if saw.strip()
+        ]))
+    
+    saw = DotExpandedDict(request.GET).get('saw')
+    if request.GET and not saw:
+        # Clear out the invalid query string
+        return Redirect(request.path)
+    
+    if not saw:
+        assert False, "Jump straight to showing the empty form"
+    
+    # saw should now of format {'0': {'s': 'tiger', 'o': 'x:ba3'}...}
+    # Essentially a dictionary of key/dict pairs. The key doesn't actually 
+    # matter, it's just used to group values. The dict looks like this:
+    #     s = The text the user entered (required)
+    #     o = The option they picked to fulfill it (optional)
+    #     r = The replacement search they want to run (defaults to same as s)
+    # The 'o' value comes from a radio select and can be of these formats:
+    #     x_*    = a Xapian search ID they have selected
+    #     s_*    = a Species ID they have selected
+    #     cancel = don't save this at all (e.g. "I made a mistake")
+    #     as-is  = save it as a InexactSighting record
+    #     search-again = run the replacement search instead
+    
+    # Are we done yet? The aim is for every key to have a valid option 
+    # provided that isn't 'search-again'.
+    if saw and is_valid_saw_list(saw.values()):
+        return Redirect(redirect_to + '?' + '&'.join([
+            urllib.urlencode({
+                'saw': d['o'] == 'as-is' and d.get('s') or d['o']
+            })
+            for d in saw.values()
+            if d.get('s') and (d['o'] != 'cancel')
+        ]))
+    
+    # We aren't done, so we need to build up all of the information required
+    # to construct our big form full of options, search results etc
+    sections = []
+    
+    section_id = 0
+    label_id = 0
+    if saw:
+        for key in sorted(saw.keys(), key = lambda k: int(k)):
+            d = saw[key]
+            search = d.get('r', d['s']).strip()
+            if not search:
+                continue
+            results = list(search_species(search, 20))
+            db_matches = list(Species.objects.filter(freebase_id__in = [
+                r['freebase_id'] for r in results
+            ]))
+            choices = []
+            is_first = True
+            for row in results:
+                try:
+                    id = 's_%s' % [
+                        s for s in db_matches 
+                        if s.freebase_id == r['freebase_id']
+                    ][0].id
+                except IndexError:
+                    id = 'x_%s' % r['search_id']
+                choices.append({
+                    'id': id,
+                    'common_name': row['common_name'],
+                    'scientific_name': row['scientific_name'],
+                    'label_id': label_id,
+                    'checked': (d.get('o') == id or is_first),
+                })
+                label_id += 1
+                is_first = False
+            
+            sections.append({
+                'id': section_id,
+                'search': d.get('r', d['s']), # Pick up replacement search
+                'options': choices,
+            })
+            section_id += 1
+    
+    return render(request, 'trips/pick_sightings.html', {
+        'sections': sections,
+        'redirect_to': redirect_to,
+        'bonus_label_id': section_id,
+    })
+
+def is_valid_saw_list(saw_list):
+    "Returns True if every 's' has a corresponding, valid 'o'"
+    for d in saw_list:
+        if not d.get('s').strip():
+            continue
+        o = d.get('o')
+        if not o:
+            return False
+        if o == 'search-again':
+            return False
+    return True
+
+@login_required
+def finish_add_sightings_to_place(request, country_code, slug):
     """
     At this point, the user has told us exactly what they saw. We're going to
     add those as sightings, but first, let's see if we can get them to add 
@@ -228,11 +212,11 @@ def finish_add_sightings(request, country_code, slug, ids):
     """
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
-    saw_id_set = ids.split('-')
+    saw_id_set = set(request.GET.getlist('saw'))
     hiddens = []
     for i, saw_id in enumerate(saw_id_set):
         hiddens.append(
-            {'name': 'saw_%s' % i, 'value': saw_id}
+            {'name': 'saw', 'value': saw_id}
         )
     
     if request.method == 'POST':
@@ -243,6 +227,11 @@ def finish_add_sightings(request, country_code, slug, ids):
                 if species: # None if it was somehow invalid
                     Sighting.objects.create(
                         species = species,
+                        place = place
+                    )
+                else:
+                    InexactSighting.objects.create(
+                        species = id,
                         place = place
                     )
             return Redirect(place.get_absolute_url())
@@ -268,12 +257,17 @@ def finish_add_sightings(request, country_code, slug, ids):
             for id in saw_id_set:
                 # Look up the id
                 species = lookup_xapian_or_django_id(id)
-                if species: # None if it was somehow invalid
+                if species: # None if it wasn't a valid ID
                     trip.sightings.create(
                         species = species,
                         place = place,
                     )
-                
+                else:
+                    # Invalid IDs are InexactSightings, add them as such
+                    trip.inexact_sightings.create(
+                        place = place,
+                        species = id,
+                    )
                 # TODO: Shouldn't allow a trip to be added if no valid 
                 # sightings
             
@@ -370,33 +364,30 @@ class FinishAddSightingsForm(forms.Form):
         return datetime.date(*parse[0][:3])
 
 def lookup_xapian_or_django_id(id):
-    if id.startswith('s'):
-        id = id[1:]
+    if id.startswith('s_'):
+        id = id[2:]
         try:
             return Species.object.get(pk = id)
         except Species.DoesNotExist:
             return None
-    elif id.startswith('x'):
-        id = id[1:]
+    elif id.startswith('x_'):
+        id = id[2:]
         # Look it up in Xapian
         try:
             details = lookup_species(id)
         except NotFound:
             return None
         # If it's a Django object already, return that
-        django_id = details.get('django_id')
-        if django_id:
-            return Species.objects.get(pk = django_id)
-        else:
+        try:
+            return Species.objects.get(freebase_id = details['freebase_id'])
+        except Species.DoesNotExist:
             # Save it to the database
             obj, created = Species.objects.get_or_create(
                 slug = details['common_name'].replace(' ', '-').lower(),
                 common_name = details['common_name'],
                 latin_name = details['scientific_name'],
+                freebase_id = details['freebase_id'],
             )
-            # TODO IMPORTANT: Update Xapian with ID of our new model object
-            # put it in the django_id field for that search record
             return obj
     else:
         return None
-    

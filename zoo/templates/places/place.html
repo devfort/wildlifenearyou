@@ -42,7 +42,7 @@ jQuery(function($) {
                 var unused_id = unusedSawId();
                 and_a.find('input').val('').attr({
                     'id': unused_id,
-                    'name': unused_id
+                    'name': 'saw'
                 });
                 and_a.find('label').attr('for', unused_id);
                 and_a.insertBefore('#see-more-animals :submit');
@@ -100,9 +100,9 @@ jQuery(function($) {
 <div id="see-more-animals"><a name="addsightings"></a>
     <h3 class="add">Have you been here?</h3>
     <p>Tell us which animals you saw.</p>
-    <form action="{{ request.path }}add-sightings/" method="GET">
-        <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw_1" id="saw_1"></div>
-        <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw_2" id="saw_2"> <span class="optional">(optional)</span></div>
+    <form action="{{ request.path }}pick-sightings/" method="GET">
+        <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw" id="saw_1"></div>
+        <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw" id="saw_2"> <span class="optional">(optional)</span></div>
         <div><input type="submit" value="Add my animals"></div>
     </form>
     <p>You can also use this to tell us if you know that {{ place.known_as }} has a particular animal (such as sharks), but we haven't listed it. (We won't assume you've seen them in this case!)</p>
