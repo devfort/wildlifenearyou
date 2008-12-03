@@ -221,6 +221,14 @@ def finish_add_sightings_to_place(request, country_code, slug):
         hiddens.append(
             {'name': 'saw', 'value': saw_id}
         )
+    # Text descriptions of sightings, so we can display them to the user
+    sightings = []
+    for saw_id in saw_id_set:
+        species = lookup_xapian_or_django_id(saw_id)
+        if species:
+            sightings.append(species)
+        else:
+            sightings.append(saw_id)
     
     if request.method == 'POST':
         if request.POST.get('just-sightings'):
@@ -296,6 +304,7 @@ def finish_add_sightings_to_place(request, country_code, slug):
         'place': place,
         'form': form,
         'tcount': tcount,
+        'sightings': sightings,
     })
 
 class FinishAddSightingsForm(forms.Form):
