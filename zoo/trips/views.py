@@ -172,7 +172,9 @@ def pick_sightings(request, redirect_to):
                     'common_name': row['common_name'],
                     'scientific_name': row['scientific_name'],
                     'label_id': label_id,
-                    'checked': (d.get('o') == id or is_first),
+                    'checked': (d.get('o') == id or (
+                        is_first and d.get('o') != 'cancel'
+                    )),
                 })
                 label_id += 1
                 is_first = False
@@ -181,6 +183,7 @@ def pick_sightings(request, redirect_to):
                 'id': section_id,
                 'search': d.get('r', d['s']), # Pick up replacement search
                 'options': choices,
+                'o': d.get('o'),
             })
             section_id += 1
     
@@ -367,7 +370,7 @@ def lookup_xapian_or_django_id(id):
     if id.startswith('s_'):
         id = id[2:]
         try:
-            return Species.object.get(pk = id)
+            return Species.objects.get(pk = id)
         except Species.DoesNotExist:
             return None
     elif id.startswith('x_'):
