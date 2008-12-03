@@ -14,10 +14,9 @@
 
 <form action="{{ request.path }}" method="POST">
 {% ifnotequal tcount 0 %}
-<h2>Want to add these sightings to an existing trip?</h2>
-<p>We show you all the trips you&rsquo;ve been on to {{ place.known_as }}.</p>
+<h2>Add these sightings to an existing trip?</h2>
 	{{ form.user_trips.errors }}
-	{{ form.user_trips.label_tag }}
+	<label for="id_user_trips">Your previous trips to {{ place.known_as }}:</label>
 	{{ form.user_trips }}
 
     <input type="submit" name="add-to-existing" value="Add to my trip">

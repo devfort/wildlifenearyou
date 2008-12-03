@@ -23,7 +23,7 @@ ul li { list-style-type: none; }
 <p>Or...</p>
 {% endif %}
 <ul>
-<li><input {% ifequal section.o "search-again" %}checked="checked"{% endifequal %}type="radio" name="saw.{{ section.id }}.o" value="search-again" id="choice_{{ section.id }}_search_again"> <label for="choice_{{ section.id }}_search_again">Try again</label> with <input type="text" value="{{ section.search }}" name="saw.{{ section.id }}.r"> instead</li>
+<li><input {% ifequal section.o "search-again" %}checked="checked"{% endifequal %}type="radio" name="saw.{{ section.id }}.o" value="search-again" id="choice_{{ section.id }}_search_again"> <label for="choice_{{ section.id }}_search_again">Search again</label> with <input type="text" value="{{ section.search }}" name="saw.{{ section.id }}.r"> instead</li>
 <li><input {% ifequal section.o "as-is" %}checked="checked"{% endifequal %}type="radio" name="saw.{{ section.id }}.o" value="as-is" id="choice_{{ section.id }}_as_is"> <label for="choice_{{ section.id }}_as_is">{% if section.options %}It wasn't any of those, j{% else %}J{% endif %}ust save "<em>{{ section.search }}</em>" for the moment</label></li>
 <li><input type="radio" {% ifequal section.o "cancel" %}checked="checked"{% endifequal %}name="saw.{{ section.id }}.o" value="cancel" id="choice_{{ section.id }}_cancel"> <label for="choice_{{ section.id }}_cancel">Actually I didn&#39;t see a "<em>{{ section.search }}</em>"</label></label></li>
 </ul>
