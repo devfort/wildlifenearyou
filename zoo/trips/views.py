@@ -34,6 +34,7 @@ def trip_view(request, username, trip_id):
         'trip': trip,
         # do this to prepare the rating for the view
         'rating': Trip.calculate_rating_average([trip]),
+        'belongs_to_user': request.user.id == user.id,
     })
 
 from django import forms
@@ -408,7 +409,7 @@ def lookup_xapian_or_django_id(id):
 def trip_delete(request, username, trip_id):
     user = get_object_or_404(User, username=username)
     trip = get_object_or_404(Trip, id=trip_id, created_by=user)
-    assert user != trip.created_by, "You can only delete your own trips!"
+    assert request.user.id == user.id, "You can only delete your own trips!"
     if request.POST.get('confirm_delete'):
         # Delete the sightings for the trip
         for sighting in list(trip.sightings.all()):
