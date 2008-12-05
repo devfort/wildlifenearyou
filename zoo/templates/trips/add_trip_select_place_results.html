@@ -1,0 +1,34 @@
+{% extends base %}
+
+{% block title %}Add a trip{% endblock %}
+
+{% block primary_content %}
+
+<h1>Add a trip</h1>
+
+<p>Where did you go?</p>
+
+<form action="." method="GET">
+    <p>
+        <input type="search" name="q" value="{{ q }}">
+        <input type="submit" value="Search">
+    </p>
+</form>
+
+{% if places %}
+<h2>Was it one of these?</h2>
+<ul>
+    {% for place in places %}
+    <li><a href="{{ place.get_absolute_url }}add-trip/">{{ place }}</a></li>
+    {% endfor %}
+</ul>
+<p>If not, tell us about the place you went to using the form below.</p>
+{% else %}
+<p>We haven't heard of that place, so you'll need to add it.</p>
+{% endif %}
+
+<h2>Add a new place</h2>
+
+{% include "trips/_add_place_form.html" %}
+
+{% endblock %}

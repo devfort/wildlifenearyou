@@ -1,5 +1,5 @@
 function anyEmptyOnes() {
-    return jQuery('#see-more-animals p:visible :text').filter(function() {
+    return jQuery('#see-more-animals div:visible :text').filter(function() {
         return $(this).val() == '';
     }).length > 0;
 }
@@ -32,7 +32,7 @@ jQuery(function($) {
                 var unused_id = unusedSawId();
                 and_a.find('input').val('').attr({
                     'id': unused_id,
-                    'name': unused_id
+                    'name': 'saw'
                 });
                 and_a.find('label').attr('for', unused_id);
                 and_a.insertBefore('#see-more-animals :submit');

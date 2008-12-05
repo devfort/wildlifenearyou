@@ -71,7 +71,12 @@ class Place(AuditedModel):
     price_notes = models.TextField(null=True, blank=True)
 
     featured = models.BooleanField(null=False, blank=False, default=False)
-
+    
+    # If a random user adds a place, it doesn't get marked as confirmed 
+    # until a moderator has checked it. This will probably be the principle 
+    # way that new places are added to the database.
+    is_confirmed = models.BooleanField(default=False)
+    
     def popularity(self):
         """
         Currently just calculated using number of species seen at

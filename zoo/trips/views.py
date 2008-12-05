@@ -4,16 +4,21 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect as Redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.datastructures import DotExpandedDict
 from django import forms
+from django.template.defaultfilters import slugify
 
-import datetime, urllib
+import datetime, urllib, re
 from parsedatetime.parsedatetime import Calendar
 
 from zoo.shortcuts import render
 from zoo.trips.models import Trip, Sighting, InexactSighting
+from zoo.places.models import Place, Country
+from zoo.animals.models import Species
 from zoo.accounts.models import Profile
 from zoo.animals.forms import SpeciesField
 from zoo.search import NotFound, lookup_species, search_species
+from zoo.trips.utils import lookup_xapian_or_django_id
 
 @login_required
 def tripbook_default(request):
@@ -37,27 +42,6 @@ def trip_view(request, username, trip_id):
         'belongs_to_user': request.user.id == user.id,
     })
 
-from django import forms
-
-class AddTripForm(forms.ModelForm):
-    class Meta:
-        model = Trip
-        fields = ('name', 'description', 'start', 'end')
-
-    def save(self):
-        trip = super(AddTripForm, self).save(commit=False)
-        trip.save()
-        Trips.objects.create(trip=trip)
-        return trip
-
-from zoo.places.models import Place, Country
-from zoo.animals.models import Species
-
-import re
-saw_key_re = re.compile('^saw_\d+$')
-saw_id_key_re = re.compile('^saw_id_\d+$')
-saw_selection_key_re = re.compile('^saw_selection_\d+$')
-
 @login_required
 def pick_sightings_for_place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
@@ -65,8 +49,6 @@ def pick_sightings_for_place(request, country_code, slug):
     return pick_sightings(request, '/%s/%s/add-sightings/' % (
         country_code.lower(), slug
     ))
-
-from django.utils.datastructures import DotExpandedDict
 
 @login_required
 def pick_sightings(request, redirect_to):
@@ -164,10 +146,10 @@ def pick_sightings(request, redirect_to):
                 try:
                     id = 's_%s' % [
                         s for s in db_matches 
-                        if s.freebase_id == r['freebase_id']
+                        if s.freebase_id == row['freebase_id']
                     ][0].id
                 except IndexError:
-                    id = 'x_%s' % r['search_id']
+                    id = 'x_%s' % row['search_id']
                 choices.append({
                     'id': id,
                     'common_name': row['common_name'],
@@ -376,35 +358,6 @@ class FinishAddSightingsForm(forms.Form):
 
         return datetime.date(*parse[0][:3])
 
-def lookup_xapian_or_django_id(id):
-    if id.startswith('s_'):
-        id = id[2:]
-        try:
-            return Species.objects.get(pk = id)
-        except Species.DoesNotExist:
-            return None
-    elif id.startswith('x_'):
-        id = id[2:]
-        # Look it up in Xapian
-        try:
-            details = lookup_species(id)
-        except NotFound:
-            return None
-        # If it's a Django object already, return that
-        try:
-            return Species.objects.get(freebase_id = details['freebase_id'])
-        except Species.DoesNotExist:
-            # Save it to the database
-            obj, created = Species.objects.get_or_create(
-                slug = details['common_name'].replace(' ', '-').lower(),
-                common_name = details['common_name'],
-                latin_name = details['scientific_name'],
-                freebase_id = details['freebase_id'],
-            )
-            return obj
-    else:
-        return None
-
 @login_required
 def trip_delete(request, username, trip_id):
     user = get_object_or_404(User, username=username)
@@ -434,3 +387,74 @@ def trip_delete(request, username, trip_id):
     return render(request, 'trips/trip_delete.html', {
         'trip': trip,
     })
+
+@login_required
+def add_trip_select_place(request):
+    """
+    If a user opts to "add a trip" without starting on a place page, we first 
+    need to determine where the trip took place. We offer users a search 
+    form for this. If they search and STILL can't find the place they went 
+    to, we allow them to add a brand new place to our database. This place 
+    will not be marked as "approved" until a member of site staff has 
+    approved it. Unapproved places do not show up in browse or global search 
+    and are not linked to from anywhere other than the user's own trip page.
+    They DO show up in this particular search form though, but ranked lower 
+    than matches that are approved.
+    """
+    q = request.GET.get('q')
+    if not q:
+        return render(request, 'trips/add_trip_select_place.html')
+    
+    # User searched
+    places = Place.objects.filter(known_as__icontains = q)
+    return render(request, 'trips/add_trip_select_place_results.html', {
+        'q': q,
+        'places': places,
+        'form': AddPlaceForm(),
+    })
+
+@login_required
+def add_trip_add_place(request):
+    if request.method == 'POST':
+        form = AddPlaceForm(request.POST)
+        if form.is_valid():
+            place = form.save(commit = False)
+            place.is_confirmed = False
+            # Derive an unused slug
+            append = 1
+            first_slug = slugify(place.known_as)
+            slug = first_slug
+            while Place.objects.filter(slug = slug).count():
+                slug = '%s-%d' % (first_slug, append)
+                append += 1
+            place.slug = slug
+            place.save()
+            return Redirect(place.get_absolute_url() + 'add-trip/')
+    else:
+        form = AddPlaceForm()
+    return render(request, 'trips/add_trip_add_place.html', {
+        'form': form,
+    })
+
+@login_required
+def add_trip(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+    return render(request, 'trips/add_trip.html', {
+        'place': place,
+    })
+
+class AddPlaceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AddPlaceForm, self).__init__(*args, **kwargs)
+        self.fields['known_as'].label = 'Place name'
+        self.fields['url'].label = 'URL'
+        self.fields['zip'].label = 'Postal code / ZIP'
+        self.fields.keyOrder = self.Meta.fields
+    
+    class Meta:
+        model = Place
+        fields = (
+            'known_as', 'country', 'url', 'address_line_1', 'address_line_2', 
+            'town', 'state', 'zip', 'phone', 'latitude', 'longitude',
+        )

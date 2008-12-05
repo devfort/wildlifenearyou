@@ -55,6 +55,7 @@ Your location is currently {{ profile.location }} &ndash;
 		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
 	</p>
 	{% endif %}
+	{% ifequal profile.user user %}<p><a href="/add-trip/">Add a trip</a></p>{% endifequal %}
 </div>
 
 <div>

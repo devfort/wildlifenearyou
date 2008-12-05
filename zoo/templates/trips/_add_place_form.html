@@ -1,0 +1,67 @@
+<form action="/add-trip/add-place/" method="POST">
+<fieldset><legend>Required fields</legend>
+<div>
+    {{ form.known_as.errors }}
+    <label for="id_{{ form.known_as.html_name }}">Name of the place</label>
+    {{ form.known_as }}
+</div>
+<div>
+    {{ form.country.errors }}
+    <label for="id_{{ form.country.html_name }}">{{ form.country.label }}</label>
+    {{ form.country }}
+</div>
+</fieldset>
+<fieldset><legend>Contact details (optional)</legend>
+<div>
+    {{ form.phone.errors }}
+    <label for="id_{{ form.phone.html_name }}">Phone number</label>
+    {{ form.phone }}
+</div>
+<div>
+    {{ form.url.errors }}
+    <label for="id_{{ form.url.html_name }}">{{ form.url.label }}</label>
+    {{ form.url }}
+</div>
+</fieldset>
+<fieldset><legend>Address (optional)</legend>
+<div>
+    {{ form.address_line_1.errors }}
+    <label for="id_{{ form.address_line_1.html_name }}">{{ form.address_line_1.label }}</label>
+    {{ form.address_line_1 }}
+</div>
+<div>
+    {{ form.address_line_2.errors }}
+    <label for="id_{{ form.address_line_2.html_name }}">{{ form.address_line_2.label }}</label>
+    {{ form.address_line_2 }}
+</div>
+<div>
+    {{ form.town.errors }}
+    <label for="id_{{ form.town.html_name }}">{{ form.town.label }}</label>
+    {{ form.town }}
+</div>
+<div>
+    {{ form.state.errors }}
+    <label for="id_{{ form.state.html_name }}">{{ form.state.label }}</label>
+    {{ form.state }}
+</div>
+<div>
+    {{ form.zip.errors }}
+    <label for="id_{{ form.zip.html_name }}">{{ form.zip.label }}</label>
+    {{ form.zip }}
+</div>
+</fieldset>
+<fieldset><legend>Latitude and Longitude (optional)</legend>
+<div>
+    {{ form.latitude.errors }}
+    <label for="id_{{ form.latitude.html_name }}">{{ form.latitude.label }}</label>
+    {{ form.latitude }}
+</div>
+<div>
+    {{ form.longitude.errors }}
+    <label for="id_{{ form.longitude.html_name }}">{{ form.longitude.label }}</label>
+    {{ form.longitude }}
+</div>
+</fieldset>
+
+    <p><input type="submit" name="Add place"></p>
+</form>
