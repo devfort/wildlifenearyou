@@ -97,7 +97,10 @@ if settings.SEARCH_ENABLED:
                     latlon = ' '.join(map(str, latlon))
                 query.sort_by_distance(latlon_fields[0], latlon)
                 annotate_with_distances = True
-            results = client.search(query, end_rank=num)
+            try:
+                results = client.search(query, end_rank=num)
+            except client.SearchClientError:
+                return [] # TODO: Log this
             search_ids = [
                 item['id'] for item in results['items']
             ]

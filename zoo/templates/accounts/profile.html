@@ -55,7 +55,15 @@ Your location is currently {{ profile.location }} &ndash;
 		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
 	</p>
 	{% endif %}
-	{% ifequal profile.user user %}<p><a href="/add-trip/">Add a trip</a></p>{% endifequal %}
+	{% ifequal profile.user user %}
+	<form action="/add-trip/" method="GET">
+	    <div class="container">
+	        <label for="search-place">Add a trip to...</label>
+	        <input type="search" name="q" id="search-place">
+	        <input type="submit" value="Go" class="submit">
+	    </div>
+	</form>
+    {% endifequal %}
 </div>
 
 <div>

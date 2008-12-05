@@ -401,7 +401,7 @@ def add_trip_select_place(request):
     They DO show up in this particular search form though, but ranked lower 
     than matches that are approved.
     """
-    q = request.GET.get('q')
+    q = request.GET.get('q', '')
     if not q:
         return render(request, 'trips/add_trip_select_place.html')
     
@@ -410,7 +410,7 @@ def add_trip_select_place(request):
     return render(request, 'trips/add_trip_select_place_results.html', {
         'q': q,
         'places': places,
-        'form': AddPlaceForm(),
+        'form': AddPlaceForm(initial={'known_as': q.title()}),
     })
 
 @login_required
