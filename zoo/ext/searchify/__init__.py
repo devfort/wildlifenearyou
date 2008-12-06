@@ -168,7 +168,8 @@ def cascade_reindex(instance):
 def delete_instance(instance):
     if hasattr(instance, 'Searchable'):
         client = get_client(instance.Searchable.xapian_index)
-        client.delete(get_uid(instance))
+        # TODO: Implement client.delete
+        # client.delete(get_uid(instance))
     post_delete.connect(post_delete_hook(instance))
 
 # UTILITY FUNCTIONS
