@@ -135,7 +135,7 @@ EMAIL_FROM = 'zoo@example.com'
 # SEARCH_ENABLED should be turned on only when a Xapian server is available.
 SEARCH_ENABLED = False
 
-XAPIAN_BASE_URL = 'http://10.0.1.205/xapian/'
+XAPIAN_BASE_URL = 'http://superevildevfort.com:8017/search/'
 XAPIAN_LOCATION_DB = 'locations' # It's safe to share the locations DB
 
 XAPIAN_PERSONAL_PREFIX = ''
