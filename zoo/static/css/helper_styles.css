@@ -163,25 +163,46 @@ a.button:focus {
 
 /* @end */
 
-/* @group Extra heading bits */
-
-/*
-h1 a:link,
-h1 a:visited,
-h1 a:active,
-h1 a:focus,
-h1 a:hover {
-	font-size: 0.35em;
-	text-transform: uppercase;
-	font-weight: normal;
-	white-space: nowrap;
-	font-family: Calibri, "Helvetica Neue", sans-serif;
-}
-*/
-
+/* @group Text indicators */
 .meta { 
-        font-size: 0.8em;
+        font-size: 0.8571em;
 }
+.notification {
+	margin-top: 1.357em;
+	background-color: #CBE3B7;
+	padding: 1em;
+	color: black;
+}
+
+.error {
+	background-color: #E3C6B7;
+	padding: 1em;
+	color: black;
+}
+.intro {
+	font-size: 1.2857em;
+	line-height: 1.2;
+}
+/* @end */
+
+/* @group Functional states */
+
+.hidden { 
+	display: none;
+}
+
+.notusing {
+	background-color: #E185E9;	
+}
+
+.hasJS .noscript {
+	display: none;
+}
+
+/* @end */
+
+
+/* @group Header auxiliary styles */
 
 h2 .meta {
     font-size: 0.6364em;
@@ -216,37 +237,3 @@ a.add:active,
 }
 
 /* @end */
-
-.notification {
-	margin-top: 1.357em;
-	background-color: #CBE3B7;
-	padding: 1em;
-	color: black;
-}
-
-.error {
-	background-color: #E3C6B7;
-	padding: 1em;
-	color: black;
-	
-}
-
-.hidden { 
-          display: none;
-}
-
-.notusing {
-	background-color: #E185E9;	
-}
-
-.intro {
-	font-size: 1.2857em;
-	line-height: 1.2;
-}
-
-.optional {
-	font-size: 0.8571em;
-}
-.hasJS .noscript {
-	display: none;
-}
