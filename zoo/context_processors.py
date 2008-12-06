@@ -29,9 +29,8 @@ def standard(request):
                     'place_name': nearest[0],
                 }
                 cache.set('footer_stat_nearest_%s' % location, animal, 300)
-        else:
-            rand = 2
-    elif not location:
+
+    if animal is None:
         rand = 2
 
     return {'base': 'base.html',
