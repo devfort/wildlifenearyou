@@ -6,7 +6,7 @@
 <script type="text/javascript" src="/static/js/star-select-replace.js"></script>
 {% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
 <h1>Tell us about your trip</h1>
 
@@ -28,6 +28,8 @@
     <input type="submit" name="add-to-existing" value="Add to this trip">
     <p class="meta">You've previously added a trip to {{ place.known_as }}. Was this a new trip?</p>
 {% endifnotequal %}
+
+<div class="primary">
 
 <h2>Save these sightings as a new trip</h2>
 <div class="container text-container">
@@ -64,6 +66,11 @@
 <div class="container">
     <input type="submit" name="save-trip" value="Save my trip report">
 </div>
+
+</div>
+
+<div class="secondary">
+
 <h2>Report the sightings but don't save a trip</h2>
 <p class="meta">Use this option if you haven't actually been to the place but know that these animals can be seen there.</p>
 <div class="container">
@@ -74,6 +81,6 @@
 </div>
 </form>
 
-
+</div>
 
 {% endblock %}
