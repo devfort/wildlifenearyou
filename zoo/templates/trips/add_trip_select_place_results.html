@@ -19,7 +19,7 @@
 <h2>Was it one of these?</h2>
 <ul>
     {% for place in places %}
-    <li><a href="{{ place.get_absolute_url }}add-trip/">{{ place }}</a></li>
+    <li><a href="{{ place.get_absolute_url }}add-trip/">{{ place }}</a> ({{ place.country }})</li>
     {% endfor %}
 </ul>
 <p>If not, tell us about the place you went to using the form below.</p>
