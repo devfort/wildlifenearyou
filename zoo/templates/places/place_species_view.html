@@ -16,6 +16,8 @@
 {% endfor %}
 </ul>
 
+{% if place_species.visible_photos.count %}
+
 <h2>Photos</h2>
 
 <p>Of {{ species.common_name }} at {{ place.known_as }}.</p>
@@ -25,6 +27,8 @@
 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
 </div>
 {% endfor %}
+
+{% endif %}
 
 <h2>Comments</h2>
 {% with place_species as object %}

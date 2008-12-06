@@ -4,12 +4,22 @@
 
 {% block content %}
 
-<h1>{{ place.known_as }} - Species</h1>
-
+<h1>{{ place.known_as }}</h1>
 
 <h2>Species</h2>
+
+{% if species_list %}
+
+<ul>
 {% for species in species_list %}
-<h3><strong><a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a></strong>, seen by {{ species.count }}{% if species.seen %} (seen){% endif %}</h3>
+<li><strong><a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a></strong>, seen by {{ species.count }}{% if species.seen %} (seen){% endif %}</li>
 {% endfor %}
+</ul>
+
+{% else %}
+
+<p>No animals have been seen at this place yet.</p>
+
+{% endif %}
 
 {% endblock %}
