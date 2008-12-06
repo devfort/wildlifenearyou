@@ -1,6 +1,6 @@
 {% extends base %}
 
-{% block title %}Search: &ldquo;{{ what }}&rdquo; near &ldquo;{{ near }}&rdquo;{% endblock %}
+{% block title %}Search: {% if what %}&ldquo;{{ what }}&rdquo;{% else %}Everything{% endif %} near &ldquo;{{ near }}&rdquo;{% endblock %}
 
 {% block search_form %}{% endblock %}
 
@@ -9,7 +9,7 @@
 
 <form action="/search/" method="GET">
     <div class="container text-container">
-        <input type="text" name="what" value="{{ what }}" size="20">
+        <input type="text" name="what" value="{% if what %}{{ what }}{% else %}Everything{% endif %}" size="20"{% if not what %} class="remove-default"{% endif %}>
         near <input type="text" name="near" value="{{ near }}" size="25">
         <input type="submit" value="Search">
     </div>
@@ -35,7 +35,7 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
     {% for place in results %}
         <li>
             <h4><a href="{{ place.get_absolute_url }}">{{ place }}</a>, {{ place.country }} <a href="{{ place.country.get_absolute_url }}" class="flag"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
-            {% if place.distance %}{{ place.distance_miles|floatformat:0 }} miles away{% endif %}
+            {% if place.distance %}{{ place.distance_miles|floatformat:0 }} mile{{ place.distance_miles|pluralize }} away{% endif %}
             </h4>
             {% if place.address %}<p>{{ place.address }}</p>{% endif %}
             {% if place.species_list %}
