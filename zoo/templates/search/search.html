@@ -2,6 +2,23 @@
 
 {% block title %}Search{% if q %}: &ldquo;{{ q }}&rdquo;{% endif %}{% endblock %}
 
+{% block extra_head %}
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
+<script type="text/javascript">
+function showMap() {
+    var $ = jQuery;
+    var div = $('<div id="gmap"></div>');
+    div.css({
+        'width': 500,
+        'height': 400
+    });
+    div.appendTo(document.body);
+    var gmap = new GMap2(div[0]);
+    gmap.setCenter(new GLatLng(37.4419, -122.1419), 13);
+}
+</script>
+{% endblock %}
+
 {% block search_form %}{% endblock %}
 
 {% block primary_content %}
