@@ -135,6 +135,9 @@ except ImportError:
 
 EMAIL_FROM = 'zoo@example.com'
 
+# This API key is for http://localhost - over-ride it in local_settings.py
+GOOGLE_MAPS_API_KEY = 'ABQIAAAAyYu8a7AdbfUctK3zwwu_2hT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSvLcMTOAnq4jYs9Ef-8-uu97vUrA'
+
 # SEARCH_ENABLED should be turned on only when a Xapian server is available.
 SEARCH_ENABLED = False
 

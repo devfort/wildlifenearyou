@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.conf import settings
 
 from zoo.animals.models import Species
 from zoo.utils import location_from_request
@@ -36,5 +37,6 @@ def standard(request):
     return {'base': 'base.html',
             'total_num_of_species': num_species,
             'rand': rand,
-            'random_animal': animal
+            'random_animal': animal,
+            'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
     }
