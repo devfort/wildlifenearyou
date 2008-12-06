@@ -15,7 +15,7 @@
 {% endif %}
 
 {% if nearest %}
-<p>The nearest {{ species.common_name }} <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">to you</a> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, {{ nearest.distance_miles|floatformat:0 }} miles away</p>
+<p>The nearest {{ species.common_name }} <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">to you</a> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, {{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away</p>
 {% else %}
 {% if not location_description %}
 <p><a href="/set-location/">Set your location</a> to find {{ species.article }} {{ species.common_name }} near you (or just <a href="/search/?q={{ species.common_name|iriencode }}">search for one</a>)</p>

@@ -125,13 +125,13 @@ class Profile(models.Model):
     def email_validation_url_for_user(self):
         (hash, days) = self._generate_user_hash(self.user.username)
         return reverse('validate-email',
-                       args=(self.user.username, days, hash,)
+                       args=(self.user.username.lower(), days, hash,)
                        )
 
     def password_key_url_for_user(self):
         (hash, days) = self._generate_user_hash(self.user.username)
         return reverse('recover-password',
-                       args=(self.user.username, days, hash,)
+                       args=(self.user.username.lower(), days, hash,)
                        )
 
     def hash_is_valid(self, days, hash):

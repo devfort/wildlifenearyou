@@ -173,7 +173,7 @@ creatures that inhabit our beloved Planet.</p>
 	    <blockquote><p>{{ species.description }}</p></blockquote>
 	    <h3>Your nearest {{ species.common_name }}</h3>
 	    {% if species.nearest %}
-	    <p><a href="{{ species.nearest.urls.absolute }}">{{ species.nearest }}</a> ({{ species.nearest.distance_miles|floatformat }} miles away)</p>
+	    <p><a href="{{ species.nearest.urls.absolute }}">{{ species.nearest }}</a> ({{ species.nearest.distance_miles|floatformat }} mile{{ species.nearest.distance_miles|pluralize }} away)</p>
 	    {% endif %}
 	    {% endwith %}
 	    {% else %}
