@@ -587,7 +587,10 @@ def newdb(request):
                     oldconfig = simplejson.loads(oldconfig)
                 config = simplejson.loads(params['fields'][0])
                 if oldconfig != config:
-                    raise DatabaseExistsError("The path for '%s' is already in use, and the configuration does not match" % db_path)
+                    raise DatabaseExistsError("The path for '%s' is already "
+                        "in use, and the configuration does not match: \n"
+                        "old config=%r\nnew config=%r" %
+                        (db_path, oldconfig, config))
                 else:
                     return {'ok': 1}
             except:
