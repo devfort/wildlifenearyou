@@ -55,9 +55,9 @@
 {% if opening_times %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
 {% for date_ranges in opening_times %}
-	<h3>{{ date_ranges.0|safe }}</h3>
+	<h3>{{ date_ranges.range|safe }}</h3>
 
-	{% for section_title, days in date_ranges.1.items %}
+	{% for section_title, days in date_ranges.sections.items %}
 	 	{% if section_title %}
 	 	<h4>{{ section_title }}</h4>
 	 	{% endif %}
@@ -66,10 +66,8 @@
 	{% for day in days %}
 		{% if day %}
 			{% if day.name %}
-				<dt>{{ day.name }}</dt>
-			{% else %}{% if not date_ranges.2 %}
-				<dt>Every day</dt>
-			{% endif %}{% endif %}
+				<dt>{{ day.name|safe }}</dt>
+			{% endif %}
 			<dd>
 				{% if day.closed %}Closed{% endif %}
 				{{ day.times }}

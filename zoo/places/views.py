@@ -10,60 +10,108 @@ from zoo.trips.models import Trip, Sighting
 
 SPECIES_ON_PLACE_PAGE = 10
 
+# Given an array of days of the week, create a human-readable representation
+def prettify_days(daynums):
+    days_of_week = ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+    in_range = False
+    ranges = {}
+    for d in range(7):
+        if d in daynums and not in_range:
+            in_range = True
+            range_start = d
+        if d not in daynums and in_range:
+            in_range = False
+            ranges[range_start] = d-1
+    if in_range:
+            if 0 in ranges:
+                ranges[range_start] = ranges[0]
+                del ranges[0]
+            else:
+                ranges[range_start] = d
+
+    out = []
+    for start in sorted(ranges):
+        end = ranges[start]
+        if start == end:
+            out.append( days_of_week[start] )
+        else:
+            out.append( '%s&ndash;%s' % (days_of_week[start], days_of_week[end] ) )
+       
+    return ', '.join(out)
+
 def place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
 
     species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE)
 
+    # Loop through opening times in database, grouping by date range and section - only store one opening time per day to allow overriding
     opening_times = {}
-    single = {}
     for opening in place.placeopening_set.all():
 
         start_date = opening.start_date or ''
         end_date = opening.end_date or ''
+        date_range_machine = u'%s - %s' % (start_date, end_date)
 
+        # Create a human-readable date range
         if start_date and end_date:
             # now see if we need to add the end date
             if end_date > start_date:
                 # now check if month and year are the same
                 if dateformat.format(start_date, 'mY') == dateformat.format(end_date, 'mY'):
-                    date_range = u'%s &mdash; %s' % (dateformat.format(start_date, 'jS'), dateformat.format(end_date, 'jS F Y'))
+                    date_range = u'%s &ndash; %s' % (dateformat.format(start_date, 'jS'), dateformat.format(end_date, 'jS F Y'))
                 elif start_date.year == end_date.year:
-                    date_range = u'%s &mdash; %s' % (dateformat.format(start_date, 'jS F'), dateformat.format(end_date, 'jS F Y'))
+                    date_range = u'%s &ndash; %s' % (dateformat.format(start_date, 'jS F'), dateformat.format(end_date, 'jS F Y'))
                 else:
-                    date_range = u'%s &mdash; %s' % (date, dateformat.format(end_date, 'jS F Y'))
+                    date_range = u'%s &ndash; %s' % (dateformat.format(start_date, 'jS F Y'), dateformat.format(end_date, 'jS F Y'))
             else:
                 date_range = u'%s' % dateformat.format(start_date, 'jS F Y')
-                single[date_range] = True
         elif start_date:
-            date_range = u'%s &mdash;' % dateformat.format(start_date, 'jS F Y')
+            date_range = u'%s &ndash;' % dateformat.format(start_date, 'jS F Y')
         elif end_date:
-            date_range = u'&mdash; %s' % dateformat.format(end_date, 'jS F Y')
+            date_range = u'&ndash; %s' % dateformat.format(end_date, 'jS F Y')
         else:
             date_range = '';
 
-        arr = opening_times.setdefault(date_range, {}).setdefault(opening.section, [None] * 8)
-
-        def gen_day_dict(day_of_week=None):
-            name = None
-            if day_of_week is not None:
-                name = ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')[day_of_week]
-
-            return {
-                'name': name,
-                'times': opening.times,
-                'closed': opening.closed,
+        if date_range_machine not in opening_times:
+            opening_times[date_range_machine] = {
+                'date_range': date_range,
+                'sections': {},
+                'single_date': (start_date and end_date and start_date == end_date),
             }
 
+        # 8 element array, as index 7 is for the common "Every day" entry
+        arr = opening_times[date_range_machine]['sections'].setdefault(opening.section, [None] * 8)
+
+        opening_status = { 'times': opening.times, 'closed': opening.closed }
         if opening.days_of_week:
             days_of_week = opening.days_of_week.split(',')
             for d in days_of_week:
-                arr[int(d)+1] = gen_day_dict(int(d))
+                arr[int(d)] = opening_status
+        elif opening_times[date_range_machine]['single_date']:
+            arr[7] = opening_status
         else:
-            arr[0] = gen_day_dict()
+            opening_status['name'] = 'Every day'
+            arr[7] = opening_status
 
-    times_sorted = [ (key, opening_times[key], single.get(key, False)) for key in sorted(opening_times.keys()) ]
+    # Now concatenate together days that have the same times
+    for data in opening_times.values():
+        for section, days in data['sections'].items():
+            arr = []
+            if days[7]:
+                arr.append(days[7]) # First put any "Every day" entry
+            for d in (1,2,3,4,5,6,0): # Week starts on Monday
+                if days[d]:
+                    daynums = [d]
+                    for i in range(6):
+                        if days[(d+i+1)%7] == days[d]:
+                            daynums.append((d+i+1)%7)
+                            days[(d+i+1)%7] = None
+                    days[d]['name'] = prettify_days(daynums)
+                    arr.append ( days[d] )
+            data['sections'][section] = arr
+
+    times_sorted = [ { 'range': opening_times[key]['date_range'], 'sections': opening_times[key]['sections'] } for key in sorted(opening_times) ]
 
     return render(request, 'places/place.html', {
         'place': place,
