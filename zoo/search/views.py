@@ -98,6 +98,8 @@ def search_single(request, q, bypass=False):
 def search(request):
     q = request.GET.get('q', '')
     what = request.GET.get('what', '')
+    if what == 'Everything':
+        what = ''
     near = request.GET.get('near', '')
     if what and near:
         return search_split(request, what, near)
