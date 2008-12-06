@@ -100,7 +100,10 @@ if settings.SEARCH_ENABLED:
             try:
                 results = client.search(query, end_rank=num)
             except client.SearchClientError:
-                return [] # TODO: Log this
+                if details:
+                    return [], [], None # TODO: Log this
+                else:
+                    return [] # TODO: Log this
             search_ids = [
                 item['id'] for item in results['items']
             ]
