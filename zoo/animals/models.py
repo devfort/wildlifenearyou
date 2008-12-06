@@ -1,6 +1,6 @@
 from django.db import models
 from zoo.utils import attrproperty
-from zoo.models import AuditedModel
+from zoo.common.models import AuditedModel
 from zoo.places.models import Place
 
 class SpeciesGroup(AuditedModel):

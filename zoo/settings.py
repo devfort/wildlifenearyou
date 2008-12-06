@@ -64,8 +64,8 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'zoo.middleware.OnlyLowercaseUrls',
-    'zoo.middleware.AutoCreatedAndModifiedFields',
+    'zoo.common.middleware.OnlyLowercaseUrls',
+    'zoo.common.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 PRELAUNCH_PASSWORD = 'tigers'
@@ -90,7 +90,7 @@ TEMPLATE_DIRS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.auth',
-    'zoo.context_processors.standard',
+    'zoo.common.context_processors.standard',
 )
 
 INSTALLED_APPS = [
@@ -151,7 +151,9 @@ except ImportError:
     pass
 
 if PRELAUNCH_PASSWORD:
-    MIDDLEWARE_CLASSES += ['zoo.prelaunch_middleware.PreLaunchMiddleware',]
+    MIDDLEWARE_CLASSES += [
+        'zoo.common.prelaunch_middleware.PreLaunchMiddleware',
+    ]
 
 assert XAPIAN_PERSONAL_PREFIX, """
     You need to create a XAPIAN_PERSONAL_PREFIX setting in your

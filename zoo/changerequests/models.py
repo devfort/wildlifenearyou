@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 import datetime
 from itertools import chain
 
-from zoo.fields import JSONField
+from zoo.common.fields import JSONField
 
 def get_pretty_field_key(val):
     if val.endswith('_id'):

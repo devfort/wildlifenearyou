@@ -5,7 +5,7 @@ import datetime
 from django.utils import dateformat
 
 from zoo.utils import attrproperty
-from zoo.models import AuditedModel
+from zoo.common.models import AuditedModel
 from zoo.animals.models import Species
 from zoo.places.models import Place
 

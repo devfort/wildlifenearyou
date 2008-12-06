@@ -2,7 +2,7 @@ from django.contrib import admin
 from zoo.places.models import Country, Place, \
     Webcam, PlaceNews, PlaceOpening, Facility, PlaceFacility, Extra, \
     PlaceDirection, TransportTypes, Currency, PlacePrice
-from zoo.models import exclude as excludees
+from zoo.common.models import exclude as excludees
 
 class PlacePriceInline(admin.TabularInline):
     model = PlacePrice

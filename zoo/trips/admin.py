@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from zoo.models import exclude
+from zoo.common.models import exclude
 from zoo.trips.models import Trip, Sighting
 
 class SightingInline(admin.TabularInline):

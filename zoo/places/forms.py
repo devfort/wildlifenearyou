@@ -1,6 +1,6 @@
 from django import forms
 
-from zoo.forms import UberForm
+from zoo.common.forms import UberForm
 from zoo.places.models import Place, PlaceOpening, PlaceFacility
 
 class PlaceEditForm(forms.ModelForm):

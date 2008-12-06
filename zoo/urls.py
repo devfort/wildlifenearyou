@@ -17,7 +17,7 @@ for model in get_models():
         databrowse.site.register(model)
 
 from django.template import add_to_builtins
-add_to_builtins('zoo.templatetags.switch')
+add_to_builtins('zoo.common.templatetags.switch')
 
 from accounts import views as accounts
 from faces import views as faces

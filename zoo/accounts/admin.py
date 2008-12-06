@@ -1,6 +1,6 @@
 from django.contrib import admin
 from zoo.accounts.models import Profile, Badge, ProfileBadge
-from zoo.models import exclude as excludees
+from zoo.common.models import exclude as excludees
 
 class ProfileBadgeInline(admin.TabularInline):
     model = ProfileBadge

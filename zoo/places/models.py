@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 
 from zoo.utils import attrproperty
-from zoo.models import AuditedModel
+from zoo.common.models import AuditedModel
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)

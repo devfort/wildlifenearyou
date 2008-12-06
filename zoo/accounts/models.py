@@ -16,7 +16,7 @@ import zoo.utils
 from zoo.utils import attrproperty
 from zoo.trips.models import Trip, Sighting
 from zoo.animals.models import Species
-from zoo.models import AuditedModel
+from zoo.common.models import AuditedModel
 from zoo.favourites.models import FavouriteSpecies
 from zoo.faces.models import SelectedFacePart
 from zoo.photos.models import Photo
