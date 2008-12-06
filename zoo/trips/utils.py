@@ -1,5 +1,6 @@
 from zoo.animals.models import Species
 from zoo.search import lookup_species
+from django.template.defaultfilters import slugify
 
 def lookup_xapian_or_django_id(id):
     if id.startswith('s_'):
@@ -21,7 +22,7 @@ def lookup_xapian_or_django_id(id):
         except Species.DoesNotExist:
             # Save it to the database
             obj, created = Species.objects.get_or_create(
-                slug = details['common_name'].replace(' ', '-').lower(),
+                slug = slugify(details['common_name'].lower()),
                 common_name = details['common_name'],
                 latin_name = details['scientific_name'],
                 freebase_id = details['freebase_id'],
