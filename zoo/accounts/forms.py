@@ -75,7 +75,7 @@ class OurAuthenticationForm(AuthenticationForm):
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(_("Please enter a correct username and password. Note that both fields are case-sensitive."))
+                raise forms.ValidationError(_("Please enter a correct username and password. Note that your password is case-sensitive."))
             elif not self.user_cache.is_active:
                 raise forms.ValidationError(_("This account is inactive."))
 

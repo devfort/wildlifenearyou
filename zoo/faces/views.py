@@ -102,7 +102,7 @@ def profile_image(request, username, just_the_image_please=False):
     if just_the_image_please:
         return im
     
-    if not im:
+    if not im or not parts:
         return HttpResponseRedirect('/static/img/default_face.png')
     response = HttpResponse(content_type = 'image/png')
     im.save(response, format = 'png')

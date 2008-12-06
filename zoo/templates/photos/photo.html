@@ -21,6 +21,10 @@
 
 <p>By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by|title }}</a>, uploaded {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.photo.url }}">original</a>)</p>
 
+{% ifequal photo.created_by request.user %}
+<p><a href="{% url photo-edit photo.created_by.username photo.id %}">Edit title and animals</a></p>
+{% endifequal %}
+
 {% with photo.sightings.all as sightings %}
 {% if sightings %}
 <h2>Species in this photo:</h2>

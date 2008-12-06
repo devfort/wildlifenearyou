@@ -5,6 +5,7 @@
 {% block extra_head %}
 <style type="text/css">
 div.all-photos {
+    margin-top: 1em;
     overflow: auto;
 }
 div.all-photos img {
@@ -21,7 +22,7 @@ div.all-photos img {
 
 <div class="all-photos">
 {% for photo in photos %}
-<a href="{{ photo.urls.absolute }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{% thumbnail photo.photo 100x100 crop %}"></a>
+<a href="{{ photo.urls.absolute }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{% thumbnail photo.photo 150x150 crop %}"></a>
 {% endfor %}
 </div>
 

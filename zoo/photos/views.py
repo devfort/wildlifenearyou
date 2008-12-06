@@ -61,11 +61,6 @@ def upload_trip(request, username, trip_id):
         if form.is_valid():
             photo = form.save(commit = False)
             photo.trip = trip
-            # If user has account 7 days or older, or is staff
-            # go live straight away
-            if request.user.get_profile().is_not_brand_new_account() or \
-                request.user.is_staff:
-                photo.is_visible = True
             # Set the title to the filename, if provided
             photo.title = form.cleaned_data['photo'].name
             # If user has account 7 days or older, or is staff
@@ -100,7 +95,7 @@ def edit_photo(request, username, photo_id):
             photo.save()
             return HttpResponseRedirect(photo.get_absolute_url())
     else:
-        form = PhotoEditForm()
+        form = PhotoEditForm({ 'title': photo.title })
     return render(request, 'photos/edit.html', {
         'form': form,
         'photo': photo,
