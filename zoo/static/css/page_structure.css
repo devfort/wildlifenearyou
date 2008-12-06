@@ -12,18 +12,20 @@
 
 /* @group Header */
 
-.header .wrapper {
-	padding: 0.8em 0.8em 0.8em 1em;
-}
-
 .header {
 	background-image: url(/static/img/bg/header.png);
 	background-repeat: repeat-x;
 	background-position: bottom left;
 }
+.header .wrapper {
+	padding: 0.8em 0.8em 0.8em 1em;
+}
 .header .contents {
 	text-align: right;
 }
+
+/* @group Logo */
+
 .header p.heading {
 	float: left;
 	width: 15em;
@@ -31,14 +33,19 @@
 	text-align: left;
 }
 .header p.heading img {
-                        position: relative;
-                        top: 3px;
-                    }
+	position: relative;
+	top: 3px;
+}
 .header span {
 	color: #5c822f;
 	font-style: italic;
 	font-size: 0.8em;
 }
+
+/* @end */
+
+/* @group Navigation */
+
 .header ul {
 	display: inline;
 	text-transform: uppercase;
@@ -62,6 +69,10 @@
 	color: black;
 }
 
+/* @end */
+
+/* @group Search */
+
 .header form {
 	display: inline;
 	text-transform: uppercase;
@@ -71,17 +82,39 @@
 }
 .header form label {
 	margin-right: 0.3em;
-                     margin-bottom: 0;
-                     display: inline;
+	margin-bottom: 0;
+	display: inline;
 }
 .header form div {
 	display: inline;
 }
 
+/* @end */
+
 
 /* @end */
 
-/* @group Main */
+/* @group Footer */
+
+.footer {
+	padding-top: 312px;
+	background-image: url(/static/img/bg/animals.png);
+	background-repeat: no-repeat;
+	background-position: 98% top;
+    background-color: #ffffff;
+    border-top: solid 1em #ffffff;
+}
+.footer p {
+    text-align: left;
+    color: #534741;
+    background-color: #c6ddab;
+    padding: 1em;
+    margin: 0;
+}
+
+/* @end */
+
+/* @group Principle Layout */
 
 .main {
 	clear: both;
@@ -110,26 +143,6 @@
 .secondary h2:first-child,
 .secondary h3:first-child {
     margin-top: 0;
-}
-
-/* @end */
-
-/* @group Footer */
-
-.footer {
-	padding-top: 312px;
-	background-image: url(/static/img/bg/animals.png);
-	background-repeat: no-repeat;
-	background-position: 98% top;
-    background-color: #ffffff;
-    border-top: solid 1em #ffffff;
-}
-.footer p {
-    text-align: left;
-    color: #534741;
-    background-color: #c6ddab;
-    padding: 1em;
-    margin: 0;
 }
 
 /* @end */

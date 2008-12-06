@@ -1,4 +1,4 @@
-/* @group See  more animals */
+/* @group See more animals */
 
 div#see-more-animals {
 	background-color: #E2F1F9;
@@ -13,6 +13,7 @@ div#see-more-animals label {
 div#see-more-animals form {
 	margin-bottom: 0;
 }
+
 /* @end */
 
 /* @group Cloud on species page */
@@ -198,7 +199,7 @@ p.tel {
 
 /* @end */
 
-/* @group select replacement */
+/* @group Star Ratings (select replacement) */
 
 .replaced {
 	display: none;
