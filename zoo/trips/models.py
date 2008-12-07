@@ -164,7 +164,7 @@ class Sighting(AuditedModel):
         help_text="The place at which this sighting occurred",
     )
     species = models.ForeignKey(Species,
-        help_text="What was sighted",
+        help_text="What was sighted", related_name='sightings'
     )
     trip = models.ForeignKey(Trip, null=True, blank=True,
         help_text="""

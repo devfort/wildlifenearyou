@@ -134,15 +134,29 @@
 				{% endif %}
 			</div>
 			<div class="column">
+				{% if featured.species %}
+				{% with featured.species as species %}
 				<h2>Featured animal</h2>
-				<img src="/static/img/site-images/sample_thumbnail.gif" width="75" height="75" alt="" class="pull-left">
-				<h3><a href="/species/bengal-tiger/">Bengal Tiger</a></h3>
-				<p>There's a Bengal Tiger at <a href="/gb/london-zoo/species/bengal-tiger/">London Zoo</a>, <strong>34 miles</strong> away from you!</p>
+				{% with species.random_photo as photo %}
+				{% if photo %}
+				{{ photo.thumb_75_pull_left }}
+				{% endif %}
+				{% endwith %}
+				<h3><a href="{{ species.get_absolute_url }}">{{ species.common_name }}</a></h3>
+				{% if species.nearest %}
+				<p>There's a {{ species.common_name }} at <a href="{{ species.nearest.urls.absolute }}">{{ species.nearest }}</a>, <strong>{{ species.nearest.distance_miles|floatformat }} mile{{ species.nearest.distance_miles|pluralize }}</strong> away from you!</p>
+				{% endif %}
 				<h4>Recently spotted at</h4>
 				<ul>
-					<li><a href="/gb/london-zoo/">Berlin Zoo</a> by <a href="#">simon</a> 2 days ago</li>
-					<li><a href="/gb/london-zoo/">London Zoo</a> by <a href="#">natbat</a> 1 week ago</li>
+					{% for sighting in species.sightings.all|slice:":2" %}
+					<li><a href="{{ sighting.place.urls.absolute }}">{{ sighting.place }}</a> by <a href="/profiles/{{ sighting.created_by.username }}/">{{ sighting.created_by.username }}</a> {{ sighting.created_at|timesince }} ago</li>
+					{% endfor %}
 				</ul>
+				{% endwith %}
+				{% else %}
+				<h2>Featured animal</h2>
+				<p>No currently featured animal</p>
+				{% endif %}
 			</div>
 			<div class="column">
 				<h2>Featured spotter</h2>
@@ -179,7 +193,7 @@
 				</ul>
 			</div>
 			<div class="secondary">
-				<p class="intro">We're currently listing <strong>123</strong> wildlife places!</p>
+				<p class="intro">We're currently listing <strong>{{ num_of_places }}</strong> wildlife place{{ num_of_places|pluralize }}!</p>
 			</div>
 		</div>
 	</div>

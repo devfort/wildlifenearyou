@@ -115,9 +115,9 @@ def set_species(request, username, photo_id):
         #print "Processing species ID %s" % id
         # Silently discard IDs that do not correspond with sightings
         try:
-            sighting = photo.trip.sightings.get(species__id = id)
+            sighting = photo.trip.sightings.filter(species__id = id)[0]
             #print "  Found sighting %s" % sighting
-        except Sighting.DoesNotExist:
+        except IndexError:
             #print "  Could not find matching sighting"
             continue
         assert request.user == sighting.created_by

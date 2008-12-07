@@ -32,7 +32,7 @@ def landing(request):
     places = Place.objects.filter(featured=True).order_by('?')
     featured['place'] = places.count() > 0 and places[0] or None
 
-    species = Species.objects.filter(featured=True)
+    species = Species.objects.filter(featured=True).order_by('?')
     featured['species'] = species.count() > 0 and species[0] or None
 
     profiles = Profile.objects.filter(featured=True)

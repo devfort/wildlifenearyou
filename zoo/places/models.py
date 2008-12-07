@@ -84,7 +84,7 @@ class Place(AuditedModel):
         """
 
         by_count = {}
-        for sighting in self.sighting_set.all():
+        for sighting in self.sightings.all():
             species = sighting.species
             by_count[species] = by_count.get(species, 0) + 1
 
@@ -197,7 +197,7 @@ class Place(AuditedModel):
         "The animal with the most sightings"
         from zoo.animals.models import Species
         species_ids = list(
-            self.sighting_set.values_list('species', flat=True)
+            self.sightings.values_list('species', flat=True)
         )
         if not species_ids:
             return None

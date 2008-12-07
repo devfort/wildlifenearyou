@@ -72,7 +72,7 @@ class Species(AbstractSpecies):
         species.
         """
 
-        num_of_sightings = float(self.sighting_set.all().count())
+        num_of_sightings = float(self.sightings.all().count())
 
         return 1 - (1 / (num_of_sightings + 1))
 
