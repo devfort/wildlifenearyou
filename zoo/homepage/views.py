@@ -46,10 +46,11 @@ def landing(request):
 
     if featured['species']:
         location, (lat, lon) = location_from_request(request)
-        from zoo.search import nearest_places_with_species as npws
-        nearest_species = npws(featured['species'].common_name, (lat, lon))
-        if nearest_species:
-            featured['species'].nearest = nearest_species[0]
+        if (lat, lon) != (None, None):
+            from zoo.search import nearest_places_with_species as npws
+            nearest_species = npws(featured['species'].common_name, (lat, lon))
+            if nearest_species:
+                featured['species'].nearest = nearest_species[0]
     
     if settings.SEARCH_ENABLED:
         default_search = ''
