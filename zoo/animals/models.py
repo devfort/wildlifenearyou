@@ -48,6 +48,16 @@ class AbstractSpecies(models.Model):
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
     freebase_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    featured = models.BooleanField(null=False, blank=False, default=False)
+    plural_override = models.CharField(max_length=500, blank=True, null=True,
+        help_text = (
+            "If the plural of this animal is more complicated than "
+            "just adding an 's' on the end, provide it here e.g. Sheep"
+        )
+    )
+    
+    def plural(self):
+        return self.plural_override or (self.common_name + 's')
     
     def visible_photos(self):
         from zoo.photos.models import Photo
@@ -75,8 +85,6 @@ class Species(AbstractSpecies):
         num_of_sightings = float(self.sightings.all().count())
 
         return 1 - (1 / (num_of_sightings + 1))
-
-    featured = models.BooleanField(null=False, blank=False, default=False)
 
     class Meta:
         verbose_name_plural = 'species'
