@@ -77,6 +77,11 @@ class Place(AuditedModel):
     # way that new places are added to the database.
     is_confirmed = models.BooleanField(default=False)
     
+    #mapping stuff - and Grid Ref for reserves
+    gridref = models.CharField(max_length=8, null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    
     def popularity(self):
         """
         Currently just calculated using number of species seen at
@@ -114,10 +119,12 @@ class Place(AuditedModel):
         else:
             return None
     
-    #mapping stuff - and Grid Ref for reserves
-    gridref = models.CharField(max_length=8, null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
-    latitude = models.FloatField(null=True, blank=True)
+    def random_photo(self):
+        vp = self.visible_photos()
+        if vp.count():
+            return vp.order_by('?')[0]
+        return None
+    
     def latlon(self):
         if self.longitude is None or self.latitude is None:
             return ''

@@ -113,9 +113,11 @@
 				<h2>Featured place</h2>
 				{% if featured.place %}
 				{% with featured.place as place %}
-				{% if place.visible_photos.all %}
-				{{ place.visible_photos.all.0.thumb_75_pull_left }}
+				{% with place.random_photo as photo %}
+				{% if photo %}
+				{{ photo.thumb_75_pull_left }}
 				{% endif %}
+				{% endwith %}
 				<h3><a class="fn org url" href="{{ place.get_absolute_url }}">{{ place.known_as }}</a></h3>
 				<p class="meta">In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a></p>
 				<!--<p class="address">
