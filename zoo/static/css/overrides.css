@@ -90,13 +90,13 @@
 
 /* @group Look for */
 
-.look-for {
+#home .look-for {
 	background-color: #C6DDAB;
 	border-top: 1px solid #6D9053;
 	padding-top: 1em;
 }
 
-.look-for label {
+#home .look-for label {
 	display: inline;
 	font-size: 1.5714em;   /* 18px */ 
     text-transform: uppercase;
@@ -106,15 +106,15 @@
 	position: absolute;  	top: 0.5em;	left: 0.538em;	margin: 0;
 }
 
-.look-for .examples {
+#home .look-for .examples {
 	margin-left: 11.67em;
 	margin-top: 0;
 }
-.look-for .container {
+#home .look-for .container {
 	margin-bottom: 0.2em;
 	margin-left: 10em;	margin-right: 5em;}
 
-.look-for input.text {
+#home .look-for input.text {
 	border: none;
 	padding: 0.2em 0.5em;
 	font-size: 1.8571em;
@@ -123,27 +123,7 @@
 	background-color: #fff;
 	width: 82%;	border: 2px solid white;
 }
-.look-for .contents {	position: relative;}.look-for input.submit {	position: absolute;	top: 0;	right: 0.538em;	font-size: 1.8571em;	border-width: 2px;
-}
-
-.photostrip {
-	margin: 0;
-	padding: 0;
-	height: 75px;
-	list-style-type: none;
-	width: 9000em;
-	overflow: hidden;
-	/* For people with really, really wide screens: */
-	background-image: url(/static/img/bg/sneaky.jpg);
-}
-.photostrip li {
-	margin: 0;
-	padding: 0;
-	float: left;
-}
-
-.photostrip img {
-	display: block;
+#home .look-for .contents {	position: relative;}#home .look-for input.submit {	position: absolute;	top: 0;	right: 0.538em;	font-size: 1.8571em;	border-width: 2px;
 }
 
 #home .photostrip {
@@ -155,22 +135,22 @@
 
 /* @group Browse */
 
-.browse {
+#home .browse {
 	background-color: #FFFFFF;
 	padding-top: 2em;
 }
 
-.browse .contents {
+#home .browse .contents {
 	background-image: url(/static/img/bg/animals_small.gif);
 	background-position: bottom right;
 	background-repeat: no-repeat;
 	min-height: 280px;
 }
-.browse .secondary {
+#home .browse .secondary {
 	margin-bottom: 186px;
 	margin-top: 0;
 }
-.browse .intro strong {
+#home .browse .intro strong {
 	font-size: 1.8571em;
 	padding-left: 0.1em;
 	padding-right: 0.1em;
@@ -180,13 +160,13 @@
 
 /* @group Featured */
 
-.featured {
+#home .featured {
 	background-color: #C6DDAB;
 	padding-top: 0.3em;
 	padding-bottom: 1.5em;
 	border-bottom: 1px solid #6D9053;
 }
-.featured .column {
+#home .featured .column {
 	background-color: #FFFFFF;
 	padding: 2%;
 	width: 26.9%;
@@ -200,26 +180,13 @@
 	border-bottom: none;
 }
 
-.featured img {
+#home .featured img {
 	margin-bottom: 1.5em;
 }
 
-.featured h4 {
+#home .featured h4 {
 	clear: both;
 	text-transform: uppercase;
-	margin-top: 0;
-}
-
-.column {
-	width: 30%;
-	float: left;
-	display: inline;
-	margin-left: 3.4%;
-}
-.column.first {
-	margin-left: 0;
-}
-.column h2 {
 	margin-top: 0;
 }
 

@@ -149,3 +149,20 @@
 }
 
 /* @end */
+
+/* @group 3-cols */
+
+.column {
+	width: 30%;
+	float: left;
+	display: inline;
+	margin-left: 3.4%;
+}
+.column.first {
+	margin-left: 0;
+}
+.column h2 {
+	margin-top: 0;
+}
+
+/* @end */

@@ -435,3 +435,27 @@ div#ajax-feedback-form {
 }
 
 /* @end */
+
+/* @group Photostrip */
+
+.photostrip {
+	margin: 0;
+	padding: 0;
+	height: 75px;
+	list-style-type: none;
+	width: 9000em;
+	overflow: hidden;
+	/* For people with really, really wide screens: */
+	background-image: url(/static/img/bg/sneaky.jpg);
+}
+.photostrip li {
+	margin: 0;
+	padding: 0;
+	float: left;
+}
+
+.photostrip img {
+	display: block;
+}
+
+/* @end */
