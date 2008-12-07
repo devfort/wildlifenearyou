@@ -12,95 +12,214 @@
 
 /* @end */
 
-/* @group homepage */
+/* @group Homepage */
+
+#home .main {
+	padding-top: 0;
+}
 
 #home .footer {
-	background-image: none;
-	margin-top: 0;
 	padding-top: 0;
-	border-top: 0;
+	background-image: none;
+	border-top-width: 0;
+	margin-top: 0;
 }
 
-.signup {
-	padding: 1em;
+#home .main h2 {
+	margin-top: 0;
+}
+
+#home .header ul li:last-child {
+	border-right: none;
+	padding-right: 0;
+	margin-right: 0;
+}
+
+/* @group Introduction block */
+
+#home .intro-block {
+	padding-top: 1em;
+	padding-bottom: 1.5em;
+}
+
+#home .intro-block .register {
+	border: 1px solid #B7C6CE;
 	background-color: #E2F1F9;
-	border: solid 1px #D8E7EF;
-}
-
-.interaction {
-	background-color: #BDDA9B;
-	border-top: 1px solid #879E6B;
-	border-bottom: 1px solid #879E6B;
-	padding: 1em 0;
-}
-
-.map {
-	background-color: #FFFFFF;
-	padding: 1em 0 0 0;
-}
-
-.map .wrapper {
-	background-image: url(/static/img/bg/animals_small.gif);
-	background-repeat: no-repeat;
-	background-position: bottom right;
-}
-
-.map img {
-	float: left;
-}
-
-.features {
-	background-color: #BDDA9B;
-	padding: 1em 0;
-}
-
-.shrinkwrap {
-	width: 100%;
-	overflow: hidden;
-}
-
-.column {
-	background-color: #FFFFFF;
-	width: 30%;
-	margin-left: 3%;
-	float: left;
+	margin-top: 0;
+	margin-left: 2em;
+	padding: 0 1em 1em 1em;
+	float: right;
+	width: 20.78em;
 	display: inline;
-	padding-bottom: 50em;
-	margin-bottom: -50em;
 }
 
-.column h2 {
+#home .intro-block h2 {
 	margin-top: 1em;
 }
 
-.inner {
-	padding-left: 1em;
+#home .intro-block label {
+	float: left;
+	width: 9em;
+	font-weight: normal;
+	line-height: 1em;
+	margin-right: 1em;
+	clear: left;
+	font-size: 0.875em;
+	padding-top: 0.4em;
+	text-align: right;
+}
+#home .intro-block .text-container {
+	margin-bottom: 0.3em;
+}
+#home .intro-block .text-container input {
+	border: none;
+	padding: 0.2em 0.2em;
+}
+#home .intro-block .submit {
+	margin-left: 10em;
+	font-size: 0.875em;
+}
+#home .intro-block .meta {
+	margin-top: 0;
+}
+#home form {
+	margin-bottom: 0;
 }
 
-.inner h3 {
-	margin-bottom: 0.6em;	
+/* @end */
+
+/* @group Look for */
+
+.look-for {
+	background-color: #C6DDAB;
+	border-top: 1px solid #6D9053;
+	padding-top: 1em;
 }
 
-.inner p {
-	margin-bottom: 1em;
+.look-for label {
+	display: inline;
+	font-size: 1.5714em;   /* 18px */ 
+    text-transform: uppercase;
+    line-height: 1;
+    font-family: Rockwell, Georgia, "Times New Roman", "Century Schoolbook L", Times, serif;
+    color: #362f2d;
+	position: absolute;  	top: 0.5em;	left: 0.538em;	margin: 0;
 }
 
-.first .inner blockquote {
-	clear: both;
+.look-for .examples {
+	margin-left: 11.67em;
+	margin-top: 0;
+}
+.look-for .container {
+	margin-bottom: 0.2em;
+	margin-left: 10em;	margin-right: 5em;}
+
+.look-for input.text {
+	border: none;
+	padding: 0.2em 0.5em;
+	font-size: 1.8571em;
+	width: 55%;
+	color: #455C35;
+	background-color: #fff;
+	width: 82%;	border: 2px solid white;
+}
+.look-for .contents {	position: relative;}.look-for input.submit {	position: absolute;	top: 0;	right: 0.538em;	font-size: 1.8571em;	border-width: 2px;
 }
 
-.inner img {
-	margin-right: 10px;
-	margin-bottom: 10px;
+.photostrip {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	width: 9000em;
+	overflow: hidden;
+}
+.photostrip li {
+	margin: 0;
+	padding: 0;
 	float: left;
 }
 
+.photostrip img {
+	display: block;
+}
 
+#home .photostrip {
+	border-top: 1px solid #6D9053;
+	border-bottom: 1px solid #6D9053;
+}
 
+/* @end */
 
+/* @group Browse */
 
-.first {
+.browse {
+	background-color: #FFFFFF;
+	padding-top: 2em;
+}
+
+.browse .contents {
+	background-image: url(/static/img/bg/animals_small.gif);
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	min-height: 280px;
+}
+.browse .secondary {
+	margin-bottom: 186px;
+	margin-top: 0;
+}
+.browse .intro strong {
+	font-size: 1.8571em;
+	padding-left: 0.1em;
+	padding-right: 0.1em;
+}
+
+/* @end */
+
+/* @group Featured */
+
+.featured {
+	background-color: #C6DDAB;
+	padding-top: 0.3em;
+	padding-bottom: 1.5em;
+	border-bottom: 1px solid #6D9053;
+}
+.featured .column {
+	background-color: #FFFFFF;
+	padding: 2%;
+	width: 26.9%;
+	margin-bottom: -50em;
+	padding-bottom: 50em;
+	border: 1px solid #ADC195;
+	/* Due to the terrifying way we implement equal height 
+	   columns, it's not actually possible to have a bottom
+	   border on them as well. This looks pretty neat though */
+	border-right: none;
+	border-bottom: none;
+}
+
+.featured img {
+	margin-bottom: 1.5em;
+}
+
+.featured h4 {
+	clear: both;
+	text-transform: uppercase;
+	margin-top: 0;
+}
+
+.column {
+	width: 30%;
+	float: left;
+	display: inline;
+	margin-left: 3.4%;
+}
+.column.first {
 	margin-left: 0;
 }
+.column h2 {
+	margin-top: 0;
+}
+
+/* @end */
 
 /* @end */

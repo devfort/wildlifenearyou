@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block fulltitle %}{% block title %}{% endblock %} | WildLifeNearYou.com{% endblock %}</title>
     <script type="text/javascript" src="/static/js/jquery-1.2.6.js"></script>
 	<!--
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -23,54 +23,51 @@
 </head>
 <body {% block extra_body %}{% endblock %}>
 <div class="header">
-    <div class="contents">
-    <div class="wrapper">
-	<p class="heading">
-	{% ifequal request.path '/' %}
-	<img src="/static/img/icons/art_zoopedia_logo.png" alt="Zoopedia">
-	{% else %}
-	<a href="/">
-	<img src="/static/img/icons/art_zoopedia_logo.png" alt="Zoopedia"></a>
-	{% endifequal %}
-    <span>We love wildlife!{#Can I Keep It?#}</span></p>
-	<ul>
-	  {% comment %} This has to all be on one line. {% endcomment %}
-	  <li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a> <span class="meta">({{ user.get_profile.percentage_complete }}% complete)</span></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Sign Up</a></li><li><a href="{% url accounts-login %}?next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
-	</ul>
-	{% block search_form %}
-    <form action="/search/" method="GET" accept-charset="utf-8">
-        <div>
-			<label for="search_term">Look for</label>
-			<input type="search" name="q" id="search_term" value="">
-			<input type="submit" value="search">
-		</div>
-    </form>
-    {% endblock %}
-    </div>
-    </div>
-</div>
+	<div class="wrapper">
+		<div class="contents">
+			<p class="heading">
+				{% ifequal request.path '/' %}
+				<img src="/static/img/icons/art_zoopedia_logo.png" alt="Zoopedia">
+				{% else %}
+				<a href="/"><img src="/static/img/icons/art_zoopedia_logo.png" alt="Zoopedia"></a>
+				{% endifequal %}
+				<span>We love wildlife!{#Can I Keep It?#}</span>
+			</p>
+			<ul>
+				{% comment %} This has to all be on one line. {% endcomment %}
+				<li><a href="/">Home</a></li>{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">My Profile</a> <span class="meta">({{ user.get_profile.percentage_complete }}% complete)</span></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Sign Up</a></li><li><a href="{% url accounts-login %}?next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
+			</ul>
+			{% block search_form %}
+			<form action="/search/" method="GET" accept-charset="utf-8">
+				<div>
+					<label for="search_term">Look for</label>
+					<input type="search" name="q" id="search_term" value="">
+					<input type="submit" value="search">
+				</div>
+			</form>
+			{% endblock %}
+		</div>  <!-- .contents -->
+	</div> <!-- .wrapper -->
+</div> <!-- .header -->
+
 <div class="main">
 {% block vanilla %}
-<div class="contents">
-<div class="wrapper">
-	{% block content %}
-
-	<div class="primary">
-		{% block primary_content %}
-		{% endblock %}
-	</div>
-
-	<div class="secondary">
-		{% block secondary_content %}
-		{% endblock %}
-
-	</div>
-
-	{% endblock %}
-</div>
-</div>
+	<div class="wrapper">
+		<div class="contents">
+			{% block content %}
+			<div class="primary">
+				{% block primary_content %}
+				{% endblock %}
+			</div>
+			<div class="secondary">
+				{% block secondary_content %}
+				{% endblock %}
+			</div>
+			{% endblock %}
+		</div>  <!-- .contents -->
+	</div> <!-- .wrapper -->
 {% endblock %}
-</div>
+</div> <!-- .main -->
 
 <div class="footer">
 	<p style="float:right">{% ifequal rand 1 %}
@@ -81,7 +78,8 @@ Our sharp-eyed animal lovers have spotted {{ total_num_of_species|intcomma }} sp
 	<p>&copy; <a href="{% url flatpage "colophon/" %}">SEDF</a>
 	| <a href="{% url flatpage "about/" %}">About</a>
 	| <a href="{% url feedback %}">Contact</a>
-</p>
+	</p>
 </div>
+
 </body>
 </html>

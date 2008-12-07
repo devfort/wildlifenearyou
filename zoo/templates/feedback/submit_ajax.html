@@ -1,11 +1,15 @@
 <div id="ajax-feedback-form">
-    <h2>Send us feedback</h2>
-    <form action="/feedback/" method="POST">
-    {% include "feedback/_form.html" %}
-    <div class="container button-container">
-        <input type="submit" value="Send">
-        <input type="submit" name="close" value="Cancel">
-        <input type="hidden" name="from-page" value="{{ from_page }}">
-    </div>
-    </form>
+	<div class="wrapper">
+		<div class="contents">
+			<h2>Send us feedback</h2>
+			<form action="/feedback/" method="POST">
+				{% include "feedback/_form.html" %}
+				<div class="container button-container">
+					<input type="submit" value="Send" class="submit">
+					<input type="submit" name="close" value="Cancel"  class="submit cancel">
+					<input type="hidden" name="from-page" value="{{ from_page }}">
+				</div>
+			</form>
+		</div>
+	</div>
 </div>

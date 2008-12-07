@@ -55,6 +55,10 @@ p, ul, ol, dl, address, table, pre, fieldset {
 	margin-bottom: 1.385em; /* 18px */
 }
 
+p {
+	margin-top: 0.8571em;
+}
+
 /* @end */
 
 
@@ -68,6 +72,7 @@ body {
     font-size:16px;
     line-height:1.125em; /* Baseline grid of 18px */
     text-align: center;
+    -moz-opacity: 0.999999; /* Fix boldness glitch in Firefox */
 }
 
 /* @group Links */
@@ -98,7 +103,7 @@ button.link:active span {
 /* size headings using classic scale of 14, 16, 18, (21), 24 */
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: Rockwell, "Times New Roman", "Century Schoolbook L", Times, serif;
+    font-family: Rockwell, Georgia, "Times New Roman", "Century Schoolbook L", Times, serif;
     color: #362f2d;
 }
 
@@ -121,6 +126,7 @@ h2 {
 h3 { 
 	font-size: 1.2857em;
 	margin-bottom: 0.2em;
+	line-height: 1.1;
 }
 h4 { 
 	font-size: 0.875em;   /* 14px */ 
@@ -146,9 +152,18 @@ ul ul, ol ol, ol ul, ul ol {
 ul,
 .prose ul, 
 ul.bullets, 
-ul.bullets ul {	/* unordered lists more often DON'T require bullets except in extended bits of writing - use the .prose class or apply directly with .bullets */
-	list-style-type: disc;
-	margin-left: 1.385em; /* 18px */
+ul.bullets ul {
+	list-style-type: none;
+}
+
+ul li,
+.prose ul li,
+ul.bullets li {
+	background-image: url(/static/img/icons/bullet_green.gif);
+	background-position: 0 0.15em;
+	background-repeat: no-repeat;
+	padding-left: 1.1429em;
+	margin-bottom: 0.2em;
 }
 
 ol {	/* ordered lists usually DO require bullets */

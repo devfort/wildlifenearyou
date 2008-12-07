@@ -22,10 +22,17 @@ div#see-more-animals form {
 	list-style-type: none;
 	margin-left: 0;
 	padding: 0;
+	line-height: 1;
 }
 .species_list li {
 	display: inline;
 	vertical-align: middle;
+	white-space: nowrap;
+	background-position: left center;
+}
+.species_list li.first {
+	background-image: none;
+	padding-left: 0;
 }
 .species_list li a {
 	text-decoration: none;
@@ -179,22 +186,6 @@ ul.currency li {
 }
 .suggest-changes a {
 	display: block;
-}
-
-/* @end */
-
-/* @group Microformats */
-
-p.url {
-	margin: 0;
-	text-transform: uppercase;
-	white-space: nowrap;
-}
-p.address {
-	margin: 0.8571em 0 0;
-}
-p.tel {
-	margin-top: 0;
 }
 
 /* @end */
