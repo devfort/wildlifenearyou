@@ -1,10 +1,10 @@
 {% extends base %}
 
-{% block title %}{{ place.known_as }} - {{ species.common_name }}{% endblock %}
+{% block title %}{{ species.plural }} at {{ place.known_as }}{% endblock %}
 
 {% block primary_content %}
 
-<h1><a href="{{ place.urls.absolute }}">{{ place.known_as }}</a> - <a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></h1>
+<h1><a href="{{ species.urls.absolute }}">{{ species.plural }}</a> at <a href="{{ place.urls.absolute }}">{{ place.known_as }}</a></h1>
 
 <h2>Who saw this?</h2>
 
