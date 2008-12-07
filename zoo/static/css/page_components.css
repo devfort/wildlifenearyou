@@ -31,7 +31,11 @@ div#see-more-animals form {
 	white-space: nowrap;
 	background: none;
 }
-.specieslist li a {
+.specieslist li a:link,
+.specieslist li a:visited,
+.specieslist li a:hover,
+.specieslist li a:focus,
+.specieslist li a:active {
 	text-decoration: none;
 	vertical-align: middle;
 	background-position: left center;
@@ -39,7 +43,11 @@ div#see-more-animals form {
 	background-repeat: no-repeat;
 	padding-left: 19px;
 }
-.specieslist li.first a {
+.specieslist li.first a:link,
+.specieslist li.first a:visited,
+.specieslist li.first a:hover,
+.specieslist li.first a:focus,
+.specieslist li.first a:active {
 	background-image: none;
 	padding-left: 0;
 }
