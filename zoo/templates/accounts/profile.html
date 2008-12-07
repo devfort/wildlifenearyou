@@ -99,7 +99,9 @@ Your location is currently {{ profile.location }} &ndash;
 	<ol>
     {% for favourite in profile.user.favourite_species.all %}
 	<li><a href="{{ favourite.species.urls.absolute }}">{{ favourite.species }}</a>
+	        {% ifequal user profile.user %}
 		{% favourite_toggler "remove" favourite.species.slug request.path "link" "" "Remove" %}
+		{% endifequal %}
 	</li>
 	{% endfor %}
 	</ol>
