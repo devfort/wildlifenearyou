@@ -186,6 +186,7 @@ def delete_location(request):
         )
         return response
     msg = 'Your location has been removed.'
+    profile.recalculate_percentage_complete()
     return render(request, 'accounts/set_location.html', {
         'msg': msg,
         'current_location': '',
@@ -223,6 +224,7 @@ def set_location(request):
                 profile.location = description
                 profile.latitude = lat
                 profile.longitude = lon
+                profile.recalculate_percentage_complete()
                 profile.save()
             else:
                 # Set it in a cookie instead
