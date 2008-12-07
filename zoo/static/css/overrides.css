@@ -42,7 +42,7 @@
 	padding-bottom: 1.5em;
 }
 
-#home .intro-block .register {
+#home .intro-block .interact {
 	border: 1px solid #B7C6CE;
 	background-color: #E2F1F9;
 	margin-top: 0;
@@ -129,9 +129,12 @@
 .photostrip {
 	margin: 0;
 	padding: 0;
+	height: 75px;
 	list-style-type: none;
 	width: 9000em;
 	overflow: hidden;
+	/* For people with really, really wide screens: */
+	background-image: url(/static/img/bg/sneaky.jpg);
 }
 .photostrip li {
 	margin: 0;

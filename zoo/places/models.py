@@ -105,7 +105,15 @@ class Place(AuditedModel):
             if val:
                 bits.append(val)
         return ', '.join(bits)
-
+    
+    def rough_location(self):
+        if self.town:
+            return self.town
+        elif self.state:
+            return self.state
+        else:
+            return None
+    
     #mapping stuff - and Grid Ref for reserves
     gridref = models.CharField(max_length=8, null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)

@@ -29,7 +29,7 @@ def landing(request):
 
     # Doing it this way means the page survives with 0 or >1 featured
     # sites.
-    places = Place.objects.filter(featured=True)
+    places = Place.objects.filter(featured=True).order_by('?')
     featured['place'] = places.count() > 0 and places[0] or None
 
     species = Species.objects.filter(featured=True)

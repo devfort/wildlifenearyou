@@ -14,31 +14,28 @@
 {% block vanilla %}
 
 <ul class="photostrip">
-    <li><a href="#"><img src="/static/img/examples/1.jpg" alt="Alt for 1" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/2.jpg" alt="Alt for 2" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/3.jpg" alt="Alt for 3" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/4.jpg" alt="Alt for 4" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/5.jpg" alt="Alt for 5" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/6.jpg" alt="Alt for 6" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/1.jpg" alt="Alt for 1" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/2.jpg" alt="Alt for 2" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/3.jpg" alt="Alt for 3" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/4.jpg" alt="Alt for 4" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/5.jpg" alt="Alt for 5" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/6.jpg" alt="Alt for 6" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/1.jpg" alt="Alt for 1" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/2.jpg" alt="Alt for 2" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/3.jpg" alt="Alt for 3" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/4.jpg" alt="Alt for 4" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/5.jpg" alt="Alt for 5" width="75" height="75"></a></li>
-    <li><a href="#"><img src="/static/img/examples/6.jpg" alt="Alt for 6" width="75" height="75"></a></li>
+	{% for photo in recent_photos %}
+	<li><a href="{{ photo.get_absolute_url }}"><img src="{{ photo.thumbnail }}" alt="{{ photo }}" width="75" height="75"></a></li>
+	{% endfor %}
 </ul>
 
 
 <div class="receptacle intro-block">
 	<div class="wrapper">
 		<div class="contents">
-			<div class="register">
+			<div class="interact">
+				{% if user.is_authenticated %}
+				<h2>Welcome back</h2>
+				<form action="/add-trip/" method="GET">
+					<div class="container text-container">
+						<label for="search-place">Add a trip to...</label>
+						<input type="text" class="text" name="q" id="search-place">
+					</div>
+					<div>
+						<input type="submit" value="Find this place" class="submit">
+					</div>
+					</form>
+				{% else %}
 				<h2>Register now</h2>
 				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action">&raquo; <span>Log in now</span></a></p>
 				<form action="{% url accounts-register %}" method="post">
@@ -62,8 +59,9 @@
 					</div>
 					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
 				</form>
+				{% endif %}
 			</div>
-			<h2>Hello there!</h2>
+			<h2>Hello there{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 <!--				<h2 style="font-family: georgia">Hello there!</h2>
 			<h2 style="font-family: courier">Hello there!</h2>
 			<h2 style="font-family: arial">Hello there!</h2>
@@ -85,7 +83,7 @@
 					<input type="text" class="text" id="q" name="q" size="50" value="{{ default_search }}">
 					<input type="submit" class="submit" value="&raquo; Search">
 				</div>
-				<p class="meta examples">Try <a href="/search/?q=otters">otters</a>, <a href="/search/?q=tigers+near+london">tigers near london</a>, <a href="/search/?q=new+zealand">new zealand</a> or your favourite animal</p>
+				<p class="meta examples">Try <a href="/search/?q=otters">otters</a>, <a href="/search/?q=tigers+near+{{ location|default:"london"|lower|iriencode }}">tigers near {{ location|default:"london"|lower }}</a>, <a href="/search/?q=new+zealand">new zealand</a> or your favourite animal</p>
 			</form>
 		</div>
 	</div>
@@ -113,9 +111,13 @@
 		<div class="contents">
 			<div class="column first vcard">
 				<h2>Featured place</h2>
-				<img src="/static/img/site-images/sample_thumbnail.gif" width="75" height="75" alt="" class="pull-left photo">
-				<h3><a class="fn org url" href="/gb/london-zoo/">London Zoo</a></h3>
-				<p class="meta">In <a href="#">Leicester</a>, <a href="#">United Kingdom</a></p>
+				{% if featured.place %}
+				{% with featured.place as place %}
+				{% if place.visible_photos.all %}
+				{{ place.visible_photos.all.0.thumb_75_pull_left }}
+				{% endif %}
+				<h3><a class="fn org url" href="{{ place.get_absolute_url }}">{{ place.known_as }}</a></h3>
+				<p class="meta">In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a></p>
 				<!--<p class="address">
 					<span class="street-address">Regents Park</span><br>
 					<span class="locality">London</span><br>
@@ -123,18 +125,13 @@
 				</p>-->
 <!--				<p class="description">ZSL London Zoo is the world's oldest scientific zoo. It was opened in London on April 27, 1828, and was originally intended to be used as a collection for scientific study. </p> -->
 				<h4>Animals spotted here</h4>
-				<p><a href="/gb/london-zoo/species/african-wild-dog/">African Wild Dog</a>,
-				<a href="/gb/london-zoo/species/brown-rat/">Brown Rat</a>,
-				<a href="/gb/london-zoo/species/egyptian-vulture/">Egyptian Vulture</a>,
-				<a href="/gb/london-zoo/species/giraffe/">Giraffe</a>,
-				<a href="/gb/london-zoo/species/grey-heron/">Grey Heron</a>,
-				<a href="/gb/london-zoo/species/harris%27s-hawk/">Harris&#39;s Hawk</a>,
-				<a href="/gb/london-zoo/species/komodo-dragon/">Komodo dragon</a>,
-				<a href="/gb/london-zoo/species/lion/">Lion</a>,
-				<a href="/gb/london-zoo/species/llama/">Llama</a>,
-				<a href="/gb/london-zoo/species/malayan-tapir/">Malayan Tapir</a>,
-				and <a href="#">more&hellip;</a>
+				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+				and <a href="{{ place.urls.species }}">more&hellip;</a>
 				</p>
+				{% endwith %}
+				{% else %}
+				<p>There is no currently featured place</p>
+				{% endif %}
 			</div>
 			<div class="column">
 				<h2>Featured animal</h2>

@@ -38,5 +38,6 @@ def standard(request):
             'total_num_of_species': num_species,
             'rand': rand,
             'random_animal': animal,
+            'location': location,
             'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
     }

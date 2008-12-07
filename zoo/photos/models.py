@@ -79,6 +79,16 @@ class Photo(models.Model):
             )
         )
 
+    def thumb_75_pull_left(self):
+        return mark_safe(
+            '<a href="%s" title="%s"><img class="pull-left" src="%s" alt="%s" width="75" height="75"></a>' % (
+                self.get_absolute_url(),
+                self.title or ('Photo by %s' % self.created_by),
+                self.photo.thumbnail,
+                self.title or ('Photo by %s' % self.created_by),
+            )
+        )
+
     objects = models.Manager()
     visible = VisiblePhotoManager()
 
