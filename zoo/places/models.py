@@ -256,6 +256,12 @@ class Place(AuditedModel):
             species_list = species_list[:limit]
 
         return species_list
+    
+    def num_visitors(self):
+        "Number of unique people who have reported sightings at this zoo"
+        return User.objects.filter(
+            created_sighting_set__place = self
+        ).distinct().count()
 
 
 class Facility(models.Model):

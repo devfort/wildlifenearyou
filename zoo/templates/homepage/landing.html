@@ -119,7 +119,7 @@
 				{% endif %}
 				{% endwith %}
 				<h3><a class="fn org url" href="{{ place.get_absolute_url }}">{{ place.known_as }}</a></h3>
-				<p class="meta">In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a></p>
+				<p>In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a>, visited by <strong>{{ place.num_visitors }}</strong> spotter{{ place.num_visitors|pluralize }}.</p>
 				<!--<p class="address">
 					<span class="street-address">Regents Park</span><br>
 					<span class="locality">London</span><br>
