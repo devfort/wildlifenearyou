@@ -29,12 +29,25 @@ def search_split(request, what, near):
     results, results_info, results_corrected_q = search_places(
         what or SEARCH_ALL, details=True, latlon=(lat, lon), num=20
     )
-    
     species_results, species_results_info, species_results_corrected_q = \
         search_known_species(
             what, details=True, default_op=Query.OP_OR,
     )
 
+    for result in results:
+        result.species_list = result.get_species()
+        for species in result.species_list:
+            if species in species_results:
+                species.matches_search = True
+        # If we got back a distance, bung that on there too
+        try:
+            result.distance = ([
+                d for d in results_info['items'] 
+                if d['id'] == 'places.Place:%s' % result.id
+            ][0]['geo_distance']['latlon'] / 1609.344)
+        except (KeyError, IndexError):
+            pass
+    
     return render(request, 'search/search_split.html', {
         'what': what,
         'near': near,
@@ -48,7 +61,7 @@ def search_split(request, what, near):
     })
 
 def search_single(request, q, bypass=False):
-    m = re.match('(.*?)\s+(?:near|in)\s+(.*)$', q)
+    m = re.match('(.*?)\s*(?:near|in)\s+(.*)$', q)
     if m and not bypass:
         return search_split(request, *m.groups())
 
