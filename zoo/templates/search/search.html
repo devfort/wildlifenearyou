@@ -34,17 +34,17 @@ function showMap() {
 </form>
 
 {% if q and not results %}
-<p>I&rsquo;m afraid your search returned no results. Try something else?</p>
+<p class="notification">I&rsquo;m afraid your search returned no results. Try something else?</p>
 {% if request.user.is_staff %}
-    <p>If you&rsquo;re a developer, try running <samp>./manage.py reindex_places</samp></p>
+    <p class="notification">If you&rsquo;re a developer, try running <samp>./manage.py reindex_places</samp></p>
 {% endif %}
 {% endif %}
 
 {% if q and results and results_corrected_q %}
 
-<div class="information">
+<p class="notification">
 We couldn&rsquo;t find any results for {{ q }}, so we thought you might like these results for &ldquo;{{ results_corrected_q }}&rdquo;.
-</div>
+</p>
 
 {% endif %}
 
