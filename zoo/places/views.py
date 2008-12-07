@@ -116,7 +116,7 @@ def place(request, country_code, slug):
     return render(request, 'places/place.html', {
         'place': place,
         'species_list': species_list,
-        'species_on_place_page': SPECIES_ON_PLACE_PAGE,
+        'species_list_more': len(species_list) > SPECIES_ON_PLACE_PAGE,
         'opening_times': times_sorted,
         'rating' : Trip.get_average_rating(place),
     })
