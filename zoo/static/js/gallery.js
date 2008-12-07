@@ -1,13 +1,4 @@
 jQuery(function($) {
-
-	$('#thumbnails a').click(function() {
-		$('.promo img#panorama').attr( {
-			src: $(this).attr('href'),
-			alt: $(this.firstChild).attr('alt')
-		});
-		return false;
-	});
-
 	if ($('#thumbnails').children().length < 3) {
 		$('#thumbnails').parent('.slideshow').addClass('minimal');
 		return;
