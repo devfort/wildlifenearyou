@@ -33,9 +33,9 @@
 
 {% if species_list %}
 <h2>Animals you might see</h2>
-<ul class="species_list">
+<ul class="specieslist">
 {% for species in species_list %}
-	<li{% if forloop.first %} class="first"{% endif %}><span class="cloud-quad-{{ species.quad }}" title="{{ species.count }} seen"><a href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}">{{ species.common_name }}</a></span></li>
+	<li{% if forloop.first %} class="first"{% endif %}><a class="cloud-quad-{{ species.quad }}" title="{{ species.count }} seen" href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}">{{ species.common_name }}</a></li>
 {% endfor %}
 </ul>
 <p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">&raquo; All species</a></p>

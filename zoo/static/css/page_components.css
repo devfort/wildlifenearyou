@@ -18,24 +18,30 @@ div#see-more-animals form {
 
 /* @group Cloud on species page */
 
-.species_list {
+.specieslist {
 	list-style-type: none;
 	margin-left: 0;
 	padding: 0;
-	line-height: 1;
+	line-height: 1.4em;
 }
-.species_list li {
+.specieslist li {
 	display: inline;
+	padding-left: 0;
 	vertical-align: middle;
 	white-space: nowrap;
-	background-position: left center;
+	background: none;
 }
-.species_list li.first {
+.specieslist li a {
+	text-decoration: none;
+	vertical-align: middle;
+	background-position: left center;
+	background-image: url(/static/img/icons/bullet_green.gif);
+	background-repeat: no-repeat;
+	padding-left: 19px;
+}
+.specieslist li.first a {
 	background-image: none;
 	padding-left: 0;
-}
-.species_list li a {
-	text-decoration: none;
 }
 .cloud-quad-0 {
 	font-size: 1em;

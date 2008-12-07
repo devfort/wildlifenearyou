@@ -3,7 +3,7 @@
 {% block title %}Search{% if q %}: &ldquo;{{ q }}&rdquo;{% endif %}{% endblock %}
 
 {% block extra_head %}
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
+<!-- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
 <script type="text/javascript">
 function showMap() {
     var $ = jQuery;
@@ -16,7 +16,7 @@ function showMap() {
     var gmap = new GMap2(div[0]);
     gmap.setCenter(new GLatLng(37.4419, -122.1419), 13);
 }
-</script>
+</script> -->
 {% endblock %}
 
 {% block search_form %}{% endblock %}
@@ -65,7 +65,7 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
             </h4>
             {% if place.address %}<p>{{ place.address }}</p>{% endif %}
             {% if place.species_list %}
-            <ul class="species_list">
+            <ul class="specieslist">
             {% for species in place.species_list %}
             	<li><span class="cloud-quad-{{ species.quad }}" title="{{ species.count }} seen"><a href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}"{% if species.matches_search %} style="color: red"{% endif %}>{{ species.common_name }}</a></span></li>
             {% endfor %}
