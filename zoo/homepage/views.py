@@ -5,7 +5,7 @@ from django.conf import settings
 from zoo.places.models import Place
 from zoo.accounts.forms import RegistrationForm
 from zoo.animals.models import Species
-from zoo.trips.models import Sighting
+from zoo.trips.models import Sighting, Trip
 from zoo.accounts.models import Profile
 from zoo.photos.models import Photo
 from zoo.utils import location_from_request
@@ -67,5 +67,8 @@ def landing(request):
         'default_search': default_search,
         'recent_photos': Photo.objects.filter(
             is_visible = True
-        ).order_by('-created_at')[:20]
+        ).order_by('-created_at')[:20],
+        'recent_trips': Trip.objects.filter(
+            start__isnull=False
+        ).order_by('-start')[:5]
     })

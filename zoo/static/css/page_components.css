@@ -459,3 +459,37 @@ div#ajax-feedback-form {
 }
 
 /* @end */
+
+/* @group Teaser list */
+
+ul.teaserlist {
+	margin: 0;
+	padding: 0;
+	margin-bottom: 1em;
+}
+ul.teaserlist li {
+	margin: 0;
+	padding: 0;
+	background: none;
+	width: 100%;
+	clear: both;
+	overflow: hidden;
+}
+ul.teaserlist img.image {
+	float: left;
+	margin-right: 1em;
+	margin-bottom: 1em;
+}
+
+ul.teaserlist h3 {
+	font-family: Calibri, "Helvetica Neue", sans-serif;
+	margin-bottom: 0.3em;
+}
+ul.teaserlist p {
+	margin: 0;
+}
+ul.teaserlist h3 span {
+	font-weight: normal;
+}
+
+/* @end */

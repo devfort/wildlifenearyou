@@ -109,7 +109,7 @@ class Trip(AuditedModel):
             
         return date
         
-    def title(self):
+    def title(self, include_date=True):
         name = self.name or 'A trip'
             
         p = Place.objects.filter(sighting__trip=self).distinct()
@@ -119,12 +119,19 @@ class Trip(AuditedModel):
             place = u' to %s' % p[0].known_as
         else:
             # This will only happen against broken old databases
-            place = u' to place unknown'    
-        date = self.formatted_date()
+            place = u' to place unknown'
+        
+        if include_date:
+            date = self.formatted_date()
+        else:
+            date = ''
         
         # Multiple conditions allowed here
         return u'%s%s%s' % (name, place, date)
-
+    
+    def title_no_date(self):
+        return self.title(include_date=False)
+    
     def compact_title(self):
         name = self.name or 'A trip'
         date = self.formatted_date()
@@ -158,6 +165,9 @@ class Trip(AuditedModel):
     def __unicode__(self):
         #return u"%s, %s" % (self.created_by.username, self.name)
         return self.title()
+    
+    def more_than_three_species(self):
+        return self.species.all().distinct().count() > 3
 
 class Sighting(AuditedModel):
     place = models.ForeignKey('places.Place',
