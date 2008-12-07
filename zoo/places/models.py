@@ -41,7 +41,7 @@ class Currency(models.Model):
 def _species_for_place(place):
     from zoo.animals.models import Species # Avoid circular import
     return Species.objects.filter(
-        sighting__place = place
+        sightings__place = place
     ).values_list('common_name', flat=True)
 
 class Place(AuditedModel):
@@ -168,7 +168,7 @@ class Place(AuditedModel):
                 'config': {'store': True, 'freetext': {'language': 'en'}},
             }, { # Searching for the place address.
                 'field_name': 'address',
-                'django_fields': [lambda inst: [inst.address()]],
+                'django_fields': [lambda inst: [inst.address()], 'country'],
                 'config': {'store': True, 'freetext': {'language': 'en'}},
             }, { # Searching for the animals in a place.
                 # This expression should return all the common names of the
