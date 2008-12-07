@@ -58,7 +58,6 @@ class Profile(models.Model):
     def avatar_img(self):
         return mark_safe('<img src="/faces/%s.png" alt="%s\'s Avatar" width="175" height="175" />' % (self.user.username.lower(), self.user.username))
 
-
     @models.permalink
     def get_absolute_url(self):
         return ('accounts-profile', (), {
@@ -163,7 +162,7 @@ class Profile(models.Model):
         if self.biography: percent += 10
         if self.user.get_full_name(): percent += 10
         if self.url: percent += 5
-        # location: 15
+        if self.latitude!=None and self.longitude!=None: percent += 15
         if self.user.created_sighting_set.count() > 0: percent += 5
         if self.user.photos.filter(is_visible=True).count() > 0: percent += 5
         if self.user.comment_comments.all().count() > 0: percent += 5
@@ -174,9 +173,6 @@ class Profile(models.Model):
         if Comment.objects.filter(content_type = pct, object_pk__in = photo_ids).exclude(user = self.user).count() > 0:
             percent += 5
         if self.user.selectedfaceparts.count() > 0: percent += 10 # avatar / profile picture
-
-        # avatar
-
         if self.user.favourite_species.all().count() > 0: percent += 5
         if self.user.created_sighting_set.count() > 10: percent += 5
         if self.user.photos.filter(is_visible=True).count() > 10: percent += 5
