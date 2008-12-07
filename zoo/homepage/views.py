@@ -64,4 +64,7 @@ def landing(request):
         'recent_sightings': recent_sightings,
         'recent_sightings_favourites': recent_sightings_favourites,
         'default_search': default_search,
+        'recent_photos': Photo.objects.filter(
+            is_visible = True
+        ).order_by('-created_at')[:20]
     })

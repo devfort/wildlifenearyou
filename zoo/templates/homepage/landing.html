@@ -15,7 +15,7 @@
 
 <ul class="photostrip">
 	{% for photo in recent_photos %}
-	<li><a href="{{ photo.get_absolute_url }}"><img src="{{ photo.thumbnail }}" alt="{{ photo }}" width="75" height="75"></a></li>
+	<li>{{ photo.thumb_75 }}</li>
 	{% endfor %}
 </ul>
 
