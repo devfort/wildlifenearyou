@@ -23,7 +23,7 @@ admin.site.register(Extra, exclude = excludees)
 admin.site.register(PlacePrice, exclude = excludees)
 admin.site.register(Place,
     exclude = excludees_place,
-    list_filter = ['country'],
+    list_filter = ['featured', 'country'],
     list_display = ('known_as', 'legal_name', 'town', 'country', 'latitude', 'longitude'),
     search_fields = ['known_as', 'legal_name', 'town', 'address_line_1', 'address_line_2'],
     inlines = [PlacePriceInline,PlaceDirectionInline],
