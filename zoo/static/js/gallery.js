@@ -1,7 +1,10 @@
 jQuery(function($) {
 
 	$('#thumbnails a').click(function() {
-		$('.promo img#panorama').attr( { src: $(this).attr('href'), alt: $(this.firstChild).attr('alt') } );
+		$('.promo img#panorama').attr( {
+			src: $(this).attr('href'),
+			alt: $(this.firstChild).attr('alt')
+		});
 		return false;
 	});
 
@@ -25,7 +28,7 @@ jQuery(function($) {
 			} else {
 				$('#gallery-left-arrow a').css('visibility','visible');
 			}
-			if (this.offset  == (this.thumbnails.children().length) - 2) {
+			if (this.offset == (this.thumbnails.children().length) - 3) {
 				$('#gallery-right-arrow a').css('visibility','hidden');
 			} else {
 				$('#gallery-right-arrow a').css('visibility','visible');
