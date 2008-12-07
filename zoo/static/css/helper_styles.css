@@ -176,6 +176,16 @@ input.active {
 
 /* @end */
 
+/* @group Highlighted blocks */
+
+div.highlight {
+	background-color: #E2F1F9;
+	padding: 1em;
+	margin-top: 1.37em;
+}
+
+/* @end */
+
 /* @group Text indicators */
 .meta { 
         font-size: 0.8571em;

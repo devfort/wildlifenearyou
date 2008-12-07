@@ -1,16 +1,16 @@
 /* @group See more animals */
 
-div#see-more-animals {
+div.highlight {
 	background-color: #E2F1F9;
 	padding: 1em;
 	margin-top: 1.37em;
 }
-div#see-more-animals label {
+div.see-more-animals label {
 	width: 4em;
 	float: left;
 }
 
-div#see-more-animals form {
+div.see-more-animals form {
 	margin-bottom: 0;
 }
 

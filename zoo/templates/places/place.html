@@ -35,13 +35,13 @@
 <h2>Animals you might see</h2>
 <ul class="specieslist">
 {% for species in species_list %}
-	<li{% if forloop.first %} class="first"{% endif %}><a class="cloud-quad-{{ species.quad }}" title="{{ species.count }} seen" href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}">{{ species.common_name }}</a></li>
+	<li{% if forloop.first %} class="first"{% endif %}><a class="cloud-quad-{{ species.quad }}" title="Seen by {{ species.count }} spotter{{ species.count|pluralize }}" href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}">{{ species.common_name }}</a></li>
 {% endfor %}
 </ul>
 <p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">&raquo; All species</a></p>
 {% endif %}
 
-<div id="see-more-animals"><a name="addsightings"></a>
+<div class="see-more-animals highlight"><a name="addsightings"></a>
     <h3 class="add">Have you been here?</h3>
     <p>Tell us which animals you saw.</p>
     <form action="{{ request.path }}pick-sightings/" method="GET">
@@ -49,7 +49,6 @@
         <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw" id="saw_2"> <span class="meta">(optional)</span></div>
         <div><input type="submit" value="Add my animals"></div>
     </form>
-    <p>You can also use this to tell us if you know that {{ place.known_as }} has a particular animal (such as sharks), but we haven't listed it. (We won't assume you've seen them in this case!)</p>
 </div>
 
 {% if opening_times %}

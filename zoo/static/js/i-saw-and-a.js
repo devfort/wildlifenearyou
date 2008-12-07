@@ -1,5 +1,5 @@
 function anyEmptyOnes() {
-    return jQuery('#see-more-animals div:visible :text').filter(function() {
+    return jQuery('.see-more-animals div:visible :text').filter(function() {
         return $(this).val() == '';
     }).length > 0;
 }
@@ -23,11 +23,11 @@ jQuery(function($) {
                 return;
             }
             if (!$this.parent().hasClass('and-a')) {
-                $('div#see-more-animals .and-a').show();
+                $('div.see-more-animals .and-a').show();
             } else {
                 // Clone an existing .and-a
                 var and_a = $(
-                    'div#see-more-animals .and-a'
+                    'div.see-more-animals .and-a'
                 ).eq(0).clone();
                 var unused_id = unusedSawId();
                 and_a.find('input').val('').attr({
@@ -35,19 +35,19 @@ jQuery(function($) {
                     'name': 'saw'
                 });
                 and_a.find('label').attr('for', unused_id);
-                and_a.insertBefore('#see-more-animals :submit');
+                and_a.insertBefore('.see-more-animals :submit');
                 setupSawBoxes();
             }
         }
     }
     function setupSawBoxes() {
-        $('div#see-more-animals input[name^=saw]').unbind('keyup').keyup(
+        $('div.see-more-animals input[name^=saw]').unbind('keyup').keyup(
             doWeNeedMoreBoxes
         );
     }
     // Set up the I saw a form bit
     if (anyEmptyOnes()) {
-        $('div#see-more-animals .and-a').hide()
+        $('div.see-more-animals .and-a').hide()
     }
     setupSawBoxes();
     doWeNeedMoreBoxes();
