@@ -399,11 +399,9 @@ div#ajax-feedback-form {
 
 /* @group Team avatars */
 
-#team_avatars {
-	list-style-type: none;
-	margin-left: 0;
-}
 #team_avatars li {
+	background-image: none;
+	padding-left: 0;
 	text-align: center;
 	float: left;
 	width: 24%;
