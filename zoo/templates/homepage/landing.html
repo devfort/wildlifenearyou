@@ -126,13 +126,15 @@
 					<span class="postal-code">NW1 4RY</span>, <abbr class="country-name" title="United Kingdom">GB</abbr>
 				</p>-->
 <!--				<p class="description">ZSL London Zoo is the world's oldest scientific zoo. It was opened in London on April 27, 1828, and was originally intended to be used as a collection for scientific study. </p> -->
+                                {% if place.species.count %}
 				<h4>Animals spotted here</h4>
 				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
 				and <a href="{{ place.urls.species }}">more&hellip;</a>
 				</p>
+				{% endif %}
 				{% endwith %}
 				{% else %}
-				<p>There is no currently featured place</p>
+				<p>There is no currently featured place. If you start adding your trips, your local place might be shown here!</p>
 				{% endif %}
 			</div>
 			<div class="column">
@@ -148,35 +150,60 @@
 				{% if species.nearest %}
 				<p>There's a {{ species.common_name }} at <a href="{{ species.nearest.urls.absolute }}">{{ species.nearest }}</a>, <strong>{{ species.nearest.distance_miles|floatformat }} mile{{ species.nearest.distance_miles|pluralize }}</strong> away from you!</p>
 				{% endif %}
+				{% if species.sightings.count %}
 				<h4>Recently spotted at</h4>
 				<ul>
 					{% for sighting in species.sightings.all|slice:":2" %}
 					<li><a href="{{ sighting.place.urls.absolute }}">{{ sighting.place }}</a> by <a href="/profiles/{{ sighting.created_by.username }}/">{{ sighting.created_by.username }}</a> {{ sighting.created_at|timesince }} ago</li>
 					{% endfor %}
 				</ul>
+				{% endif %}
 				{% endwith %}
 				{% else %}
 				<h2>Featured animal</h2>
-				<p>No currently featured animal</p>
+				<p>No currently featured animal. If you mark an animal as your favourite, it might be shown here!</p>
 				{% endif %}
 			</div>
 			<div class="column">
 				<h2>Featured spotter</h2>
+                    	        {% if featured.profile %}
+                    	        {% with featured.profile as profile %}
+                    	        {{ profile.avatar_img_75_pull_left }}
 				<img src="/faces/sedf.png" width="75" height="75" alt="" class="pull-left">
-				<h3><a href="/profile/sedf/">natbat</a></h3>
+				<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
+				{% if profile.passport.seen_species %}
 				<p>Has spotted
-				<a href="/gb/london-zoo/species/giraffe/">Giraffe</a>,
-				<a href="/gb/london-zoo/species/grey-heron/">Grey Heron</a>,
-				<a href="/gb/london-zoo/species/harris%27s-hawk/">Harris&#39;s Hawk</a>,
-				<a href="/gb/london-zoo/species/harris%27s-hawk/">Sumatran Tiger</a>,
-				<a href="/gb/london-zoo/species/komodo-dragon/">Komodo dragon</a> but really likes the <a href="#">Eurasian Otter</a>!
+                                {% if profile.passport.favourite_species.count %}
+                                {% with profile.passport.favourite_species.0 as favourite %}
+				{% for species in profile.passport.seen_species|slice:":5" %}{% ifnotequal favourite species %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endifnotequal %}{% endfor %}
+				and really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
+				{% endwith %}
+                                {% else %}
+				{% for species in profile.passport.seen_species|slice:":5" %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.
+				{% endif %}
+				{% else %}
+				{% if profile.passport.favourite_species.count %}
+                                {% with profile.passport.favourite_species.0 as favourite %}
+				Hasn't spotted anything yet, but really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
+				{% endwith %}
+				{% endif %}
+				{% endif %}
 				</p>
+				{% if profile.user.created_trip_set.count %}
 				<h4>Recent trips</h4>
 				<ul>
-					<li><a href="/gb/london-zoo/">My trip to Berlin Zoo</a> yesterday</li>
-					<li><a href="/gb/london-zoo/">My trip to London Zoo</a> 3 months ago</li>
+				        {% for trip in profile.user.created_trip_set.all|slice:":2" %}
+					<li><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a> {{ trip.formatted_date }}</li>
+					{% endfor %}
 				</ul>
-				<p>Why not <a href="#">check out their photos</a>?</p>
+				{% endif %}
+				{% if profile.visible_photos.count %}
+				<p>Why not <a href="{{ profile.urls.absolute }}">check out their photos</a>?</p>
+				{% endif %}
+                    	        {% endwith %}
+                    	        {% else %}
+                    	        <p>There is no currently featured spotter. If you start adding your trips, you could be highlighted here!</p>
+                    	        {% endif %}
 			</div>
 		</div>
 	</div>
@@ -193,7 +220,7 @@
 						<img src="/faces/{{ trip.created_by }}.png" width="75" height="75" alt="{{ trip.created_by }}" class="image">
 						<h3><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span>
 						</h3>
-					<p><strong><a href="/profile/{{ trip.created_by }}/">{{ trip.created_by }}</a></strong> visited {% for place in trip.places.all.distinct %}<a href="{{ place.get_absolute_url }}">{{ place }}</a>{% if not forloop.last %} and {% endif %}{% endfor %} and saw {% for species in trip.species.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ species.get_absolute_url }}">{{ species.plural }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% endif %}</p>
+					<p><strong><a href="/profile/{{ trip.created_by }}/">{{ trip.created_by }}</a></strong> visited {% for place in trip.places.all.distinct %}<a href="{{ place.get_absolute_url }}">{{ place }}</a>{% if not forloop.last %} and {% endif %}{% endfor %} and saw {% for species in trip.species.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ species.get_absolute_url }}">{{ species.plural|lower }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% endif %}.</p>
 					</li>
 					{% endfor %}
 				</ul>

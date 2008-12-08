@@ -62,7 +62,7 @@ class Species(AbstractSpecies):
     def visible_photos(self):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
-            sightings__species = self, is_visible = True
+            trip__sightings__species = self, is_visible = True,
         ).distinct()
 
     def random_photo(self):

@@ -64,8 +64,9 @@ class Trip(AuditedModel):
     @staticmethod
     def get_passport(user):
         class Passport:
-            def __init__(self, seen):
+            def __init__(self, seen, favourites):
                 self.seen_species = seen
+                self.favourite_species = favourites
 
         if not user.is_authenticated():
             return Passport([])
@@ -80,8 +81,9 @@ class Trip(AuditedModel):
             species.count = by_count[species]
 
         species_list.sort(key=lambda s: s.count, reverse=True)
+        favourites = Species.objects.filter(favourited__user=user).order_by('?')
 
-        return Passport(species_list)
+        return Passport(species_list, favourites)
 
     def formatted_date(self):
         date = self.start

@@ -156,9 +156,15 @@ class Place(AuditedModel):
     def visible_photos(self):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
-            sightings__place = self,
+            trip__sightings__place = self,
             is_visible = True
         )
+
+    def random_photo(self):
+        vp = self.visible_photos()
+        if vp.count():
+            return vp.order_by('?')[0]
+        return None
 
     class Searchable:
         fields = [
