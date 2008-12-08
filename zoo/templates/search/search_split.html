@@ -12,9 +12,15 @@
         <input type="text" name="what" value="{% if what %}{{ what }}{% else %}Everything{% endif %}" size="20"{% if not what %} class="remove-default"{% endif %}>
         near <input type="text" name="near" value="{{ near }}" size="25">
         <input type="submit" value="Search">
-        <input type="submit" name='reset' value="Reset">
     </div>
 </form>
+
+{% if what %}
+<p><small>Alternatively, search for
+<a href="/search/?q={{ what|urlencode }}">&ldquo;{{ what }}&rdquo; everywhere</a>,
+or <a href="/search/?near={{ near|urlencode }}">everything near &ldquo;{{ near }}&rdquo;</a>.</small>
+</p>
+{% endif %}
 
 {% if not results %}
 <p class="notification">I&rsquo;m afraid your search returned no results. Try something else?</p>
