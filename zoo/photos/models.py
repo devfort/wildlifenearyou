@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+from django.utils.html import escape
 
 from sorl.thumbnail.fields import ImageWithThumbnailsField
 
@@ -31,7 +32,7 @@ class Photo(models.Model):
         User, related_name='photos_moderated', null=True, blank=True,
     )
     moderated_at = models.DateTimeField(null=True, blank=True)
-
+    
     # WARNING: Denormalisation ahoy! We have a bit of a tough one here:
     # photos are encouraged to have 0 or more sightings, and a sighting
     # relates a photo to both a place, a trip AND a species.
@@ -70,12 +71,13 @@ class Photo(models.Model):
         return self.title or unicode(self.photo)
 
     def thumb_75(self):
+        title = escape(self.detailed_title())
         return mark_safe(
             '<a href="%s" title="%s"><img src="%s" alt="%s" width="75" height="75"></a>' % (
                 self.get_absolute_url(),
-                self.title or ('Photo by %s' % self.created_by),
+                title,
                 self.photo.thumbnail,
-                self.title or ('Photo by %s' % self.created_by),
+                title,
             )
         )
 
@@ -83,12 +85,29 @@ class Photo(models.Model):
         return mark_safe(
             '<a href="%s" title="%s"><img class="pull-left" src="%s" alt="%s" width="75" height="75"></a>' % (
                 self.get_absolute_url(),
-                self.title or ('Photo by %s' % self.created_by),
+                self.detailed_title(),
                 self.photo.thumbnail,
                 self.title or ('Photo by %s' % self.created_by),
             )
         )
-
+    
+    def detailed_title(self):
+        species = list(
+            Species.objects.filter(sightings__photos = self).distinct()
+        )
+        title = ''
+        if self.title and not self.title.lower().endswith('.jpg'):
+            title = '"%s"' % self.title
+            if species:
+                title += ': '
+        if species:
+            title += ', '.join([s.common_name for s in species])
+        if title:
+            title += (', by %s' % self.created_by)
+        else:
+            title = ('Photo by %s' % self.created_by)
+        return title
+    
     objects = models.Manager()
     visible = VisiblePhotoManager()
 
