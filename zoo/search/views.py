@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponseRedirect as Redirect
 
 import re
 from pprint import pformat
@@ -109,6 +110,8 @@ def search_single(request, q, bypass=False):
     })
 
 def search(request):
+    if request.GET.get('reset', ''):
+        return Redirect('/search/')
     q = request.GET.get('q', '')
     what = request.GET.get('what', '')
     if what == 'Everything':

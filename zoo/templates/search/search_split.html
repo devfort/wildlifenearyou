@@ -12,6 +12,7 @@
         <input type="text" name="what" value="{% if what %}{{ what }}{% else %}Everything{% endif %}" size="20"{% if not what %} class="remove-default"{% endif %}>
         near <input type="text" name="near" value="{{ near }}" size="25">
         <input type="submit" value="Search">
+        <input type="submit" name='reset' value="Reset">
     </div>
 </form>
 
