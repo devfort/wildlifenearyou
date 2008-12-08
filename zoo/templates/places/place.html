@@ -148,7 +148,6 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 
 {% block secondary_content %}
 
-
 <h2>Average Rating</h2>
 {% if rating.on %}
 <p class="rating" title="{{ rating.on|length }} out of 5 stars">
@@ -167,7 +166,10 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 </p>
 {% endif %}
 
-<p><a href="{% url place-support place.country.country_code place.slug %}" class="button">Support your zoo!</a></p>
+<p class="suggest-changes">
+	Found incorrect information on the page?
+	<a href="{{ place.urls.suggest_changes }}">Let us know! You won’t hurt our feelings.</a>
+</p>
 
 <h2>Photos</h2>
 
@@ -223,9 +225,5 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
     {% include "comments/_comments.html" %}
 {% endwith %}
 
-<p class="suggest-changes">
-	Found incorrect information on the page?
-	<a href="{{ place.urls.suggest_changes }}">Let us know! You won’t hurt our feelings.</a>
-</p>
 
 {% endblock %}
