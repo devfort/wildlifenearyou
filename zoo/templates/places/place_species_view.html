@@ -4,7 +4,9 @@
 
 {% block primary_content %}
 
-<h1><a href="{{ species.urls.absolute }}">{{ species.plural }}</a> at <a href="{{ place.urls.absolute }}">{{ place.known_as }}</a></h1>
+<h1>{{ species.plural }} at {{ place.known_as }}</h1>
+
+<p>Check out <a href="{{ place.urls.absolute }}">everything about {{ place.known_as }}</a>, or <a href="{{ species.urls.absolute }}">other places to see {{ species.plural|lower }}</a>.</p>
 
 <h2>Spotted by</h2>
 
