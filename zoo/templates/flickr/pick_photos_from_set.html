@@ -1,0 +1,23 @@
+{% extends base %}
+
+{% block title %}Pick photos to import{% endblock %}
+
+{% block primary_content %}
+
+<h1>Photos in {{ set.title }}</h1>
+
+<p>Pick the photos you would like to import in to {{ trip }}?</p>
+
+<form action="." method="post">
+<ul>
+	{% for photo in photos.photos.photo %}
+	<li>
+		<img src="{{ photo.square }}" class="pull-left">
+		<p><input type="checkbox" name="photo" value="{{ photo.id }}" id="import_{{ photo.id }}"> <label for="import_{{ photo.id }}">Import this</label></p>
+	</li>
+	{% endfor %}
+</ul>
+<p><input type="submit" class="submit" value="Import these photos in to {{ trip }}"></p>
+</form>
+
+{% endblock %}

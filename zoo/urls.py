@@ -101,6 +101,8 @@ urlpatterns = patterns('',
         name='trip-view'),
     url(r'^profile/(?P<username>\w+)/trip/(?P<trip_id>\d+)/upload/$',
         photos.upload_trip, name='upload-photos-trip'),
+    url(r'^profile/(?P<username>\w+)/trip/(?P<trip_id>\d+)/import-flickr/$',
+        'zoo.flickr.views.import_trip', name='import-flickr-photos-trip'),
     url(r'^profile/(?P<username>\w+)/trip/(?P<trip_id>\d+)/delete/$', 
         'zoo.trips.views.trip_delete',
         name='trip-delete'),
@@ -120,7 +122,8 @@ urlpatterns = patterns('',
     (r'^faces/users/(\w+).xml$', faces.profile_image_xml),
     (r'^faces/update/$', faces.update),
 
-
+    (r'^flickr-callback/$', 'zoo.flickr.views.flickr_callback'),
+    
     url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),
 
