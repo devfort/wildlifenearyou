@@ -19,7 +19,7 @@
                 {% endfor %}{% endfor %} with {{ trip.sighting_count }} animal sighting{{ trip.sighting_count|pluralize }}</p>
 
                 <p class="description">
-                {{ trip.description }}
+                {{ trip.description|linebreaks }}
                 </p>
 
                 {% for place in sightings_by_place %}
