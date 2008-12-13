@@ -1,6 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class FaceAreaCategoryManager(models.Manager):
+    def for_user(self, user):
+        return (
+            list(self.filter(is_special = False)) + 
+            list(self.filter(
+                is_special = True,
+                specialperms__user = user
+            ))
+        )
+
 class FaceAreaCategory(models.Model):
     name = models.CharField(max_length=100)
     order = models.IntegerField(blank = True, null=True, help_text="""
@@ -14,6 +24,8 @@ class FaceAreaCategory(models.Model):
     class Meta:
         verbose_name_plural = 'face area categories'
         ordering = ('order',)
+    
+    objects = FaceAreaCategoryManager()
     
     def __unicode__(self):
         if self.is_special:

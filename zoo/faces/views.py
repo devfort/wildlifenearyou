@@ -24,9 +24,10 @@ from zoo.shortcuts import render
 </profileImages>
 """
 
+@login_required
 def profile_images_xml(request):
     profileImages = ET.Element('profileImages')
-    for category in FaceAreaCategory.objects.all():
+    for category in FaceAreaCategory.objects.for_user(request.user):
         faceareacategory = ET.Element('faceareacategory')
         faceareacategory.attrib = {'name': category.name}
         profileImages.append(faceareacategory)
@@ -49,6 +50,7 @@ def profile_images_xml(request):
                 partlist.append(p)
     return XmlResponse(ET.tostring(profileImages))
 
+@login_required
 def profile_xml(request):
     return profile_image_xml(request, request.user.username)
 
