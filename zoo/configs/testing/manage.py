@@ -2,6 +2,8 @@
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../ext'))
 sys.path.insert(0, '../../../')
+sys.path.insert(0, '../../')
+sys.path.insert(0, '.')
 
 from django.core.management import execute_manager
 try:
