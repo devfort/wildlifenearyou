@@ -171,6 +171,25 @@ assert XAPIAN_PERSONAL_PREFIX, """
 # record back to the search index.
 XAPIAN_SPECIES_DB = '%s_species' % XAPIAN_PERSONAL_PREFIX
 
+# wildlifenearyou.com/{username} means we need to reserve a lot of namespace
+RESERVED_USERNAMES = set(
+    """
+    feed www help security porn manage smtp fuck pop manager api owner shit 
+    secure ftp discussion blog features test mail email administrator 
+    xmlrpc web xxx pop3 abuse atom complaints news information imap cunt 
+    info pr0n about forum admin weblog team feeds root about info news blog 
+    forum features discussion email abuse complaints map tags ajax django 
+    comet poll polling thereyet filter search zoom machinetags search 
+    people profiles profile person navigate nav browse manage static css 
+    javascript js code flags flag country countries region place places 
+    photos owner maps upload geocode geocoding login logout openid openids 
+    recover lost signup reports report flickr upcoming mashups recent irc 
+    group groups bulletin bulletins messages message newsfeed events 
+    companies active rss img company books shop sales animals species 
+    plants narwhals plant animal wildlife latin dictionary fish zoos zoo 
+    aquarium aquariums park parks safari arboretum arboretums
+    """.strip().split()
+)
 
 #----------------------------------------------------------------------------------------------
 #                                                                                             -
