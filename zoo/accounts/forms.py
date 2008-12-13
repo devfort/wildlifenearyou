@@ -3,14 +3,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from zoo.accounts.models import Profile
 
 class RegistrationForm(forms.ModelForm):
     username = forms.RegexField(
-        label = _("Username"), max_length = 30, regex = r'^\w+$',
+        label = _("Username"), max_length = 30, regex = r'^\w{3,}$',
         help_text = _(
-            "Required. 30 characters or fewer. Alphanumeric characters " +
+            "Required, 3-30 characters. Alphanumeric characters " +
             "only (letters, digits and underscores)."
         ),
         error_message = _(
@@ -31,6 +32,10 @@ class RegistrationForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data["username"]
+        if username in settings.RESERVED_USERNAMES:
+            raise forms.ValidationError(_(
+                "That username is not available."
+            ))
         try:
             User.objects.get(username=username)
         except User.DoesNotExist:
