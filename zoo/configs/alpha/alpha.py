@@ -9,7 +9,20 @@ DEV_STATUS_HTML = """
 </div>
 """
 
+# Database settings
 DATABASE_NAME = 'zoo_alpha'
 DATABASE_USER = 'zoo_alpha'
-XAPIAN_PERSONAL_PREFIX = 'zoo_alpha'
+
+# Xapian settings
 SEARCH_ENABLED = True
+XAPIAN_BASE_URL = 'http://superevildevfort.com:8017/search/'
+XAPIAN_PERSONAL_PREFIX = 'zoo_alpha'
+XAPIAN_LOCATION_DB = '%s_locations' % XAPIAN_PERSONAL_PREFIX
+XAPIAN_SPECIES_DB = '%s_species' % 
+
+# SMTP settings
+DEFAULT_FROM_EMAIL = 'simon@simonwillison.net'
+EMAIL_FROM = DEFAULT_FROM_EMAIL
+EMAIL_HOST = 'mail.authsmtp.com'
+EMAIL_HOST_USER = 'ac35086'
+EMAIL_HOST_PASSWORD = 'xzaf8gbxm'
