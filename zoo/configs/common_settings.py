@@ -141,3 +141,6 @@ RESERVED_USERNAMES = set(
     aquarium aquariums park parks safari arboretum arboretums
     """.strip().split()
 )
+
+GOOGLE_MAPS_API_KEY = ''
+

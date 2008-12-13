@@ -1,5 +1,9 @@
 from zoo.configs.common_settings import *
 
+# Debug settings - turn OFF before launch
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
 # Database settings
 DATABASE_NAME = 'zoo_alpha'
 DATABASE_USER = 'zoo_alpha'
@@ -9,7 +13,7 @@ SEARCH_ENABLED = True
 XAPIAN_BASE_URL = 'http://superevildevfort.com:8017/search/'
 XAPIAN_PERSONAL_PREFIX = 'zoo_alpha'
 XAPIAN_LOCATION_DB = '%s_locations' % XAPIAN_PERSONAL_PREFIX
-XAPIAN_SPECIES_DB = '%s_species' % 
+XAPIAN_SPECIES_DB = '%s_species' % XAPIAN_PERSONAL_PREFIX
 
 # SMTP settings
 DEFAULT_FROM_EMAIL = 'simon@simonwillison.net'
