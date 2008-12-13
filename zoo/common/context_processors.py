@@ -1,5 +1,6 @@
 from django.core.cache import cache
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 from zoo.animals.models import Species
 from zoo.utils import location_from_request
@@ -40,4 +41,5 @@ def standard(request):
             'random_animal': animal,
             'location': location,
             'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
+            'dev_status_html': mark_safe(settings.DEV_STATUS_HTML),
     }

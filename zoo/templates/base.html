@@ -16,12 +16,15 @@
     <link rel="stylesheet" href="/static/css/page_structure.css" type="text/css">
     <link rel="stylesheet" href="/static/css/page_components.css" type="text/css">
     <link rel="stylesheet" href="/static/css/overrides.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/debug.css" type="text/css">
     <!--[if IE]>
     <link rel="stylesheet" type="text/css" href="/static/css/ie.css">
     <![endif]-->
     {% block extra_head %}{% endblock %}
+
 </head>
 <body {% block extra_body %}{% endblock %}>
+{{ dev_status_html }}
 <div class="header">
 	<div class="wrapper">
 		<div class="contents">
