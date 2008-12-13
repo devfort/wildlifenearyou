@@ -17,7 +17,7 @@ from zoo.search import nearest_places_with_species
 
 def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
     if request.user.is_authenticated():
-        return Redirect('/')
+        return Redirect(request.REQUEST.get(redirect_field_name, '/'))
 
     redirect_to = request.REQUEST.get(redirect_field_name, '')
 
