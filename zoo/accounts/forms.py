@@ -80,12 +80,15 @@ class OurAuthenticationForm(AuthenticationForm):
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(_("Please enter a correct username and password. Note that your password is case-sensitive."))
+                raise forms.ValidationError(_(
+                    "Please enter a correct username and password. Note that your password is case-sensitive."
+                ))
             elif not self.user_cache.is_active:
                 raise forms.ValidationError(_("This account is inactive."))
-
-        if not self.user_cache.get_profile().email_validated:
-            raise forms.ValidationError(_("You must validate your email address before logging in. Check your email!"))
+            if not self.user_cache.get_profile().email_validated:
+                raise forms.ValidationError(_(
+                    "You must validate your email address before logging in. Check your email!"
+                ))
 
         # TODO: determine whether this should move to its own method.
         if self.request:
