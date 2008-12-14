@@ -101,6 +101,7 @@ jQuery(function($) {
             arrow.css('margin-left', 0);
         }
         infobox.css('left', left);
+        infobox.css('top', photostrip.offset().top + photostrip.height() + 2);
         infobox.find('div.info').html(a.attr('origtitle'));
     });
     
