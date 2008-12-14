@@ -9,7 +9,12 @@
 {% block content %}
 <h1>{{ profile.user.username }} - edit profile</h1>
 
-<div id="flashMovie"></div>
+<h2>Avatar</h2>
+
+<p>Your avatar is shown whenever you crop up around the site.</p>
+
+<div id="flashMovie">We're really sorry, but you can't edit your avatar without having both Flash and Javascript installed and enabled in your browser.</div>
+
 <script type="text/javascript">
     var so = new SWFObject(
         "/static/swf/profilepicture.swf", "flashMovie", 470, 470, 9,
@@ -23,6 +28,7 @@
     so.write("flashMovie");
 </script>
 
+<h2>Other details</h2>
 
 <form action="{{ path }}" method="post">
 {{ profile_form.as_p }}
