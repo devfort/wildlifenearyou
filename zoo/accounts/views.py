@@ -143,6 +143,12 @@ def profile(request, username):
         'profile': user.get_profile(),
     })
 
+def photos(request, username):
+    user = get_object_or_404(User, username = username)
+    return render(request, 'accounts/photos.html', {
+        'profile': user.get_profile(),
+    })
+
 def profile_edit(request, username):
     user = get_object_or_404(User, username = username)
     profile = user.get_profile()

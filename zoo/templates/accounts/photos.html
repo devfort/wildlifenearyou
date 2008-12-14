@@ -1,0 +1,21 @@
+{% extends base %}
+
+{% block title %}{{ profile.user|title }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ profile.user|title }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+{% if profile.badges.all %}
+<ul>{{ profile.badges.all|unordered_list }}</ul>
+{% endif %}
+
+<div>
+        <h2>Photos</h2>
+
+        {% for photo in profile.user.photos.all %}
+                <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
+        {% endfor %}
+        {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
+</div>
+
+{% endblock %}
