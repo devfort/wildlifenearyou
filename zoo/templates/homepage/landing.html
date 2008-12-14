@@ -154,7 +154,10 @@
 				<h4>Recently spotted at</h4>
 				<ul>
 					{% for sighting in species.sightings.all|slice:":2" %}
-					<li><a href="{{ sighting.place.urls.absolute }}">{{ sighting.place }}</a> by <a href="{% url accounts-profile sighting.created_by.username %}/">{{ sighting.created_by.username }}</a> {{ sighting.created_at|timesince }} ago</li>
+					<li><a href="{{ sighting.place.urls.absolute }}">{{ sighting.place }}</a> by <a href="{% url accounts-profile sighting.created_by.username %}/">{{ sighting.created_by.username }}</a>
+					{% if sighting.trip %}
+					{{ sighting.trip.formatted_date }}
+					{% endif %}</li>
 					{% endfor %}
 				</ul>
 				{% endif %}
@@ -198,7 +201,7 @@
 				</ul>
 				{% endif %}
 				{% if profile.visible_photos.count %}
-				<p>Why not <a href="{{ profile.urls.absolute }}">check out their photos</a>?</p>
+					<p>Why not <a href="{% url accounts-profile-photos profile.user.username %}">check out their photos</a>?</p>
 				{% endif %}
                     	        {% endwith %}
                     	        {% else %}
