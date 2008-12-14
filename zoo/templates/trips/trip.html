@@ -60,7 +60,7 @@
         {% endwith %}
 {% endwith %}
 
-<p>Created by <a href="/profile/{{ trip.created_by.username }}/">{{ trip.created_by }}</a> on {{ trip.created_at|date:"jS F Y" }}</p>
+<p>Created by <a href="{% url accounts-profile trip.created_by.username %}">{{ trip.created_by }}</a> on {{ trip.created_at|date:"jS F Y" }}</p>
 
 {% if belongs_to_user %}
 <p><a href="edit/">Edit this trip</a> | <a href="delete/">Delete this trip</a></p>

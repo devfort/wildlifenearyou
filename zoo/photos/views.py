@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.core.urlresolvers import reverse
 
 from models import Photo
 from zoo.shortcuts import render
@@ -26,7 +27,7 @@ def upload(request, place=None, redirect_to=None):
                 obj.is_visible = True
             obj.save()
             return HttpResponseRedirect(redirect_to or (
-                '/profile/%s/' % request.user.username
+                reverse('accounts-profile', args=(request.user,))
             ))
     else:
         form = UploadPhotoForm()

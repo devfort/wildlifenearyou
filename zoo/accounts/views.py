@@ -135,7 +135,7 @@ def password_key_sent(request):
 
 @login_required
 def profile_default(request):
-    return Redirect(u'/profile/%s' % (request.user,))
+    return Redirect(reverse('accounts-profile', args=(request.user,)))
 
 def profile(request, username):
     user = get_object_or_404(User, username = username)

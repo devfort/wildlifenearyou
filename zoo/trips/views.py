@@ -382,7 +382,7 @@ def trip_delete(request, username, trip_id):
         for place in places:
             place.save()
         
-        return Redirect('/profile/%s/' % username)
+        return Redirect(reverse('accounts-profile', args=(username,)))
     
     return render(request, 'trips/trip_delete.html', {
         'trip': trip,

@@ -154,7 +154,7 @@
 				<h4>Recently spotted at</h4>
 				<ul>
 					{% for sighting in species.sightings.all|slice:":2" %}
-					<li><a href="{{ sighting.place.urls.absolute }}">{{ sighting.place }}</a> by <a href="/profiles/{{ sighting.created_by.username }}/">{{ sighting.created_by.username }}</a> {{ sighting.created_at|timesince }} ago</li>
+					<li><a href="{{ sighting.place.urls.absolute }}">{{ sighting.place }}</a> by <a href="{% url accounts-profile sighting.created_by.username %}/">{{ sighting.created_by.username }}</a> {{ sighting.created_at|timesince }} ago</li>
 					{% endfor %}
 				</ul>
 				{% endif %}
@@ -220,7 +220,7 @@
 						<img src="/faces/{{ trip.created_by }}.png" width="75" height="75" alt="{{ trip.created_by }}" class="image">
 						<h3><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span>
 						</h3>
-					<p><strong><a href="/profile/{{ trip.created_by }}/">{{ trip.created_by }}</a></strong> visited {% for place in trip.places.all.distinct %}<a href="{{ place.get_absolute_url }}">{{ place }}</a>{% if not forloop.last %} and {% endif %}{% endfor %} and saw {% for species in trip.species.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ species.get_absolute_url }}">{{ species.plural|lower }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% endif %}.</p>
+					<p><strong><a href="{% url accounts-profile trip.created_by %}">{{ trip.created_by }}</a></strong> visited {% for place in trip.places.all.distinct %}<a href="{{ place.get_absolute_url }}">{{ place }}</a>{% if not forloop.last %} and {% endif %}{% endfor %} and saw {% for species in trip.species.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ species.get_absolute_url }}">{{ species.plural|lower }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% endif %}.</p>
 					</li>
 					{% endfor %}
 				</ul>
