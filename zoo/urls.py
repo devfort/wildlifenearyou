@@ -48,6 +48,10 @@ urlpatterns = patterns('',
     url(r'^search/$', 'zoo.search.views.search',
         name='search'),
 
+    # Ajax autocompleters
+    url(r'^autocomplete/species/$', 'zoo.search.views.autocomplete_species',
+        name='autocomplete-species'),
+
     # User accounts stuff
     url(r'^login/$', 'accounts.views.login', {
         'template_name': 'accounts/login.html'
@@ -96,7 +100,8 @@ urlpatterns = patterns('',
     (r'^faces/users/(\w+).xml$', faces.profile_image_xml),
     (r'^faces/update/$', faces.update),
 
-    (r'^flickr-callback/$', 'zoo.flickr.views.flickr_callback'),
+    url(r'^flickr-callback/$', 'zoo.flickr.views.flickr_callback', 
+        name='flickr-callback'),
     
     url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),

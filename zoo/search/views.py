@@ -7,7 +7,8 @@ from djape.client import Query, Client
 
 from zoo.shortcuts import render
 from zoo.search import search_places, search_known_species, search_near, \
-    search_locations, SEARCH_ALL
+    search_locations, SEARCH_ALL, search_species
+from zoo.trips.models import Sighting
 
 def search_split(request, what, near):
     # First, let us look up the location
@@ -130,3 +131,15 @@ def location_complete(request):
     q = request.GET.get('q', '')
     results = search_locations(q)
     return render_json(request, list(results))
+
+def autocomplete_species(request):
+    q = request.GET.get('q', '')
+    results = list(search_species(q))
+    # Annotate with a count of the number of sightings for each
+    for result in results:
+        result['num_sightings'] = Sighting.objects.filter(
+            species__freebase_id = result['freebase_id']
+        ).count()
+    # Order by number of sightings, with most at the top
+    results.sort(key = lambda r: r['num_sightings'], reverse=True)
+    return render_json(request, results)

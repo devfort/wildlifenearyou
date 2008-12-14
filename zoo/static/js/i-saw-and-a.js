@@ -41,9 +41,35 @@ jQuery(function($) {
         }
     }
     function setupSawBoxes() {
-        $('div.see-more-animals input[name^=saw]').unbind('keyup').keyup(
-            doWeNeedMoreBoxes
-        );
+        $('div.see-more-animals input[name^=saw]').unbind('.doweneed').bind(
+            'keyup.doweneed', doWeNeedMoreBoxes
+        ).autocomplete('/autocomplete/species/', {
+            dataType: 'json',
+            selectFirst: true,
+            width: 400,
+            formatItem: function(item) {
+                var result = item.common_name;
+                if (item.scientific_name) {
+                    result += ', ' + item.scientific_name;
+                }
+                if (item.num_sightings) {
+                    result += ' (seen ' + item.num_sightings + ' times)';
+                }
+                return result;
+            },
+            formatResult: function(item) {
+                return item.common_name;
+            },
+            parse: function(data) {
+                return $.map(data, function(row) {
+                    return {
+                        data: row,
+                        value: row.common_name,
+                        result: row.common_name
+                    }
+                });
+            }
+        });
     }
     // Set up the I saw a form bit
     if (anyEmptyOnes()) {
@@ -51,4 +77,23 @@ jQuery(function($) {
     }
     setupSawBoxes();
     doWeNeedMoreBoxes();
+    
+    // Since we're using autocomplete, the form should not submit unless the 
+    // button is directly clicked.
+    $('div.see-more-animals form').submit(function() {
+        return false;
+    });
+    // Problem: if you hit "enter" in one of the fields, Firefox fires the 
+    // click() event on the first submit button in the form. So, to create 
+    // a submit button that can be clicked to submit the form WITHOUT it 
+    // being magically clicked when you hit enter inside another field, you 
+    // need to clone the original submit button, hide it and set up the 
+    // click behaviour on that clone. Crazy but it works.
+    var submit = $('div.see-more-animals :submit');
+    var submit2 = submit.clone();
+    submit2.insertAfter(submit);
+    submit.hide();
+    submit2.click(function() {
+        $('div.see-more-animals form')[0].submit();
+    });
 });
