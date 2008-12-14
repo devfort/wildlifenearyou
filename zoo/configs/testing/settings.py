@@ -22,6 +22,9 @@ EMAIL_HOST = 'mail.authsmtp.com'
 EMAIL_HOST_USER = 'ac35086'
 EMAIL_HOST_PASSWORD = 'xzaf8gbxm'
 
+# API Keys
+GOOGLE_MAPS_API_KEY = "ABQIAAAAyYu8a7AdbfUctK3zwwu_2hTGub4EDPAvn1yh6P8Pcoj_zzNVuBRgEgIJQIt3MwOjhDuBkM-JeQb4HA"
+
 # Prelaunch middleware
 PRELAUNCH_PASSWORD = 'tigers'
 if PRELAUNCH_PASSWORD:

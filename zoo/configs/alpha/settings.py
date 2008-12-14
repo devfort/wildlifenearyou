@@ -29,6 +29,9 @@ if PRELAUNCH_PASSWORD:
         'zoo.common.prelaunch_middleware.PreLaunchMiddleware',
     ]
 
+# API Keys
+GOOGLE_MAPS_API_KEY = "ABQIAAAAyYu8a7AdbfUctK3zwwu_2hQ01HQsC4mkjJr7qTVEDPk4sSFdohRgeCFcjXUtZnEU307E9xnV8VU7vw"
+
 # Dev status bar HTML
 DEV_STATUS_HTML = """
 <div class="dev-status alpha">
