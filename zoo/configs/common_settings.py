@@ -143,6 +143,7 @@ RESERVED_USERNAMES = set(
 )
 
 GOOGLE_MAPS_API_KEY = ''
+GOOGLE_ANALYTICS_CODE = ''
 
 # Used solely to display to the user what the file upload limit is;
 # this is actually set in nginx configuration. In bytes.
