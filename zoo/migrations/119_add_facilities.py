@@ -22,7 +22,7 @@ migration = m.InsertRows(
     ),
     (4L,
     u'facility_icons/giftshop.png',
-    u'First aid',
+    u'Gift shop',
     ),
     (5L,
     u'facility_icons/handicapped.png',
