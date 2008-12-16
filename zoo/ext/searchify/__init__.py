@@ -1,5 +1,5 @@
 # $Id$
-# zzzz this needs a name
+# FIXME this needs a name
 #
 
 # Add an inner class Searchable to your model, with fields (list of django_fields) and cascades (list of strings which are Django fields that are relations to other Django model instances).
@@ -48,20 +48,26 @@
 #
 # When auto-generating, we use ':' to separate bits of things where possible, and '__' where we require \w only.
 
-# FIXME: make it easy to reindex a model
+# FIXME: make it easy to reindex a model (including 'cheap' where we don't delete everything for that model first)
 # FIXME: make it easy to reindex everything
-# FIXME: make it possible to index an individual model to more than one database.
+# FIXME: it's easy to accidentally delete the database after initialisation happens; we should provide a CLEAR DATABASE function (used by reindexing, above) which safely clears and ensures that the database has appropriate configuration at the end of things
 
+# FIXME: drop xapian_index
+# FIXME: check any other changes made by Simon and/or Richard
 # FIXME: document the new hooks
 # FIXME: registering and initialising
 # FIXME: document that you have to call initialise (and figure out where additional config comes from...)
+
+# TODO: make it possible to index an individual model to more than one database.
 # Test: the override stuff
+
+# FIXME: augment the default manager for each model to include a search() method (very simple, takes a single query string?)
 
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.db import models
 from django.db.models import FieldDoesNotExist, BooleanField
 from django.conf import settings
-from djape.client import Client
+from djape.client import Client, Query, FreeTextQuery
 
 class TestClient:
     def newdb(self, fields, dbname):
@@ -82,19 +88,78 @@ class TestClient:
     def delete(self, uid):
         print 'delete ' + uid
 
-def get_client(dbname):
+def get_client(dbname_or_model):
+    if not isinstance(dbname_or_model, str):
+        dbname = get_index(dbname_or_model)
+    else:
+        dbname = dbname_or_model
     return Client(
         settings.XAPIAN_BASE_URL, dbname, settings.XAPIAN_PERSONAL_PREFIX
     )
 
+def make_searcher(manager, model):
+    # FIXME: make this work :-)
+    index = get_index(model)
+    if not index:
+        # FIXME: this isn't done properly... it can't respond to the same methods etc. as QueryResult, below
+        def search(query=None, num=0):
+            return []
+        return search
+
+    c = get_client(index)
+    def search(query=None, num=0):
+        class QueryResult:
+            def __init__(self, results):
+                self.results = results
+                search_ids = [ item['id'] for item in results['items'] ]
+                to_grab = []
+                self.deets = {}
+                for item in results['items']:
+                    search_id = item['id']
+                    model_key, id = search_id.split(':')
+                    if model_key != model.__name__:
+                        # FIXME: not right!
+                        #continue
+                        pass
+                    to_grab.append(id)
+                    self.deets[id] = item
+                self.bulk = manager.in_bulk(to_grab)
+
+            # FIXME: would be nice to use .-access not just []-access?
+                
+            def get(self, key):
+                return self.results.get(key)
+                
+            def __iter__(self):
+                for obj in self.bulk.values():
+                    # FIXME: ``search_details`` should be configurable...
+                    obj.search_details = self.deets[str(obj.pk)]
+                    yield obj
+        
+        results = c.search(Query(query), end_rank=num)
+        return QueryResult(results)
+    return search
+
+def get_index(model_or_inst):
+    index = None
+    if hasattr(model_or_inst.Searchable, 'index'):
+        index = getattr(model_or_inst.Searchable, 'index')
+    elif hasattr(model_or_inst.Searchable, 'xapian_index'):
+        index = getattr(model_or_inst.Searchable, 'xapian_index')
+    # The following is not true: you may want to configure aspects of searchify on a non-indexed class (eg: cascades)
+    #assert index, 'Searchable classes require an index property (or xapian_index for temporary bc)'
+    return index
+
 def initialise():
     indexes = {} # Map Xapian dbname => list of fields
+    imodels = []
     for model in models.get_models():
         if not hasattr(model, 'Searchable'):
             continue
-        index = getattr(model.Searchable, 'xapian_index')
-        assert index, 'Searchable classes require a xapian_index property'
-        indexes.setdefault(index, []).extend(get_configuration(model))
+        index = get_index(model)
+        if index!=None:
+            indexes.setdefault(index, []).extend(get_configuration(model))
+            imodels.append(model)
     
     # Now loop through and ensure each db exists
     for index, fields in indexes.items():
@@ -104,9 +169,22 @@ def initialise():
         try:
             client.newdb(fields, allow_reopen = True)
         except client.SearchClientError:
-            print "Clearing database - you will need to re-index"
+            print "Clearing database '%s' - you will need to re-index" % index
             client.newdb(fields, overwrite = True)
             raise
+    
+    # Finally, go back over the models adding searchers to the default manager
+    for model in imodels:
+        if hasattr(model.Searchable, 'managers'):
+            managers = getattr(model.Searchable, 'managers')
+        else:
+            managers = ['objects']
+        for manager in managers:
+            manager = getattr(model, manager)
+            if hasattr(model.Searchable, 'query'):
+                manager.query = getattr(model.Searchable, 'query')
+            else:
+                manager.query = make_searcher(manager, model)
     
     # Set up the global signal hooks
     post_save.connect(index_hook)
@@ -128,16 +206,19 @@ def post_delete_hook(instance):
 def index_instance(instance):
     if not hasattr(instance, 'Searchable'):
         return False
-    
+
     # first, check should_delete_instance for situations where we *mark* as
     # deleted rather than deleting in the ORM/database
     # (eg: a deleted boolean field)
-    
-    client = get_client(instance.Searchable.xapian_index)
+
+    index = get_index(instance)
+    if not index:
+        cascade_reindex(instance)
+        return
+    client = get_client(index)
     
     if should_delete_instance(instance):
         client.delete(get_uid(instance))
-        cascade_reindex(instance)
     else:
         dret = get_index_data(instance)
         if dret!=None:
@@ -146,13 +227,13 @@ def index_instance(instance):
             doc.extend(fielddata)
             doc.id = ident
             client.add(doc)
-        cascade_reindex(instance)
+
+    cascade_reindex(instance)
 
 def cascade_reindex(instance):
     if not hasattr(instance, 'Searchable') or \
         not hasattr(instance.Searchable, 'cascades'):
         return
-    client = get_index_data(instance.Searchable.xapian_index)
     for descriptor in instance.Searchable.cascades:
         if isinstance(descriptor, str):
             cascade_inst = getattr(instance, descriptor)
@@ -167,9 +248,10 @@ def cascade_reindex(instance):
 
 def delete_instance(instance):
     if hasattr(instance, 'Searchable'):
-        client = get_client(instance.Searchable.xapian_index)
-        # TODO: Implement client.delete
-        # client.delete(get_uid(instance))
+        index = get_index(instance)
+        if index:
+            client = get_client(index)
+            client.delete(get_uid(instance))
     post_delete.connect(post_delete_hook(instance))
 
 # UTILITY FUNCTIONS
