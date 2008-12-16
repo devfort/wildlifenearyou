@@ -191,7 +191,14 @@ class Place(AuditedModel):
                 'field_name': 'latlon',
                 'django_fields': [lambda inst: [inst.latlon()]],
                 'config': {'type': 'geo', 'geo': {}, 'store': True}
-            }
+            }, { # Facilities of the place.
+                'field_name': 'facilities',
+                'django_fields': [lambda inst: [f.desc for f in inst.place_facilities.all()]],
+                'config': {
+                    'freetext': {'language': 'en'},
+                    'store': True,
+                } # enable stemming,
+            },
         ]
         xapian_index = 'placeinfo'
 
@@ -291,6 +298,9 @@ class PlaceFacility(AuditedModel):
 
     class Meta:
         verbose_name_plural = 'place facilities'
+
+    class Searchable:
+        cascades = ['place']
 
     def __unicode__(self):
         return self.desc
