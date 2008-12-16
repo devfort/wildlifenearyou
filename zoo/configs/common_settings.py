@@ -144,3 +144,6 @@ RESERVED_USERNAMES = set(
 
 GOOGLE_MAPS_API_KEY = ''
 
+# Used solely to display to the user what the file upload limit is;
+# this is actually set in nginx configuration. In bytes.
+FILE_UPLOAD_SIZE_LIMIT = 2*1024*1024

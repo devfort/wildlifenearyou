@@ -6,12 +6,14 @@
 
 <h1>Upload a photo</h1>
 
-{% if attach_to %}This photo will be attached to <strong>{{ attach_to }}</strong>{% endif %}
+{% if attach_to %}<p>This photo will be attached to <strong>{{ attach_to }}</strong>.</p>{% endif %}
 
 <form enctype="multipart/form-data" method="post" action=".">
 {{ form.as_p }}
 <p><input type="submit" value="Upload"></p>
 </form>
+
+<p>You can upload any image up to {{ limit|filesizeformat }}.</p>
 
 {% endblock %}
 

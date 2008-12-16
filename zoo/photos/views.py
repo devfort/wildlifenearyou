@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 from models import Photo
 from zoo.shortcuts import render
@@ -35,6 +36,7 @@ def upload(request, place=None, redirect_to=None):
     return render(request, 'photos/upload.html', {
         'form': form,
         'attach_to': place,
+        'limit': settings.FILE_UPLOAD_SIZE_LIMIT,
     })
 
 class UploadPhotoForm(forms.ModelForm):
@@ -77,6 +79,7 @@ def upload_trip(request, username, trip_id):
     return render(request, 'photos/single_upload.html', {
         'form': form,
         'action': request.path,
+        'limit': settings.FILE_UPLOAD_SIZE_LIMIT,
     })
 
 class PhotoOnlyForm(forms.ModelForm):
