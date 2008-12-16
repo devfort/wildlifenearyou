@@ -92,7 +92,7 @@
         <h2>Photos from this trip</h2>
         <div>
         {% for photo in photos %}
-        <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{{ photo.created_by.get_profile.urls.absolute }}">{{ photo.created_by|title }}</a>
+        <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
         {% endfor %}
         </div>
         <h2>Got any more?</h2>
