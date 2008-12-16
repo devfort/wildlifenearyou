@@ -174,6 +174,21 @@ urlpatterns = patterns('',
     url(r'^countries/$', 'zoo.places.views.all_countries',
         name='countries'),
 
+    url(r'^404/$', direct_to_template, {'template':'404.html'}),
+    url(r'^500/$', direct_to_template, {'template':'500.html'}),
+)
+
+urlpatterns += patterns('zoo.changerequests.views',
+    url(r'moderation/', 'moderation_queue',
+        name='admin-moderation'),
+)
+
+urlpatterns += patterns('django.contrib.flatpages.views',
+    url(r'^(?P<url>.*)$', 'flatpage', name='flatpage'),
+)
+
+# User patterns come last, because they are greedy
+urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/$', accounts.profile,
         name='accounts-profile'),
     url(r'^(?P<username>\w+)/edit/$', accounts.profile_edit,
@@ -200,17 +215,4 @@ urlpatterns = patterns('',
     url(r'^(?P<username>\w+)/trip/(?P<trip_id>\d+)/delete/$', 
         'zoo.trips.views.trip_delete',
         name='trip-delete'),
-
-    url(r'^404/$', direct_to_template, {'template':'404.html'}),
-    url(r'^500/$', direct_to_template, {'template':'500.html'}),
 )
-
-urlpatterns += patterns('zoo.changerequests.views',
-    url(r'moderation/', 'moderation_queue',
-        name='admin-moderation'),
-)
-
-urlpatterns += patterns('django.contrib.flatpages.views',
-    url(r'^(?P<url>.*)$', 'flatpage', name='flatpage'),
-)
-
