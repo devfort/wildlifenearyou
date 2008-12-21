@@ -183,10 +183,6 @@ urlpatterns += patterns('zoo.changerequests.views',
         name='admin-moderation'),
 )
 
-urlpatterns += patterns('django.contrib.flatpages.views',
-    url(r'^(?P<url>.*)$', 'flatpage', name='flatpage'),
-)
-
 # User patterns come last, because they are greedy
 urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/$', accounts.profile,
@@ -216,3 +212,9 @@ urlpatterns += patterns('',
         'zoo.trips.views.trip_delete',
         name='trip-delete'),
 )
+
+urlpatterns += patterns('django.contrib.flatpages.views',
+    url(r'^(?P<url>.*)$', 'flatpage', name='flatpage'),
+)
+
+
