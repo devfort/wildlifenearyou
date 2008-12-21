@@ -82,6 +82,20 @@ class Place(AuditedModel):
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     
+    # We can (optionally) editorially select a photo to be featured for this place
+    chosen_photo = models.ForeignKey('photos.Photo', null=True, blank=True, related_name='place_we_feature_for')
+
+    @property
+    def photo(self):
+        """
+        Either return the chosen photo, or a visible one at random if none are chosen.
+        Can return None if there are no photos of this place at all.
+        """
+        if self.chosen_photo:
+            return self.chosen_photo
+        else:
+            return self.random_photo()
+    
     def popularity(self):
         """
         Currently just calculated using number of species seen at

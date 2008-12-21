@@ -184,21 +184,20 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 			{% endfor %}
 			</div>
 		{% else %}{# More than one photo #}
-			{% for photo in place.visible_photos.all %}
-				{% if forloop.first %}
-	<div class="gallery">
-		<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
-		<div class="slideshow">
-			<ul id="thumbnails">
-				{% else %}
-		<li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
-				{% endif %}
-				{% if forloop.last %}
-			</ul><!-- /#thumbnails -->
-		</div><!-- /.slideshow -->
-	</div>
-				{% endif %}
-			{% endfor %}
+		{% with place.photo as chosen %}
+		<div class="gallery">
+        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
+        		<div class="slideshow">
+        			<ul id="thumbnails">
+			                {% for photo in place.visible_photos.all %}
+			                {% ifnotequal chosen photo %}
+        		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+        		                {% endifnotequal %}
+			                {% endfor %}
+			        </ul><!-- /#thumbnails -->
+		        </div><!-- /.slideshow -->
+	        </div>
+	        {% endwith %}
 		{% endifequal %}
 	{% endif %}
 {% endwith %}

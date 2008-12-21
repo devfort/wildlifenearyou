@@ -113,11 +113,9 @@
 				<h2>Featured place</h2>
 				{% if featured.place %}
 				{% with featured.place as place %}
-				{% with place.random_photo as photo %}
-				{% if photo %}
-				{{ photo.thumb_75_pull_left }}
+				{% if place.photo %}
+				{{ place.photo.thumb_75_pull_left }}
 				{% endif %}
-				{% endwith %}
 				<h3><a class="fn org url" href="{{ place.get_absolute_url }}">{{ place.known_as }}</a></h3>
 				<p>In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a>, visited by <strong>{{ place.num_visitors }}</strong> spotter{{ place.num_visitors|pluralize }}.</p>
 				<!--<p class="address">
@@ -171,6 +169,9 @@
 				<h2>Featured spotter</h2>
                     	        {% if featured.profile %}
                     	        {% with featured.profile as profile %}
+                    	        {% comment %}
+                    	        FIXME!
+                    	        {% endcomment %}
                     	        {{ profile.avatar_img_75_pull_left }}
 				<img src="/faces/sedf.png" width="75" height="75" alt="" class="pull-left">
 				<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
