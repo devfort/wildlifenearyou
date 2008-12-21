@@ -117,13 +117,13 @@
 #home .look-for input.text {
 	border: none;
 	padding: 0.2em 0.5em;
-	font-size: 1.8571em;
+	font-size: 1.5714em;
 	width: 55%;
 	color: #455C35;
 	background-color: #fff;
 	width: 82%;	border: 2px solid white;
 }
-#home .look-for .contents {	position: relative;}#home .look-for input.submit {	position: absolute;	top: 0;	right: 0.538em;	font-size: 1.8571em;	border-width: 2px;
+#home .look-for .contents {	position: relative;}#home .look-for input.submit {	position: absolute;	top: 0;	right: 0.538em;	font-size: 1.5714em;	border-width: 2px;
 }
 
 #home .photostrip {
