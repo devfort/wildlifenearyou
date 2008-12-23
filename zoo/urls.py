@@ -151,6 +151,8 @@ urlpatterns = patterns('',
 
     url(r'^places/$', 'zoo.places.views.all_places',
         name='places'),
+    url(r'^places/autocomplete/$', 'zoo.search.views.place_complete',
+        name='places-autocomplete'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/species/$', 'zoo.places.views.place_species',
         name='place-species'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/species/(?P<species_slug>[^/]+)/$', 'zoo.places.views.place_species_view',

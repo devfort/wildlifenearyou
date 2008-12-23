@@ -1,6 +1,5 @@
 from django.conf import settings
-from django.http import HttpResponseRedirect as Redirect
-
+from django.http import HttpResponseRedirect as Redirect, HttpResponse, Http404
 import re
 from pprint import pformat
 from djape.client import Query, Client
@@ -132,14 +131,10 @@ def location_complete(request):
     results = search_locations(q)
     return render_json(request, list(results))
 
-def autocomplete_species(request):
+def place_complete(request):
     q = request.GET.get('q', '')
-    results = list(search_species(q))
-    # Annotate with a count of the number of sightings for each
-    for result in results:
-        result['num_sightings'] = Sighting.objects.filter(
-            species__freebase_id = result['freebase_id']
-        ).count()
-    # Order by number of sightings, with most at the top
-    results.sort(key = lambda r: r['num_sightings'], reverse=True)
-    return render_json(request, results)
+    return render_json(request, [{
+        'id': place.id,
+        'name': place.known_as,
+        'url': place.urls.absolute,
+    } for place in search_places(q)])

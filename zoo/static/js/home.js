@@ -108,4 +108,43 @@ jQuery(function($) {
     photostrip.mouseout(function() {
         infobox.hide();
     });
+    
+    // Set up the autocomplete for the "Add a trip to..." box
+    $('input#search-place').autocomplete('/places/autocomplete/', {
+        dataType: 'json',
+        selectFirst: true,
+        formatItem: function(item) {
+            return item.name;
+        },
+        parse: function(data) {
+            return $.map(data, function(row) {
+                return {
+                    data: row,
+                    value: row.name,
+                    result: row.name
+                }
+            });
+        }
+    }).bind('result', function(ev, result) {
+        var url = 'http://' + location.host + result.url;
+        window.location = url;
+    });
+    // Since we're using autocomplete, the form should not submit unless the 
+    // button is directly clicked.
+    $('input#search-place').parents('form').submit(function() {
+        return false;
+    });
+    // Problem: if you hit "enter" in one of the fields, Firefox fires the 
+    // click() event on the first submit button in the form. So, to create 
+    // a submit button that can be clicked to submit the form WITHOUT it 
+    // being magically clicked when you hit enter inside another field, you 
+    // need to clone the original submit button, hide it and set up the 
+    // click behaviour on that clone. Crazy but it works.
+    var submit = $('input#search-place').parents('form').find(':submit');
+    var submit2 = submit.clone();
+    submit2.insertAfter(submit);
+    submit.hide();
+    submit2.click(function() {
+        $('input#search-place').parents('form')[0].submit();
+    });
 });
