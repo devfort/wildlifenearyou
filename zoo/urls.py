@@ -49,8 +49,9 @@ urlpatterns = patterns('',
         name='search'),
 
     # Ajax autocompleters
-    url(r'^autocomplete/species/$', 'zoo.search.views.autocomplete_species',
-        name='autocomplete-species'),
+    url(r'^autocomplete/species/(\d+)/$', 
+        'zoo.trips.views.autocomplete_species',
+        name='autocomplete-species-place'),
 
     # User accounts stuff
     url(r'^login/$', 'accounts.views.login', {

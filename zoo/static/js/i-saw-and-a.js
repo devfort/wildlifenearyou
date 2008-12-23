@@ -24,6 +24,7 @@ jQuery(function($) {
             }
             if (!$this.parent().hasClass('and-a')) {
                 $('div.see-more-animals .and-a').show();
+                setupSawBoxes();
             } else {
                 // Clone an existing .and-a
                 var and_a = $(
@@ -40,6 +41,98 @@ jQuery(function($) {
             }
         }
     }
+    function setupSawBoxes() {
+        $('div.see-more-animals input[name^=saw]').each(function() {
+            var input = $(this);
+            if (input.hasClass('is-setup')) {
+                return true;
+            }
+            input.addClass('is-setup');
+            input.keyup(runTheSearch);
+        });
+    }
+    function runTheSearch(ev) {
+        var input = $(ev.target);
+        var xhr = input.data('xhr');
+        if (xhr) {
+            // Cancel previous request
+            xhr.abort();
+        }
+        if (input.val().length < 3) {
+            return;
+        }
+        
+        function ensureFirstContainerUsesISawA(form) {
+            form.find('div.container:first').find(
+                'strong.label:first,label:first'
+            ).each(function() {
+                $(this).text('I saw a');
+            });
+        }
+        
+        // Fire off the search
+        var xhr = $.get('/autocomplete/species/' + PLACE_ID + '/?q=' + input.val(), 
+            function(html) {
+                $('.species-autocomplete').remove();
+                var div = $(html);
+                // Display the div position absolute by the input box */
+                div.css({
+                    'position': 'absolute',
+                    'top': input.offset().top + input.outerHeight() - 2,
+                    'left': input.offset().left,
+                    'width': 450
+                }).appendTo(document.body);
+                // Set up the event handlers
+                div.find('ul ul li').css({
+                    'cursor': 'pointer'
+                }).click(function() {
+                    var search_id = $(this).attr('id');
+                    var name = $.trim($(this).find('h6').clone().find(
+                        'span'
+                    ).remove().end().text());
+                    div.remove();
+                    var container = input.parents('div.container');
+                    var ltext = container.find('label').text();
+                    container.empty();
+                    container.html(
+                        '<strong class="label">' + ltext + '</strong> ' + 
+                        '<span class="species-name">' + name + '</span>'
+                    );
+                    var remove = $(
+                        '<a class="meta" href="#">(remove)</a>'
+                    ).click(function() {
+                        var form = container.parents('form:first');
+                        container.remove();
+                        ensureFirstContainerUsesISawA(form);
+                        return false;
+                    }).appendTo(container.find('span.species-name'));
+                });
+                div.find('a.close').click(function() {
+                    div.remove();
+                    return false;
+                })
+                /*
+                var ul = $('<ul></ul>').css('clear', 'both');
+                $.each(list, function() {
+                    var li = $('<li></li>');
+                    li.text(this.common_name + ', ' + this.scientific_name);
+                    li.appendTo(ul);
+                    if (this.photo) {
+                        $(
+                            '<img width="45" src="' + this.photo + '" />'
+                        ).appendTo(li);
+                    }
+                });
+                ul.insertAfter(input);
+                */
+            }
+        );
+        input.data('xhr', xhr);
+    }
+    $('div.see-more-animals input[name^=saw]').unbind('.doweneed').bind(
+        'keyup.doweneed', doWeNeedMoreBoxes
+    )
+    /*
     function setupSawBoxes() {
         $('div.see-more-animals input[name^=saw]').unbind('.doweneed').bind(
             'keyup.doweneed', doWeNeedMoreBoxes
@@ -71,6 +164,7 @@ jQuery(function($) {
             }
         });
     }
+    */
     // Set up the I saw a form bit
     if (anyEmptyOnes()) {
         $('div.see-more-animals .and-a').hide()

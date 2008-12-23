@@ -206,6 +206,9 @@ div.highlight {
 	font-size: 1.2857em;
 	line-height: 1.2;
 }
+.nowrap {
+	white-space: nowrap;
+}
 /* @end */
 
 /* @group Functional states */

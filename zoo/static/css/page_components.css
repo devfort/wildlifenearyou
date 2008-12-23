@@ -1,12 +1,81 @@
-/* @group See more animals */
+/* @group See more animals? */
 
-div.see-more-animals label {
+div.see-more-animals label,
+div.see-more-animals strong.label {
 	width: 4em;
 	float: left;
+	padding-top: 0.2em;
 }
 
 div.see-more-animals form {
 	margin-bottom: 0;
+}
+
+div.see-more-animals input.text {
+	width: 40%;
+	padding: 0.2em 0.5em;
+}
+div.see-more-animals span.species-name {
+	padding: 0.2em 0.5em;
+	display: block;
+}
+div.see-more-animals span.species-name a {
+	margin-left: 0.5em;
+}
+/* @end */
+
+/* @group Species auto-complete box */
+
+.species-autocomplete {
+	background-color: #fff;
+	border: 1px solid #999;
+	text-align: left;
+	padding: 0.5em;
+}
+.species-autocomplete a.close {
+	position: absolute;
+	top: 0.5em;
+	right: 0.5em;
+	cursor: pointer;
+	color: red;
+	text-decoration: none;
+	width: 16px;
+	height: 16px;
+	display: block;
+}
+.species-autocomplete a.close img {
+	width: 16px;
+	height: 16px;
+}
+.species-autocomplete h4 {
+	margin: 0;
+	padding: 0;
+}
+.species-autocomplete ul,
+.species-autocomplete li {
+	list-style-type: none;
+	background: none;
+	margin: 0;
+	padding: 0;
+}
+.species-autocomplete li {
+	width: 100%;
+	overflow: hidden;
+}
+.species-autocomplete ul ul li {
+	min-height: 45px;
+	background-color: #eee;
+	margin-bottom: 2px;
+}
+.species-autocomplete h5,
+.species-autocomplete p {
+	margin: 0;
+	margin-right: 45px;
+}
+.species-autocomplete img {
+	float: right;
+	width: 45px;
+	clear: right;
 }
 
 /* @end */

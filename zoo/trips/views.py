@@ -15,6 +15,7 @@ from zoo.shortcuts import render
 from zoo.trips.models import Trip, Sighting, InexactSighting
 from zoo.places.models import Place, Country
 from zoo.animals.models import Species
+from zoo.photos.models import Photo
 from zoo.accounts.models import Profile
 from zoo.animals.forms import SpeciesField
 from zoo.search import NotFound, lookup_species, search_species
@@ -458,3 +459,50 @@ class AddPlaceForm(forms.ModelForm):
             'known_as', 'country', 'url', 'address_line_1', 'address_line_2', 
             'town', 'state', 'zip', 'phone', 'latitude', 'longitude',
         )
+
+from zoo.search import search_species
+def autocomplete_species(request, place_id):
+    place = get_object_or_404(Place, pk = place_id)
+    q = request.GET.get('q', '')
+    results = list(search_species(q))
+    # We're going to build three groups - species that have been sighted at 
+    # this place, species that have been sighted somewhere else, and species 
+    # that have not been sighted at all.
+    seen_here_group = []
+    seen_elsewhere_group = []
+    not_seen_group = []
+    for result in results:
+        # Annotate with photo
+        photos = Photo.objects.filter(
+            sightings__species__freebase_id = result['freebase_id'],
+            is_visible = True
+        ).distinct()
+        result['photo'] = photos and unicode(photos[0].photo.thumbnail) or ''
+        # Assign to a group and annotate with number of previous sightings
+        num_sightings_here = Sighting.objects.filter(
+            species__freebase_id = result['freebase_id'],
+            place = place
+        ).count()
+        if num_sightings_here:
+            result['num_sightings'] = num_sightings_here
+            seen_here_group.append(result)
+            continue
+        num_sightings = Sighting.objects.filter(
+            species__freebase_id = result['freebase_id']
+        ).count()
+        if num_sightings:
+            result['num_sightings'] = num_sightings
+            seen_elsewhere_group.append(result)
+            continue
+        # Not seen anywhere before
+        not_seen_group.append(result)
+    
+    # Order each group by number of sightings, with most at the top
+    seen_here_group.sort(key = lambda r: r['num_sightings'], reverse=True)
+    seen_elsewhere_group.sort(key = lambda r: r['num_sightings'], reverse=True)
+    return render(request, 'trips/autocomplete_species.html', {
+        'seen_here': seen_here_group,
+        'seen_elsewhere': seen_elsewhere_group,
+        'not_seen': not_seen_group,
+        'q': q,
+    })
