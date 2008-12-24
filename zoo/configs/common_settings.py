@@ -65,6 +65,7 @@ MIDDLEWARE_CLASSES = [
     'zoo.common.middleware.OnlyLowercaseUrls',
     'zoo.common.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django_openid.registration.RegistrationConsumer',
 ]
 
 ROOT_URLCONF = 'zoo.urls'
@@ -114,6 +115,8 @@ INSTALLED_APPS = [
     'zoo.feedback',
     'zoo.freebase',
     'zoo.search',
+    'zoo.common',
+    'django_openid',
 ]
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')

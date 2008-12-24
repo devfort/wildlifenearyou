@@ -23,6 +23,8 @@ from accounts import views as accounts
 from faces import views as faces
 from photos import views as photos
 
+from accounts.openid import RegistrationConsumer
+
 urlpatterns = patterns('',
     # Example:
     # (r'^zoo/', include('zoo.foo.urls')),
@@ -34,7 +36,9 @@ urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
-
+    
+    (r'^account/(.*?)$', RegistrationConsumer()),
+    
     # Landing Page
     url(r'^$', 'zoo.homepage.views.landing',
         name='landing-page'),
