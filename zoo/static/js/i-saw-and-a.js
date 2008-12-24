@@ -1,5 +1,3 @@
-console = window.loadFirebugConsole();
-
 function anyEmptyOnes() {
     return jQuery('.see-more-animals :text').filter(function() {
         return $(this).val() == '';
