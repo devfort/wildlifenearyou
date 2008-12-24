@@ -57,6 +57,18 @@ urlpatterns = patterns('',
         'zoo.trips.views.autocomplete_species',
         name='autocomplete-species-place'),
 
+    # Flickr integration
+    url(r'^flickr/$', 'zoo.flickr.views.index', 
+        name='flickr'),
+    url(r'^flickr/callback/$', 'zoo.flickr.views.flickr_callback', 
+        name='flickr-callback'),
+    url(r'^flickr/search/$', 'zoo.flickr.views.search', 
+        name='flickr-search'),
+    url(r'^flickr/your-places/(.*?)/$', 'zoo.flickr.views.place', 
+        name='flickr-place'),
+    url(r'^flickr/selected/$', 'zoo.flickr.views.selected',
+        name='flickr-selected'),
+
     # User accounts stuff
     url(r'^login/$', 'accounts.views.login', {
         'template_name': 'accounts/login.html'
@@ -105,9 +117,6 @@ urlpatterns = patterns('',
     (r'^faces/users/(\w+).xml$', faces.profile_image_xml),
     (r'^faces/update/$', faces.update),
 
-    url(r'^flickr-callback/$', 'zoo.flickr.views.flickr_callback', 
-        name='flickr-callback'),
-    
     url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),
 

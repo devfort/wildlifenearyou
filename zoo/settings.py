@@ -10,6 +10,8 @@ DATABASE_USER = 'sedf'
 
 SECRET_KEY = '6p-br^04irwt=+&4dag12(-7_!p4&t=u+h1+#$xrvr0n6=+o^d'
 
+CACHE_BACKEND = 'db://django_cache'
+
 try:
     import debug_toolbar
     MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
@@ -26,7 +28,7 @@ FLICKR_API_KEY = '940756abbc65d6f8223f3b9494d0b19f'
 FLICKR_API_SECRET = '5c121cb53d477871'
 
 # SEARCH_ENABLED should be turned on only when a Xapian server is available.
-SEARCH_ENABLED = False
+SEARCH_ENABLED = True
 
 XAPIAN_BASE_URL = 'http://superevildevfort.com:8017/search/'
 XAPIAN_LOCATION_DB = 'locations' # It's safe to share the locations DB

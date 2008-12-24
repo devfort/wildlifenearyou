@@ -19,13 +19,18 @@ class Photo(models.Model):
     created_at =  models.DateTimeField()
     title = models.CharField(max_length=255, blank=True)
     photo = ImageWithThumbnailsField(
+        blank=True, # This will be blank for flickr photos
         upload_to='photos',
         thumbnail={'size': (75, 75), 'options': ('crop', 'upscale')},
         extra_thumbnails={
             'admin': {'size': (70, 50), 'options': ('sharpen',)},
         }
     )
-
+    # If the photo lives on Flickr, we store those details instead
+    flickr_id = models.CharField(max_length=32, blank=True)
+    flickr_secret = models.CharField(max_length=32, blank=True)
+    flickr_server = models.CharField(max_length=16, blank=True)
+    
     # Moderation flags
     is_visible = models.BooleanField(default=False)
     moderated_by = models.ForeignKey(
@@ -76,7 +81,7 @@ class Photo(models.Model):
             '<a href="%s" title="%s"><img src="%s" alt="%s" width="75" height="75"></a>' % (
                 self.get_absolute_url(),
                 title,
-                self.photo.thumbnail,
+                self.thumb_75_url(),
                 title,
             )
         )
@@ -86,10 +91,22 @@ class Photo(models.Model):
             '<a href="%s" title="%s"><img class="pull-left" src="%s" alt="%s" width="75" height="75"></a>' % (
                 self.get_absolute_url(),
                 self.detailed_title(),
-                self.photo.thumbnail,
+                self.thumb_75_url(),
                 self.title or ('Photo by %s' % self.created_by),
             )
         )
+    
+    def thumb_75_url(self):
+        if self.flickr_id:
+            return 'http://static.flickr.com/%(flickr_server)s/%(flickr_id)s_%(flickr_secret)s_s.jpg' % self.__dict__
+        else:
+            return self.photo.thumbnail
+    
+    def original_url(self):
+        if self.photo:
+            return self.photo.url
+        else:
+            return 'http://www.flickr.com/photo.gne?id=%s' % self.flickr_id
     
     def detailed_title(self):
         species = list(

@@ -16,10 +16,14 @@
 
 
 {% load thumbnail %}
-<img src="{% thumbnail photo.photo 600x600 %}">
-<!-- ><img src="{{ photo.photo.url }}"> -->
 
-<p>By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by|title }}</a>, uploaded {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.photo.url }}">original</a>)</p>
+{% if photo.photo %}
+<img src="{% thumbnail photo.photo 600x600 %}">
+{% else %}
+<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg">
+{% endif %}
+
+<p>By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by|title }}</a>, uploaded {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">original</a>)</p>
 
 {% ifequal photo.created_by request.user %}
 <p><a href="{% url photo-edit photo.created_by.username photo.id %}">Edit title and animals</a></p>

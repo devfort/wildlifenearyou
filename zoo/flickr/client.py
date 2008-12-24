@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils import simplejson
+from django.core.cache import cache
 import flickrapi
 
 top = 'jsonFlickrApi('
@@ -15,18 +16,21 @@ def parse_json(rest_json):
         rest_json = rest_json[:-len(tail)]
     
     json = simplejson.loads(rest_json)
-    
-    if json['stat'] == 'ok' or not self.fail_on_error:
+    if json['stat'] == 'ok':
         if 'photos' in json and 'photo' in json['photos']:
             annotate_photos(json['photos']['photo'])
         # Ditto for photo sets, which include details of their primary photo
         if 'photosets' in json and 'photoset' in json['photosets']:
             annotate_photos(json['photosets']['photoset'])
         
+        # Recurse through fixing anything with a single '_content' key
+        recursively_fix_content(json)
+        
         return json
     
-    err = json.err[0]
-    raise flickrapi.FlickrError(u'Error: %(code)s: %(msg)s' % err)
+    code = json['code']
+    message = json['message']
+    raise flickrapi.FlickrError(u'Error: %s: %s' % (code, message))
 
 # http://www.flickr.com/services/api/misc.urls.html
 FLICKR_URL_TEMPLATE = \
@@ -40,6 +44,31 @@ FLICKR_FORMATS = {
     u'large': u'_b.jpg', # 1024 on longest side
 }
 FLICKR_PHOTO_URL = u'http://www.flickr.com/photos.gne?id=%(id)s'
+
+def recursively_fix_content(json):
+    if isinstance(json, list):
+        for i, obj in enumerate(json):
+            if isinstance(obj, dict) and len(obj) == 1 and obj.keys()[0] == '_content':
+                json[i] = obj['_content']
+            else:
+                recursively_fix_content(obj)
+    elif isinstance(json, dict):
+        if '_content' in json:
+            json['content'] = json['_content']
+            del json['_content']
+        for key, value in json.items():
+            if isinstance(value, dict):
+                if len(value) == 1 and value.keys()[0] == '_content':
+                    json[key] = value['_content']
+                else:
+                    recursively_fix_content(value)
+                if '_content' in value:
+                    value['content'] = value['_content']
+                    del value['_content']
+            else:
+                recursively_fix_content(json[key])
+    else:
+        return
 
 def annotate_photos(json_photos):
     "Annotate a list of Flickr photo dicts with useful URLs"
@@ -72,7 +101,9 @@ class BetterFlickrAPI(flickrapi.FlickrAPI):
         return parse_json(data)
 
 def Flickr(**kwargs):
-    return BetterFlickrAPI(
+    client = BetterFlickrAPI(
         settings.FLICKR_API_KEY, settings.FLICKR_API_SECRET, format='json',
-        **kwargs
+        cache=True, **kwargs
     )
+    client.cache = cache
+    return client

@@ -116,9 +116,7 @@ Your location is currently {{ profile.location }} &ndash;
 <div>
         <h2>Photos</h2>
 
-        {% for photo in profile.user.photos.all %}
-                <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
-        {% endfor %}
+        {% for photo in profile.user.photos.all %}{{ photo.thumb_75 }}{% endfor %}
         {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 </div>
 

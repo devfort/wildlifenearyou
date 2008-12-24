@@ -1,0 +1,15 @@
+{% extends base %}
+
+{% block title %}Search your photos{% endblock %}
+
+{% block primary_content %}
+
+<h1>Search your photos</h1>
+
+<form action="/flickr/search/" method="get">
+    <p><input type="search" name="q">
+        <input type="submit" value="Search">
+    </p>
+</form>
+
+{% endblock %}
