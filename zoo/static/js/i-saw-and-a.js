@@ -57,6 +57,9 @@ jQuery(function($) {
     
     function runTheSearch(ev) {
         console.log('runTheSearch');
+        // Hide the (optional) bits when they first interact
+        $('.see-more-animals span.optional').remove();
+        
         var input = $(ev.target);
         var xhr = input.data('xhr');
         if (xhr) {
@@ -81,11 +84,11 @@ jQuery(function($) {
                 }).appendTo(document.body);
                 
                 div.find('div:first').height(
-                    Math.min(200, div.find('ul:first').height())
+                    Math.min(150, div.find('ul:first').height())
                 );
                 
                 // Set up the event handlers
-                div.find('ul ul li').css({
+                div.find('li.species-pick').css({
                     'cursor': 'pointer'
                 }).click(function() {
                     var select_id = $(this).attr('id');
@@ -103,20 +106,38 @@ jQuery(function($) {
                     container.empty();
                     container.html(
                         '<strong class="label">' + ltext + '</strong> ' + 
-                        '<span class="species-name">' + name + '</span>' +
+                        '<span class="species-name">' + name + 
+                        '<a href="#" class="edit">edit</a> ' + 
+                        '<a href="#" class="remove">remove</a></span>' + 
                         '<input id="' + inputid + '" type="hidden" name="' + 
                             inputname + '" value="' + name + '">' +
                         '<input type="hidden" name="' + hiddenname + 
                             '" value="' + select_id + '">'
                     );
-                    var remove = $(
-                        '<a class="meta" href="#">(remove)</a>'
-                    ).click(function() {
+                    container.find('a.remove').click(function() {
                         var form = container.parents('form:first');
-                        container.remove();
-                        ensureFirstContainerUsesISawA(form);
+                        container.hide('fast', function() {
+                            container.remove();
+                            ensureFirstContainerUsesISawA(form);
+                        });
                         return false;
-                    }).appendTo(container.find('span.species-name'));
+                    });
+                    container.find('a.edit').click(function() {
+                        container.empty();
+                        container.html(
+                            '<label for="' + inputid + '">and a</label>' + 
+                            '<input id="' + inputid + '" type="text" name="' +
+                            inputname + '" value="' + name + '" class="text">'
+                        );
+                        // Set up the input and re-run the search
+                        setupSawBoxes();
+                        container.find('input').keyup();
+                        
+                        ensureFirstContainerUsesISawA(
+                            container.parents('form:first')
+                        );
+                        return false;
+                    });
                 });
                 div.find('a.close').click(function() {
                     div.remove();
@@ -125,10 +146,31 @@ jQuery(function($) {
                 div.find('a.record-instead').click(function() {
                     // Record that they said 'as-is' here
                     var hiddenname = input.attr('name').replace('.s', '.o');
-                    input.parents('div.container').append($(
+                    var container = input.parents('div.container');
+                    if (container.find(':hidden[value=as-is]').length) {
+                        // Already flagged as such
+                        div.remove();
+                        return false;
+                    }
+                    container.append($(
                         '<input type="hidden" name="' + hiddenname + 
                             '" value="as-is" />'
                     ));
+                    container.append($(
+                        "<p class='meta have-not-heard'>We haven't heard " +
+                        "of this, but you told us to record it anyway</p>"
+                    ));
+                    // And the 'remove' button
+                    input.after($(
+                        '<span> <a href="#" class="remove">remove</a></span>'
+                    ).find('a').click(function() {
+                        var form = container.parents('form:first');
+                        container.hide('fast', function() {
+                            container.remove();
+                            ensureFirstContainerUsesISawA(form);
+                        });
+                        return false;
+                    }).end());
                     div.remove();
                     return false;
                 });

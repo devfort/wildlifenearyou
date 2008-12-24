@@ -22,6 +22,10 @@ div.see-more-animals span.species-name {
 div.see-more-animals span.species-name a {
 	margin-left: 0.5em;
 }
+div.see-more-animals p.have-not-heard {
+	margin-top: 0.2em;
+}
+
 /* @end */
 
 /* @group Species auto-complete box */

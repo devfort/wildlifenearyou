@@ -10,7 +10,7 @@
     {% endif %}
     <ul>
     {% for result in seen_here %}
-        <li id="{{ result.select_id }}">
+        <li class="species-pick" id="{{ result.select_id }}">
             {% if result.photo %}
             <img src="{{ result.photo }}" alt="{{ result.common_name }}">
             {% endif %}
@@ -29,7 +29,7 @@
     {% endif %}
     <ul>
     {% for result in seen_elsewhere %}
-        <li id="{{ result.select_id }}">
+        <li class="species-pick" id="{{ result.select_id }}">
             {% if result.photo %}
             <img src="{{ result.photo }}" alt="{{ result.common_name }}">
             {% endif %}
@@ -48,7 +48,7 @@
     {% endif %}
     <ul>
     {% for result in not_seen %}
-        <li id="{{ result.select_id }}">
+        <li class="species-pick" id="{{ result.select_id }}">
             {% if result.photo %}
             <img src="{{ result.photo }}" alt="{{ result.common_name }}">
             {% endif %}

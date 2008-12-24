@@ -20,8 +20,8 @@
 
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
 <p class="address">{% if place.address %}{{ place.address }},{% endif %}
-	<a href="{{ place.country.urls.absolute }}">{{ place.country }}
-	<img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt=""></a>
+	<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
+	<a href="{{ place.country.urls.absolute }}"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
 	{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
 </p>
 
@@ -50,7 +50,7 @@
     <p>Tell us which animals you saw.</p>
     <form action="{{ request.path }}pick-sightings/" method="GET">
         <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1" class="text"></div>
-        <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw.2.s" id="saw_2" class="text"> <span class="meta">(optional)</span></div>
+        <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw.2.s" id="saw_2" class="text"> <span class="meta optional">(optional)</span></div>
         <div><input type="submit" value="Add my animals"></div>
     </form>
 </div>

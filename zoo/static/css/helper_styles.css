@@ -262,6 +262,30 @@ a.add:active,
 	background-repeat: no-repeat;
 }
 
+a.edit:link,
+a.edit:visited,
+a.edit:hover,
+a.edit:focus,
+a.edit:active, 
+.edit {
+	padding-left: 20px;
+	background-image: url(/static/img/icons/edit.png);
+	background-position: left 0.15em;
+	background-repeat: no-repeat;
+}
+
+a.remove:link,
+a.remove:visited,
+a.remove:hover,
+a.remove:focus,
+a.remove:active, 
+.remove {
+	padding-left: 20px;
+	background-image: url(/static/img/icons/remove.png);
+	background-position: left 0.15em;
+	background-repeat: no-repeat;
+}
+
 a.action:link,
 a.action:visited,
 a.action:hover,
