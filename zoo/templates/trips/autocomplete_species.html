@@ -10,7 +10,7 @@
     {% endif %}
     <ul>
     {% for result in seen_here %}
-        <li id="s{{ result.search_id }}">
+        <li id="{{ result.select_id }}">
             {% if result.photo %}
             <img src="{{ result.photo }}" alt="{{ result.common_name }}">
             {% endif %}
@@ -29,7 +29,7 @@
     {% endif %}
     <ul>
     {% for result in seen_elsewhere %}
-        <li id="s{{ result.search_id }}">
+        <li id="{{ result.select_id }}">
             {% if result.photo %}
             <img src="{{ result.photo }}" alt="{{ result.common_name }}">
             {% endif %}
@@ -48,7 +48,7 @@
     {% endif %}
     <ul>
     {% for result in not_seen %}
-        <li id="s{{ result.search_id }}">
+        <li id="{{ result.select_id }}">
             {% if result.photo %}
             <img src="{{ result.photo }}" alt="{{ result.common_name }}">
             {% endif %}
@@ -64,11 +64,11 @@
 </ul>
 </div>
 <h4>Or&hellip;</h4>
-<p><a href="#">Record "{{ q }}" instead</a>
+<p><a href="#" class="record-instead">Record "{{ q }}" instead</a>
 <span class="meta nowrap">(You can change this later)</span></p>
 {% else %}
 <h4>We haven't heard of this animal</h4>
-<p><a href="#">Record "{{ q }}" anyway</a>
+<p><a href="#" class="record-instead">Record "{{ q }}" anyway</a>
 <span class="meta nowrap">(You can change this later)</span></p>
 {% endif %}
 </div>

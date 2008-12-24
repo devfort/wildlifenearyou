@@ -472,15 +472,27 @@ def autocomplete_species(request, place_id):
     seen_elsewhere_group = []
     not_seen_group = []
     for result in results:
+        # If it's in our Species database, annotate with a bunch of stuff
+        species = None
+        try:
+            species = Species.objects.get(freebase_id = result['freebase_id'])
+        except Species.DoesNotExist:
+            pass
+        if not species:
+            result['select_id'] = 'x_%s' % result['search_id']
+            not_seen_group.append(result)
+            continue
+        # Matches a known species
+        result['select_id'] = 's_%s' % species.id
         # Annotate with photo
         photos = Photo.objects.filter(
-            sightings__species__freebase_id = result['freebase_id'],
+            sightings__species = species,
             is_visible = True
         ).distinct()
         result['photo'] = photos and unicode(photos[0].photo.thumbnail) or ''
         # Assign to a group and annotate with number of previous sightings
         num_sightings_here = Sighting.objects.filter(
-            species__freebase_id = result['freebase_id'],
+            species = species,
             place = place
         ).count()
         if num_sightings_here:
