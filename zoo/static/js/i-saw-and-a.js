@@ -79,6 +79,11 @@ jQuery(function($) {
                     'left': input.offset().left,
                     'width': 450
                 }).appendTo(document.body);
+                
+                div.find('div:first').height(
+                    Math.min(200, div.find('ul:first').height())
+                );
+                
                 // Set up the event handlers
                 div.find('ul ul li').css({
                     'cursor': 'pointer'
@@ -90,7 +95,7 @@ jQuery(function($) {
                     div.remove();
                     var container = input.parents('div.container');
                     var ltext = container.find('label').text();
-                    var inputname = container.find(':text').attr('name');
+                    var inputname = input.attr('name');
                     var hiddenname = inputname.replace('.s', '.o');
                     var inputid = 'saw_' + inputname.replace(
                         'saw.', ''
@@ -113,10 +118,20 @@ jQuery(function($) {
                         return false;
                     }).appendTo(container.find('span.species-name'));
                 });
-                div.find('a.close,a.record-instead').click(function() {
+                div.find('a.close').click(function() {
                     div.remove();
                     return false;
-                })
+                });
+                div.find('a.record-instead').click(function() {
+                    // Record that they said 'as-is' here
+                    var hiddenname = input.attr('name').replace('.s', '.o');
+                    input.parents('div.container').append($(
+                        '<input type="hidden" name="' + hiddenname + 
+                            '" value="as-is" />'
+                    ));
+                    div.remove();
+                    return false;
+                });
             }
         );
         input.data('xhr', xhr);
