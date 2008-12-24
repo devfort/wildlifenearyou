@@ -172,7 +172,7 @@ class Place(AuditedModel):
         return Photo.objects.filter(
             trip__sightings__place = self,
             is_visible = True
-        )
+        ).distinct()
 
     def random_photo(self):
         vp = self.visible_photos()
