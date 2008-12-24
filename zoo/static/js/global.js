@@ -1,8 +1,4 @@
-
-
 jQuery(function($) {
-	
-	
 	// add JavaScript class for styling
 	$('body').addClass('hasJS');
 
@@ -264,3 +260,18 @@ jQuery(window).load(function() {
 	// Crazyweird fix lets us style abbr using CSS in IE - do NOT run onDomReady, must be onload
 	document.createElement('abbr');
 });
+
+/* Get Firebug to work - 
+   http://www.codecouch.com/2008/10/referenceerror-console-is-not-defined/ */
+if (window['loadFirebugConsole']) {
+	window.loadFirebugConsole();
+} else {
+	if (!window['console']) {
+		window.console = {};
+		window.console.info = alert;
+		window.console.log = alert;
+		window.console.warn = alert;
+		window.console.error = alert;
+	}
+}
+
