@@ -101,8 +101,8 @@ Your location is currently {{ profile.location }} &ndash;
 </div>
 
 <div>
-	<h2>Favourite Animals</h2>
 	{% if profile.user.favourite_species.all %}
+	<h2>Favourite Animals</h2>
 	<ol>
     {% for favourite in profile.user.favourite_species.all %}
 	<li><a href="{{ favourite.species.urls.absolute }}">{{ favourite.species }}</a>
@@ -112,11 +112,11 @@ Your location is currently {{ profile.location }} &ndash;
 	</li>
 	{% endfor %}
 	</ol>
+	<p>To add more to this list, <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites.</p>
 	{% else %}
-	<p>
-		{% ifequal profile.user user %}You don&rsquo;t{% else %}This user doesn&rsquo;t{% endifequal %} have any favourite animals yet.
-		{% ifequal profile.user user %}Pick some?{% else %}Suggest some?{% endifequal %}
-	</p>
+	{% ifequal profile.user user %}
+	<p>You don&rsquo;t have any favourite animals yet. Why don't you <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites?</p>
+	{% endifequal %}
 	{% endif %}
 </div>
 
