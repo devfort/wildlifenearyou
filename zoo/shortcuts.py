@@ -11,7 +11,6 @@ def render(request, template_name, context=None, base=None):
     context = context or {}
     context['base'] = base or 'base.html'
     context['path'] = request.path
-    context['GOOGLE_ANALYTICS_CODE'] = settings.GOOGLE_ANALYTICS_CODE
     return render_to_response(
         template_name, context, context_instance = RequestContext(request)
     )

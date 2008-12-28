@@ -42,4 +42,5 @@ def standard(request):
             'location': location,
             'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
             'dev_status_html': mark_safe(settings.DEV_STATUS_HTML),
+            'GOOGLE_ANALYTICS_CODE': mark_safe(settings.GOOGLE_ANALYTICS_CODE),
     }
