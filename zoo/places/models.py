@@ -207,7 +207,10 @@ class Place(AuditedModel):
                 'config': {'type': 'geo', 'geo': {}, 'store': True}
             }, { # Facilities of the place.
                 'field_name': 'facilities',
-                'django_fields': [lambda inst: [f.desc for f in inst.place_facilities.all()]],
+                'django_fields': [
+                                    lambda inst: [f.specific_desc for f in inst.place_facilities.all()],
+                                    lambda inst: [f.facility.default_desc for f in inst.place_facilities.all()],
+                                  ],
                 'config': {
                     'freetext': {'language': 'en'},
                     'store': True,
