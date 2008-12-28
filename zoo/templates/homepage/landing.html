@@ -166,6 +166,12 @@
 				<h2>Featured animal</h2>
 				<p>No currently featured animal. If you mark an animal as your favourite, it might be shown here!</p>
 				{% endif %}
+				<h3>Animal hit parade</h3>
+				{% if featured.species %}
+				<p>Why not check out some other <a href='{% url hit-parade %}'>popular or rare animals</a>?</p>
+				{% else %}
+				<p>Why not check out some <a href='{% url hit-parade %}'>popular or rare animals</a>?</p>
+				{% endif %}
 			</div>
 			<div class="column">
 				<h2>Featured spotter</h2>
