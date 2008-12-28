@@ -188,18 +188,7 @@ class ModPythonHandler(BaseHandler):
 
         # if we need to set up middleware, now that settings works we can do it now.
         if self._request_middleware is None:
-            try:
-                if self._request_middleware is None:
-                    self.load_middleware()
-            except:
-                try:
-                    print 'middleware load failure: EXITING IMMEDIATELY'
-                    import traceback
-                    traceback.print_exc()
-                except:
-                    pass
-                import os
-                os._exit(-1)
+            self.load_middleware()
 
         set_script_prefix(req.get_options().get('django.root', ''))
         signals.request_started.send(sender=self.__class__)

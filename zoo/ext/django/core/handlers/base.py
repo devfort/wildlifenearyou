@@ -28,34 +28,46 @@ class BaseHandler(object):
         self._view_middleware = []
         self._response_middleware = []
         self._exception_middleware = []
-        for middleware_path in settings.MIDDLEWARE_CLASSES:
-            try:
-                dot = middleware_path.rindex('.')
-            except ValueError:
-                raise exceptions.ImproperlyConfigured, '%s isn\'t a middleware module' % middleware_path
-            mw_module, mw_classname = middleware_path[:dot], middleware_path[dot+1:]
-            try:
-                mod = __import__(mw_module, {}, {}, [''])
-            except ImportError, e:
-                raise exceptions.ImproperlyConfigured, 'Error importing middleware %s: "%s"' % (mw_module, e)
-            try:
-                mw_class = getattr(mod, mw_classname)
-            except AttributeError:
-                raise exceptions.ImproperlyConfigured, 'Middleware module "%s" does not define a "%s" class' % (mw_module, mw_classname)
+        try:
+            for middleware_path in settings.MIDDLEWARE_CLASSES:
+                try:
+                    dot = middleware_path.rindex('.')
+                except ValueError:
+                    raise exceptions.ImproperlyConfigured, '%s isn\'t a middleware module' % middleware_path
+                mw_module, mw_classname = middleware_path[:dot], middleware_path[dot+1:]
+                try:
+                    mod = __import__(mw_module, {}, {}, [''])
+                except ImportError, e:
+                    raise exceptions.ImproperlyConfigured, 'Error importing middleware %s: "%s"' % (mw_module, e)
+                try:
+                    mw_class = getattr(mod, mw_classname)
+                except AttributeError:
+                    raise exceptions.ImproperlyConfigured, 'Middleware module "%s" does not define a "%s" class' % (mw_module, mw_classname)
 
-            try:
-                mw_instance = mw_class()
-            except exceptions.MiddlewareNotUsed:
-                continue
+                try:
+                    mw_instance = mw_class()
+                except exceptions.MiddlewareNotUsed:
+                    continue
 
-            if hasattr(mw_instance, 'process_request'):
-                self._request_middleware.append(mw_instance.process_request)
-            if hasattr(mw_instance, 'process_view'):
-                self._view_middleware.append(mw_instance.process_view)
-            if hasattr(mw_instance, 'process_response'):
-                self._response_middleware.insert(0, mw_instance.process_response)
-            if hasattr(mw_instance, 'process_exception'):
-                self._exception_middleware.insert(0, mw_instance.process_exception)
+                if hasattr(mw_instance, 'process_request'):
+                    self._request_middleware.append(mw_instance.process_request)
+                if hasattr(mw_instance, 'process_view'):
+                    self._view_middleware.append(mw_instance.process_view)
+                if hasattr(mw_instance, 'process_response'):
+                    self._response_middleware.insert(0, mw_instance.process_response)
+                if hasattr(mw_instance, 'process_exception'):
+                    self._exception_middleware.insert(0, mw_instance.process_exception)
+
+        except:
+            try:
+                print 'middleware load failure: EXITING IMMEDIATELY'
+                import traceback
+                traceback.print_exc()
+            except:
+                pass
+            import os
+            os._exit(-1)
+
 
     def get_response(self, request):
         "Returns an HttpResponse object for the given HttpRequest"
