@@ -137,16 +137,26 @@ def password_key_sent(request):
 def profile_default(request):
     return Redirect(reverse('accounts-profile', args=(request.user,)))
 
+def get_photos(request, user):
+    if user == request.user or request.user.is_staff():
+        return user.photos
+    else:
+        return user.photos.filter(
+            is_visible = True
+        ).distinct()
+
 def profile(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'accounts/profile.html', {
         'profile': user.get_profile(),
+        'photos': get_photos(request, user),
     })
 
 def photos(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'accounts/photos.html', {
         'profile': user.get_profile(),
+        'photos': get_photos(request, user),
     })
 
 def profile_edit(request, username):

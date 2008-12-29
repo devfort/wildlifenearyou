@@ -12,7 +12,7 @@
 <div>
         <h2>Photos</h2>
 
-        {% for photo in profile.user.photos.all %}
+        {% for photo in photos.all %}
                 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
         {% endfor %}
         {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}

@@ -1,8 +1,13 @@
 {% extends base %}
 
 {% load favourites_extras %}
+{% load thumbnail %}
 
 {% block title %}{{ profile.user|title }}{% endblock %}
+
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/gallery.js"></script>
+{% endblock %}
 
 {% block primary_content %}
 
@@ -121,9 +126,38 @@ Your location is currently {{ profile.location }} &ndash;
 </div>
 
 <div>
-        <h2>Photos</h2>
-
-        {% for photo in profile.user.photos.all %}{{ photo.thumb_75 }}{% endfor %}
+        {% with photos.count as visible_photo_count %}
+        	{% if visible_photo_count %}
+                        <h2>Photos</h2>
+        		{% ifequal visible_photo_count 1 %}{# Only one photo #}
+        			<div class="gallery">
+        			{% for photo in photos.all %}
+        				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
+        			{% endfor %}
+        			</div>
+        		{% else %}{# More than one photo #}
+        		{% with photos.all|first as chosen %}
+        		<div class="gallery">
+                		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
+                		<div class="slideshow">
+                			<ul id="thumbnails">
+        			                {% for photo in photos.all|slice:":30" %}
+        			                {% ifnotequal chosen photo %}
+                		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+                		                {% endifnotequal %}
+        			                {% endfor %}
+        			        </ul><!-- /#thumbnails -->
+        		        </div><!-- /.slideshow -->
+                	        <p><a href='{% url accounts-profile-photos profile.user.username %}'>See all {% ifequal user profile.user %}your{% else %}their {% endifequal %} photos.</a></p>
+        	        </div>
+        	        {% endwith %}
+        		{% endifequal %}
+        	{% else %}
+        	        {% ifequal profile.user user %}
+        	                <h2>Photos</h2>
+                        {% endifequal %}
+        	{% endif %}
+        {% endwith %}
         {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 </div>
 
