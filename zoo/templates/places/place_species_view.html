@@ -1,6 +1,12 @@
 {% extends base %}
 
+{% load thumbnail %}
+
 {% block title %}{{ species.plural }} at {{ place.known_as }}{% endblock %}
+
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/gallery.js"></script>
+{% endblock %}
 
 {% block primary_content %}
 
@@ -16,27 +22,44 @@
 {% endfor %}
 </ul>
 
-{% if place_species.visible_photos.count %}
+{% endblock %}
 
-<h2>Photos</h2>
+{% block secondary_content %}
 
-<p>Of {{ species.common_name }} at {{ place.known_as }}.</p>
+{% with place_species.visible_photos.count as visible_photo_count %}
+	{% if visible_photo_count %}
+	        <h2>Photos</h2>
 
-{% for photo in place_species.visible_photos.all %}
-<div>
-<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a> by <a href="{% url accounts-profile photo.created_by.username %}/">{{ photo.created_by|title }}</a>
-</div>
-{% endfor %}
+                <p>Of the <a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a> at <a href='{{ place.urls.absolute }}'>{{ place.known_as }}</a>.</p>
 
-{% endif %}
+		{% ifequal visible_photo_count 1 %}{# Only one photo #}
+			<div class="gallery">
+			{% for photo in place_species.visible_photos.all %}
+				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
+			{% endfor %}
+			</div>
+		{% else %}{# More than one photo #}
+		{% with place_species.visible_photos.all|first as chosen %}
+		<div class="gallery">
+        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
+        		<div class="slideshow">
+        			<ul id="thumbnails">
+			                {% for photo in place_species.visible_photos.all %}
+			                {% ifnotequal chosen photo %}
+        		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+        		                {% endifnotequal %}
+			                {% endfor %}
+			        </ul><!-- /#thumbnails -->
+		        </div><!-- /.slideshow -->
+	        </div>
+	        {% endwith %}
+		{% endifequal %}
+	{% endif %}
+{% endwith %}
 
 <h2>Comments</h2>
 {% with place_species as object %}
     {% include "comments/_comments.html" %}
 {% endwith %}
-
-{% endblock %}
-
-{% block secondary_content %}
 
 {% endblock %}
