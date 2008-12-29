@@ -51,17 +51,17 @@
 # FIXME: make it easy to reindex a model (including 'cheap' where we don't delete everything for that model first)
 # FIXME: make it easy to reindex everything
 # FIXME: it's easy to accidentally delete the database after initialisation happens; we should provide a CLEAR DATABASE function (used by reindexing, above) which safely clears and ensures that the database has appropriate configuration at the end of things
+# FIXME: document the query() method added to managers
+# FIXME: registering and initialising so we're not bound to Djape. (Possibly even write something to tie into Lucene/Solr or similar.)
+# FIXME: other FIXMEs ;-)
 
 # FIXME: drop xapian_index
 # FIXME: check any other changes made by Simon and/or Richard
-# FIXME: document the new hooks
-# FIXME: registering and initialising
+# FIXME: document the new hooks (and move to docstring throughout)
 # FIXME: document that you have to call initialise (and figure out where additional config comes from...)
 
 # TODO: make it possible to index an individual model to more than one database.
 # Test: the override stuff
-
-# FIXME: augment the default manager for each model to include a search() method (very simple, takes a single query string?)
 
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.db import models
@@ -98,7 +98,6 @@ def get_client(dbname_or_model):
     )
 
 def make_searcher(manager, model):
-    # FIXME: make this work :-)
     index = get_index(model)
     if not index:
         # FIXME: this isn't done properly... it can't respond to the same methods etc. as QueryResult, below
@@ -112,28 +111,46 @@ def make_searcher(manager, model):
             def __init__(self, results):
                 self.results = results
                 search_ids = [ item['id'] for item in results['items'] ]
-                to_grab = []
-                self.deets = {}
+                self._result_ids = []
+                self._deets = {}
                 for item in results['items']:
                     search_id = item['id']
                     model_key, id = search_id.split(':')
                     if model_key != model.__name__:
                         # FIXME: not right!
+                        # Either we need to get this right, or we could filter the query through a boolean to restrict to
+                        # this model in the first place. The latter would work better, but requires some thought. (In particular,
+                        # semi-constructing queries like this unsettles Richard, so there's probably a reason to avoid it.)
                         #continue
                         pass
-                    to_grab.append(id)
-                    self.deets[id] = item
-                self.bulk = manager.in_bulk(to_grab)
+                    self._result_ids.append(id)
+                    self._deets[id] = item
+                self._bulk = manager.in_bulk(self._result_ids)
 
-            # FIXME: would be nice to use .-access not just []-access?
-                
-            def get(self, key):
+            # From djape, we get: matches_lower_bound, doc_count, matches_upper_bound, db_name, _orig_xapian_query, elapsed, has_more_results, matches_estimated
+            # We really care about everything except _orig_xapian_query (which you'd have to extract in code rather than templates anyway).
+            def __getattr__(self, key):
+                """Provide .-access to aspects of the result. eg: q.doc_count (providing the search provider returns doc_count)."""
                 return self.results.get(key)
-                
+
+            def __len__(self):
+                return len(self._result_ids)
+            
             def __iter__(self):
-                for obj in self.bulk.values():
-                    # FIXME: ``search_details`` should be configurable...
-                    obj.search_details = self.deets[str(obj.pk)]
+                """
+                Iterate over the results, in the order they were in the result set.
+                Return a decorated object, ie the Django model instance with an extra attribute (default 'match') containing match details (you mostly care about 'rank', if provided).
+                """
+                for key in self._result_ids:
+                    obj = self._bulk[long(key)]
+                    # From djape we get: data (dict of field->data pairs), id, rank
+                    # We only really care about rank at this stage, as we've pulled out the object.
+                    if hasattr(model.Searchable, 'match_details_attribute'):
+                        match_attr = model.Searchable.match_details_attribute
+                    else:
+                        match_attr = 'match'
+                    if match_attr is not None:
+                        setattr(obj, match_attr, self._deets[str(obj.pk)])
                     yield obj
         
         results = c.search(Query(query), end_rank=num)
