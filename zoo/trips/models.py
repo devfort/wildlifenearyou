@@ -172,12 +172,6 @@ class Trip(AuditedModel):
         return self.species.all().distinct().count() > 3
 
 class Sighting(AuditedModel):
-    place = models.ForeignKey('places.Place',
-        help_text="The place at which this sighting occurred",
-    )
-    species = models.ForeignKey(Species,
-        help_text="What was sighted", related_name='sightings'
-    )
     trip = models.ForeignKey(Trip, null=True, blank=True,
         help_text="""
             If this sighting was part of a trip, give it here. Leave blank for 
@@ -185,6 +179,17 @@ class Sighting(AuditedModel):
             species at this place
         """, related_name = 'sightings'
     )
+    place = models.ForeignKey('places.Place',
+        help_text="The place at which this sighting occurred",
+    )
+    # If what they saw doesn't exist in our species table, they can save a 
+    # textual description instead. We'll provide tools to help people go 
+    # back over their inexact matches and look them up properly at some point
+    species = models.ForeignKey(Species,
+        help_text="What was sighted", related_name='sightings'
+    )
+    species_inexact = models.CharField(max_length=100, blank=True)
+    note = models.TextField(blank=True)
     
     def save(self, *args, **kwargs):
         super(Sighting, self).save(*args, **kwargs)
