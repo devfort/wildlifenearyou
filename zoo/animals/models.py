@@ -65,6 +65,14 @@ class Species(AbstractSpecies):
             sightings__species = self, is_visible = True,
         ).distinct()
 
+    def photo(self):
+        if self.visible_photos().count() >= 1:
+            return self.random_photo()
+        else:
+            # Here is where to return a picture of some trees
+            # (it would perhaps be nice to have a variety of different photos available)
+            return None
+
     def random_photo(self):
         vp = self.visible_photos()
         if vp.count():
