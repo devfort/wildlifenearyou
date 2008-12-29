@@ -186,7 +186,8 @@ class Sighting(AuditedModel):
     # textual description instead. We'll provide tools to help people go 
     # back over their inexact matches and look them up properly at some point
     species = models.ForeignKey(Species,
-        help_text="What was sighted", related_name='sightings'
+        help_text="What was sighted", related_name='sightings',
+        null=True, blank=True
     )
     species_inexact = models.CharField(max_length=100, blank=True)
     note = models.TextField(blank=True)
