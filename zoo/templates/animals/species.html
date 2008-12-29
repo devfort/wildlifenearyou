@@ -6,6 +6,10 @@
 
 {% block title %}{{ species.common_name }} ({{ species.latin_name }}){% endblock %}
 
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/gallery.js"></script>
+{% endblock %}
+
 {% block primary_content %}
 
 <h1>{{ species.common_name }} <i class="scientific">({{ species.latin_name }})</i></h1>
@@ -51,15 +55,33 @@
 
 {% block secondary_content %}
 
-
-{% if species.visible_photos %}
-<h2>Photos</h2>
-<ul>
-  {% for photo in species.visible_photos|slice:":30" %}
-  <li><a href="{{ photo.urls.absolute }}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
-  {% endfor %}
-</ul>
-{% endif %}
+{% with species.visible_photos.count as visible_photo_count %}
+	{% if visible_photo_count %}
+                <h2>Photos</h2>
+		{% ifequal visible_photo_count 1 %}{# Only one photo #}
+			<div class="gallery">
+			{% for photo in species.visible_photos.all %}
+				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
+			{% endfor %}
+			</div>
+		{% else %}{# More than one photo #}
+		{% with species.photo as chosen %}
+		<div class="gallery">
+        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
+        		<div class="slideshow">
+        			<ul id="thumbnails">
+			                {% for photo in species.visible_photos|slice:":30" %}
+			                {% ifnotequal chosen photo %}
+        		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+        		                {% endifnotequal %}
+			                {% endfor %}
+			        </ul><!-- /#thumbnails -->
+		        </div><!-- /.slideshow -->
+	        </div>
+	        {% endwith %}
+		{% endifequal %}
+	{% endif %}
+{% endwith %}
 
 <h2>Comments</h2>
 {% with species as object %}
