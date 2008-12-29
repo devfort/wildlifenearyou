@@ -1,9 +1,12 @@
 {% extends base %}
 
+{% load thumbnail %}
+
 {% block title %}{{ trip.title }}{% endblock %}
 
 {% block extra_head %}
 <script type="text/javascript" src="/static/js/star-select-replace.js"></script>
+<script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}
 
 {% block primary_content %}
@@ -87,21 +90,40 @@
         <!-- TODO: Users should see their OWN photos even if they have not 
             yet been moderated, with a visual indication of this e.g. red border
         -->
-        {% with trip.visible_photos.all as photos %}
-        {% if photos %}
-        <h2>Photos from this trip</h2>
-        <div>
-        {% for photo in photos %}
-        <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.photo.thumbnail_tag }}</a>
-        {% endfor %}
-        </div>
-        <h2>Got any more?</h2>
-        {% else %}
-        <h2>Take any photos?</h2>
-        {% endif %}
+        {% with trip.visible_photos.count as visible_photo_count %}
+        	{% if visible_photo_count %}
+                        <h2>Photos</h2>
+        		{% ifequal visible_photo_count 1 %}{# Only one photo #}
+        			<div class="gallery">
+        			{% for photo in trip.visible_photos.all %}
+        				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
+        			{% endfor %}
+        			</div>
+        		{% else %}{# More than one photo #}
+        		{% with trip.visible_photos.all|first as chosen %}
+        		<div class="gallery">
+                		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
+                		<div class="slideshow">
+                			<ul id="thumbnails">
+        			                {% for photo in trip.visible_photos|slice:":30" %}
+        			                {% ifnotequal chosen photo %}
+                		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+                		                {% endifnotequal %}
+        			                {% endfor %}
+        			        </ul><!-- /#thumbnails -->
+        		        </div><!-- /.slideshow -->
+        	        </div>
+        	        {% endwith %}
+        		{% endifequal %}
+                {% if belongs_to_user %}<h2>Got any more?</h2>{% endif %}
+                {% else %}
+                {% if belongs_to_user %}<h2>Take any photos?</h2>{% endif %}
+                <h2>Take any photos?</h2>
+                {% endif %}
         {% endwith %}
+        {% if belongs_to_user %}
         <form enctype="multipart/form-data" action="{{ request.path }}upload/" method="POST">
             <p><input type="file" name="photo" id="id_photo"> <input type="submit" value="Upload"></p>
         </form>
-	
+        {% endif %}
 {% endblock %}
