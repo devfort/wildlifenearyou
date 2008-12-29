@@ -436,13 +436,12 @@ class PlaceSpeciesSolelyForLinking(models.Model):
 
     def visible_photos(self):
         from zoo.photos.models import Photo
-        return [] # TODO: re-enable this - we removed contained_species
-                  # and have not yet replaced it
         return Photo.objects.filter(
-            place=self.place
+            sightings__place = self.place, 
+            sightings__species = self.species
         ).filter(
-            contained_species=self.species
-        ).filter(is_visible = True)
+            is_visible = True
+        ).distinct()
 
     class Meta:
         db_table = 'places_placespecies'
