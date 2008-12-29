@@ -72,6 +72,9 @@ class Profile(models.Model):
     def __unicode__(self):
         return u'Profile for %s' % (self.user,)
 
+    def visible_photos(self):
+        return self.user.photos.filter(is_visible=True)
+
     def passport(self):
         return Trip.get_passport(self.user)
 
