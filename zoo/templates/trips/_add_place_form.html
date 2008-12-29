@@ -1,3 +1,24 @@
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(window).load(function() {
+    var $ = jQuery;
+    var mapdiv = $('<div></div>').css({
+        width: '100%',
+        height: '300px'
+    });
+    $('fieldset#location div:first').before(mapdiv);
+    window.gmap = new GMap2(mapdiv[0]);
+    gmap.addControl(new GLargeMapControl());
+    gmap.addControl(new GMapTypeControl());
+    gmap.setMapType(G_HYBRID_MAP);
+    gmap.setCenter(new GLatLng(44.08758, -21.796875), 2);
+    GEvent.addListener(gmap, 'move', function() {
+        var center = gmap.getCenter();
+        $('#id_latitude').val(center.lat());
+        $('#id_longitude').val(center.lng());
+    });
+});
+</script>
 <form action="/add-trip/add-place/" method="POST">
 <fieldset><legend>Required fields</legend>
 <div>
@@ -9,6 +30,18 @@
     {{ form.country.errors }}
     <label for="id_{{ form.country.html_name }}">{{ form.country.label }}</label>
     {{ form.country }}
+</div>
+</fieldset>
+<fieldset id="location"><legend>Location (required)</legend>
+<div>
+    {{ form.latitude.errors }}
+    <label for="id_{{ form.latitude.html_name }}">{{ form.latitude.label }}</label>
+    {{ form.latitude }}
+</div>
+<div>
+    {{ form.longitude.errors }}
+    <label for="id_{{ form.longitude.html_name }}">{{ form.longitude.label }}</label>
+    {{ form.longitude }}
 </div>
 </fieldset>
 <fieldset><legend>Contact details (optional)</legend>
@@ -50,18 +83,5 @@
     {{ form.zip }}
 </div>
 </fieldset>
-<fieldset><legend>Latitude and Longitude (optional)</legend>
-<div>
-    {{ form.latitude.errors }}
-    <label for="id_{{ form.latitude.html_name }}">{{ form.latitude.label }}</label>
-    {{ form.latitude }}
-</div>
-<div>
-    {{ form.longitude.errors }}
-    <label for="id_{{ form.longitude.html_name }}">{{ form.longitude.label }}</label>
-    {{ form.longitude }}
-</div>
-</fieldset>
-
     <p><input type="submit" name="Add place"></p>
 </form>
