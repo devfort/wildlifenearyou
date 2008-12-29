@@ -177,11 +177,7 @@
 				<h2>Featured spotter</h2>
                     	        {% if featured.profile %}
                     	        {% with featured.profile as profile %}
-                    	        {% comment %}
-                    	        FIXME!
-                    	        {% endcomment %}
-                    	        {{ profile.avatar_img_75_pull_left }}
-				<img src="/faces/sedf.png" width="75" height="75" alt="" class="pull-left">
+				<img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
 				<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
 				{% if profile.passport.seen_species %}
 				<p>Has spotted
