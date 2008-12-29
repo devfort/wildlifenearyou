@@ -5,7 +5,7 @@
 {% block title %}{{ place.known_as|title }}{% endblock %}
 
 {% block extra_head %}
-<script type="text/javascript">PLACE_ID = {{ place.id }}</script>
+<script type="text/javascript">var PLACE_ID = {{ place.id }};</script>
 <script type="text/javascript" src="/static/js/gallery.js"></script>
 <script type="text/javascript" src="/static/js/jquery.dimensions.js"></script>
 <script type="text/javascript" src="/static/js/i-saw-and-a.js"></script>
