@@ -119,6 +119,7 @@ def place(request, country_code, slug):
         'species_list_more': len(species_list) > SPECIES_ON_PLACE_PAGE,
         'opening_times': times_sorted,
         'rating' : Trip.get_average_rating(place),
+        'been_here': Trip.objects.filter(sightings__place = place, created_by = request.user).distinct().count(),
     })
 
 def place_summary(request, country_code, slug):

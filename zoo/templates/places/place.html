@@ -11,9 +11,12 @@
 <script type="text/javascript" src="/static/js/i-saw-and-a.js"></script>
 {% endblock %}
 
+{% block content_title %}
+<h1>{{ place.known_as|title }}</h1>
+{% endblock %}
+
 {% block primary_content %}
 
-<h1>{{ place.known_as|title }}</h1>
 {% if place.url %}
 <p class="url"><a href="{{ place.url }}">&raquo; Visit their official website</a></p>
 {% endif %}
@@ -46,7 +49,7 @@
 {% endif %}
 
 <div class="see-more-animals highlight"><a name="addsightings"></a>
-    <h3 class="add">Have you been here?</h3>
+    <h3 class="add">Have you been here{% if been_here %} again{% endif %}?</h3>
     <p>Tell us which animals you saw.</p>
     <form action="{{ request.path }}pick-sightings/" method="GET">
         <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1" class="text"></div>
@@ -121,6 +124,26 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
     {% endif %}
 {% endwith %}
 
+{% if place.most_recent_trips_with_desc %}
+<h2>Zoo Tripbook entries</h2>
+
+{% if been_here %}
+<p class="add">Have you been here again? Tell us <a href="{% url place-add-trip place.country.country_code place.slug %}">what it was like this time</a>!</p>
+{% else %}
+<p class="add">Have you been here? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
+{% endif %}
+
+<ol class="comments tripbook">
+{% for trip in place.most_recent_trips_with_desc|slice:":5" %}
+	<li >
+	<blockquote><p>{{ trip.description|truncatewords:100 }}</p></blockquote>
+	<p class="posted-by">
+	<img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
+<a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> on <a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
+{% endfor %}
+</ol>
+{% endif %}
+
 <!--
 <h2>Events at ...</h2>
 -->
@@ -136,22 +159,12 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
     {% endif %}
 {% endwith %}
 
-{% with place.extras.all as extras %}
-	<h2>Extras</h2>
-	<ul>
-		{% for extra in place.extras.all %}
-		<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
-		{% endfor %}
-		<li><a href="{{ place.urls.summary }}">Zoo summary sheet</a></li>
-	</ul>
-{% endwith %}
-
 {% endblock %}
 
 {% block secondary_content %}
 
-<h2>Average Rating</h2>
 {% if rating.on %}
+<h2>Average Rating</h2>
 <p class="rating" title="{{ rating.on|length }} out of 5 stars">
 {% for i in rating.on %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
@@ -160,12 +173,10 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 <img src="/static/img/icons/starselect_off.png" alt="">
 {% endfor %}
 </p>
+{% if been_here %}
 {% else %}
-<!-- TODOOOOO: IF you are logged in AND you've been on a trip here AND you've not rated this yet, encourage to rate??? -->
-<p>No-one has yet rated a trip to this place. <br>
-<!-- TODOOOOO: IF you are logged in AND you've not got a trip to this place then display this message-->
-<a href="#addsightings" class="add">Have you been here? Add your trip and rate this place.</a>
-</p>
+<p class="add">Have you been here? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
+{% endif %}
 {% endif %}
 
 <p class="suggest-changes">
@@ -208,23 +219,19 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 <p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add your own photos to this zoo</p>
 {% endif %}
 
-{% if place.most_recent_trips_with_desc %}
-<h2>Zoo Tripbook entries</h2>
-<ol class="comments tripbook">
-{% for trip in place.most_recent_trips_with_desc|slice:":5" %}
-	<li >
-	<blockquote><p>{{ trip.description|truncatewords:10 }}</p></blockquote>
-	<p class="posted-by">
-	<img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
-<a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
-{% endfor %}
-</ol>
-{% endif %}
+{% with place.extras.all as extras %}
+	<h2>Extras</h2>
+	<ul>
+		{% for extra in place.extras.all %}
+		<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
+		{% endfor %}
+		<li><a href="{{ place.urls.summary }}">Zoo summary sheet</a></li>
+	</ul>
+{% endwith %}
 
 <h2>Comments</h2>
 {% with place as object %}
     {% include "comments/_comments.html" %}
 {% endwith %}
-
 
 {% endblock %}
