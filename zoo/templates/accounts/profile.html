@@ -41,7 +41,6 @@ Your location is currently <a class="edit" href="/set-location/">{{ profile.loca
 {% ifequal profile.user user %}
 <p>You don&rsquo;t seem to have filled in your biography yet, so why not <a href='{% url accounts-profile-edit profile.user %}'>do that now</a> and tell us a bit about yourself?</p>
 {% else %}
-<p>This user has not written a biography yet.</p>
 {% endifequal %}
 {% endif %}
 </div>
@@ -67,8 +66,7 @@ Your location is currently <a class="edit" href="/set-location/">{{ profile.loca
 
 	{% else %}
 	<p>
-		{% ifequal profile.user user %}You haven&rsquo;t{% else %}This user hasn&rsquo;t{% endifequal %} been anywhere yet.
-		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
+		{% ifequal profile.user user %}You{% else %}They{% endifequal %} haven&rsquo;t been anywhere yet.
 	</p>
 	{% endif %}
 </div>
@@ -78,8 +76,6 @@ Your location is currently <a class="edit" href="/set-location/">{{ profile.loca
 	<p>
 	{% ifequal profile.user user %}
 	Add more by <a href="{% url search %}" title="Look for something">finding a place you've spotted animals</a>, and then on its page tell us the animals you saw.
-	{% else %}
-	The Animal Passport contains all of the animals {{ profile.user }} has spotted on their trips.
 	{% endifequal %}
 	{% if profile.passport.seen_species %}
         </p>
@@ -99,7 +95,7 @@ Your location is currently <a class="edit" href="/set-location/">{{ profile.loca
 	{% endcomment %}
 	<p>
 	{% else %}
-		However {% ifequal profile.user user %}it seems you {% else %}they {% endifequal %}haven&rsquo;t spotted any {% ifequal profile.user user %}animals {% endifequal %}yet.
+		{% ifequal profile.user user %}Tt seems you {% else %}They {% endifequal %}haven&rsquo;t spotted any {% ifequal profile.user user %}animals {% endifequal %}yet.
 	</p>
 	{% endif %}
 </div>
