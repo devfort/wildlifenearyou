@@ -6,26 +6,30 @@
 
 <h1>Import from Flickr</h1>
 
+<p>Search for photos to import from your Flickr account by text or tag:</p>
+
 <form action="{% url flickr-search %}" method="get">
     <p><input type="search" name="q"> <input type="submit" value="Search your photos"></p>
 </form>
 
-{% if places.places.place %}
-<h3>Your places</h3>
+<p>Or pick photos from <a href="{% url flickr-places %}">your places</a> or <a href="{% url flickr-groups %}">your groups</a>.</p>
+
+{% if recent %}
+<h2>Your most recent photos</h2>
+
+<form action="/flickr/selected/" method="post">
 <ul>
-    {% for place in places.places.place %}
-    <li><a href="/flickr/your-places/{{ place.woeid }}/">{{ place.content }}</a>, {{ place.photo_count }} photo{{ place.photo_count|pluralize }}</li>
+    {% for photo in recent %}
+    <li style="clear: both">
+        <img src="{{ photo.square }}" class="pull-left" width="75" height="75">
+        <p><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> <label for="import_{{ photo.id }}">Import this</label></p>
+        <p><a href="http://www.flickr.com/photo.gne?id={{ photo.id }}">View on Flickr</a></p>
+    </li>
     {% endfor %}
 </ul>
-{% endif %}
+<p><input type="submit" class="submit" value="Import these photos"></p>
+</form>
 
-{% if groups.groups.group %}
-<h3>Your groups</h3>
-<ul>
-{% for group in groups.groups.group %}
-<li>{{ group.name }}</li>
-{% endfor %}
-</ul>
 {% endif %}
 
 {% endblock %}

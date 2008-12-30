@@ -38,13 +38,65 @@ def index(request):
     client = Flickr(token = flickr_token)
     token_info = client.auth_checkToken()
     user_id = token_info['auth']['user']['nsid']
+    
+    # TODO: refactor this to share logic in photo_picker method
+    recent = client.photos_search(user_id = 'me', per_page=20)['photos']['photo']
+    for photo in recent:
+        photo['signed'] = signed.dumps({
+            'id': photo['photo_id'],
+            'farm': photo['farm'],
+            'secret': photo['secret'],
+            'server': photo['server'],
+            'title': photo['title'],
+        })
+    
+    
     return render(request, 'flickr/index.html', {
         'info': client.people_getInfo(user_id = user_id),
+        'recent': recent,
+    })
+
+@login_required
+def places(request):
+    flickr_token = request.COOKIES.get('flickr_token')
+    if not flickr_token:
+        return flickr_redirect(request.path)
+    client = Flickr(token = flickr_token)
+    token_info = client.auth_checkToken()
+    user_id = token_info['auth']['user']['nsid']
+    return render(request, 'flickr/places.html', {
         'places': client.places_placesForUser(
             place_type = 'locality',
         ),
+    })
+
+@login_required
+def groups(request):
+    flickr_token = request.COOKIES.get('flickr_token')
+    if not flickr_token:
+        return flickr_redirect(request.path)
+    client = Flickr(token = flickr_token)
+    token_info = client.auth_checkToken()
+    user_id = token_info['auth']['user']['nsid']
+    return render(request, 'flickr/groups.html', {
         'groups': client.people_getPublicGroups(user_id = user_id),
     })
+
+@login_required
+def group(request, group_nsid):
+    flickr_token = request.COOKIES.get('flickr_token')
+    if not flickr_token:
+        return flickr_redirect(request.path)
+    client = Flickr(token = flickr_token)
+    token_info = client.auth_checkToken()
+    group_info = client.groups_getInfo(group_id = group_nsid)
+    user_id = token_info['auth']['user']['nsid']
+    photos = client.groups_pools_getPhotos(
+        group_id = group_nsid, user_id = user_id
+    )['photos']['photo']
+    return photo_picker(
+        request, photos, 'Your photos in %s' % group_info['group']['name']
+    )
 
 @login_required
 def place(request, woe_id):
@@ -97,7 +149,6 @@ def search(request):
         text = q
     )['photos']['photo']
     return photo_picker(request, photos, 'Search for "%s"' % q)
-    
 
 def flickr_error(request, msg):
     return render(request, 'flickr/error.html', {
@@ -157,27 +208,24 @@ def import_trip_from_set(request, username, trip_id, set_id):
     user = get_object_or_404(User, username=username)
     trip = get_object_or_404(Trip, id=trip_id, created_by=user)
     assert username == request.user.username
-
+    
     # Load the photos from the set
     flickr_token = request.COOKIES.get('flickr_token')
     if not flickr_token:
         return flickr_error(request, 'Your Flickr token is missing')
-
+    
     flickr = Flickr(token = flickr_token)
     set_info = flickr.photosets_getInfo(set_id)
     photos = flickr.photosets_getPhotos(set_id)
-
+    
     if request.method == 'POST':
         # Actually do the import
         assert False, request.POST
-
+    
     return render(request, 'flickr/pick_photos_from_set.html', {
         'photos': photos,
         'set': set_info,
     })
-
-
-
 
 # OLD METHODS - will probably delete these
 

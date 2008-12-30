@@ -1,0 +1,19 @@
+{% extends base %}
+
+{% block title %}Import from Flickr Places{% endblock %}
+
+{% block primary_content %}
+
+<h1>Your places on Flickr</h1>
+
+{% if places.places.place %}
+<ul>
+    {% for place in places.places.place %}
+    <li><a href="/flickr/your-places/{{ place.woeid }}/">{{ place.content }}</a>, {{ place.photo_count }} photo{{ place.photo_count|pluralize }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>None of your Flickr photos belong to a place - maybe you haven't geotagged any photos yet?</p>
+{% endif %}
+
+{% endblock %}

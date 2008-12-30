@@ -1,0 +1,18 @@
+{% extends base %}
+
+{% block title %}Import from Flickr Groups{% endblock %}
+
+{% block primary_content %}
+
+<h1>Your Flickr Groups</h1>
+{% if groups.groups.group %}
+<ul>
+{% for group in groups.groups.group %}
+<li><a href="{{ group.nsid|urlencode }}/">{{ group.name }}</a></li>
+{% endfor %}
+</ul>
+{% else %}
+<p>You do not belong to any groups on Flickr.</p>
+{% endif %}
+
+{% endblock %}
