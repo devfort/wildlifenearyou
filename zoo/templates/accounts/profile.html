@@ -28,7 +28,7 @@ Your location is currently {{ profile.location }} &ndash;
 </p>
 {% endifequal %}
 
-<p>{% ifequal profile.user user %}You{% else %}They{% endifequal %} have an engagement score of <strong>{{ profile.percentage_complete }}</strong>, making you a <strong>helpful macaque</strong>.{% ifequal profile.user user %} To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% endifequal %}</p>
+<p><img src="/static/img/engagementbadge/monkey.png" class="pull-left">{% ifequal profile.user user %}You{% else %}They{% endifequal %} have an engagement score of <strong>{{ profile.percentage_complete }}</strong>, making you a <strong>helpful macaque</strong>.{% ifequal profile.user user %} To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% endifequal %}</p>
 
 <div>
 {% if profile.url %}
