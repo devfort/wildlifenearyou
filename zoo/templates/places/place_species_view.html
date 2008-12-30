@@ -8,11 +8,16 @@
 <script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}
 
+{% block content_title %}
+<h1>{{ species.plural }} at {{ place.known_as }}</h1>
+{% endblock %}
+
 {% block primary_content %}
 
-<h1>{{ species.plural }} at {{ place.known_as }}</h1>
-
-<p>Check out <a href="{{ place.urls.absolute }}">everything about {{ place.known_as }}</a>, or <a href="{{ species.urls.absolute }}">other places to see {{ species.plural|lower }}</a>.</p>
+<h2>Comments</h2>
+{% with place_species as object %}
+    {% include "comments/_comments.html" %}
+{% endwith %}
 
 <h2>Spotted by</h2>
 
@@ -55,11 +60,6 @@
 	        {% endwith %}
 		{% endifequal %}
 	{% endif %}
-{% endwith %}
-
-<h2>Comments</h2>
-{% with place_species as object %}
-    {% include "comments/_comments.html" %}
 {% endwith %}
 
 {% endblock %}

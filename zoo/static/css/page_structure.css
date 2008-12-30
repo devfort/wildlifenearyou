@@ -140,12 +140,15 @@
     width: 60%;
     display: inline;
 }
+.primary h2:first-child,
+.primary h3:first-child {
+    margin-top: 0;
+}
 
 .secondary {
     float: right;
     width: 34%;
     display: inline;
-    margin-top: 2.7em;
 }
 .secondary h2:first-child,
 .secondary h3:first-child {

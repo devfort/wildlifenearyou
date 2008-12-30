@@ -178,7 +178,7 @@ input.active {
 
 /* @group Highlighted blocks */
 
-div.highlight {
+.highlight {
 	background-color: #E2F1F9;
 	padding: 1em;
 	margin-top: 1.37em;
