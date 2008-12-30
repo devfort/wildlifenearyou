@@ -210,7 +210,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 
 {% if place.most_recent_trips_with_desc %}
 <h2>Zoo Tripbook entries</h2>
-<ol class="comments">
+<ol class="comments tripbook">
 {% for trip in place.most_recent_trips_with_desc|slice:":5" %}
 	<li >
 	<blockquote><p>{{ trip.description|truncatewords:10 }}</p></blockquote>

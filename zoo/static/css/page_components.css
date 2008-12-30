@@ -223,6 +223,18 @@ ol.comments li .posted-by a {
 
 /* @end */
 
+/* @group Tripbook entries */
+
+ol.comments li blockquote {
+	background-color: #e2f1f9;
+}
+
+ol.comments li .posted-by {
+  background-image: url('/static/img/bg/art_talkbubble_logbook_point.png');
+}
+
+/* @end */
+
 /* @group Edit form */
 
 .nested-edit {
@@ -276,6 +288,8 @@ ul.currency li {
 }
 .facilities li {
 	margin-bottom: 0.5em;
+	padding: 0;
+	background-image: none;
 }
 
 .direction_Car {
