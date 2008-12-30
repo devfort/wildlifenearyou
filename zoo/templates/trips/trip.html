@@ -1,6 +1,7 @@
 {% extends base %}
 
 {% load thumbnail %}
+{% load zoocommon %}
 
 {% block title %}{{ trip.title }}{% endblock %}
 
@@ -9,52 +10,67 @@
 <script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}
 
+{% block content_title %}
+<h1>{{ trip.compact_title }}</h1>
+{% endblock %}
+
 {% block primary_content %}
 
-<h1>{{ trip.compact_title }}</h1>
+<div class="comments tripbook">
+        {% if trip.description %}
+        <blockquote>{{ trip.description|linebreaks }}</blockquote>
+        <p class="posted-by">
+        {% else %}
+        <p class="trip-by">
+        {% endif %}
+        <img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
+        <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> to <a href="{{ trip.places.all.0.urls.absolute }}">{{ trip.places.all.0.known_as }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
+</div>
+
 {% with trip.sightings.all as sightings %}
         {% regroup sightings by place.known_as as sightings_by_place %}
     
         {% with sightings_by_place|length as sl %}
         {% ifequal 1 sl %}
-                <p>A trip to {% for place in sightings_by_place %}{% for sighting in place.list|slice:":1" %}           
-                        <a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
-                {% endfor %}{% endfor %} with {{ trip.sightings.count }} animal sighting{{ trip.sightings.count|pluralize }}</p>
-
-                <p class="description">
-                {{ trip.description|linebreaks }}
-                </p>
-
                 {% for place in sightings_by_place %}
                         <h2>Sighting{{ trip.sightings.count|pluralize }}</h2>
-                        <ul>
+                        <ul class="animal-list">
                                 {% for sighting in place.list %}
                                     {% if sighting.species %}
-                                        <li><a href="{% url place-species-view sighting.place.country.country_code,sighting.place.slug,sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+                                    <li>{% with sighting.species as species %}
+                                            <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                                            <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+                                            <p><i class="scientific">{{ species.latin_name }}</i></p>
+                                    {% endwith %}</li>
                                     {% else %}
-                                        <li>{{ sighting.species_inexact }}</li>
+                                    <li>
+                                            <div class="thumb-75"></div>
+                                            <p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+                                    </li>
                                     {% endif %}
                                 {% endfor %}
                         </ul>
                 {% endfor %}
         {% else %}
-                <p>A trip with {{ trip.sightings.count }} animal sighting{{ trip.sightings.count|pluralize }}</p>
-
-                <p class="description">
-                {{ trip.description }}
-                </p>
-
                 <h2>Sighting{{ trip.sightings.count|pluralize }}</h2>
                 {% for place in sightings_by_place %}
                         <h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
                 {% endfor %}</h3>
                 <p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
 
-                <ul>
+                <ul class="animal-list">
                         {% for sighting in place.list %}
-                        {% if sighting.species %}<li><a href="{% url place-species-view sighting.place.country.country_code,sighting.place.slug,sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+                        {% if sighting.species %}
+                        <li>{% with sighting.species as species %}
+                                <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                                <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
+                                <p><i class="scientific">{{ species.latin_name }}</i></p>
+                        {% endwith %}</li>
                         {% else %}
-                        <li>{{ sighting.species_inexact }}</li>
+                        <li>
+                                <div class="thumb-75"></div>
+                                <p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+                        </li>
                         {% endif %}
                         {% endfor %}
                 </ul>
@@ -63,16 +79,9 @@
         {% endwith %}
 {% endwith %}
 
-<p>Created by <a href="{% url accounts-profile trip.created_by.username %}">{{ trip.created_by }}</a> on {{ trip.created_at|date:"jS F Y" }}</p>
-
-{% if belongs_to_user %}
-<p><a href="edit/">Edit this trip</a> | <a href="delete/">Delete this trip</a></p>
-{% endif %}
-
 {% endblock %}
 
 {% block secondary_content %}
-
 	<h2>Trip Rating</h2>
 	{% if rating.on %}
 	<p class="rating" title="{{ rating.on|length }} out of 5 stars">
@@ -117,13 +126,17 @@
         		{% endifequal %}
                 {% if belongs_to_user %}<h2>Got any more?</h2>{% endif %}
                 {% else %}
-                {% if belongs_to_user %}<h2>Take any photos?</h2>{% endif %}
-                <h2>Take any photos?</h2>
+                {% if belongs_to_user %}<h2>Did you take any photos?</h2>{% endif %}
                 {% endif %}
         {% endwith %}
         {% if belongs_to_user %}
-        <form enctype="multipart/form-data" action="{{ request.path }}upload/" method="POST">
-            <p><input type="file" name="photo" id="id_photo"> <input type="submit" value="Upload"></p>
+        <form enctype="multipart/form-data" action="{{ request.path }}upload/" method="post">
+            <div class="container"><input type="file" name="photo" id="id_photo"></div>
+            <div class="container button-container"><input type="submit" value="Upload"></div>
         </form>
+        {% endif %}
+
+        {% if belongs_to_user %}
+        <p class="highlight"><a class="edit" href="edit/">Edit this trip</a> <a class="remove" href="delete/">Delete this trip</a></p>
         {% endif %}
 {% endblock %}

@@ -180,44 +180,44 @@ div.animal-list {
 
 /* @group Comments */
 
-ol.comments { 
+.comments { 
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
 
-ol.comments li {
+.comments li {
 	margin-bottom: 1.375em;
 }
 
-ol.comments li blockquote {
+.comments blockquote {
 	margin: 0;
-	padding: 0.5em;
+	padding: 0.5em 1em 0.5em 1em;
 	background-color: #f4f9e2;
 	font-style: normal;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
-ol.comments li p { 
+.comments p { 
 	margin: 0 0 0.3em 0;
 }
-ol.comments li .posted-by {
+.comments .posted-by {
 	background-image: url('/static/img/bg/art_talkbubble_comment_point.png');
 	background-repeat: no-repeat;
 	background-position: 20px 0;
 }
-ol.comments li img {
+.comments img {
 	position: relative;
 	top: 10px;
 }
-ol.comments li .posted-by span.meta {
+.comments .posted-by span.meta {
 	font-size: 0.8em;
 	display: block;
 	padding-left: 35px;
 }
 
-ol.comments li .posted-by a {
+.comments .posted-by a {
 	font-weight: bold;
 }
 
@@ -225,12 +225,21 @@ ol.comments li .posted-by a {
 
 /* @group Tripbook entries */
 
-ol.comments li blockquote {
+.tripbook blockquote {
 	background-color: #e2f1f9;
 }
 
-ol.comments li .posted-by {
+.tripbook blockquote p {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+.tripbook .posted-by {
   background-image: url('/static/img/bg/art_talkbubble_logbook_point.png');
+}
+
+.tripbook .trip-by a {
+  font-weight: bold;
 }
 
 /* @end */

@@ -136,23 +136,27 @@
 }
 
 .primary {
-    float: left;
-    width: 60%;
-    display: inline;
+  float: left;
+  width: 60%;
+  display: inline;
 }
 .primary h2:first-child,
 .primary h3:first-child {
-    margin-top: 0;
+  margin-top: 0;
+}
+
+.primary h2 {
+  clear: left;
 }
 
 .secondary {
-    float: right;
-    width: 34%;
-    display: inline;
+  float: right;
+  width: 34%;
+  display: inline;
 }
 .secondary h2:first-child,
 .secondary h3:first-child {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 /* @end */
