@@ -1,18 +1,23 @@
 {% extends base %}
 
+{% load zoocommon %}
+
 {% block title %}The Animal Hit Parade{% endblock %}
 
 {% block content %}
 
 <h1>The Animal Hit Parade</h1>
 
-<p>The top 20 most favourited animals</p>
+<h2>The top 20 most favourited animals</h2>
 
 {% if species_list %}
-<ol>
+<ol class='animal-list'>
   {% for species in species_list %}
-  <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a>
-    (favourited by {{ species.count }} {{ species.count|pluralize:"person,people" }})</li>
+  <li>
+          <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+          <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(favourited {{ species.count|oncetimes }})</span></p>
+          <p><i class="scientific">{{ species.latin_name }}</i></p>
+  </li>
   {% endfor %}
 </ol>
 {% else %}
@@ -24,10 +29,13 @@
 <p>The top 5 least seen animals:</p>
 
 {% if species_list %}
-<ol>
+<ol class="animal-list">
   {% for species in obscure_species %}
-  <li><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a>
-    (seen by {{ species.count }} {{ species.count|pluralize:"person,people" }})</li>
+  <li>
+          <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+          <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
+          <p><i class="scientific">{{ species.latin_name }}</i></p>
+  </li>
   {% endfor %}
 </ol>
 {% else %}

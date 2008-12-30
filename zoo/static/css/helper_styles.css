@@ -326,6 +326,13 @@ a.action:active span,
 	margin-bottom: 0.6em;
 }
 
+.thumb-75 {
+  width: 75px;
+  height: 75px;
+  background-image: url(/static/img/bg/hiding_animal_75.png);
+  background-repeat: no-repeat;
+}
+
 /* @end */
 
 /* @group Microformats */
