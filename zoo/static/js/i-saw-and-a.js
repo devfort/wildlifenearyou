@@ -23,9 +23,7 @@ jQuery(function($) {
     }
     
     function addAnotherBoxIfNeeded() {
-        console.log('addAnotherBoxIfNeeded');
         if (anyEmptyOnes()) {
-            console.log('There are some empty ones');
             return;
         }
         // Clone an existing .and-a
@@ -42,7 +40,6 @@ jQuery(function($) {
         setupSawBoxes();
     }
     function setupSawBoxes() {
-        console.log('setupSawBoxes');
         $('div.see-more-animals :text[name^=saw]').each(function() {
             var input = $(this);
             if (input.hasClass('is-setup')) {
@@ -54,7 +51,6 @@ jQuery(function($) {
     }
     
     function runTheSearch(ev) {
-        console.log('runTheSearch');
         // Hide the (optional) bits when they first interact
         $('.see-more-animals span.optional').remove();
         
