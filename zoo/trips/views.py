@@ -12,7 +12,7 @@ import datetime, urllib, re
 from parsedatetime.parsedatetime import Calendar
 
 from zoo.shortcuts import render
-from zoo.trips.models import Trip, Sighting, InexactSighting
+from zoo.trips.models import Trip, Sighting
 from zoo.places.models import Place, Country
 from zoo.animals.models import Species
 from zoo.photos.models import Photo
@@ -70,7 +70,7 @@ def pick_sightings(request, redirect_to):
        *   = free text not matched in our database
     
     Our sightings recording mechanism is now expected to be able to deal with 
-    free text, which will be turned in to an InexactSighting record.
+    free text, which will be recorded using species_inexact on a Sighting.
     
     The INPUT to this view should start off as something like this:
     
@@ -111,7 +111,7 @@ def pick_sightings(request, redirect_to):
     #     x_*    = a Xapian search ID they have selected
     #     s_*    = a Species ID they have selected
     #     cancel = don't save this at all (e.g. "I made a mistake")
-    #     as-is  = save it as a InexactSighting record
+    #     as-is  = save it using species_inexact
     #     search-again = run the replacement search instead
     
     # Are we done yet? The aim is for every key to have a valid option 
@@ -225,8 +225,8 @@ def finish_add_sightings_to_place(request, country_code, slug):
                         place = place
                     )
                 else:
-                    InexactSighting.objects.create(
-                        species = id,
+                    Sighting.objects.create(
+                        species_inexact = id,
                         place = place
                     )
             return Redirect(place.get_absolute_url())
@@ -258,10 +258,10 @@ def finish_add_sightings_to_place(request, country_code, slug):
                         place = place,
                     )
                 else:
-                    # Invalid IDs are InexactSightings, add them as such
-                    trip.inexact_sightings.create(
+                    # Invalid IDs are inexact sightings, add them as such
+                    trip.sightings.create(
                         place = place,
-                        species = id,
+                        species_inexact = id,
                     )
                 # TODO: Shouldn't allow a trip to be added if no valid 
                 # sightings
@@ -373,8 +373,6 @@ def trip_delete(request, username, trip_id):
                 photo.trip = None
                 photo.save()
             sighting.delete()
-        for inexact_sighting in list(trip.inexact_sightings.all()):
-            inexact_sighting.delete()
         
         # Delete the trip
         places = list(trip.places.all())
