@@ -185,10 +185,10 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 	<a href="{{ place.urls.suggest_changes }}">Let us know! You won’t hurt our feelings.</a>
 </p>
 
-<h2>Photos</h2>
-
 {% with place.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
+                <h2>Photos</h2>
+
 		{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
 			{% for photo in place.visible_photos.all %}
