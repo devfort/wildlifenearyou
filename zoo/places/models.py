@@ -84,7 +84,11 @@ class Place(AuditedModel):
     
     # We can (optionally) editorially select a photo to be featured for this place
     chosen_photo = models.ForeignKey('photos.Photo', null=True, blank=True, related_name='place_we_feature_for')
-
+    
+    # External identifiers are useful
+    freebase_id = models.CharField(max_length=100, blank=True, db_index=True)
+    wikipedia_url = models.CharField(max_length=255, blank=True)
+    
     @property
     def photo(self):
         """
@@ -266,7 +270,9 @@ class Place(AuditedModel):
             seen_species = []
 
         by_count = {}
-        for sighting in Sighting.objects.filter(place=self):
+        for sighting in Sighting.objects.filter(
+                place=self, species__isnull=False
+            ):
             species = sighting.species
             by_count[species] = by_count.get(species, 0) + 1
 
