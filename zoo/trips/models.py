@@ -199,29 +199,3 @@ class Sighting(AuditedModel):
         if self.trip:
             ret += ' during trip %s' % self.trip
         return ret
-
-class InexactSighting(AuditedModel):
-    """
-    Lets us deal with sighting entries which cannot yet be resoved to an 
-    "official" species that we know about, but which the user nevertheless
-    should be able to record. We'll eventually add a mechanism to allow 
-    people to go back over their inexact sightings and promote them to real
-    ones.
-    """
-    species = models.CharField(max_length=100, help_text="What was sighted")
-    place = models.ForeignKey('places.Place',
-        help_text="The place at which this sighting occurred",
-        related_name = 'inexact_sightings'
-    )
-    trip = models.ForeignKey(Trip, null=True, blank=True,
-        help_text="""
-            If this sighting was part of a trip, give it here. Leave blank for 
-            a non-trip sighting, e.g. just <em>knowledge</em> about the
-            species at this place
-        """, related_name = 'inexact_sightings'
-    )
-    def __unicode__(self):
-        ret = u'Inexact sighting of %s at %s' % (self.species, self.place)
-        if self.trip:
-            ret += ' during trip %s' % self.trip
-        return ret
