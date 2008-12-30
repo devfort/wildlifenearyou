@@ -245,6 +245,27 @@ div.animal-list {
 
 /* @end */
 
+/* @group Profile badges */
+
+.badges {
+  margin: 0 0 1.3em 0;
+  padding: 0;
+  font-size: 0.8em;
+}
+
+.badges li {
+  margin: 0 1em 0 0;
+  padding: 0.3em 0.6em;
+  background-image: none;
+  list-style: none;
+  display: inline;
+  background-color: #dcedc9;
+  color: #5c822f;
+  -moz-border-radius: 5px;
+}
+
+/* @end */
+
 /* @group Edit form */
 
 .nested-edit {

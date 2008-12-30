@@ -14,16 +14,15 @@
 
 <h1>{{ profile.user|title }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
 {% if profile.badges.all %}
-<ul>{{ profile.badges.all|unordered_list }}</ul>
+<ul class="badges">{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
 {% ifequal profile.user user %}
-<p><a href="{% url accounts-profile-edit profile.user %}">Edit your profile</a> |
+<p><a class="edit" href="{% url accounts-profile-edit profile.user %}">Edit your profile</a> |
 {% if profile.location %}
-Your location is currently {{ profile.location }} &ndash;
-<a href="/set-location/">edit your location</a>.
+Your location is currently <a class="edit" href="/set-location/">{{ profile.location }}</a>
 {% else %}
-<a href="/set-location/">Set your location</a> to find animals near you
+<a class="edit" href="/set-location/">Set your location</a> to find animals near you
 {% endif %}
 </p>
 {% endifequal %}
