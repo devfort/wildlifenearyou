@@ -329,7 +329,7 @@ a.action:active span,
 .thumb-75 {
   width: 75px;
   height: 75px;
-  background-image: url(/static/img/bg/hiding_animal_75.png);
+  background-image: url(/static/img/bg/animal_75.png);
   background-repeat: no-repeat;
 }
 
