@@ -29,13 +29,14 @@ class CustomMigration(m.Migration):
         """])
         # Now insert them all again
         for row in existing:
+            row = [str(r).replace("'", "\\'") for r in row]
             self.execute_sql(["""
                 INSERT INTO `trips_sighting` 
                     (created_at, created_by_id, species_inexact, 
-                    place_id, trip_id, modified_at, modified_by_id)
+                    place_id, trip_id, modified_at, modified_by_id, note)
                 VALUES
-                    ('%s', '%s', '%s', '%s', '%s', '%s', '%s')
-            """ % row])
+                    ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '')
+            """ % tuple(row)])
     
     def down(self):
         self.execute_sql([
