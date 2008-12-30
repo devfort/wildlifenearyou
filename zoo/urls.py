@@ -74,6 +74,8 @@ urlpatterns = patterns('',
         name='flickr-group'),
     url(r'^flickr/selected/$', 'zoo.flickr.views.selected',
         name='flickr-selected'),
+    url(r'^flickr/bulk-assign/$', 'zoo.flickr.views.bulk_assign',
+        name='flickr-bulk-assign'),
 
     # User accounts stuff
     url(r'^login/$', 'accounts.views.login', {

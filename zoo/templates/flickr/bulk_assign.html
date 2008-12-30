@@ -1,0 +1,30 @@
+{% extends base %}
+
+{% block title %}Assign photos to trips{% endblock %}
+
+{% block primary_content %}
+
+<h1>Assign photos to trips</h1>
+
+<p>TODO: This form does not actually work yet!</p>
+
+{% if photos %}
+    <form action="/flickr/bulk-assign/" method="post">
+    <ul>
+        {% for photo in photos %}
+        <li style="clear: both">
+            {{ photo.thumb_75_pull_left }}
+            <select name="photo_{{ photo.id }}">
+                <option>-- pick a trip --</option>
+                <option>My trip to London Zoo, 5th December 2008</option>
+            </select>
+        </li>
+        {% endfor %}
+    </ul>
+    <p style="clear: both"><input type="submit" class="submit" value="Assign these photos"></p>
+    </form>
+{% else %}
+    <p>No photos specified.</p>
+{% endif %}
+
+{% endblock %}

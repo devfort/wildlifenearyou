@@ -169,7 +169,9 @@ def selected(request):
         request.user.get_profile().is_not_brand_new_account() or \
         request.user.is_staff
     )
+    added_ids = []
     for photo in photos_to_add:
+        # TODO: Ensure we don't import the same photo twice
         p = Photo.objects.create(
             created_by = request.user,
             created_at = datetime.datetime.now(),
@@ -180,9 +182,24 @@ def selected(request):
             flickr_server = photo['server'],
             is_visible = is_visible
         )
-        # TODO: Ensure we don't import the same photo twice
+        added_ids.append(p.id)
     
-    return HttpResponseRedirect('/%s/photos/' % request.user.username)
+    return HttpResponseRedirect(
+        '/flickr/bulk-assign/?ids=%s' % ','.join(map(str, added_ids))
+    )
+
+@login_required
+def bulk_assign(request):
+    if request.method == 'POST':
+        assert False, request.POST
+    ids = request.GET.get('ids', '').split(',')
+    photos = Photo.objects.filter(
+        pk__in = ids,
+        created_by = request.user,
+    )
+    return render(request, 'flickr/bulk_assign.html', {
+        'photos': photos,
+    })
 
 @login_required
 def import_photos(request):
