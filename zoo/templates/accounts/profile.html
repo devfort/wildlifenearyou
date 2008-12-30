@@ -125,7 +125,9 @@ Your location is currently <a class="edit" href="/set-location/">{{ profile.loca
                 </li>
         	{% endfor %}
 	</ol>
+	{% ifequal profile.user user %}
 	<p>To add more to this list, <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites.</p>
+	{% endifequal %}
 	{% else %}
 	{% ifequal profile.user user %}
 	<p>You don&rsquo;t have any favourite animals yet. Why don't you <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites?</p>
