@@ -15,7 +15,7 @@
 .header {
 	background-image: url(/static/img/bg/header.png);
 	background-repeat: repeat-x;
-	background-position: bottom left;
+	background-position: left bottom;
 }
 .header .contents {
 	padding: 0.8em 0.8em 0.8em 1em;
