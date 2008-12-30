@@ -206,6 +206,7 @@ div.animal-list {
 	background-image: url('/static/img/bg/art_talkbubble_comment_point.png');
 	background-repeat: no-repeat;
 	background-position: 20px 0;
+	line-height: 1.4;
 }
 .comments img {
 	position: relative;

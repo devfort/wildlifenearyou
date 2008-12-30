@@ -173,12 +173,14 @@ Your location is currently {{ profile.location }} &ndash;
 {% if profile.user.comment_comments.all %}
         <div>
                 <h2>{% ifequal profile.user user %}Your{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Comments</h2>
+                <ul class="comments">
                 {% for comment in profile.user.comment_comments.all %}
-                        <div class="comment">
-                                {{ comment.comment|linebreaks }}
-                                <div class="posted-by">Posted on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a> at {{ comment.submit_date|date:"jS F Y H:i" }}</div>
-                        </div>
+                	<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
+                	<p class="posted-by">
+                	<img src="{% url profile-image-resized user.username %}" alt="" height="30" width="30">
+                        on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a><span class="meta">at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
                 {% endfor %}
+                </ul>
         </div>
 {% endif %}
 
