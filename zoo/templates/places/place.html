@@ -214,12 +214,6 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 	{% endif %}
 {% endwith %}
 
-{% if not user.is_anonymous %}
-<p><a class="add" href="upload/">Upload a photo you took here!</a></p>
-{% else %}
-<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add your own photos to this zoo</p>
-{% endif %}
-
 {% with place.extras.all as extras %}
 	<h2>Extras</h2>
 	<ul>
