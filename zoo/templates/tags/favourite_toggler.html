@@ -1,9 +1,6 @@
-<form method="POST" action="{% url favourite-species action %}">
-  <input type="hidden" name="species" value="{{ slug }}">
-  <input type="hidden" name="next" value="{{ next }}">
-  <div class="container button-container">
+<form method="post" action="{% url favourite-species action %}">
+  <p><input type="hidden" name="species" value="{{ slug }}"><input type="hidden" name="next" value="{{ next }}">
   <input class="{{ class }}" type="submit" value="{% ifequal action 'add' %}{{ add_label }}{% else %}{{ remove_label }}{% endifequal %}
 ">
-  </div>
-
+  </p>
 </form>

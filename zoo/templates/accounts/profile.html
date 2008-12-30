@@ -2,6 +2,7 @@
 
 {% load favourites_extras %}
 {% load thumbnail %}
+{% load zoocommon %}
 
 {% block title %}{{ profile.user|title }}{% endblock %}
 
@@ -27,12 +28,15 @@ Your location is currently {{ profile.location }} &ndash;
 </p>
 {% endifequal %}
 
+<p>{% ifequal profile.user user %}You{% else %}They{% endifequal %} have an engagement score of <strong>{{ profile.percentage_complete }}</strong>, making you a <strong>helpful macaque</strong>.{% ifequal profile.user user %} To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% endifequal %}</p>
+
 <div>
 {% if profile.url %}
 <p class="url"><a href="{{ profile.url }}">&raquo; {% ifequal profile.user user %}Your website{% else %}Visit their website{% endifequal %}</a></p>
 {% endif %}
 
 {% if profile.biography %}
+<h2>{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Biography</h2>
 {{ profile.biography|linebreaks}}
 {% else %}
 {% ifequal profile.user user %}
@@ -44,8 +48,16 @@ Your location is currently {{ profile.location }} &ndash;
 </div>
 
 <div>
-	<h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Most Recent Trips</h2>
-	{% ifequal profile.user user %}<p>Add a trip by <a href="{% url search %}" title="Look for something">finding a place you've spotted animals</a> <em>(hint: try searching for 'London Zoo')</em>, and then on its page tell us the animals you saw.</p>{% endifequal %}
+	<h2>{% ifequal profile.user user %}Your{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Most Recent Trips</h2>
+    	{% ifequal profile.user user %}
+    	<form action="/add-trip/" method="GET">
+    	    <div class="container">
+    	        <label for="search-place">Add a trip to...</label>
+    	        <input type="search" name="q" id="search-place">
+    	        <input type="submit" value="Go" class="submit">
+    	    </div>
+    	</form>
+        {% endifequal %}
 	{% if profile.user.created_trip_set.all %}
 	<ol>
 	{% for trip in profile.user.created_trip_set.all|slice:":5" %}
@@ -60,36 +72,32 @@ Your location is currently {{ profile.location }} &ndash;
 		{% ifequal profile.user user %}View recommendations from other users?{% else %}Recommend somewhere for this user to visit?{% endifequal %}
 	</p>
 	{% endif %}
-	{% ifequal profile.user user %}
-	<form action="/add-trip/" method="GET">
-	    <div class="container">
-	        <label for="search-place">Add a trip to...</label>
-	        <input type="search" name="q" id="search-place">
-	        <input type="submit" value="Go" class="submit">
-	    </div>
-	</form>
-    {% endifequal %}
 </div>
 
 <div>
-	<h2>Animal Passport</h2>
+	<h2>Animals {% ifequal profile.user user %}you{% else %}they{% endifequal %}'ve seen</h2>
 	<p>
 	{% ifequal profile.user user %}
-        The Animal Passport contains all of the animals you have said you have spotted on a trip to a place.
 	Add more by <a href="{% url search %}" title="Look for something">finding a place you've spotted animals</a>, and then on its page tell us the animals you saw.
 	{% else %}
 	The Animal Passport contains all of the animals {{ profile.user }} has spotted on their trips.
 	{% endifequal %}
 	{% if profile.passport.seen_species %}
         </p>
-	<ol class='animal-passport'>
+	<ol class='animal-list'>
 	{% for species in profile.passport.seen_species %}
-		<li>{{ species.count }}&times; <a href="{{ species.urls.absolute }}">{{ species }}</a></li>
+                <li>
+                        <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                        <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
+                        <p><i class="scientific">{{ species.latin_name }}</i></p>
+                </li>
 	{% endfor %}
 	</ol>
+	{% comment %}
 	{% ifequal profile.user user %}
-	<p>If you've told us that an animal lives at a place &mdash; say because you've checked their website or read a news story about it &mdash; but haven't actually been there, it won&rsquo;t appear in your passport.</p>
+	<p>If you've told us that an animal lives at a place &mdash; say because you've checked their website or read a news story about it &mdash; but haven't actually been there, it won&rsquo;t appear here.</p>
 	{% endifequal %}
+	{% endcomment %}
 	<p>
 	{% else %}
 		However {% ifequal profile.user user %}it seems you {% else %}they {% endifequal %}haven&rsquo;t spotted any {% ifequal profile.user user %}animals {% endifequal %}yet.
@@ -101,21 +109,22 @@ Your location is currently {{ profile.location }} &ndash;
 
 {% block secondary_content %}
 
-<div>
-        <p>{{ profile.avatar_img }}</p>
-</div>
+<div><p>{{ profile.avatar_img }}</p></div>
 
 <div>
 	{% if profile.user.favourite_species.all %}
-	<h2>Favourite Animals</h2>
-	<ol>
-    {% for favourite in profile.user.favourite_species.all %}
-	<li><a href="{{ favourite.species.urls.absolute }}">{{ favourite.species }}</a>
-	        {% ifequal user profile.user %}
-		{% favourite_toggler "remove" favourite.species.slug request.path "link" "" "Remove" %}
-		{% endifequal %}
-	</li>
-	{% endfor %}
+	<h2>{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Favourite Animals</h2>
+	<ol class="animal-list">
+                {% for favourite in profile.user.favourite_species.all %}
+                <li>
+                        <div class="thumb-75">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                        <p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
+                        <p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
+                        {% ifequal user profile.user %}
+            		{% favourite_toggler "remove" favourite.species.slug request.path "link" "" "Remove" %}
+            		{% endifequal %}
+                </li>
+        	{% endfor %}
 	</ol>
 	<p>To add more to this list, <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites.</p>
 	{% else %}
@@ -128,7 +137,7 @@ Your location is currently {{ profile.location }} &ndash;
 <div>
         {% with photos.count as visible_photo_count %}
         	{% if visible_photo_count %}
-                        <h2>Photos</h2>
+                        <h2>{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Photos</h2>
         		{% ifequal visible_photo_count 1 %}{# Only one photo #}
         			<div class="gallery">
         			{% for photo in photos.all %}
@@ -154,7 +163,7 @@ Your location is currently {{ profile.location }} &ndash;
         		{% endifequal %}
         	{% else %}
         	        {% ifequal profile.user user %}
-        	                <h2>Photos</h2>
+        	                <h2>Your Photos</h2>
                         {% endifequal %}
         	{% endif %}
         {% endwith %}
@@ -163,7 +172,7 @@ Your location is currently {{ profile.location }} &ndash;
 
 {% if profile.user.comment_comments.all %}
         <div>
-                <h2>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Comments</h2>
+                <h2>{% ifequal profile.user user %}Your{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Comments</h2>
                 {% for comment in profile.user.comment_comments.all %}
                         <div class="comment">
                                 {{ comment.comment|linebreaks }}
