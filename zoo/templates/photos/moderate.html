@@ -1,0 +1,39 @@
+{% extends base %}
+
+{% block title %}Moderate photos{% endblock %}
+
+{% block primary_content %}
+
+<h1>Moderate photos</h1>
+
+{% load thumbnail %}
+
+{% ifequal photos.count 0 %}
+<p>Nothing to see. Move along.</p>
+{% else %}
+
+<h2>Showing {{ photos|length }} of {{ total }}</h2>
+
+<form method='post'>
+        <ul>
+                {% for photo in photos %}
+                <li>
+                        {% if photo.photo %}
+                        <img src="{% thumbnail photo.photo 600x600 %}">
+                        {% else %}
+                        <img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg">
+                        {% endif %}
+                        <p>By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by|title }}</a>, uploaded {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">original</a>)</p>
+                        <p>Action</p>
+                        <ul>
+                                <li><input type='radio' checked='checked' id='photo-{{ photo.pk }}-0' name='photo-{{ photo.pk }}' value='0'><label for='photo-{{ photo.pk }}-0'>Do nothing</label></li>
+                                <li><input type='radio' id='photo-{{ photo.pk }}-1' name='photo-{{ photo.pk }}' value='1'><label for='photo-{{ photo.pk }}-1'>Reject</label></li>
+                                <li><input type='radio' id='photo-{{ photo.pk }}-2' name='photo-{{ photo.pk }}' value='2'><label for='photo-{{ photo.pk }}-2'>Accept</label></li>
+                        </ul>
+                </li>
+                {% endfor %}
+        </ul>
+        <input type='submit' value='Go for these!'>
+</form>
+{% endifequal %}
+{% endblock %}

@@ -12,6 +12,8 @@ from zoo.trips.models import Trip
 from zoo.places.models import Place
 from zoo.animals.forms import SpeciesField
 
+import datetime
+
 @login_required
 def upload(request, place=None, redirect_to=None):
     if request.method == 'POST':
@@ -145,3 +147,26 @@ def all(request):
     return render(request, 'photos/all.html', {
         'photos': Photo.objects.all().order_by('-created_at'),
     })
+
+@login_required
+def moderate(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+        
+    if request.method == 'POST':
+        for k in request.POST.keys():            
+            if k[:6]=='photo-':
+                v = request.POST[k]
+                if v=='0':
+                    continue
+                ppk = int(k[6:])
+                photo = Photo.objects.get(pk=ppk)
+                photo.moderated_by = request.user
+                photo.moderated_at = datetime.datetime.now()
+                if v=='2':
+                    photo.is_visible = True
+                photo.save()
+        return HttpResponseRedirect(reverse('moderate-photos'))
+    else:
+        photos = Photo.objects.filter(is_visible=False).filter(moderated_by=None)
+        return render(request, 'photos/moderate.html', { 'photos': photos[:10], 'total': photos.count() })

@@ -136,6 +136,7 @@ urlpatterns = patterns('',
 
     url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),
+    url(r'^moderation/photos/$', 'zoo.photos.views.moderate', name='moderate-photos'),
 
     (r'^set-location/$', 'zoo.accounts.views.set_location'),
     (r'^set-location/delete/$', 'zoo.accounts.views.delete_location'),
