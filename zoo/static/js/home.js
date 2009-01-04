@@ -3,7 +3,7 @@ jQuery(function($) {
     /* Example links type in the search box, then submit */
     
     var input = $('#q');
-    var submit = input.parents('form:first').find(':submit');
+    var searchSubmit = input.parents('form:first').find(':submit');
     $('.examples a').click(function() {
         input.focus();
         animateTextEntry($(this).text());
@@ -18,10 +18,10 @@ jQuery(function($) {
                 i++;
             } else {
                 clearTimeout(timeout);
-                submit.addClass('active');
+                searchSubmit.addClass('active');
                 setInterval(function() {
-                    submit.removeClass('active');
-                    submit.click();
+                    searchSubmit.removeClass('active');
+                    searchSubmit.click();
                 }, 300);
             }
         }, 25);
@@ -140,10 +140,10 @@ jQuery(function($) {
     // being magically clicked when you hit enter inside another field, you 
     // need to clone the original submit button, hide it and set up the 
     // click behaviour on that clone. Crazy but it works.
-    var submit = $('input#search-place').parents('form').find(':submit');
-    var submit2 = submit.clone();
-    submit2.insertAfter(submit);
-    submit.hide();
+    var addTripSubmit = $('input#search-place').parents('form').find(':submit');
+    var submit2 = addTripSubmit.clone();
+    submit2.insertAfter(addTripSubmit);
+    addTripSubmit.hide();
     submit2.click(function() {
         $('input#search-place').parents('form')[0].submit();
     });
