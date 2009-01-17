@@ -99,22 +99,22 @@
         <!-- TODO: Users should see their OWN photos even if they have not 
             yet been moderated, with a visual indication of this e.g. red border
         -->
-        {% with trip.visible_photos.count as visible_photo_count %}
+        {% with visible_photos.count as visible_photo_count %}
         	{% if visible_photo_count %}
                         <h2>Photos</h2>
         		{% ifequal visible_photo_count 1 %}{# Only one photo #}
         			<div class="gallery">
-        			{% for photo in trip.visible_photos.all %}
+        			{% for photo in visible_photos.all %}
         				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
         			{% endfor %}
         			</div>
         		{% else %}{# More than one photo #}
-        		{% with trip.visible_photos.all|first as chosen %}
+        		{% with visible_photos.all|first as chosen %}
         		<div class="gallery">
                 		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
                 		<div class="slideshow">
                 			<ul id="thumbnails">
-        			                {% for photo in trip.visible_photos|slice:":30" %}
+        			                {% for photo in visible_photos|slice:":30" %}
         			                {% ifnotequal chosen photo %}
                 		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
                 		                {% endifnotequal %}
