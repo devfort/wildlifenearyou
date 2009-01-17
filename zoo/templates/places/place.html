@@ -12,13 +12,18 @@
 <script type="text/javascript">
 jQuery(function($) {
     $('#locationmap').hide();
-    $('#maplink').toggle(function() {
+    // Create the map link
+    var a = $('<span> (<a href="http://maps.google.com/?ll=' + 
+      '{{ place.latitude }},{{ place.longitude }}&amp;z=13" ' + 
+      'id="maplink">map</a>)</span>'
+    ).insertAfter($('#countrylink')).find('a');
+    a.toggle(function() {
         $('#locationmap').slideDown(500);
-        $(this).text('hide map');
+        a.text('hide map');
         return false;
     }, function() {
         $('#locationmap').slideUp(500);
-        $(this).text('map');
+        a.text('map');
         return false;
     });
 });
@@ -38,7 +43,7 @@ jQuery(function($) {
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
 <p class="address">{% if place.address %}{{ place.address }},{% endif %}
 	<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
-	<a href="{{ place.country.urls.absolute }}"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a> (<a href="http://maps.google.com/?ll={{ place.latitude }},{{ place.longitude }}&amp;z=13" id="maplink">map</a>)
+	<a href="{{ place.country.urls.absolute }}" id="countrylink"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
 	{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
 </p>
 
