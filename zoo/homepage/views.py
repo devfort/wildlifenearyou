@@ -42,7 +42,10 @@ def landing(request):
 
     if featured['place']:
         # Have to do this as django template method calls can't take params.
-        featured['place'].species = featured['place'].get_species(limit=10)
+        try:
+            featured['place'].species = featured['place'].get_species(limit=10)
+        except Species.DoesNotExist:
+            featured['place'].species = None
 
     if featured['species']:
         location, (lat, lon) = location_from_request(request)
