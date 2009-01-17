@@ -597,6 +597,15 @@ div#ajax-feedback-form {
 
 /* @end */
 
+/* @group Avatars */
+
+.avatar-container {
+  margin: 0 auto;
+  width: 175px;
+}
+
+/* @end */
+
 /* @group Team avatars */
 
 #team_avatars li {

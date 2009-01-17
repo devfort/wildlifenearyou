@@ -17,16 +17,6 @@
 <ul class="badges">{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
-{% ifequal profile.user user %}
-<p><a class="edit" href="{% url accounts-profile-edit profile.user %}">Edit your profile</a> |
-{% if profile.location %}
-Your location is currently <a class="edit" href="/set-location/">{{ profile.location }}</a>
-{% else %}
-<a class="edit" href="/set-location/">Set your location</a> to find animals near you
-{% endif %}
-</p>
-{% endifequal %}
-
 <p><img src="/static/img/engagementbadge/monkey.png" class="pull-left">{% ifequal profile.user user %}You{% else %}They{% endifequal %} have an engagement score of <strong>{{ profile.percentage_complete }}</strong>, making {% ifequal profile.user user %}you{% else %}them{% endifequal %} a <strong>helpful macaque</strong>.{% ifequal profile.user user %} To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% endifequal %}</p>
 
 <div>
@@ -104,7 +94,18 @@ Your location is currently <a class="edit" href="/set-location/">{{ profile.loca
 
 {% block secondary_content %}
 
-<div><p>{{ profile.avatar_img }}</p></div>
+<div><p class='avatar-container'>{{ profile.avatar_img }}</p></div>
+
+{% ifequal profile.user user %}
+<p class="highlight">
+<a class="edit" href="{% url accounts-profile-edit profile.user %}">Edit your profile and avatar</a>.
+{% if profile.location %}
+We think you are currently in <strong>{{ profile.location }}</strong>; if this is wrong, you can <a href="/set-location/">change your location</a>.
+{% else %}
+If you <a href="/set-location/">tell us your location</a>, we can find animals near you.
+{% endif %}
+</p>
+{% endifequal %}
 
 <div>
 	{% if profile.user.favourite_species.all %}
