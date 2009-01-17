@@ -2,11 +2,15 @@
 
 {% load zoocommon %}
 
-{% block title %}The Animal Hit Parade{% endblock %}
+{% block title %}Popular animals{% endblock %}
 
-{% block content %}
+{% block content_title %}
 
-<h1>The Animal Hit Parade</h1>
+<h1>Popular animals</h1>
+
+{% endblock %}
+
+{% block primary_content %}
 
 <h2>The top 20 most favourited animals</h2>
 
@@ -24,9 +28,11 @@
 <p>No animals have been favourited yet.</p>
 {% endif %}
 
-<h2>Obscure Animals</h2>
+{% endblock %}
 
-<p>The top 5 least seen animals:</p>
+{% block secondary_content %}
+
+<h2>Unusual animals</h2>
 
 {% if species_list %}
 <ol class="animal-list">

@@ -49,7 +49,8 @@ def hit_parade(request):
     sightings = Sighting.objects.all()
     obscure = {}
     for s in sightings:
-        obscure[s.species] = obscure.get(s.species, 0) + 1
+        if s.species:
+            obscure[s.species] = obscure.get(s.species, 0) + 1
 
     obscure_list = obscure.keys()
     for s in obscure_list:
