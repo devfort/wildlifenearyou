@@ -8,7 +8,7 @@ from django.conf import settings
 
 from models import Photo
 from zoo.shortcuts import render
-from zoo.trips.models import Trip
+from zoo.trips.models import Trip, Sighting
 from zoo.places.models import Place
 from zoo.animals.forms import SpeciesField
 
