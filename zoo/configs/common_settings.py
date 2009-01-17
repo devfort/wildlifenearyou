@@ -141,7 +141,8 @@ RESERVED_USERNAMES = set(
     group groups bulletin bulletins messages message newsfeed events 
     companies active rss img company books shop sales animals species 
     plants narwhals plant animal wildlife latin dictionary fish zoos zoo 
-    aquarium aquariums park parks safari arboretum arboretums autocomplete
+    aquarium aquariums park parks safari arboretum arboretums autocomplete 
+    popular
     """.strip().split()
 )
 
