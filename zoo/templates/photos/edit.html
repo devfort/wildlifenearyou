@@ -1,4 +1,4 @@
-{% extends base %}
+{% extends base %}{% load thumbnail %}
 
 {% block title %}Edit photo details{% endblock %}
 
@@ -6,8 +6,21 @@
 
 <h1>Edit photo details</h1>
 
+{% if photo.photo %}
+<img src="{% thumbnail photo.photo 600x600 %}">
+{% else %}
+<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg">
+{% endif %}
+<p><a href="{{ photo.get_absolute_url }}">Cancel</a> and return to photo</p>
+
+
+{% endblock %}
+
+{% block secondary_content %}
+<h2>Photo details</h2>
+
+
 <form method="post" action="{{ request.path }}">
-{{ photo.thumb_75 }}
 
 <div>
 {{ form.title.errors }}
@@ -22,16 +35,10 @@
 {% endif %}
 </div>
 
-<div><input type="submit" class="submit" value="Save changes to this photo"></div>
-
-<p><a href="{{ photo.get_absolute_url }}">Cancel</a> and return to photo</p>
+<div><input type="submit" class="submit" value="Save details"></div>
 
 </form>
 
-
-{% endblock %}
-
-{% block secondary_content %}
 
 {% if photo.trip %}
 <h2>Species in this photo</h2>
@@ -44,7 +51,7 @@
 <li class="checkbox-container"><input type="checkbox" name="saw" value="{{ sighting.id }}" id="s{{ sighting.id }}"> <label for="s{{ sighting.id }}">{{ sighting.species_name }}</label></li>
 {% endfor %}
 </ul>
-<p><input type="submit" value="These animals are in this photo">
+<p><input type="submit" value="Save these species">
 </form>
 
 <p><a href="#">Add more</a> animals if you've missed any</p>
