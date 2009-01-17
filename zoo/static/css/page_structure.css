@@ -125,10 +125,10 @@
 
 .main {
 	clear: both;
-	background-color: #ffffff;
-	background-image: url(/static/img/bg/bg_gradient_blue_white.png);
+	background-color: #f9fcfe;
+	/*background-image: url(/static/img/bg/bg_gradient_blue_white.png);
 	background-repeat: repeat-x;
-	background-position: top left;
+	background-position: top left;*/
 	width: 100%;
 	overflow: hidden;
 	padding-top: 2em;

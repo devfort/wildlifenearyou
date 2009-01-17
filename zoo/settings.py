@@ -10,7 +10,7 @@ DATABASE_USER = 'sedf'
 
 SECRET_KEY = '6p-br^04irwt=+&4dag12(-7_!p4&t=u+h1+#$xrvr0n6=+o^d'
 
-CACHE_BACKEND = 'db://django_cache'
+#CACHE_BACKEND = 'db://django_cache'
 
 try:
     import debug_toolbar
