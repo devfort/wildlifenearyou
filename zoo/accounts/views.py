@@ -138,7 +138,7 @@ def profile_default(request):
     return Redirect(reverse('accounts-profile', args=(request.user,)))
 
 def get_photos(request, user):
-    if user == request.user or request.user.is_staff:
+    if user == request.user:
         return user.photos
     else:
         return user.photos.filter(
