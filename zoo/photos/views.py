@@ -91,6 +91,28 @@ class PhotoOnlyForm(forms.ModelForm):
 
 @login_required
 def edit_photo(request, username, photo_id):
+    """
+    Editing photos gets complicated. We want people to be able to assign 
+    species to their photos. That means we need sightings. We also want 
+    people to be able to assign their photos to a trip. For sightings to work,
+    the photo MUST be assigned to a place. At the moment our data model 
+    doesn't actually allow this to happen through a trip, since it's possible 
+    for a trip to go to more than one place.
+    
+    So... what do we do?
+    
+    We could let people say WHERE a photo was taken before allowing them to 
+    say what species are in the photo.
+    
+    We could force people to assign a photo to a trip first, then if the trip 
+    has more than one place in it ask them which place it was to (best option?)
+    
+    BUT... what if they assign a photo to a trip that does not yet have a 
+    place associated with it.
+    
+    Grr... our data model is simply too complicated at this point. A trip 
+    should be only to a particular place... or should it?
+    """
     if username != request.user.username:
         raise HttpResponseForbidden
     photo = get_object_or_404(Photo, id=photo_id, created_by=request.user)
