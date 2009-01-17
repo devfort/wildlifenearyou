@@ -27,10 +27,10 @@
 		<div class="contents">
 			<div class="interact">
 				{% if user.is_authenticated %}
-				<h2>Welcome back</h2>
+				<h2>Where have you been?</h2>
 				<form action="/add-trip/" method="GET">
 					<div class="container text-container">
-						<label for="search-place">Add a trip to...</label>
+						<label for="search-place">I've been to…</label>
 						<input type="text" class="text" name="q" id="search-place">
 					</div>
 					<div>
@@ -59,7 +59,7 @@
 				</form>
 				{% endif %}
 			</div>
-			<h2>Hello there{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
+			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 <!--				<h2 style="font-family: georgia">Hello there!</h2>
 			<h2 style="font-family: courier">Hello there!</h2>
 			<h2 style="font-family: arial">Hello there!</h2>
@@ -122,7 +122,7 @@
 					<span class="postal-code">NW1 4RY</span>, <abbr class="country-name" title="United Kingdom">GB</abbr>
 				</p>-->
 <!--				<p class="description">ZSL London Zoo is the world's oldest scientific zoo. It was opened in London on April 27, 1828, and was originally intended to be used as a collection for scientific study. </p> -->
-                                {% if place.species.count %}
+                                {% if place.species %}
 				<h4>Animals spotted here</h4>
 				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
 				and <a href="{{ place.urls.species }}">more&hellip;</a>
