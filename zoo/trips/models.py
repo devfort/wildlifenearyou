@@ -27,7 +27,7 @@ class Trip(AuditedModel):
     description = models.TextField(blank=True)
     rating = models.CharField(max_length=1, blank=True, choices=[ (i,i) for i in range(1,6) ])
     species = models.ManyToManyField(Species, through='Sighting')
-    places = models.ManyToManyField('places.Place', through='Sighting')
+    place = models.ForeignKey(Place)
     
     class Meta:
         ordering = ['-start']

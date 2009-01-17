@@ -174,7 +174,7 @@ Your location is currently <a class="edit" href="/set-location/">{{ profile.loca
                 {% for comment in profile.user.comment_comments.all %}
                 	<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
                 	<p class="posted-by">
-                	<img src="{% url profile-image-resized user.username %}" alt="" height="30" width="30">
+                	<img src="{% url profile-image-resized profile.user.username %}" alt="" height="30" width="30">
                         on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a><span class="meta">at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
                 {% endfor %}
                 </ul>
