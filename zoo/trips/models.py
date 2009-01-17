@@ -196,8 +196,14 @@ class Sighting(AuditedModel):
     def visible_photos(self):
         return self.photos.filter(is_visible = True)
     
+    def species_name(self):
+        if self.species:
+            return self.species.common_name
+        else:
+            return self.species_inexact
+    
     def __unicode__(self):
-        ret = u'Sighting of %s at %s' % (self.species.common_name, self.place)
+        ret = u'Sighting of %s at %s' % (self.species_name(), self.place)
         if self.trip:
             ret += ' during trip %s' % self.trip
         return ret
