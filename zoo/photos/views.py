@@ -101,14 +101,14 @@ def edit_photo(request, username, photo_id):
         return HttpResponseForbidden('Not your photo')
     photo = get_object_or_404(Photo, id=photo_id, created_by=request.user)
     if request.method == 'POST':
-        form = PhotoEditForm(request.POST)
+        form = PhotoEditForm(request.user, request.POST)
         if form.is_valid():
             photo.title = form.cleaned_data['title']
             photo.trip = form.cleaned_data['trip']
             photo.save()
             return HttpResponseRedirect(photo.get_absolute_url())
     else:
-        form = PhotoEditForm(instance=photo)
+        form = PhotoEditForm(request.user, instance=photo)
     return render(request, 'photos/edit.html', {
         'form': form,
         'photo': photo,
@@ -138,6 +138,10 @@ def set_species(request, username, photo_id):
     return HttpResponseRedirect(photo.get_absolute_url())
 
 class PhotoEditForm(forms.ModelForm):
+    def __init__(self, user, *args, **kwargs):
+        super(PhotoEditForm, self).__init__(*args, **kwargs)
+        self.fields['trip'].queryset = Trip.objects.filter(created_by=user)
+
     class Meta:
         model = Photo
         fields = ('title', 'trip')
