@@ -41,7 +41,7 @@ class Currency(models.Model):
 def _species_for_place(place):
     from zoo.animals.models import Species # Avoid circular import
     return Species.objects.filter(
-        sightings__place = place
+        place = place
     ).values_list('common_name', flat=True)
 
 class Place(AuditedModel):
@@ -53,10 +53,6 @@ class Place(AuditedModel):
         unique=True
     )
     country = models.ForeignKey(Country, null=False, blank=False)
-
-    # XXX Would this now work?
-    #animals = models.ManyToManyField(Species, through='Sighting')
-    #trips = models.ManyToManyField('trips.Trip', through='Sighting')
 
     opening_times = models.TextField()
     facilities = models.ManyToManyField('Facility', through='PlaceFacility')
@@ -174,7 +170,7 @@ class Place(AuditedModel):
     def visible_photos(self):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
-            trip__sightings__place = self,
+            sighting__place = self,
             is_visible = True
         ).distinct()
 
@@ -226,8 +222,8 @@ class Place(AuditedModel):
     def most_recent_trips(self):
         from zoo.trips.models import Trip
         trips = Trip.objects.filter(
-            sightings__place=self
-        ).order_by('-created_at').distinct()
+            place = self
+        ).order_by('-created_at')
         return trips
 
     def most_recent_trips_with_desc(self):

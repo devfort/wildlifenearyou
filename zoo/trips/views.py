@@ -244,6 +244,7 @@ def finish_add_sightings_to_place(request, country_code, slug):
                     start_accuracy = form.cleaned_data['start_accuracy'],
                     description = form.cleaned_data['description'],
                     rating = form.cleaned_data['review-rating'],
+                    place = place,
                 )
                 trip.save()
                 # created_by should happen automatically
@@ -281,7 +282,7 @@ def finish_add_sightings_to_place(request, country_code, slug):
         whos_trip += ' trip'
         form = FinishAddSightingsForm(initial = {'name': whos_trip}, user=request.user, place=place)
         
-    tcount = request.user.created_trip_set.all().filter(sightings__place=place).distinct().count()
+    tcount = request.user.created_trip_set.all().filter(place=place).count()
     
     return render(request, 'trips/why-not-add-to-your-tripbook.html', {
         'hiddens': hiddens,
@@ -301,7 +302,7 @@ class FinishAddSightingsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         place = kwargs.pop('place')
-        trips = user.created_trip_set.all().filter(sightings__place=place).distinct()
+        trips = user.created_trip_set.all().filter(place=place)
 
         super(FinishAddSightingsForm, self).__init__(*args, **kwargs)
         self.fields['review-rating'] = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
@@ -375,11 +376,9 @@ def trip_delete(request, username, trip_id):
             sighting.delete()
         
         # Delete the trip
-        places = list(trip.places.all())
+        place = trip.place
         trip.delete()
-        # Re-index each place
-        for place in places:
-            place.save()
+        place.save() # Re-index to update denormalised stuff
         
         return Redirect(reverse('accounts-profile', args=(username,)))
     

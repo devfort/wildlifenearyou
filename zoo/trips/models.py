@@ -135,12 +135,14 @@ class Trip(AuditedModel):
 
     @staticmethod
     def get_average_rating(place):
-        trips = Trip.objects.filter(sightings__place=place, rating__gt=0).distinct()
+        trips = Trip.objects.filter(place = place, rating__gt = 0)
         return Trip.calculate_rating_average(trips)
 
     @staticmethod
     def get_my_average_rating_for_place(user, place):
-        trips = Trip.objects.filter(sightings__place=place,created_by=user, rating__gt=0).distinct()
+        trips = Trip.objects.filter(
+            place = place, created_by = user, rating__gt = 0
+        )
         return Trip.calculate_rating_average(trips)
 
     @staticmethod
