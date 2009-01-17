@@ -7,7 +7,7 @@
 	        <p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location"> <input type="submit" value="Go"></p>
 	    </form>
 
-	    <p><a href="{% url hit-parade %}">Check out the most popular animals!</a></p>
+	    <p><a href="{% url popular %}">Check out the most popular animals!</a></p>
 
 		{% if random_zoo %}<p>Why not visit <a href="{{ random_zoo.urls.absolute }}">{{ random_zoo }}</a>? You might see a <a href="{{ random_zoo.most_common_animal.get_absolute_url }}">{{ random_zoo.most_common_animal.common_name }}</a>!{% endif %}
 

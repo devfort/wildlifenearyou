@@ -166,8 +166,8 @@ urlpatterns = patterns('',
         name='all-species-latin'),
     url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.species_latin',),
 
-    url(r'^hit_parade/$', 'zoo.favourites.views.hit_parade',
-        name='hit-parade'),
+    url(r'^popular/$', 'zoo.favourites.views.hit_parade',
+        name='popular'),
 
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/upload/$',
         'zoo.photos.views.upload_place',

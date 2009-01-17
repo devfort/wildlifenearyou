@@ -48,7 +48,7 @@
 <!-- TODO add in profile icons here of people who have favourited it -->
 <p>Favourited by <strong>{{ favourites }}</strong> {{ favourites|pluralize:"person,people" }}
 {% if hit_parade %}
-&mdash; currently the <a href="{% url hit-parade %}">{{ hit_parade|ordinal }} most favourited animal</a></p>
+&mdash; currently the <a href="{% url popular %}">{{ hit_parade|ordinal }} most favourited animal</a></p>
 {% endif %}
 
 {% endblock %}
