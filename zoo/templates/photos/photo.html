@@ -34,7 +34,7 @@
 <h2>Species in this photo:</h2>
 <ul>
     {% for sighting in sightings %}
-    <li><a href="{{ sighting.species.get_absolute_url }}">{{ sighting.species }}</a></li>
+    <li>{% if sighting.species %}<a href="{{ sighting.species.get_absolute_url }}">{{ sighting.species }}</a>{% else %}{{ sighting.species_inexact }}{% endif %}</li>
     {% endfor %}
 </ul>
 {% endif %}

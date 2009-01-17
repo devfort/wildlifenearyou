@@ -40,8 +40,8 @@
 
 <form action="../set-species/" method="POST">
 <ul>
-{% for species in photo.trip.species.all %}
-<li class="checkbox-container"><input type="checkbox" name="saw" value="{{ species.id }}" id="s{{ species.id }}"> <label for="s{{ species.id }}">{{ species }}</label></li>
+{% for sighting in photo.trip.sightings.all %}
+<li class="checkbox-container"><input type="checkbox" name="saw" value="{{ sighting.id }}" id="s{{ sighting.id }}"> <label for="s{{ sighting.id }}">{{ sighting.species_name }}</label></li>
 {% endfor %}
 </ul>
 <p><input type="submit" value="These animals are in this photo">

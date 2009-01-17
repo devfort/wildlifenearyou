@@ -103,9 +103,43 @@ def edit_photo(request, username, photo_id):
     if request.method == 'POST':
         form = PhotoEditForm(request.user, request.POST)
         if form.is_valid():
+            trip_has_changed = (photo.trip != form.cleaned_data['trip'])
+            old_trip = photo.trip
+            
             photo.title = form.cleaned_data['title']
-            photo.trip = form.cleaned_data['trip']
+            
+            if trip_has_changed:
+                photo.trip = form.cleaned_data['trip']
+            
             photo.save()
+            
+            # If the user changed the trip AND that photo has sightings 
+            # associated with it, we need to create new sightings for those 
+            # animals attached to the new trip and re-target the photo 
+            # relationships to point at those new sightings instead. We'll 
+            # leave the old sightings where they are - the user can delete 
+            # them later if they want to.
+            if trip_has_changed:
+                sightings = list(photo.sightings.all())
+                # Clear out those relationships (does not delete sightings)
+                photo.sightings.clear()
+                for sighting in sightings:
+                    # Ensure a sighting for that species exists for new trip
+                    kwargs = {'trip': photo.trip}
+                    if sighting.species:
+                        kwargs['species'] = sighting.species
+                    else:
+                        kwargs['species_inexact'] = sighting.species_inexact
+                    matching_sightings = Sighting.objects.filter(**kwargs)
+                    if matching_sightings:
+                        # Attach the photo to the first of those matches
+                        photo.sightings.add(matching_sightings[0])
+                    else:
+                        # Create a new sighting for that species on that place
+                        del kwargs['trip'] # re-using kwargs from earlier
+                        kwargs['place'] = trip.place
+                        photo.sightings.create(**kwargs)
+            
             return HttpResponseRedirect(photo.get_absolute_url())
     else:
         form = PhotoEditForm(request.user, instance=photo)
@@ -128,7 +162,7 @@ def set_species(request, username, photo_id):
         #print "Processing species ID %s" % id
         # Silently discard IDs that do not correspond with sightings
         try:
-            sighting = photo.trip.sightings.filter(species__id = id)[0]
+            sighting = photo.trip.sightings.filter(pk = id)[0]
             #print "  Found sighting %s" % sighting
         except IndexError:
             #print "  Could not find matching sighting"
