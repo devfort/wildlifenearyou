@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpRespons
 from zoo.shortcuts import render
 from django.conf import settings
 
-from zoo.places.models import Place
+from zoo.places.models import Place, Country
 from zoo.accounts.forms import RegistrationForm
 from zoo.animals.models import Species
 from zoo.trips.models import Sighting, Trip
@@ -39,6 +39,9 @@ def landing(request):
     featured['profile'] = profiles.count() > 0 and profiles[0] or None
 
     num_of_places = Place.objects.count()
+    num_of_countries = Country.objects.filter(
+        place__isnull = False
+    ).distinct().count()
 
     if featured['place']:
         # Have to do this as django template method calls can't take params.
@@ -64,6 +67,7 @@ def landing(request):
         'random_zoo': random_zoo,
         'featured': featured,
         'num_of_places': num_of_places,
+        'num_of_countries': num_of_countries,
         'reg_form': reg_form,
         'recent_sightings': recent_sightings,
         'recent_sightings_favourites': recent_sightings_favourites,
