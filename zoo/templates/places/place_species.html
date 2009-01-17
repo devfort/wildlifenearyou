@@ -2,11 +2,13 @@
 
 {% block title %}{{ place.known_as }} - Species{% endblock %}
 
-{% block content %}
+{% block content_title %}
 
-<h1><a href="{{ place.urls.absolute }}">{{ place.known_as }}</a></h1>
+<h1>Animals at {{ place.known_as }}</h1>
 
-<h2>Species</h2>
+{% endblock %}
+
+{% block primary_content %}
 
 {% if species_list %}
 
@@ -21,5 +23,11 @@
 <p>No animals have been seen at this place yet.</p>
 
 {% endif %}
+
+{% endblock %}
+
+{% block secondary_content %}
+
+<a href="{{ place.urls.absolute }}">{{ place.known_as }}</a>
 
 {% endblock %}
