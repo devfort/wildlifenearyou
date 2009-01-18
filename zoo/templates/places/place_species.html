@@ -1,10 +1,12 @@
 {% extends base %}
 
+{% load zoocommon %}
+
 {% block title %}{{ place.known_as }} - Species{% endblock %}
 
 {% block content_title %}
 
-<h1>Animals at {{ place.known_as }}</h1>
+<h1>Animals spotted at {{ place.known_as }}</h1>
 
 {% endblock %}
 
@@ -12,15 +14,19 @@
 
 {% if species_list %}
 
-<ul>
+<ul class='animal-list'>
 {% for species in species_list %}
-<li><strong><a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a></strong>, seen by {{ species.count }}{% if species.seen %} (seen){% endif %}</li>
+<li>
+        <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+        <p><a class="animal-name" href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.count|oncetimes }})</span></p>
+        <p><i class="scientific">{{ species.latin_name }}</i></p>
+</li>
 {% endfor %}
 </ul>
 
 {% else %}
 
-<p>No animals have been seen at this place yet.</p>
+<p>No animals have been spotted at this place yet.</p>
 
 {% endif %}
 
@@ -28,6 +34,6 @@
 
 {% block secondary_content %}
 
-<a href="{{ place.urls.absolute }}">{{ place.known_as }}</a>
+We have more information on <a href="{{ place.urls.absolute }}">{{ place.known_as }}</a>.
 
 {% endblock %}
