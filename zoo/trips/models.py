@@ -160,6 +160,16 @@ class Trip(AuditedModel):
     def visible_photos(self):
         return self.photos.filter(is_visible = True)
     
+    @property
+    def photo(self):
+        return self.random_photo()
+    
+    def random_photo(self):
+        vp = self.visible_photos()
+        if vp.count():
+            return vp.order_by('?')[0]
+        return None
+        
     def __unicode__(self):
         #return u"%s, %s" % (self.created_by.username, self.name)
         return self.title()
