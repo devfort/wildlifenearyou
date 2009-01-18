@@ -47,12 +47,16 @@
     	</form>
         {% endifequal %}
 	{% if profile.user.created_trip_set.all %}
-	<ol>
+	<ol class="trip-list">
 	{% for trip in profile.user.created_trip_set.all|slice:":5" %}
-		<li><a href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a> ({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</li>
+                <li>
+                        <div class="thumb-75">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                        <p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
+                        <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>
+                </li>
 	{% endfor %}
 	</ol>
-	<p><a href="{% url tripbook profile.user %}">Show all {% ifequal profile.user user %}your{% else %}their{% endifequal %} trips</a>.</p>
+	<p>See <a href="{% url tripbook profile.user %}">all {% ifequal profile.user user %}your{% else %}their{% endifequal %} trips</a>.</p>
 
 	{% else %}
 	<p>
