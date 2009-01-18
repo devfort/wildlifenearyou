@@ -65,7 +65,7 @@ jQuery(function($) {
 {% endfor %}
 </ul>
 {% if species_list_more %}
-<p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">All species</a></p>
+<p class="more">See <a href="{% url place-species place.country.country_code,place.slug %}">all species that have been spotted here</a>.</p>
 {% endif %}
 {% endif %}
 
