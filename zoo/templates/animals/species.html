@@ -26,18 +26,8 @@
 {% endif %}
 {% endif %}
 
-{% if request.user.is_authenticated %}
-	{% if favourited %}
-	<p>This is one of your favourite animals! {% favourite_toggler "remove" species.slug request.path %}</a></p>
-	{% else %}
-	<p class="add">{% favourite_toggler "add" species.slug request.path %}</p>
-	{% endif %}
-{% else %}
-	<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
-{% endif %}
-
 {% if species.seen_at %}
-<h2>See them here:</h2>
+<h2>See them here</h2>
 <ul>
     {% for place in species.seen_at %}
     <li><a href="{{ place.urls.absolute }}">{{ place }}</a></li>
@@ -45,15 +35,25 @@
 </ul>
 {% endif %}
 
-<!-- TODO add in profile icons here of people who have favourited it -->
-<p>Favourited by <strong>{{ favourites }}</strong> {{ favourites|pluralize:"person,people" }}
-{% if hit_parade %}
-&mdash; currently the <a href="{% url popular %}">{{ hit_parade|ordinal }} most favourited animal</a></p>
-{% endif %}
-
 {% endblock %}
 
 {% block secondary_content %}
+
+<h2>Favourite</h2>
+
+{% if request.user.is_authenticated %}
+	{% if favourited %}
+	<p>This is one of your favourite animals! {% favourite_toggler "remove" species.slug request.path %}</p>
+	{% else %}
+	<p class="add">{% favourite_toggler "add" species.slug request.path %}</p>
+	{% endif %}
+{% else %}
+	<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
+{% endif %}
+
+<!-- TODO add in profile icons here of people who have favourited it -->
+<p>Favourited by <strong>{{ favourites }}</strong> {{ favourites|pluralize:"person,people" }}{% if hit_parade %}
+        &mdash; currently the <a href="{% url popular %}">{{ hit_parade|ordinal }} most favourited animal</a>{% endif %}.</p>
 
 {% with species.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
