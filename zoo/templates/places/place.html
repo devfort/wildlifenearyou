@@ -37,7 +37,7 @@ jQuery(function($) {
 {% block primary_content %}
 
 {% if place.url %}
-<p class="url"><a href="{{ place.url }}">&raquo; Visit their official website</a></p>
+<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
 {% endif %}
 
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
@@ -65,7 +65,7 @@ jQuery(function($) {
 {% endfor %}
 </ul>
 {% if species_list_more %}
-<p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">&raquo; All species</a></p>
+<p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">All species</a></p>
 {% endif %}
 {% endif %}
 

@@ -43,7 +43,7 @@ def place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
 
-    species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE)
+    species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE + 1)
 
     # Loop through opening times in database, grouping by date range and section - only store one opening time per day to allow overriding
     opening_times = {}
@@ -115,7 +115,7 @@ def place(request, country_code, slug):
 
     return render(request, 'places/place.html', {
         'place': place,
-        'species_list': species_list,
+        'species_list': species_list[0:SPECIES_ON_PLACE_PAGE],
         'species_list_more': len(species_list) > SPECIES_ON_PLACE_PAGE,
         'opening_times': times_sorted,
         'rating' : Trip.get_average_rating(place),
