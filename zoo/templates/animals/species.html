@@ -10,9 +10,11 @@
 <script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}
 
-{% block primary_content %}
-
+{% block content_title %}
 <h1>{{ species.common_name }} <i class="scientific">({{ species.latin_name }})</i></h1>
+{% endblock %}
+
+{% block primary_content %}
 
 {% if species.description %}
 <p class="intro">{{ species.description }}</p>
@@ -33,6 +35,22 @@
     <li><a href="{{ place.urls.absolute }}">{{ place }}</a></li>
     {% endfor %}
 </ul>
+{% endif %}
+
+{% if spotters %}
+<h2>Spotted by</h2>
+<ol class="spotter-list">
+{% for spotter in spotters %}
+        <li>
+                <img src="/faces/medium/{{ spotter.username }}.png" width="75" height="75" alt="" class="pull-left">
+                <p><a class="spotter-name" href="{{ spotter.urls.absolute }}">{{ spotter }}</a></p>
+{% comment %}                <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>{% endcomment %}
+        </li>
+{% endfor %}
+</ol>
+{% if more_spotters %}
+<p><a href='{{ species.urls.spotters }}'>See all spotters…</a></p>
+{% endif %}
 {% endif %}
 
 {% endblock %}

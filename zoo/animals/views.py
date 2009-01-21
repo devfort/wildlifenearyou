@@ -10,6 +10,11 @@ from zoo.favourites.models import FavouriteSpecies
 from zoo.search import nearest_places_with_species
 from zoo.utils import location_from_request
 
+from django.contrib.auth.models import User
+
+SPOTTERS_ON_SPECIES_PAGE = 5
+FAVOURITERS_ON_SPECIES_PAGE = 5
+
 def species(request, slug):
     try:
         species = Species.objects.get(slug=slug)
@@ -38,6 +43,7 @@ def species(request, slug):
         except IndexError:
             nearest = None
 
+    spotters = User.objects.filter(created_sighting_set__species=species).distinct()
     return render(request, 'animals/species.html', {
         'species': species,
         'favourited': species.has_favourited(request.user),
@@ -45,6 +51,16 @@ def species(request, slug):
         'favourites': favourites,
         'nearest': nearest,
         'location_description': description,
+        'spotters': spotters[0:SPOTTERS_ON_SPECIES_PAGE],
+        'more_spotters': spotters.count() > SPOTTERS_ON_SPECIES_PAGE,
+    })
+
+def species_spotters(request, slug):
+    species = get_object_or_404(Species, slug=slug)
+    spotters = User.objects.filter(created_sighting_set__species=species).distinct()
+    return render(request, 'animals/spotters.html', {
+        'species': species,
+        'spotters': spotters,
     })
 
 def all_species(request):

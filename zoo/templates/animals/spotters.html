@@ -1,0 +1,24 @@
+{% extends base %}
+
+{% load humanize %}
+
+{% block title %}Who's spotted {{ species.common_name }} ({{ species.latin_name }})?{% endblock %}
+
+{% block content %}
+
+<h1>{{ species.common_name }} <i class="scientific">({{ species.latin_name }})</i></h1>
+
+{% if spotters %}
+<h2>Spotted by</h2>
+<ol class="spotter-list">
+{% for spotter in spotters %}
+        <li>
+                <img src="/faces/medium/{{ spotter.username }}.png" width="75" height="75" alt="" class="pull-left">
+                <p><a class="spotter-name" href="{{ spotter.urls.absolute }}">{{ spotter }}</a></p>
+{% comment %}                <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>{% endcomment %}
+        </li>
+{% endfor %}
+</ol>
+{% endif %}
+
+{% endblock %}

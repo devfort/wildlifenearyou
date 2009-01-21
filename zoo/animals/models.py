@@ -29,10 +29,18 @@ class AbstractSpecies(models.Model):
             'slug': self.slug
         })
 
+    @models.permalink
+    def get_spotters_url(self):
+        return ('species-spotters', (), {
+            'slug': self.slug
+        })
+
     @attrproperty
     def urls(self, name):
         if name == 'absolute':
             return self.get_absolute_url()
+        if name == 'spotters':
+            return self.get_spotters_url()
 
     def article(self):
         if self.common_name[0] in ('a','e','i','o','u','A','E','I','O','U'):

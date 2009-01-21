@@ -158,6 +158,8 @@ urlpatterns = patterns('',
         name='species-xml'),
     url(r'^animals/(?P<slug>[^/]+)/$', 'zoo.animals.views.species',
         name='species'),
+    url(r'^animals/(?P<slug>[^/]+)/spotters/$', 'zoo.animals.views.species_spotters',
+        name='species-spotters'),
 
     url(r'^favourite/(?P<action>add|remove)/$', 'zoo.favourites.views.handle_favourite',
         name='favourite-species'),
