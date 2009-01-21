@@ -79,13 +79,6 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
             {% if place.distance %}<span class="latlon" title="{{ place.latitude }}, {{ place.longitude }}">{{ place.distance_miles|floatformat:0 }} mile{{ place.distance_miles|pluralize }} away</span> from {{ location_used.description }}{% endif %}
             </h4>
             {% if place.address %}<p>{{ place.address }}</p>{% endif %}
-            {% if place.species_list %}
-            <ul class="specieslist">
-            {% for species in place.species_list %}
-            	<li><span class="cloud-quad-{{ species.quad }}" title="Seen by {{ species.count }} spotter{{ species.count|pluralize }}"><a href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}"{% if species.matches_search %} style="color: red"{% endif %}>{{ species.common_name }}</a></span></li>
-            {% endfor %}
-            </ul>
-            {% endif %}
         </li>
     {% endfor %}
     </ol>
