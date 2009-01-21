@@ -10,6 +10,8 @@
 
 {% block content_title %}
 <h1>{{ species.plural }} at {{ place.known_as }}</h1>
+
+<p>There may well be <a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a> elsewhere. Why not have a look?</p>
 {% endblock %}
 
 {% block primary_content %}
