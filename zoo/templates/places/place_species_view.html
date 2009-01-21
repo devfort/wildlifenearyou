@@ -23,9 +23,13 @@
 
 <h2>Spotted by</h2>
 
-<ul>
+<ul class="spotter-list">
 {% for sighting in sightings %}
-<li><a href="{{ sighting.created_by.get_profile.urls.absolute }}">{{ sighting.created_by.username }}</a> {% if sighting.trip %} on <a href="{{ sighting.trip.get_absolute_url }}">{{ sighting.trip }}</a>{% else %} reported on {{ sighting.created_at|date:"jS F Y" }}{% endif %}</li>
+        <li>
+                <img src="/faces/medium/{{ sighting.created_by.username }}.png" width="75" height="75" alt="" class="pull-left">
+                <p><a class="spotter-name" href="{{ sighting.created_by.get_profile.urls.absolute }}">{{ sighting.created_by }}</a></p>
+                <p class="meta">{% if sighting.trip %}on <a href="{{ sighting.trip.get_absolute_url }}">{{ sighting.trip }}</a>{% else %}reported on {{ sighting.created_at|date:"jS F Y" }}{% endif %}</p>
+        </li>
 {% endfor %}
 </ul>
 
