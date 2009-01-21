@@ -53,6 +53,10 @@ def hit_parade(request):
             obscure[s.species] = obscure.get(s.species, 0) + 1
 
     obscure_list = obscure.keys()
+    for idx in range(len(obscure_list)-1, -1, -1):
+        if obscure_list[idx] in species_list:
+            del obscure_list[idx]
+
     for s in obscure_list:
         s.count = obscure[s]
 
