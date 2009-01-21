@@ -76,7 +76,7 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
     {% for place in results %}
         <li>
             <h4><a href="{{ place.get_absolute_url }}">{{ place }}</a>, {{ place.country }} <a href="{{ place.country.get_absolute_url }}" class="flag"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
-            {% if place.distance %}<span class="latlon" title="{{ place.latitude }}, {{ place.longitude }}">{{ place.distance_miles|floatformat:0 }} mile{{ place.distance_miles|pluralize }} away</span>{% endif %}
+            {% if place.distance %}<span class="latlon" title="{{ place.latitude }}, {{ place.longitude }}">{{ place.distance_miles|floatformat:0 }} mile{{ place.distance_miles|pluralize }} away</span> from {{ location_used.description }}{% endif %}
             </h4>
             {% if place.address %}<p>{{ place.address }}</p>{% endif %}
             {% if place.species_list %}
