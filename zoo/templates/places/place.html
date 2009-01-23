@@ -195,11 +195,9 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 <img src="/static/img/icons/starselect_off.png" alt="">
 {% endfor %}
 </p>
-{% if been_here %}
-{% else %}
-<p class="add">Have you been here? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
 {% endif %}
-{% endif %}
+
+<p class="add">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
 
 <p class="suggest-changes">
 	Found incorrect information on the page?
