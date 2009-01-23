@@ -54,7 +54,15 @@ class Profile(models.Model):
     # The other two are lat and lon
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-    
+
+    def points_image(self):
+        """The PNG within /static/img/engagementbadge/ ."""
+        return 'monkey'
+        
+    def points_animal(self):
+        """Which animal are we, based on animal points? (currently still stored as percentage_complete)"""
+        return 'helpful macaque'
+
     def avatar_img(self):
         return mark_safe('<img src="/faces/%s.png" alt="%s\'s Avatar" width="175" height="175" />' % (self.user.username.lower(), self.user.username))
 

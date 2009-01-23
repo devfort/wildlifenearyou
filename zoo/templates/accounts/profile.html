@@ -17,7 +17,16 @@
 <ul class="badges">{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
-<p><img src="/static/img/engagementbadge/monkey.png" class="pull-left">{% ifequal profile.user user %}You{% else %}They{% endifequal %} have an engagement score of <strong>{{ profile.percentage_complete }}</strong>, making {% ifequal profile.user user %}you{% else %}them{% endifequal %} a <strong>helpful macaque</strong>.{% ifequal profile.user user %} To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% endifequal %}</p>
+<p>
+        <img src="/static/img/engagementbadge/{{ profile.points_image }}.png" class="pull-left">
+        {% ifequal profile.user user %}You{% else %}They{% endifequal %}
+        have <strong>{{ profile.percentage_complete }}</strong> animal points, making
+        {% ifequal profile.user user %}you{% else %}them{% endifequal %} a <strong>{{ profile.points_animal }}</strong>.
+        {% ifequal profile.user user %}
+        To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% else %}
+        Animal points are way of telling how active people are on the site, and are linked to things like recording trips, uploading photos, and making comments.
+        {% endifequal %}
+</p>
 
 <div>
 {% if profile.url %}
