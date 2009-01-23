@@ -1,4 +1,5 @@
-from django_openid.registration import RegistrationConsumer, RegistrationForm
+from django_openid.registration import RegistrationConsumer
+from django_openid.forms import RegistrationForm
 
 class SinglePasswordRegistrationForm(RegistrationForm):
     extra_required = ('email',) # first/last name are optional
