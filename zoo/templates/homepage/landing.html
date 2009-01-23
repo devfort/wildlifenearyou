@@ -60,14 +60,20 @@
 				{% endif %}
 			</div>
 			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
-<!--				<h2 style="font-family: georgia">Hello there!</h2>
-			<h2 style="font-family: courier">Hello there!</h2>
-			<h2 style="font-family: arial">Hello there!</h2>
-			<h2 style="font-family: helvetica">Hello there!</h2>
-			<h2 style='font-family: "times new roman"'>Hello there!</h2>
-			<h2>Hello there!</h2>
--->
-			<p class="intro">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+			{% if user.is_authenticated %}
+			<p class="intro">If you've spotted some animals since you last checked in with us, why not add the trip in, and also upload any photos you took? If not, why not check out some recent trips others have taken, and record your thoughts on the animals they've spotted and the photos they've taken?</p>
+			{% else %}
+			<p class="intro"><strong>Wild Life Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
+			<form action="/add-trip/" method="GET">
+				<div class="container text-container">
+					<label for="search-place">I've been to…</label>
+					<input type="text" class="text" name="q" id="search-place">
+				</div>
+				<div>
+					<input type="submit" value="Find this place" class="submit">
+				</div>
+			</form>
+			{% endif %}
 		</div>
 	</div>
 </div>
