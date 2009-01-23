@@ -9,6 +9,7 @@
 {% block content %}
 <h1>{{ profile.user.username }} - edit profile</h1>
 
+<div class='halfwidth'>
 <h2>Avatar</h2>
 
 <p>Your avatar is shown whenever you crop up around the site.</p>
@@ -27,7 +28,9 @@
     so.useExpressInstall("/static/swf/swfobject/expressinstall.swf");
     so.write("flashMovie");
 </script>
+</div>
 
+<div class='halfwidth'>
 <h2>Other details</h2>
 
 <form action="{{ path }}" method="post">
@@ -35,5 +38,6 @@
 {{ user_form.as_p }}
 <input type="submit" name="submit" value="Submit changes">
 </form>
+</div>
 
 {% endblock %}

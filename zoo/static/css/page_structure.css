@@ -161,6 +161,22 @@
 
 /* @end */
 
+/* @group 2-cols */
+.halfwidth {
+  width: 50%;
+  float: left;
+  display: inline;
+}
+.halfwidth h2:first-child,
+.halfwidth h3:first-child {
+  margin-top: 0;
+}
+.halfway h2 {
+  clear: left;
+}
+
+/* @end */
+
 /* @group 3-cols */
 
 .column {
