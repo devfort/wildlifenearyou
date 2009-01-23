@@ -136,6 +136,17 @@ def place_summary(request, country_code, slug):
     },
                   base='base_print.html')
 
+def place_animal_checklist(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+
+    species_list = place.get_species(request.user)
+
+    return render(request, 'places/place_animal_checklist.html', {
+        'place': place,
+        'species_list': species_list,
+    })
+
 def place_species(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
