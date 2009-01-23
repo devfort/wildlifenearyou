@@ -12,9 +12,9 @@ from django.contrib import databrowse
 from django.contrib.auth.models import User
 from django.db.models import get_models
 from dmigrations.migration_state import table_present
-for model in get_models():
-    if table_present(model._meta.db_table):
-        databrowse.site.register(model)
+#for model in get_models():
+#    if table_present(model._meta.db_table):
+#        databrowse.site.register(model)
 
 from django.template import add_to_builtins
 add_to_builtins('zoo.common.templatetags.switch')
@@ -187,6 +187,8 @@ urlpatterns = patterns('',
         name='places'),
     url(r'^places/autocomplete/$', 'zoo.search.views.place_complete',
         name='places-autocomplete'),
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animal-checklist/$', 'zoo.places.views.place_animal_checklist',
+        name='place-animal-checklist'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/$', 'zoo.places.views.place_species',
         name='place-species'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/(?P<species_slug>[^/]+)/$', 'zoo.places.views.place_species_view',

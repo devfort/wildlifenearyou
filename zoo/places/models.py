@@ -154,6 +154,8 @@ class Place(AuditedModel):
             urlname = 'place'
         elif name == 'summary':
             urlname = 'place-summary'
+        elif name == 'animal_checklist':
+            urlname = 'place-animal-checklist'
         elif name == 'suggest_changes':
             urlname = 'place-edit'
         elif name == 'changes_suggested':
@@ -186,6 +188,10 @@ class Place(AuditedModel):
                 'field_name': 'place',
                 'django_fields': ['legal_name', 'known_as'],
                 'config': {'store': True, 'freetext': {'language': 'en'}},
+            #}, { # Searching the description.
+            #    'field_name': 'description',
+            #    'django_fields': ['description'],
+            #    'config': {'store': True, 'freetext': {'language': 'en'}},
             }, { # Searching for the place address.
                 'field_name': 'address',
                 'django_fields': [lambda inst: [inst.address()], 'country'],
