@@ -136,24 +136,29 @@ class Trip(AuditedModel):
     @staticmethod
     def get_average_rating(place):
         trips = Trip.objects.filter(place = place, rating__gt = 0)
-        return Trip.calculate_rating_average(trips)
+        return Trip.calculate_rating_object(trips)
 
     @staticmethod
     def get_my_average_rating_for_place(user, place):
         trips = Trip.objects.filter(
             place = place, created_by = user, rating__gt = 0
         )
-        return Trip.calculate_rating_average(trips)
+        return Trip.calculate_rating_object(trips)
 
     @staticmethod
-    def calculate_rating_average(trips):
+    def calculate_rating_object(trips):
         total_rating = sum([ int(trip.rating) for trip in trips if trip.rating ])
         rating = 0
         if len(trips):
             rating = int( (total_rating + 0.0) / len(trips) + 0.5 )
+        # List uniquification from <http://www.peterbe.com/plog/uniqifiers-benchmark/uniqifiers_benchmark.py>
+        # (I just chose the faster one, f9.)
+        spotters = {}.fromkeys(map(lambda x: x.created_by, trips)).keys()
         rating = {
             'on': [ 1 for x in range(rating) ],
             'off': [ 1 for x in range(5-rating) ],
+            'trips': len(trips),
+            'spotters': len(spotters),
         }
         return rating  
     

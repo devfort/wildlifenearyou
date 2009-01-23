@@ -195,6 +195,7 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
 <img src="/static/img/icons/starselect_off.png" alt="">
 {% endfor %}
 </p>
+<p>Based on ratings of {{ rating.trips }} trip{{ rating.trips|pluralize }} by {{ rating.spotters }} spotter{{ rating.spotters|pluralize}}.</p>
 {% endif %}
 
 <p class="add">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>

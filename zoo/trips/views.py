@@ -43,7 +43,7 @@ def trip_view(request, username, trip_id):
         'profile': user.get_profile(),
         'trip': trip,
         # do this to prepare the rating for the view
-        'rating': Trip.calculate_rating_average([trip]),
+        'rating': Trip.calculate_rating_object([trip]),
         'belongs_to_user': request.user.id == user.id,
         'visible_photos': photos,
     })
