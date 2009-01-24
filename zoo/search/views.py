@@ -14,7 +14,7 @@ def search_split(request, what, near):
     locations = search_locations(near)
     locations = list(locations)
     if locations:
-        location_used = locations[0]
+        location_used = locations.pop(0)
         lat, lon = location_used['latlon']
     else:
         location_used = None
@@ -52,6 +52,7 @@ def search_split(request, what, near):
     return render(request, 'search/search_split.html', {
         'what': what,
         'near': near,
+        'locations': locations,
         'location_used': location_used,
         'results': results,
         'results_info': pformat(results_info),
