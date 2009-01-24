@@ -14,6 +14,9 @@ function showMap() {
     });
     div.insertBefore($('ol:first'));
     window.gmap = new GMap2(div[0]);
+    gmap.addControl(new GLargeMapControl());
+    gmap.addControl(new GScaleControl());
+    gmap.addControl(new GMenuMapTypeControl());
     gmap.setCenter(new GLatLng(37.4419, -122.1419), 13);
 
     var bounds = new GLatLngBounds();
