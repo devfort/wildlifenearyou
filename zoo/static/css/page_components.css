@@ -235,14 +235,6 @@ div.spotter-list {
 	background-repeat: no-repeat;
 	padding-left: 19px;
 }
-.specieslist li.first a:link,
-.specieslist li.first a:visited,
-.specieslist li.first a:hover,
-.specieslist li.first a:focus,
-.specieslist li.first a:active {
-	background-image: none;
-	padding-left: 0;
-}
 .cloud-quad-0 {
 	font-size: 1em;
 }
