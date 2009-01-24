@@ -8,6 +8,7 @@ from zoo.shortcuts import render
 from zoo.search import search_places, search_known_species, search_near, \
     search_locations, SEARCH_ALL, search_species
 from zoo.trips.models import Sighting
+from zoo.utils import location_from_request
 
 def search_split(request, what, near):
     # First, let us look up the location
@@ -113,9 +114,13 @@ def search_single(request, q, bypass=False):
 def search(request):
     q = request.GET.get('q', '')
     what = request.GET.get('what', '')
-    if what == 'Everything':
+    if what.lower() == 'everything':
         what = ''
     near = request.GET.get('near', '')
+    if near.lower() == 'me':
+        (current_location, (lat, lon)) = location_from_request(request)
+        if current_location:
+            near = current_location
     if what and near:
         return search_split(request, what, near)
     elif what:
