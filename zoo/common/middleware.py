@@ -6,9 +6,10 @@ since middleware is only executed by a first incoming web request and hence
 is not triggered for command line tools or the ./manage.py shell. It will have
 to do for the moment though.
 """
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.conf import settings
 from django.db.models.signals import pre_save, post_save
+from django.template.loader import render_to_string
 import datetime, threading
 
 from django.contrib.auth.models import User
@@ -60,3 +61,12 @@ post_save.connect(profilecalc_postsave)
 if settings.SEARCH_ENABLED:
     from searchify import initialise
     initialise()
+
+class Custom403(object):
+    """Catches a 403 response and renders a 403.html template"""
+
+    def process_response(self, request, response):
+        if isinstance(response, HttpResponseForbidden):
+            return HttpResponseForbidden(render_to_string('403.html', { 'content': response.content }))
+        else:
+            return response

@@ -66,6 +66,7 @@ MIDDLEWARE_CLASSES = [
     'zoo.common.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django_openid.registration.RegistrationConsumer',
+    'zoo.common.middleware.Custom403',
 ]
 
 ROOT_URLCONF = 'zoo.urls'
