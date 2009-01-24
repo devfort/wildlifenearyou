@@ -1,5 +1,14 @@
 Hello {{ user.username }},
 
-Go here: {{ url }}
+Welcome to WildlifeNearYou, the website that lets you share your passion for
+animals around you. Before you can log in and add animals, trips, and photos,
+we need you to confirm your registration by clicking on the link below:
 
-kthxbai
+{{ url }}
+
+If clicking the link above doesn't work, you may have to copy it and then paste
+it into the 'Location' or 'Address' box of your web browser, and then press
+'enter' or 'return' on your keyboard.
+
+Best wishes,
+The WildlifeNearYou team
