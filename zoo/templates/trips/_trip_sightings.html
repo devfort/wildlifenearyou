@@ -1,39 +1,12 @@
-	<h{{htag}}>{% ifequal link_title "true" %}<a href="{% url trip-view trip.created_by, trip.id %}">{% endifequal %}{{ trip.title }}{% ifequal link_title "true" %}</a>{% endifequal %}</h{{htag}}>
-	{% with trip.sightings.all as sightings %}
-	{% regroup sightings by place.known_as as sightings_by_place %}
+	<h{{htag}}>{% ifequal link_title "true" %}<a href="{% url trip-view trip.created_by, trip.id %}">{% endifequal %}{{ trip.compact_title }}{% ifequal link_title "true" %}</a>{% endifequal %}</h{{htag}}>
+	<p>A trip to <a href="{% url place trip.place.country.country_code,trip.place.slug %}">{{ trip.place }}</a>
+		 with {{ trip.sightings.count }} animal sighting{{ trip.sightings.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
 
-	{% with sightings_by_place|length as sl %}
-{% ifequal 1 sl %}
-	<p>A trip to {% for place in sightings_by_place %}{% for sighting in place.list|slice:":1" %}		
-		<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
-		{% endfor %}{% endfor %} with {{ trip.sightings.count }} animal sighting{{ trip.sightings.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
-
-	{% for place in sightings_by_place %}
 	<h{{htag2}}>Sighting{{ trip.sightings.count|pluralize }}</h{{htag2}}>
 	<ul>
-		{% for sighting in place.list %}
+		{% for sighting in trip.sightings.all %}
+		{% if sighting.species %}
 		<li><a href="{% url species sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
+		{% endif %}
 		{% endfor %}
 	</ul>
-	{% endfor %}
-{% else %}
-	<p>A trip {% ifnotequal trip.formatted_date '' %} taken {{ trip.formatted_date }}{% endifnotequal %} with {{ trip.sightings.count }} animal sighting{{ trip.sightings.count|pluralize }} </p>
-
-	<p class="description">
-	{{ trip.description }}
-	</p>
-
-	<h{{htag2}}>Sightings</h{{htag2}}>
-	{% for place in sightings_by_place %}
-	<h{{htag3}}>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>{% endfor %}</h{{htag3}}>
-	<p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
-
-	<ul>
-		{% for sighting in place.list %}
-		<li><a href="{% url species sighting.species.slug %}">{{ sighting.species.common_name }}</a></li>
-		{% endfor %}
-	</ul>
-	{% endfor %}
-{% endifequal %}
-	{% endwith %}
-	{% endwith %}
