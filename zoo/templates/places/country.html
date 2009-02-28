@@ -6,9 +6,11 @@
 
 <h1>{{ country.name }} Places</h1>
 {% if places %}
-    <ul>
+    <ul class='place-list'>
     {% for place in places %}
-        <li><a href="{{ place.urls.absolute }}" title="Information on {{ place.known_as }}">{{ place.known_as }}</li>
+    <li>
+    {% include "places/_place.html" %}
+    </li>
     {% endfor %}
     </ul>
 {% else %}

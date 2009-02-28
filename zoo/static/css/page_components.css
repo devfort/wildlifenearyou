@@ -28,6 +28,46 @@ div.see-more-animals p.have-not-heard {
 
 /* @end */
 
+/* @group Place list */
+
+.place-list {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place-list li,
+div.place-list {
+  margin: 0 0 0.5em 0;
+  padding: 0;
+  background-image: none;
+  clear: both;
+  width: 100%;
+  overflow: hidden;
+}
+
+.place-list .thumb-75 {
+  float: left;
+  margin-right: 1em;
+}
+
+.place-list p {
+  margin-top: 0.3em;
+  margin-bottom: 0.4em;
+}
+
+.place-list .meta {
+  margin-left: 0.2em;
+}
+
+.place-list .place-name {
+  font-size: 1.375em;
+  font-weight: bold;
+}
+
+/* @end */
+
 /* @group Animal list */
 
 .animal-list {

@@ -36,9 +36,11 @@
 
 {% if species.seen_at %}
 <h2>See them here</h2>
-<ul>
+<ul class="place-list">
     {% for place in species.seen_at %}
-    <li><a href="{{ place.urls.absolute }}">{{ place }}</a></li>
+    <li>
+            {% include "places/_place.html" %}
+    </li>
     {% endfor %}
 </ul>
 {% endif %}

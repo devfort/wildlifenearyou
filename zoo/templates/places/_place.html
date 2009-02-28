@@ -1,0 +1,6 @@
+<div class="thumb-75">{% with place.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+<p><a class="place-name" href="{{ place.urls.absolute }}">{{ place.known_as }}</a></p>
+<p class="meta">
+{% if place.distance %}{{ place.distance|floatformat:0 }} mile{{ place.distance|pluralize }} away, in{% else %}In{% endif %}
+{{ place.town }}, {{ place.country.name }}.{% if place.url %} <a href='{{ place.url }}'>Visit their official website</a>.{% endif %}
+</p>
