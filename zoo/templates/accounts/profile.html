@@ -30,7 +30,7 @@
 
 <div>
 {% if profile.url %}
-<p class="url"><a href="{{ profile.url }}">&raquo; {% ifequal profile.user user %}Your website{% else %}Visit their website{% endifequal %}</a></p>
+<p class="url"><a href="{{ profile.url }}">{% ifequal profile.user user %}Your website{% else %}Visit their website{% endifequal %}</a></p>
 {% endif %}
 
 {% if profile.biography %}

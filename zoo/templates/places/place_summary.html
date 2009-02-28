@@ -6,7 +6,7 @@
 
 <h1>{{ place.known_as|title }}</h1>
 {% if place.url %}
-<p class="url"><a href="{{ place.url }}">&raquo; Visit their official website</a></p>
+<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
 {% endif %}
 
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
@@ -24,6 +24,8 @@
 <p class="intro">{{ place.description }}</p>
 {% endif %}
 
+<p>Go back to our <a href="{{ place.urls.absolute }}">main page on {{ place.known_as }}</a>.</p>
+
 {% if species_list %}
 <h2>Animals you might see</h2>
 <ul class="specieslist">
@@ -31,7 +33,7 @@
 	<li><span class="cloud-quad-{{ species.quad }}" title="{{ species.count }} seen"><a href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}">{{ species.common_name }}</a></span></li>
 {% endfor %}
 </ul>
-<p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">&raquo; All species</a></p>
+<p class="more"><a href="{% url place-species place.country.country_code,place.slug %}">All species…</a></p>
 {% endif %}
 
 {% if dates %}
