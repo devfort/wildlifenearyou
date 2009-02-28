@@ -24,6 +24,8 @@
 <p class="intro">{{ place.description }}</p>
 {% endif %}
 
+<div id="locationmap" style="overflow: hidden"><img src="http://maps.google.com/staticmap?center={{ place.latitude }},{{ place.longitude }}&amp;zoom=13&amp;size=512x256&amp;markers={{ place.latitude }},{{ place.longitude }},red&amp;key={{ GOOGLE_MAPS_API_KEY }}&amp;sensor=false"></div>
+
 <p>Go back to our <a href="{{ place.urls.absolute }}">main page on {{ place.known_as }}</a>.</p>
 
 {% if species_list %}
