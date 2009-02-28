@@ -2,12 +2,11 @@
 
 {% block title %}{{ place.known_as|title }}{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
 <h1>{{ place.known_as|title }}</h1>
-{% if place.url %}
-<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
-{% endif %}
+
+<h2>General information</h2>
 
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
 <p class="address">{% if place.address %}{{ place.address }},{% endif %}
@@ -18,6 +17,10 @@
 
 {% if place.phone %}
 <p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
+{% endif %}
+
+{% if place.url %}
+<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
 {% endif %}
 
 {% if place.description %}
@@ -48,18 +51,20 @@
 	 	<h4>{{ section_title }}</h4>
 	 	{% endif %}
 
-	<dl>
+	<ul class="opening-list">
 	{% for day in days %}
 		{% if day %}
-			{% if day.name %}
-				<dt>{{ day.name }}</dt>
-			{% else %}
-				<dt>Every day</dt>
-			{% endif %}
-			<dd>
-				{% if day.closed %}Closed{% endif %}
-				{{ day.times }}
-			</dd>
+        		<li>
+        			{% if day.name %}
+        				<span class="opening-days">{{ day.name }}</span>
+        			{% else %}
+        				<span class="opening-days">Every day</span>
+        			{% endif %}
+        			<span class="opening-hours">
+        				{% if day.closed %}Closed{% endif %}
+        				{{ day.times }}
+        			</span>
+        		</li>
 		{% endif %}
 	{% endfor %}
 	</dl>
@@ -67,23 +72,10 @@
 {% endfor %}
 {% endif %}
 
-{% with place.price.all as prices %}
-    {% if prices %}
-	<h2 class="">Price</h2>
-	<ul class="currency">
-	{% for price in prices %}
-		<li class="currency_{{ price.currency.currency_code }}">{{ price.type|title }}:
-{% ifequal price.value 0 %}Free{% else %}
-{% ifequal price.currency.currency_code 'GBP' %}
-&pound;{% endifequal %}{%ifequal price.currency.currency_code 'EUR' %}
-&euro;{% endifequal %}{%ifequal price.currency.currency_code 'YEN' %}
-&yen;{% endifequal %}{%ifequal price.currency.currency_code 'USD' %}
-${% endifequal %}{{ price.value }}{% endifequal %}
-	{% endfor %}
-	</ul>
-    {% endif %}
-	{% if place.price_notes %}<p>{{ place.price_notes }}</p>{% endif %}
-{% endwith %}
+{% if place.price_notes %}
+	<h2 class="">Prices</h2>
+	<p>{{ place.price_notes }}</p>
+{% endif %}
 
 {% with place.place_facilities.all as facilities %}
 	{% if facilities %}
@@ -103,21 +95,6 @@ ${% endifequal %}{{ price.value }}{% endifequal %}
     	<h3 class="direction_{{direction.mode}}">By {{ direction.mode }}</h3>
 		<p>{{ direction.route }}</p>
 	{% endfor %}
-    {% endif %}
-{% endwith %}
-
-<!--
-<h2>Events at ...</h2>
--->
-
-{% with place.news.all as news %}
-    {% if news %}
-	<h2>News about {{ place.known_as }}</h2>
-    <ul>
-    {% for story in news %}
-        <li>{{ story.story_date|date:"jS M Y" }}: <a href="{{ story.url }}">{{ story.headline }}</a></li>
-    {% endfor %}
-    </ul>
     {% endif %}
 {% endwith %}
 

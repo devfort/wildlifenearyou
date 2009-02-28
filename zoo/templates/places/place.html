@@ -36,12 +36,9 @@ jQuery(function($) {
 
 {% block primary_content %}
 
-{% if place.url %}
-<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
-{% endif %}
+<h2>General information</h2>
 
-<!-- <p class="sub-head">{{ place.legal_name }}</p> -->
-<p class="address">{% if place.address %}{{ place.address }},{% endif %}
+<p class="address">{% if place.address %}Address: {{ place.address }},{% endif %}
 	<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
 	<a href="{{ place.country.urls.absolute }}" id="countrylink"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
 	{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
@@ -49,6 +46,10 @@ jQuery(function($) {
 
 {% if place.phone %}
 <p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
+{% endif %}
+
+{% if place.url %}
+<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
 {% endif %}
 
 {% if place.description %}
@@ -89,17 +90,19 @@ jQuery(function($) {
 	 	<h4>{{ section_title }}</h4>
 	 	{% endif %}
 
-	<ul class='opening-list'>
+	<ul class="opening-list">
 	{% for day in days %}
 		{% if day %}
-		<li>
-			{% if day.name %}
-				<span class='opening-days'>{{ day.name|safe }}</span>
-			{% endif %}
-			<span class='opening-hours'>
-				{% if day.closed %}Closed{% endif %}
-				{{ day.times }}
-			</span>
+        		<li>
+        			{% if day.name %}
+        				<span class="opening-days">{{ day.name }}</span>
+        			{% else %}
+        				<span class="opening-days">Every day</span>
+        			{% endif %}
+        			<span class="opening-hours">
+        				{% if day.closed %}Closed{% endif %}
+        				{{ day.times }}
+        			</span>
 			</li>
 		{% endif %}
 	{% endfor %}
