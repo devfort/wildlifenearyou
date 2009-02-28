@@ -418,6 +418,26 @@ ul.currency li {
 
 /* @end */
 
+/* @group Opening hours */
+
+.opening-list {
+  list-style-type: none;
+  margin-left: 0;
+}
+
+.opening-list li {
+  margin-left: 25px; /* line up with text in facilities lists */
+  margin-bottom: 0.5em;
+  padding: 0;
+  background-image: none;
+}
+
+.opening-days {
+  font-weight: bold;
+}
+
+/* @end */
+
 /* @group Facilities */
 
 .facilities {
@@ -434,6 +454,10 @@ ul.currency li {
 	padding: 0;
 	background-image: none;
 }
+
+/* @end */
+
+/* @group Directions */
 
 .direction_Car {
 	background-image: url(/static/img/icons/direction_car.png);

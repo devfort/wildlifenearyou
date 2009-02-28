@@ -82,26 +82,28 @@ jQuery(function($) {
 {% if opening_times %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
 {% for date_ranges in opening_times %}
-	<h3>{{ date_ranges.range|safe }}</h3>
+	<h3>{% if date_ranges.range %}{{ date_ranges.range|safe }}{% else %}Normal opening hours{% endif %}</h3>
 
 	{% for section_title, days in date_ranges.sections.items %}
 	 	{% if section_title %}
 	 	<h4>{{ section_title }}</h4>
 	 	{% endif %}
 
-	<dl>
+	<ul class='opening-list'>
 	{% for day in days %}
 		{% if day %}
+		<li>
 			{% if day.name %}
-				<dt>{{ day.name|safe }}</dt>
+				<span class='opening-days'>{{ day.name|safe }}</span>
 			{% endif %}
-			<dd>
+			<span class='opening-hours'>
 				{% if day.closed %}Closed{% endif %}
 				{{ day.times }}
-			</dd>
+			</span>
+			</li>
 		{% endif %}
 	{% endfor %}
-	</dl>
+	</ul>
 	{% endfor %}
 {% endfor %}
 {% endif %}
