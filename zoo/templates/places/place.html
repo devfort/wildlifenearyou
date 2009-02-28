@@ -106,23 +106,10 @@ jQuery(function($) {
 {% endfor %}
 {% endif %}
 
-{% with place.price.all as prices %}
-    {% if prices %}
-	<h2 class="">Price</h2>
-	<ul class="currency">
-	{% for price in prices %}
-		<li class="currency_{{ price.currency.currency_code }}">{{ price.type|title }}:
-{% ifequal price.value 0 %}Free{% else %}
-{% ifequal price.currency.currency_code 'GBP' %}
-&pound;{% endifequal %}{%ifequal price.currency.currency_code 'EUR' %}
-&euro;{% endifequal %}{%ifequal price.currency.currency_code 'YEN' %}
-&yen;{% endifequal %}{%ifequal price.currency.currency_code 'USD' %}
-${% endifequal %}{{ price.value }}{% endifequal %}
-	{% endfor %}
-	</ul>
-    {% endif %}
-	{% if place.price_notes %}<p>{{ place.price_notes }}</p>{% endif %}
-{% endwith %}
+{% if place.price_notes %}
+<h2 class="">Prices</h2>
+<p>{{ place.price_notes }}</p>
+{% endif %}
 
 {% with place.place_facilities.all as facilities %}
 	{% if facilities %}
