@@ -6,9 +6,13 @@
 
 <h1>All species, by latin name</h1>
 {% if all_species %}
-<ul>
+<ul class='animal-list'>
 {% for species in all_species %}
-    <li><a href="{{ species.urls.absolute }}"><i class="scientific">{{ species.latin_name }}</i></a></li>
+<li>
+<div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+<p><a class="animal-name" href="{{ species.urls.absolute }}"><i class="scientific">{{ species.latin_name }}</li></a></p>
+<p>{{ species.common_name }}</p>
+</li>
 {% endfor %}
 </ul>
 {% else %}
