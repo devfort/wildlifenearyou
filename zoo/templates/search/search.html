@@ -98,9 +98,12 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 
 {% if users_results %}
     <h4>Matching users</h4>
-    <ol>
-            {% for result in users_results %}
-            <li><a href="{{ result.get_absolute_url }}">{{ result.user.username }}</a></li>
+    <ol class="spotter-list">
+            {% for profile in users_results %}
+            <li>
+                    <img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
+                    <p><a class="spotter-name" href="{{ profile.urls.absolute }}">{{ profile.user }}</a></p>
+            </li>
             {% endfor %}
     </ol>
 {% endif %}
