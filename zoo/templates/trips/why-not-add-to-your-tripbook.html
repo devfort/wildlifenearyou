@@ -12,6 +12,10 @@
 
 <p>Why not write about your trip in your tripbook? If you save a trip, you can upload your photos to it later.</p>
 
+<form action="{{ request.path }}" method="POST">
+
+{% if sightings %}
+
 <h2>Animals seen</h2>
 <ul>
 {% for sighting in sightings %}
@@ -19,7 +23,6 @@
 {% endfor %}
 </ul>
 
-<form action="{{ request.path }}" method="POST">
 {% ifnotequal tcount 0 %}
 <h2>Add these sightings to an existing trip</h2>
 	{{ form.user_trips.errors }}
@@ -28,6 +31,14 @@
     <input type="submit" name="add-to-existing" value="Add to this trip">
     <p class="meta">You've previously added a trip to {{ place.known_as }}. Was this a new trip?</p>
 {% endifnotequal %}
+
+{% else %}
+
+<h2>No animals seen</h2>
+
+<p>Is this really what you mean? You're about to create a trip without having seen any animals!</p>
+
+{% endif %}
 
 <div class="primary">
 
@@ -71,6 +82,7 @@
 
 <div class="secondary">
 
+{% if sightings %}
 <h2>Report the sightings but don't save a trip</h2>
 <p class="meta">Use this option if you haven't actually been to the place but know that these animals can be seen there.</p>
 <div class="container">
@@ -79,8 +91,10 @@
     <input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
 {% endfor %}
 </div>
-</form>
+{% endif %}
 
 </div>
+
+</form>
 
 {% endblock %}
