@@ -49,6 +49,7 @@ urlpatterns = patterns('',
     url(r'^profile/$', accounts.profile_default,
         name='accounts-default'),
 
+    url(r'^search/species/$', 'zoo.search.views.search_species', name='species-search'),
     url(r'^search/$', 'zoo.search.views.search',
         name='search'),
 

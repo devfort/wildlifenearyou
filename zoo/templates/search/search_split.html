@@ -106,11 +106,18 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 
 {% if species_results %}
     <h4>Matching species</h4>
-    <ol>
-    {% for result in species_results %}
-        <li><a href="{{ result.get_absolute_url }}">{{ result.common_name }}</a> <i class="scientific">{{ result.latin_name }}</i></li>
+    <ol class="animal-list">
+    {% for species in species_results %}
+            <li>
+                    <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                    <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+                    <p><i class="scientific">{{ species.latin_name }}</i></p>
+            </li>
     {% endfor %}
     </ol>
+    {% if species_results_more %}
+            <a href="{% url species-search %}?q={{ what|urlencode }}">More species matching &ldquo;{{ what }}&rdquo;…</a>
+    {% endif %}
 {% endif %}
 
 {% if request.user.is_staff %}

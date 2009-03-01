@@ -62,12 +62,31 @@ def search_split(request, what, near):
         'results': results,
         'results_info': pformat(results_info),
         'results_corrected_q': results_corrected_q,
-        'species_results': species_results,
+        'species_results': species_results[:5],
         'species_results_info': pformat(species_results_info),
         'species_results_corrected_q': species_results_corrected_q,
+        'species_results_more': len(species_results)>5,
         'users_results': users_results,
         'users_results_info': pformat(users_results_info),
         'users_results_corrected_q': users_results_corrected_q,
+    })
+
+def search_species(request):
+    q = request.GET.get('q', '')
+
+    species_results = None
+    species_results_info = None
+    species_results_corrected_q = None
+    
+    if q:
+        species_results, species_results_info, species_results_corrected_q = \
+            search_known_species(q, details=True, default_op=Query.OP_OR)
+            
+    return render(request, 'search/search_species.html', {
+        'q': q,
+        'species_results': species_results,
+        'species_results_info': pformat(species_results_info),
+        'species_results_corrected_q': species_results_corrected_q,
     })
 
 def search_single(request, q, bypass=False):
@@ -117,9 +136,10 @@ def search_single(request, q, bypass=False):
         'results': results,
         'results_info': pformat(results_info),
         'results_corrected_q': results_corrected_q,
-        'species_results': species_results,
+        'species_results': species_results[:5],
         'species_results_info': pformat(species_results_info),
         'species_results_corrected_q': species_results_corrected_q,
+        'species_results_more': len(species_results)>5,
         'users_results': users_results,
         'users_results_info': pformat(users_results_info),
         'users_results_corrected_q': users_results_corrected_q,
