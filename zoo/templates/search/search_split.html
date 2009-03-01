@@ -112,9 +112,24 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
     {% endfor %}
     </ol>
 {% endif %}
+
 {% if request.user.is_staff %}
     <h4><a class="toggler" href="#debug-species-results">Debug info (developers only)</a></h4>
     <pre id="debug-species-results" style="font-size:0.85em">{{ species_results_info }}</pre>
+{% endif %}
+
+{% if users_results %}
+    <h4>Matching users</h4>
+    <ol>
+            {% for result in users_results %}
+            <li><a href="{{ result.get_absolute_url }}">{{ result.user.username }}</a></li>
+            {% endfor %}
+    </ol>
+{% endif %}
+
+{% if request.user.is_staff %}
+    <h4><a class="toggler" href="#debug-users-results">Debug info (developers only)</a></h4>
+    <pre id="debug-users-results" style="font-size:0.85em">{{ users_results_info }}</pre>
 {% endif %}
 
 {% endblock %}

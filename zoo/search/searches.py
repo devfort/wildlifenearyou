@@ -190,6 +190,14 @@ delete_places = make_db_deleter(
     'placeinfo', settings.XAPIAN_PERSONAL_PREFIX,
 )
 
+search_users = make_db_searcher(
+    'userinfo', settings.XAPIAN_PERSONAL_PREFIX,
+    latlon_fields = ['latlon']
+)
+delete_users = make_db_deleter(
+    'userinfo', settings.XAPIAN_PERSONAL_PREFIX,
+)
+
 def nearest_places_with_species(q, latlon):
     return search_places(q, latlon=latlon, search_field='species')
 

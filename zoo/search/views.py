@@ -6,7 +6,7 @@ from djape.client import Query, Client
 
 from zoo.shortcuts import render
 from zoo.search import search_places, search_known_species, search_near, \
-    search_locations, SEARCH_ALL, search_species
+    search_locations, SEARCH_ALL, search_species, search_users
 from zoo.trips.models import Sighting
 from zoo.utils import location_from_request
 
@@ -35,6 +35,10 @@ def search_split(request, what, near):
         search_known_species(
             what, details=True, default_op=Query.OP_OR,
     )
+    users_results, users_results_info, users_results_corrected_q = \
+        search_users(
+            what, details=True, default_op=Query.OP_OR,
+    )
 
     for result in results:
         result.species_list = result.get_species()
@@ -61,6 +65,9 @@ def search_split(request, what, near):
         'species_results': species_results,
         'species_results_info': pformat(species_results_info),
         'species_results_corrected_q': species_results_corrected_q,
+        'users_results': users_results,
+        'users_results_info': pformat(users_results_info),
+        'users_results_corrected_q': users_results_corrected_q,
     })
 
 def search_single(request, q, bypass=False):
@@ -69,11 +76,14 @@ def search_single(request, q, bypass=False):
         return search_split(request, *m.groups())
 
     results = None
-    species_results = None
     results_info = None
-    species_results_info = None
     results_corrected_q = None
+    species_results = None
+    species_results_info = None
     species_results_corrected_q = None
+    users_results = None
+    users_results_info = None
+    users_results_corrected_q = None
     location_results = None
     
     if q:
@@ -81,6 +91,8 @@ def search_single(request, q, bypass=False):
             search_places(q, details=True, num=20)
         species_results, species_results_info, species_results_corrected_q = \
             search_known_species(q, details=True, default_op=Query.OP_OR)
+        users_results, users_results_info, users_results_corrected_q = \
+            search_users(q, details=True, default_op=Query.OP_OR)
 
         #near_results = search_near('', q)
         location_results = search_locations(q, 3)
@@ -108,6 +120,9 @@ def search_single(request, q, bypass=False):
         'species_results': species_results,
         'species_results_info': pformat(species_results_info),
         'species_results_corrected_q': species_results_corrected_q,
+        'users_results': users_results,
+        'users_results_info': pformat(users_results_info),
+        'users_results_corrected_q': users_results_corrected_q,
         'location_results': location_results,
     })
 

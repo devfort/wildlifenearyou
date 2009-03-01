@@ -55,6 +55,29 @@ class Profile(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
 
+    class Searchable:
+        fields = [
+            { # Searching for people by name.
+                'field_name': 'name',
+                'django_fields': [lambda x: [x.user.username], lambda x: [x.user.get_full_name()]],
+                'config': {'store': True, 'freetext': {'language': 'en'}},
+            }, { # Searching by biography.
+                'field_name': 'biography',
+                'django_fields': ['biography'],
+                'config': {'store': True, 'freetext': {'language': 'en'}},
+            }, { # Location of the person.
+                'field_name': 'latlon',
+                'django_fields': [lambda inst: [inst.latlon()]],
+                'config': {'type': 'geo', 'geo': {}, 'store': True}
+            },
+        ]
+        xapian_index = 'userinfo'
+
+    def latlon(self):
+        if self.longitude is None or self.latitude is None:
+            return ''
+        return "%f %f" % (self.latitude, self.longitude)
+
     def points_image(self):
         """The PNG within /static/img/engagementbadge/ ."""
         return 'monkey'
@@ -192,6 +215,19 @@ class Profile(models.Model):
         # 5% reserved. Once we fill that up, we'll start awarding badges for specific things instead.
 
         return percent
+
+# Ensure that when a User object is saved, we save the profile as well (if any).
+# This guarantees correct reindexing. We can't do it the normal way (by shoving a
+# searchable class within the User model) because that's monkeypatching and somewhat
+# grotty.
+#
+# Ideally we should wrap this mechanism into a reverse cascades system in Searchify.
+from django.db.models.signals import post_save
+def autosave_profile(sender, **kwargs):
+    profile = sender.get_profile()
+    if profile:
+        profile.save()
+post_save.connect(autosave_profile, User)
 
 # presave hook to update profile percentage completion
 def profilecalc_postsave(sender, **kwargs):

@@ -61,6 +61,7 @@
 # FIXME: document that you have to call initialise (and figure out where additional config comes from...)
 
 # TODO: make it possible to index an individual model to more than one database.
+# TODO: reverse cascades, so you can put searchable stuff into your Profile model, but have it index stuff from the User.
 # Test: the override stuff
 
 from django.db.models.signals import post_save, pre_delete, post_delete
