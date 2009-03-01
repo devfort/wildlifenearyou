@@ -224,7 +224,7 @@ class Profile(models.Model):
 # Ideally we should wrap this mechanism into a reverse cascades system in Searchify.
 from django.db.models.signals import post_save
 def autosave_profile(sender, **kwargs):
-    profile = sender.get_profile()
+    profile = kwargs['instance'].get_profile()
     if profile:
         profile.save()
 post_save.connect(autosave_profile, User)
