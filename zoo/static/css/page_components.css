@@ -477,6 +477,16 @@ ul.currency li {
 	padding-left: 25px;
 	min-height: 20px;
 }
+.direction_Train, .direction_Foot,
+.direction_Plane, .direction_Helicopter,
+.direction_Zeppelin, .direction_Boat,
+.direction_Ferry, .direction_UFO,
+.direction_Narwhal, .direction_Teleporter {
+	background-image: url(/static/img/icons/icons_green_placeholder_20x20.png);
+	background-repeat: no-repeat;
+	padding-left: 25px;
+	min-height: 20px;
+}
 
 /* @end */
 
