@@ -77,7 +77,7 @@ def validate_email(request, username, days, hash):
 
 def validate_email_success(request):
     if not request.user.is_authenticated():
-        if not request.user.get_profile.email_validated:
+        if not request.user.get_profile().email_validated:
             raise Http404
 
     return render(request, 'accounts/email_validated.html', {})
