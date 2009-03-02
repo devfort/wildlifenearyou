@@ -131,12 +131,10 @@ def place_summary(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
 
-    species_list = place.get_species(request.user)
     times_sorted = get_times_sorted(place)
 
     return render(request, 'places/place_summary.html', {
         'place': place,
-        'species_list': species_list,
         'opening_times': times_sorted,
     },
                   base='base_print.html')
