@@ -41,7 +41,7 @@ class Currency(models.Model):
 def _species_for_place(place):
     from zoo.animals.models import Species # Avoid circular import
     return Species.objects.filter(
-        place = place
+        sightings__place = place
     ).values_list('common_name', flat=True)
 
 class Place(AuditedModel):
