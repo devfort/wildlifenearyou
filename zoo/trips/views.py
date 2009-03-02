@@ -236,7 +236,7 @@ def finish_add_sightings_to_place(request, country_code, slug):
                     )
             return Redirect(place.get_absolute_url())
         
-        form = FinishAddSightingsForm(request.POST, user=request.user, place=place)
+        form = AddTripForm(request.POST, initial = {'place': place})
         if form.is_valid():
             if request.POST.get('add-to-existing'):
                 # if the user chose this option they want to add this sighting to an existing trip of theirs
@@ -248,7 +248,7 @@ def finish_add_sightings_to_place(request, country_code, slug):
                     start = form.cleaned_data['start'],
                     start_accuracy = form.cleaned_data['start_accuracy'],
                     description = form.cleaned_data['description'],
-                    rating = form.cleaned_data['review-rating'],
+                    rating = form.cleaned_data['rating'],
                     place = place,
                 )
                 trip.save()
@@ -285,8 +285,8 @@ def finish_add_sightings_to_place(request, country_code, slug):
             else:
                 whos_trip += "'s"
         whos_trip += ' trip'
-        form = FinishAddSightingsForm(initial = {'name': whos_trip}, user=request.user, place=place)
-        
+        form = AddTripForm(initial = {'name': whos_trip, 'place': place})
+
     tcount = request.user.created_trip_set.all().filter(place=place).count()
     
     return render(request, 'trips/why-not-add-to-your-tripbook.html', {
@@ -297,21 +297,27 @@ def finish_add_sightings_to_place(request, country_code, slug):
         'sightings': sightings,
     })
 
-class FinishAddSightingsForm(forms.Form):
-    name = forms.CharField(max_length=100, label='Trip title')
+class AddTripForm(forms.ModelForm):
+    # In the model this is a date, but we do some magic to allow more flexibility (see clean_start below).
     start = forms.CharField(required = False, label='Trip date')
-    description = forms.CharField(required = False, widget=forms.Textarea,
-        label='Notes'
-    )
+    # And this has to be there or it won't be saved
+    start_accuracy = forms.CharField(required = False, label='Start accuracy (hidden)')
+    # Override the default for this, since we need it to match the widget we're using
+    rating = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
-        place = kwargs.pop('place')
-        trips = user.created_trip_set.all().filter(place=place)
+        super(AddTripForm, self).__init__(*args, **kwargs)
+        self.fields['name'].label = 'Trip title'
+        self.fields['description'].label = 'Notes'
+        self.fields.keyOrder = self.Meta.fields
 
-        super(FinishAddSightingsForm, self).__init__(*args, **kwargs)
-        self.fields['review-rating'] = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
-        self.fields['user_trips'] = forms.ChoiceField(required = False, choices=[ (trip.id, trip.title()) for trip in trips ]) 
+    class Meta:
+        model = Trip
+        fields = (
+            # Do start_accuracy before start so that when we adjust it in clean_start
+            # it doesn't get wiped over by its own (implicit) clean processing
+            'start_accuracy', 'start', 'name', 'description', 'rating',
+        )
 
     def clean_start(self):
         start = self.cleaned_data['start'].lower()
@@ -389,6 +395,41 @@ def trip_delete(request, username, trip_id):
     
     return render(request, 'trips/trip_delete.html', {
         'trip': trip,
+    })
+
+class EditTripForm(AddTripForm):
+    def __init__(self, *args, **kwargs):
+        super(EditTripForm, self).__init__(*args, **kwargs)
+        if kwargs['instance']:
+            # This feels wrong. But it works.
+            self.initial['start'] = kwargs['instance'].formatted_start_date()
+
+@login_required
+def edit_trip(request, username, trip_id):
+    user = get_object_or_404(User, username=username)
+    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
+    if request.user.id != user.id:
+        return HttpResponseForbidden()
+
+    if request.method=='POST':
+        form = EditTripForm(request.POST, instance=trip)
+        if form.is_valid():
+            dates_match = False
+            if trip.end == trip.start:
+                dates_match = True
+            trip2 = form.save(commit = False)
+            if trip2.end == trip.end and dates_match:
+                # Preserve matching start/end dates unless the end date has been explicitly changed
+                # (which won't happen at the moment as we don't offer it in the interface)
+                trip2.end = trip.start
+            trip2.save()
+            return Redirect(reverse('trip-view', args=(username, trip_id,)))
+    else:
+        form = EditTripForm(instance=trip)
+    
+    return render(request, 'trips/trip_edit.html', {
+        'trip': trip,
+        'form': form,
     })
 
 @login_required

@@ -137,6 +137,6 @@
         {% endif %}
 
         {% if belongs_to_user %}
-        <p class="highlight"><a class="edit" href="edit/">Edit this trip</a> <a class="remove" href="delete/">Delete this trip</a></p>
+        <p class="highlight"><a class="edit" href="{{ trip.urls.edit }}">Edit this trip</a> <a class="remove" href="delete/">Delete this trip</a></p>
         {% endif %}
 {% endblock %}

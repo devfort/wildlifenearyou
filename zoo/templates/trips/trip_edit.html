@@ -1,0 +1,52 @@
+{% extends base %}
+
+{% block title %}Edit your trip{% endblock %}
+
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/star-select-replace.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<h1>Edit your trip</h1>
+
+<form action="{{ trip.urls.edit }}" method="POST">
+
+<div class="container text-container">
+    {{ form.name.errors }}
+    <label for="id_name">Title</label>
+    {{ form.name }}
+    to {{ trip.place }}
+    <p class="meta">(use titles to differentiate between different trips to the same place)</p>
+</div>
+<div class="container text-container">
+    {{ form.start.errors }}
+    <label for="id_start">Date of trip</label>
+    {{ form.start }}
+    <p class="meta">(optional, as accurate as you can remember; e.g. &ldquo;13/4/2007&rdquo;, &ldquo;May 2008&rdquo;, &ldquo;2005&rdquo;)</p>
+</div>
+<div class="container textarea-container">
+    {{ form.description.errors }}
+    {{ form.description.label_tag }}
+    {{ form.description }}
+    <p class="meta">(optional)</p>
+</div>
+<div class="select-container container">
+	<label for="rating">Your rating for this trip:</label>
+	<select id="rating" name="rating">
+		<option></option>
+		<option value="1" {% ifequal trip.rating "1" %}selected="selected" {% endifequal %}class="worst">*</option>
+		<option value="2" {% ifequal trip.rating "2" %}selected="selected" {% endifequal %}class="bad">**</option>
+		<option value="3" {% ifequal trip.rating "3" %}selected="selected" {% endifequal %}class="fair">***</option>
+		<option value="4" {% ifequal trip.rating "4" %}selected="selected" {% endifequal %}class="good">****</option>
+		<option value="5" {% ifequal trip.rating "5" %}selected="selected" {% endifequal %}class="best">*****</option>
+	</select>
+    <p class="meta">(optional, one star is worst, five stars is best)</p>
+</div>
+<div class="container">
+    <input type="submit" name="save-trip" value="Save changes">
+</div>
+
+</form>
+
+{% endblock %}

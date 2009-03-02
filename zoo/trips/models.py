@@ -50,6 +50,11 @@ class Trip(AuditedModel):
                 'username': self.created_by.username,
                 'trip_id': self.id,
                 })
+        elif name == 'edit':
+            return ('edit-trip', (), {
+                'username': self.created_by.username,
+                'trip_id': self.id,
+                })
         else:
             raise AttributeError, name
     
@@ -79,6 +84,19 @@ class Trip(AuditedModel):
 
         return Passport(species_list, favourites)
 
+    def formatted_start_date(self):
+        date = self.start
+        if date is not None:
+            if self.start_accuracy == 'year':
+                date = u'%s' % self.start.year
+            elif self.start_accuracy == 'month':
+                date = u'%s' % dateformat.format(self.start, 'F Y')
+            else:
+                date = u'%s' % dateformat.format(self.start, 'jS F Y')
+        else:
+            date = ''
+        return date
+
     def formatted_date(self):
         date = self.start
         if date is not None:
@@ -101,7 +119,7 @@ class Trip(AuditedModel):
                 else:
                     date = u' on %s' % date
         else:
-            date = '';
+            date = ''
             
         return date
         

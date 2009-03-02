@@ -42,7 +42,7 @@ function setVal(objID, selIndex) {
 }
 
 jQuery(document).ready(function() {
-	if (document.getElementById('review-rating')) {
-		selectReplacement(document.getElementById('review-rating'));
+	if (document.getElementById('rating')) {
+		selectReplacement(document.getElementById('rating'));
 	}
 });
