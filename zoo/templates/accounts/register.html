@@ -3,8 +3,30 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<form action="/register/" method="POST">
-{{ form.as_p }}
-<p><input type="submit" value="Register"></p>
+
+<h1>Register now</h1>
+
+<p>Create an account so you can start logging your trips to see animals, birds, fish and other creatures. You can also comment
+on other people's trips and photos, set up your profile, and help us find out more about all the places you can see wild
+animals.</p>
+
+<form action="{% url accounts-register %}" method="post">
+	<div class="container text-container">
+		<label for="id_username">desired username</label>
+		<input id="id_username" type="text" name="username" maxlength="30" />
+	</div>
+	<div class="container text-container">
+		<label for="id_email">e-mail</label>
+		<input id="id_email" type="text" name="email" maxlength="75" />
+	</div>
+	<!-- We're thinking we might ask them to set a password
+		AFTER they've validated their e-mail! -->
+	<div class="container text-container">
+		<label for="id_password1">password</label>
+		<input type="password" name="password1" id="id_password1" />
+	</div>
+        <p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
+	<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
 </form>
+
 {% endblock %}
