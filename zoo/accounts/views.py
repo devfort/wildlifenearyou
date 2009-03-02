@@ -20,6 +20,9 @@ def login(request, template_name='registration/login.html', redirect_field_name=
         return Redirect(request.REQUEST.get(redirect_field_name, '/'))
 
     redirect_to = request.REQUEST.get(redirect_field_name, '')
+    suppress_register = request.REQUEST.get('suppress-register', 'false')
+    if not redirect_to:
+        suppress_register = 'true'
 
     if request.method == "POST":
         form = OurAuthenticationForm(data=request.POST)
@@ -39,12 +42,15 @@ def login(request, template_name='registration/login.html', redirect_field_name=
     return render(request, template_name, {
         'form': form,
         redirect_field_name: redirect_to,
+        'suppress_register': suppress_register,
     })
 login = never_cache(login)
 
-def register(request):
+def register(request, redirect_field_name=REDIRECT_FIELD_NAME):
     if request.user.is_authenticated():
-        return Redirect('/')
+        return Redirect(request.REQUEST.get(redirect_field_name, '/'))
+
+    redirect_to = request.REQUEST.get(redirect_field_name, '')
 
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -52,11 +58,21 @@ def register(request):
             user = form.save()
             p = user.get_profile()
             p.send_validation_email()
-            return Redirect(reverse('accounts-registration-complete'))
+            if not redirect_to or '//' in redirect_to or ' ' in redirect_to:
+                redirect_to = reverse('accounts-registration-complete')
+            else:
+                # log them in temporarily; when they close their browser they won't be
+                # able to log in again because this account hasn't passed email verification
+                # yet. But allows them to get straight on with using the site.
+                from django.contrib.auth import login, authenticate
+                user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+                login(request, user)
+            return Redirect(redirect_to)
     else:
         form = RegistrationForm()
     return render(request, 'accounts/register.html', {
         'form': form,
+        'next': redirect_to,
     })
 
 def registration_complete(request):

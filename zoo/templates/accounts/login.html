@@ -1,12 +1,41 @@
 {% extends base %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login or register{% endblock %}
 
-{% block content %}
+{% block content_title %}{% ifnotequal suppress_register 'true' %}<h1>Please login or register to continue</h1>{% endifnotequal %}{% endblock %}
+
+{% block primary_content %}
+<h2>Login</h2>
 <form action="/login/" method="POST">
 {{ form.as_p }}
 <p><a href="{% url forgotten-password %}">I&rsquo;ve forgotten my password, please send help!</a></p>
 <p><input type="submit" value="Login"></p>
 <input type="hidden" name="next" value="{{ next }}">
 </form>
+{% endblock %}
+
+{% block secondary_content %}
+{% ifnotequal suppress_register 'true' %}
+<h2>Register</h2>
+
+<form action="{% url accounts-register %}" method="post">
+	<div class="container text-container">
+		<label for="id_username">desired username</label>
+		<input id="id_username" type="text" name="username" maxlength="30" />
+	</div>
+	<div class="container text-container">
+		<label for="id_email">e-mail</label>
+		<input id="id_email" type="text" name="email" maxlength="75" />
+	</div>
+	<!-- We're thinking we might ask them to set a password
+		AFTER they've validated their e-mail! -->
+	<div class="container text-container">
+		<label for="id_password">password</label>
+		<input type="password" name="password" id="id_password" />
+	</div>
+        <p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
+	<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
+        <input type="hidden" name="next" value="{{ next }}">
+</form>
+{% endifnotequal %}
 {% endblock %}

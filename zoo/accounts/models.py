@@ -239,9 +239,9 @@ class Profile(models.Model):
 # Ideally we should wrap this mechanism into a reverse cascades system in Searchify.
 from django.db.models.signals import post_save
 def autosave_profile(sender, **kwargs):
-    profile = kwargs['instance'].get_profile()
-    if profile:
-        profile.save()
+    profiles = Profile.objects.filter(user=kwargs['instance'])
+    if len(profiles)==1:
+        profiles[0].save()
 post_save.connect(autosave_profile, User)
 
 # presave hook to update profile percentage completion
