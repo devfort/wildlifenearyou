@@ -34,7 +34,7 @@
 			</p>
 			<ul>
 				{% comment %} This has to all be on one line. {% endcomment %}
-				{% if user.is_authenticated %}<li>{{ user.username }}</li><li><a href="{% url accounts-profile user %}">Profile</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Sign Up</a></li><li><a href="{% url accounts-login %}?next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
+				{% if user.is_authenticated %}<li>{{ user.username }}</li><li><a href="{% url accounts-profile user %}">Profile</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
 			</ul>
 			{% block search_form %}
 			<form action="/search/" method="GET" accept-charset="utf-8">
