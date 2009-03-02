@@ -114,14 +114,16 @@ class Profile(models.Model):
         hash = md5.new(settings.SECRET_KEY + days + username).hexdigest()
         return (hash, days)
 
-    def send_email(self, subject, template, kwargs):
+    def send_email(self, subject, template, kwargs, to_email=None):
         body = render_to_string(template, kwargs)
+        if to_email is None:
+            to_email = self.user.email
 
         import smtplib
         try:
             zoo.utils.send_mail(
                 subject, body,
-                settings.EMAIL_FROM, [self.user.email],
+                settings.EMAIL_FROM, [to_email],
                 fail_silently=False
             )
         except smtplib.SMTPException:
@@ -135,6 +137,17 @@ class Profile(models.Model):
                          'url': self.email_validation_url_for_user()
                          })
     send_validation_email.alters_data = True
+
+    def send_invitation_email(self, to_name, to_email):
+        self.send_email('Check out WildlifeNearYou!',
+                        'emails/invite.txt',
+                        {'user': self.user,
+                         'to_name': to_name,
+                         'to_email': to_email,
+                         'url': reverse('landing-page'),
+                         },
+                         to_email)
+    send_invitation_email.alters_data = True
 
     def send_password_key_email(self):
         self.send_email('You can change your password',
