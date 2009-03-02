@@ -1,14 +1,31 @@
 Hello {{ user.username }},
 
-We're truly chuffed to bits that you've chosen to be a part of {{ site.name }} and taken the time to sign up, we think you're wonderful! Now you're an official member of {{ site.name }} you get access to what we hope you think are some really nice things.
+We're truly chuffed to bits that you've chosen to be a part of
+WildlifeNearYou and taken the time to sign up--we think you're wonderful!
+Now you're an official member of WildlifeNearYou, you get access to what we
+hope you think are some really nice things.
 
-    * You can get stuck in and create your own profile including customising your own little avatar, we think they're so cute! Tell us your location and we'll give you info as to where your nearest favourite animals are.
-    * We actively encourage you to create guestbook entries to share your experiences about a particular zoo for others to read, we love a good read too! You can describe your trip and include a list of animals/creatures you spotted on your day out.
-    * We hope you have fun keeping track of all the creatures you've seen.
-    * Share your photos of your trip to the zoo.
-    * You have the ability to rate a zoo which will let others know how awesome it was in a snapshot.
-    * We'd also like to let you know that we have given you our beloved users the power to keep the information about the zoos and creatures accurate. At any time you spot something that isn't right, pretty please with sugar on top tell us about it so we can put it right. We value your input and time, without you we can't do this on our own.
+    * You can get stuck in and create your own profile including customising
+      your own little avatar, we think they're so cute! Tell us your
+      location and we'll give you info as to where your nearest favourite
+      animals are.
+    * We actively encourage you to create trips to share your experiences
+      about a particular place you've visited. You can describe your trip
+      and include a list of animals/creatures you spotted on your day out.
+    * Share your photos of your trips.
+    * You have the ability to rate a trip, which will let others know how
+      awesome it was for you.
+    * We have also given you our beloved users the power to keep the
+      information about the places the site knows about accurate. Any time
+      you spot something that isn't right, please tell us about it so we can
+      put it right. We value your input and time--we can't do this without
+      you!
 
-If at anytime you have any questions, problems or suggestions for improvement please don't be scared to get in touch ({{ site.name }} {{ site_email }}), we don't bite. Thanks again and most importantly of all... Enjoy!
+If at anytime you have any questions, problems or suggestions for
+improvement please don't be scared to get in touch--there's a feedback form
+on the site (the link's at the top of each page).
 
-From, {{ site.name }} Team
+Thanks again and most importantly of all... Enjoy!
+
+Best wishes,
+The WildlifeNearYou team
