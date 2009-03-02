@@ -35,23 +35,18 @@ def prettify_days(daynums):
         if start == end:
             out.append( days_of_week[start] )
         else:
-            out.append( '%s&ndash;%s' % (days_of_week[start], days_of_week[end] ) )
+            out.append( u"%s\u2013%s" % (days_of_week[start], days_of_week[end] ) )
        
     return ', '.join(out)
 
-def place(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-
-    species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE + 1)
-
+def get_times_sorted(place):
     # Loop through opening times in database, grouping by date range and section - only store one opening time per day to allow overriding
     opening_times = {}
     for opening in place.placeopening_set.all():
 
         start_date = opening.start_date or ''
         end_date = opening.end_date or ''
-        date_range_machine = u'%s - %s' % (start_date, end_date)
+        date_range_machine = u"%s\u2013%s" % (start_date, end_date)
 
         # Create a human-readable date range
         if start_date and end_date:
@@ -59,17 +54,17 @@ def place(request, country_code, slug):
             if end_date > start_date:
                 # now check if month and year are the same
                 if dateformat.format(start_date, 'mY') == dateformat.format(end_date, 'mY'):
-                    date_range = u'%s &ndash; %s' % (dateformat.format(start_date, 'jS'), dateformat.format(end_date, 'jS F Y'))
+                    date_range = u"%s\u2013%s" % (dateformat.format(start_date, 'jS'), dateformat.format(end_date, 'jS F Y'))
                 elif start_date.year == end_date.year:
-                    date_range = u'%s &ndash; %s' % (dateformat.format(start_date, 'jS F'), dateformat.format(end_date, 'jS F Y'))
+                    date_range = u"%s\u2013%s" % (dateformat.format(start_date, 'jS F'), dateformat.format(end_date, 'jS F Y'))
                 else:
-                    date_range = u'%s &ndash; %s' % (dateformat.format(start_date, 'jS F Y'), dateformat.format(end_date, 'jS F Y'))
+                    date_range = u"%s\u2013%s" % (dateformat.format(start_date, 'jS F Y'), dateformat.format(end_date, 'jS F Y'))
             else:
                 date_range = u'%s' % dateformat.format(start_date, 'jS F Y')
         elif start_date:
-            date_range = u'%s &ndash;' % dateformat.format(start_date, 'jS F Y')
+            date_range = u"%s\u2013" % dateformat.format(start_date, 'jS F Y')
         elif end_date:
-            date_range = u'&ndash; %s' % dateformat.format(end_date, 'jS F Y')
+            date_range = u"\u2013%s" % dateformat.format(end_date, 'jS F Y')
         else:
             date_range = '';
 
@@ -112,6 +107,14 @@ def place(request, country_code, slug):
             data['sections'][section] = arr
 
     times_sorted = [ { 'range': opening_times[key]['date_range'], 'sections': opening_times[key]['sections'] } for key in sorted(opening_times) ]
+    return times_sorted
+
+def place(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    place = get_object_or_404(Place, slug=slug, country=country)
+
+    species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE + 1)
+    times_sorted = get_times_sorted(place)
 
     return render(request, 'places/place.html', {
         'place': place,
@@ -129,10 +132,12 @@ def place_summary(request, country_code, slug):
     place = get_object_or_404(Place, slug=slug, country=country)
 
     species_list = place.get_species(request.user)
+    times_sorted = get_times_sorted(place)
 
     return render(request, 'places/place_summary.html', {
         'place': place,
         'species_list': species_list,
+        'opening_times': times_sorted,
     },
                   base='base_print.html')
 
