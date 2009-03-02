@@ -138,13 +138,15 @@ class Profile(models.Model):
                          })
     send_validation_email.alters_data = True
 
-    def send_invitation_email(self, to_name, to_email):
+    def send_invitation_email(self, to_name, to_email, ref=None):
+        """Send an email inviting a friend to check out WildlifeNearYou. If ref set, highlights a particular page."""
         self.send_email('Check out WildlifeNearYou!',
                         'emails/invite.txt',
                         {'user': self.user,
                          'to_name': to_name,
                          'to_email': to_email,
                          'url': reverse('landing-page'),
+                         'link': ref,
                          },
                          to_email)
     send_invitation_email.alters_data = True

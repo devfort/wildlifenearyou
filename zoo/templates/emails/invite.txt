@@ -2,10 +2,14 @@ Hello {{ to_name }},
 
 Your friend {{ user.get_full_name }} is using WildlifeNearYou, the website that
 lets you share your passion for animals around you - and they thought you might
-like to join them.
+like to join them. You can join them at:
 
 {{ url }}
+{% if link %}
+They thought you might particularly like:
 
+{{ link }}
+{% endif %}
 If clicking the link above doesn't work, you may have to copy it and then paste
 it into the 'Location' or 'Address' box of your web browser, and then press
 'enter' or 'return' on your keyboard.

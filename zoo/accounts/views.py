@@ -208,6 +208,39 @@ def delete_location(request):
         'current_location': '',
     })
 
+@login_required
+def invite_friends(request):
+    msg = None
+    if request.method=='POST':
+        email = request.POST.get('email', None)
+        name = request.POST.get('name', '')
+        ref = request.POST.get('link', '')
+
+        if name:
+            rcpt = name
+        else:
+            rcpt = email
+
+        try:
+            if email:
+                # FIXME: link is relative not absolute
+                request.user.get_profile().send_invitation_email(to_name=name, to_email=email, link=ref)
+                msg = u"Invitation sent to %s" % rcpt
+        except Exception, e:
+            if request.user.is_staff:
+                msg = u"An error occurred while sending an invitation to %s: %s." % (rcpt, unicode(e))
+            else:
+                msg = u"An error occurred while sending an invitation to %s." % (rcpt,)
+    elif request.method=='GET':
+        ref = request.GET.get('link', '')
+    # FIXME: sample email renders with url/link as relative not absolute
+    return render(request, 'accounts/invite_friends.html', {
+        'msg': msg,
+        'url': reverse('landing-page'),
+        'to_name': 'friend',
+        'link': ref,
+        })
+
 from zoo.utils import location_from_request
 def set_location(request):
     """

@@ -1,0 +1,14 @@
+<p>Want your friends to join in the fun at WildlifeNearYou? Just add their name and email and we'll send them an invitation saying you're on the site. We won't use their details for anything else.</p>
+
+<form action="{% url invite-friends %}" method="POST">
+        <input type="hidden" name="link" value="{{ link }}">
+	<div class="container text-container">
+		<label for="invite-name">Name</label>
+		<input type="text" class="text" name="name" id="invite-name">
+		<label for="invite-email">Email</label>
+		<input type="text" class="text" name="email" id="invite-email">
+	</div>
+	<div>
+		<input type="submit" value="Invite this person" class="submit">
+	</div>
+</form>

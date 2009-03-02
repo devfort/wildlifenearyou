@@ -48,6 +48,8 @@ urlpatterns = patterns('',
         name='tripbook-default'),
     url(r'^profile/$', accounts.profile_default,
         name='accounts-default'),
+    url(r'^invite/$', accounts.invite_friends,
+        name='invite-friends'),
 
     url(r'^search/species/$', 'zoo.search.views.search_species', name='species-search'),
     url(r'^search/$', 'zoo.search.views.search',

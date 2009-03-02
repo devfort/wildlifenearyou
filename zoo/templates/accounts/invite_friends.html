@@ -1,0 +1,19 @@
+{% extends base %}
+
+{% block title %}Invite your friends{% endblock %}
+
+{% block content %}
+
+<h1>Invite your friends</h1>
+
+{% if msg %}<p class="notification">{{ msg|safe }}</p>{% endif %}
+
+{% include "accounts/_invite_form.html" %}
+
+<h2>Sample email</h2>
+
+<pre>
+{% include "emails/invite.txt" %}
+</pre>
+
+{% endblock %}
