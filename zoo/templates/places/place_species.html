@@ -1,5 +1,6 @@
 {% extends base %}
 
+{% load pagination_tags %}
 {% load zoocommon %}
 
 {% block title %}{{ place.known_as }} - Species{% endblock %}
@@ -14,6 +15,8 @@
 
 {% if species_list %}
 
+{% autopaginate species_list 10 %}
+{% paginate %}
 <ul class='animal-list'>
 {% for species in species_list %}
 <li>
@@ -23,6 +26,7 @@
 </li>
 {% endfor %}
 </ul>
+{% paginate %}
 
 {% else %}
 

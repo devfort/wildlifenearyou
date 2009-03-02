@@ -794,6 +794,33 @@ div#ajax-feedback-form {
 
 /* @end */
 
+/* @group Photos list */
+
+.photos-list {
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+  text-align: center;
+}
+
+.photos-list li {
+  display: inline;
+  padding: 4px;
+  margin: 0;
+}
+
+/* @end */
+
+/* @group Pagination */
+
+.pagination {
+  text-align: center;
+  margin: 0.2em 0.5em 0.5em 0.5em;
+  padding: 0;
+}
+
+/* @end */
+
 /* @group Teaser list */
 
 ul.teaserlist {

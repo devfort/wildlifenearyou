@@ -1,6 +1,8 @@
 {% extends base %}
 
-{% block title %}{{ profile.user|title }}{% endblock %}
+{% load pagination_tags %}
+
+{% block title %}{{ profile.user|title }}'s photos{% endblock %}
 
 {% block content %}
 
@@ -9,13 +11,24 @@
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
+<p>Why not check out <a href="{{ profile.urls.absolute }}">{{ profile.user|title }}'s full profile</a>?</p>
+
 <div>
         <h2>Photos</h2>
 
-        {% for photo in photos.all %}
-                <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-        {% endfor %}
+        {% with photos.all as photos %}
+        {% autopaginate photos 10 %}
+        {% paginate %}
+        <ul class="photos-list">
+                {% for photo in photos.all %}
+                        <li>
+                                <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+                        </li>
+                {% endfor %}
+        </ul>
+        {% paginate %}
         {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
+        {% endwith %}
 </div>
 
 {% endblock %}

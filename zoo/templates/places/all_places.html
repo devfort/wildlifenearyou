@@ -1,18 +1,23 @@
 {% extends base %}
 
+{% load pagination_tags %}
+
 {% block title %}All Places{% endblock %}
 
 {% block content %}
 
 <h1>All Places</h1>
 {% if all_places %}
+{% autopaginate all_places 10 %}
+{% paginate %}
 <ul class='place-list'>
-{% for place in all_places %}
-<li>
-        {% include "places/_place.html" %}
-</li>
-{% endfor %}
+        {% for place in all_places %}
+        <li>
+                {% include "places/_place.html" %}
+        </li>
+        {% endfor %}
 </ul>
+{% paginate %}
 {% else %}
 <p>Eek! We have no places to show you!</p>
 {% endif %}

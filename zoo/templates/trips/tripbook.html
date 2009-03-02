@@ -1,27 +1,34 @@
 {% extends base %}
 
+{% load pagination_tags %}
+
 {% block title %}{{ profile.user }}&rsquo;s Tripbook{% endblock %}
 
 {% block content %}
 {% load trip_sightings %}
 <h1>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Trip Book</h1>
 
+<p>Why not check out <a href="{{ profile.urls.absolute }}">{{ profile.user|title }}'s full profile</a>?</p>
+
 <div id="my_trips">
-	{% if tripbook %}
+{% if tripbook %}
+	{% autopaginate tripbook 10 %}
+	{% paginate %}
 	<ol class='trip-list'>
-	{% for trip in tripbook %}
-        <li>
-                <div class="thumb-75">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-                <p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
-                <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>
-        </li>
-	{% endfor %}
-</ol>
-	{% else %}
+        	{% for trip in tripbook %}
+                        <li>
+                                <div class="thumb-75">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                                <p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
+                                <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>
+                        </li>
+        	{% endfor %}
+        </ol>
+        {% paginate %}
+{% else %}
 	<p>
 		{% ifequal profile.user user %}You haven&rsquo;t{% else %}This user hasn&rsquo;t{% endifequal %} been on any trips yet.
 	</p>
-	{% endif %}
+{% endif %}
 </div>
 
 
