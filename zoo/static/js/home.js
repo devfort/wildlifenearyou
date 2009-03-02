@@ -147,4 +147,16 @@ jQuery(function($) {
     submit2.click(function() {
         $('input#search-place').parents('form')[0].submit();
     });
+    
+    $('#login-now-toggle').click(function() {
+        $('#register-box').hide();
+        $('#login-box').show();
+        return false;
+    });
+    $('#register-now-toggle').click(function() {
+        $('#register-box').show();
+        $('#login-box').hide();
+        return false;
+    });
+    
 });

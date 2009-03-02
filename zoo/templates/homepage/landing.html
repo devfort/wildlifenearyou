@@ -25,54 +25,64 @@
 <div class="receptacle intro-block">
 	<div class="wrapper">
 		<div class="contents">
-			<div class="interact">
-				{% if user.is_authenticated %}
-				<h2>Where have you been?</h2>
-				<form action="/add-trip/" method="GET">
-					<div class="container text-container">
-						<label for="search-place">I've been to…</label>
-						<input type="text" class="text" name="q" id="search-place">
-					</div>
-					<div>
-						<input type="submit" value="Find this place" class="submit">
-					</div>
-					</form>
-				{% else %}
-				<h2>Register now</h2>
-				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action">&raquo; <span>Log in now</span></a></p>
-				<form action="{% url accounts-register %}" method="post">
-					<div class="container text-container">
-						<label for="id_username">desired username</label>
-						<input id="id_username" type="text" name="username" maxlength="30" />
-					</div>
-					<div class="container text-container">
-						<label for="id_email">e-mail</label>
-						<input id="id_email" type="text" name="email" maxlength="75" />
-					</div>
-					<!-- We're thinking we might ask them to set a password
-						AFTER they've validated their e-mail! -->
-					<div class="container text-container">
-						<label for="id_password1">password</label>
-						<input type="password" name="password1" id="id_password1" />
-					</div>
-					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
-				</form>
-				{% endif %}
-			</div>
+			{% if user.is_authenticated %}
+        			<div class="interact">
+        				<h2>Where have you been?</h2>
+        				<form action="/add-trip/" method="GET">
+        					<div class="container text-container">
+        						<label for="search-place">I've been to…</label>
+        						<input type="text" class="text" name="q" id="search-place">
+        					</div>
+        					<div>
+        						<input type="submit" value="Find this place" class="submit">
+        					</div>
+        				</form>
+        			</div>
+			{% else %}
+        			<div class="interact" id="register-box">
+        				<h2>Register now</h2>
+        				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in now</span></a></p>
+        				<form action="{% url accounts-register %}" method="post">
+        					<div class="container text-container">
+        						<label for="id_username">desired username</label>
+        						<input id="id_username" type="text" name="username" maxlength="30" />
+        					</div>
+        					<div class="container text-container">
+        						<label for="id_email">e-mail</label>
+        						<input id="id_email" type="text" name="email" maxlength="75" />
+        					</div>
+        					<!-- We're thinking we might ask them to set a password
+        						AFTER they've validated their e-mail! -->
+        					<div class="container text-container">
+        						<label for="id_password1">password</label>
+        						<input type="password" name="password1" id="id_password1" />
+        					</div>
+                                                <p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
+        					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
+        				</form>
+				</div>
+        			<div class="interact" id="login-box" style="display: none;">
+        				<h2>Login</h2>
+        				<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register now</span></a></p>
+        				<form action="{% url accounts-login %}" method="post">
+                                                <div class="container text-container">
+                                                        <label for="id_username">username</label>
+                                                        <input id="id_username" type="text" name="username" maxlength="30" />
+                                                </div>
+                                                <div class="container text-container">
+                                                        <label for="id_password">password</label>
+                                                        <input type="password" name="password" id="id_password" />
+                                                </div>
+                                                <p class="meta"><a href="{% url forgotten-password %}">I&rsquo;ve forgotten my password, please send help!</a></p>
+                                                <div><input type="submit" class="submit" value="&raquo; Login"></div>
+        				</form>
+        		        </div>
+			{% endif %}
 			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 			{% if user.is_authenticated %}
-			<p class="intro">If you've spotted some animals since you last checked in with us, why not add the trip in, and also upload any photos you took? If not, why not check out some recent trips others have taken, and record your thoughts on the animals they've spotted and the photos they've taken?</p>
+			<p class="intro">If you've spotted some animals since you last checked in with us, why not add the trip in, and also upload any photos you took? If not, why not check out some recent trips others have taken, and record your thoughts on the animals they've spotted and the photos they've taken? Or you could <a href="{% url invite-friends %}">invite some friends</a> to join in the fun!</p>
 			{% else %}
 			<p class="intro"><strong>Wild Life Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
-			<form action="/add-trip/" method="GET">
-				<div class="container text-container">
-					<label for="search-place">I've been to…</label>
-					<input type="text" class="text" name="q" id="search-place">
-				</div>
-				<div>
-					<input type="submit" value="Find this place" class="submit">
-				</div>
-			</form>
 			{% endif %}
 		</div>
 	</div>
