@@ -32,10 +32,13 @@ if settings.SEARCH_ENABLED:
                 raise NotFound, id
         return lookup
 
-    def make_searcher(dbname, latlon_fields=[]):
+    def make_searcher(dbname, latlon_fields=[], default_op=None):
         client = Client(settings.XAPIAN_BASE_URL, dbname)
         def search(q, num=0):
-            results = client.search(Query(q), end_rank=num)
+            if default_op:
+                results = client.search(Query(FreeTextQuery(q, default_op=default_op)), end_rank=num)
+            else:
+                results = client.search(Query(q), end_rank=num)
             for item in results['items']:
                 yield doc_from_result_item(item, latlon_fields)
         return search
@@ -179,7 +182,7 @@ search_near = make_near_searcher(
 lookup_location = make_lookup(
     settings.XAPIAN_LOCATION_DB, latlon_fields = ['latlon']
 )
-search_species = make_searcher(settings.XAPIAN_SPECIES_DB)
+search_species = make_searcher(settings.XAPIAN_SPECIES_DB, default_op=Query.OP_OR)
 lookup_species = make_lookup(settings.XAPIAN_SPECIES_DB)
 
 search_places = make_db_searcher(
