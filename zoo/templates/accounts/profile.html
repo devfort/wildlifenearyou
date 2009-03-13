@@ -78,7 +78,7 @@
 	<h2>Animals {% ifequal profile.user user %}you{% else %}they{% endifequal %}'ve spotted</h2>
 	<p>
 	{% ifequal profile.user user %}
-	Add more by <a href="{% url search %}" title="Look for something">finding a place you've spotted animals</a>, and then on its page tell us the animals you saw.
+	Add {% if profile.user.created_trip_set.count %}more{% else %}some{% endif %} trips to tell us what you've seen.
 	{% endifequal %}
 	{% if profile.passport.seen_species %}
         </p>
@@ -98,7 +98,7 @@
 	{% endcomment %}
 	<p>
 	{% else %}
-		{% ifequal profile.user user %}Tt seems you {% else %}They {% endifequal %}haven&rsquo;t spotted any {% ifequal profile.user user %}animals {% endifequal %}yet.
+		{% ifequal profile.user user %}You {% else %}They {% endifequal %}haven&rsquo;t spotted any animals yet.
 	</p>
 	{% endif %}
 </div>
@@ -122,7 +122,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 
 <div>
 	{% if profile.user.favourite_species.all %}
-	<h2>{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Favourite Animals</h2>
+	<h2 id="favourite-animals">{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Favourite Animals</h2>
 	<ol class="animal-list">
                 {% for favourite in profile.user.favourite_species.all %}
                 <li>
