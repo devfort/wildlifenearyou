@@ -15,13 +15,6 @@ import datetime, threading
 from django.contrib.auth.models import User
 from accounts.models import profilecalc_postsave
 
-##### Only allow lowercase URLs on this site, redirect if contains uppercase
-
-class OnlyLowercaseUrls:
-    def process_request(self, request):
-        if request.path.lower() != request.path:
-            return HttpResponseRedirect(request.path.lower())
-
 ##### Save current user in a thread local and auto-populate created_by etc
 
 stash = threading.local()
