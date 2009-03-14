@@ -1,19 +1,23 @@
+from zoo.accounts.models import Profile
 from django_openid.registration import RegistrationConsumer
 from django_openid.forms import RegistrationForm
 
-class SinglePasswordRegistrationForm(RegistrationForm):
+from django.conf import settings
+
+class CustomRegistrationForm(RegistrationForm):
     extra_required = ('email',) # first/last name are optional
     
     def __init__(self, *args, **kwargs):
         kwargs['reserved_usernames'] = settings.RESERVED_USERNAMES
-        super(RF, self).__init__(*args, **kwargs)
-        # We only ask for their password once
-        del self.fields['password2']
+        super(CustomRegistrationForm, self).__init__(*args, **kwargs)
         
     class Meta(RegistrationForm.Meta):
         fields = ('username', 'email')
 
 class RegistrationConsumer(RegistrationConsumer):
+    base_template = 'base.html'
+    
+    RegistrationForm = CustomRegistrationForm
     
     def user_can_login(self, request, user):
         # User must have validated their e-mail address
@@ -35,5 +39,4 @@ class RegistrationConsumer(RegistrationConsumer):
         Profile.objects.create(user=user)
         return user
     
-    def get_registration_form_class(self, request):
-        return SinglePasswordRegistrationForm
+endpoint = RegistrationConsumer()
