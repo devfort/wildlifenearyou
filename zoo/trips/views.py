@@ -297,6 +297,29 @@ def finish_add_sightings_to_place(request, country_code, slug):
         'sightings': sightings,
     })
 
+class TripForm(forms.ModelForm):
+    class Meta:
+        model = Trip
+        fields = ('name', 'start', 'start_accuracy', 'description', 'rating')
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        self.place = kwargs.pop('place')
+        super(TripForm, self).__init__(*args, **kwargs)
+        self.fields['rating'] = forms.ChoiceField(
+            required = False,
+            choices = [(i,i) for i in range(1,6)]
+        )
+    
+    def save(self):
+        obj = super(TripForm, self).save(commit = False)
+        obj['created_by'] = self.user
+        obj['place'] = self.place
+        return obj.save()
+
+class FinishAddSightingsForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Trip title')
+
 class AddTripForm(forms.ModelForm):
     # In the model this is a date, but we do some magic to allow more flexibility (see clean_start below).
     start = forms.CharField(required = False, label='Trip date')
