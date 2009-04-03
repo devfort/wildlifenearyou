@@ -19,8 +19,8 @@
 
 <p>
         <img src="/static/img/engagementbadge/{{ profile.points_image }}.png" class="pull-left">
-        {% ifequal profile.user user %}You{% else %}They{% endifequal %}
-        have <strong>{{ profile.percentage_complete }}</strong> animal points, making
+        {% ifequal profile.user user %}You have{% else %}{{ profile.user }} has{% endifequal %}
+        <strong>{{ profile.percentage_complete }}</strong> animal points, making
         {% ifequal profile.user user %}you{% else %}them{% endifequal %} a <strong>{{ profile.points_animal }}</strong>.
         {% ifequal profile.user user %}
         To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% else %}
@@ -75,7 +75,7 @@
 </div>
 
 <div>
-	<h2>Animals {% ifequal profile.user user %}you{% else %}they{% endifequal %}'ve spotted</h2>
+	<h2>Animals {% ifequal profile.user user %}you've{% else %}{{ profile.user }} has{% endifequal %} spotted</h2>
 	<p>
 	{% ifequal profile.user user %}
 	Add {% if profile.user.created_trip_set.count %}more{% else %}some{% endif %} trips to tell us what you've seen.
