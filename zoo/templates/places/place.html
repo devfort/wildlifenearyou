@@ -138,7 +138,7 @@ jQuery(function($) {
 {% endwith %}
 
 {% if place.most_recent_trips_with_desc %}
-<h2>Zoo Tripbook entries</h2>
+<h2>Recent trips here</h2>
 
 {% if been_here %}
 <p class="add">Have you been here again? Tell us <a href="{% url place-add-trip place.country.country_code place.slug %}">what it was like this time</a>!</p>
@@ -178,7 +178,7 @@ jQuery(function($) {
 {% block secondary_content %}
 
 {% if rating.on %}
-<h2>Average Rating</h2>
+<h2>Average rating</h2>
 <p class="rating" title="{{ rating.on|length }} out of 5 stars">
 {% for i in rating.on %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
@@ -227,14 +227,19 @@ jQuery(function($) {
 {% endwith %}
 
 {% with place.extras.all as extras %}
-	<h2>Extras</h2>
+	<h2>Print these out</h2>
+	<ul>
+		<li><a href="{{ place.urls.summary }}">Zoo summary sheet</a></li>
+		<li><a href="{{ place.urls.animal_checklist }}">Animal checklist</a></li>
+	</ul>
+	{% if extras %}
+	<h2>Downloads</h2>
 	<ul>
 		{% for extra in place.extras.all %}
 		<li><a href="{{ extra.file.url }}">{{ extra }}</a></li>
 		{% endfor %}
-		<li><a href="{{ place.urls.summary }}">Zoo summary sheet</a></li>
-		<li><a href="{{ place.urls.animal_checklist }}">Animal checklist</a></li>
 	</ul>
+	{% endif %}
 {% endwith %}
 
 <h2>Comments</h2>
