@@ -204,15 +204,15 @@ def finish_add_sightings_to_place(request, country_code, slug):
     """
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
-    saw_id_set = set(request.REQUEST.getlist('saw'))
+    saw_ids = request.REQUEST.getlist('saw')
     hiddens = []
-    for i, saw_id in enumerate(saw_id_set):
+    for saw_id in saw_ids:
         hiddens.append(
             {'name': 'saw', 'value': saw_id}
         )
     # Text descriptions of sightings, so we can display them to the user
     sightings = []
-    for saw_id in saw_id_set:
+    for saw_id in saw_ids:
         species = lookup_xapian_or_django_id(saw_id)
         if species:
             sightings.append(species)
@@ -221,18 +221,21 @@ def finish_add_sightings_to_place(request, country_code, slug):
     
     if request.method == 'POST':
         if request.POST.get('just-sightings'):
-            for id in saw_id_set:
+            for i, id in enumerate(saw_ids):
                 # Look up the id
                 species = lookup_xapian_or_django_id(id)
+                note = request.POST.get('sighting_note_%d' % i, '')
                 if species: # None if it was somehow invalid
                     Sighting.objects.create(
                         species = species,
-                        place = place
+                        place = place,
+                        note = note
                     )
                 else:
                     Sighting.objects.create(
                         species_inexact = id,
-                        place = place
+                        place = place,
+                        note = note
                     )
             return Redirect(place.get_absolute_url())
         
@@ -255,19 +258,22 @@ def finish_add_sightings_to_place(request, country_code, slug):
                 # created_by should happen automatically
             
             # Now we finally add the sightings!
-            for id in saw_id_set:
+            for i, id in enumerate(saw_ids):
                 # Look up the id
                 species = lookup_xapian_or_django_id(id)
+                note = request.POST.get('sighting_note_%d' % i, '')
                 if species: # None if it wasn't a valid ID
                     trip.sightings.create(
                         species = species,
                         place = place,
+                        note = note,
                     )
                 else:
                     # Invalid IDs are inexact sightings, add them as such
                     trip.sightings.create(
                         place = place,
                         species_inexact = id,
+                        note = note,
                     )
                 # TODO: Shouldn't allow a trip to be added if no valid 
                 # sightings
