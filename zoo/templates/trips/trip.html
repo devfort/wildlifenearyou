@@ -48,7 +48,7 @@
                                             <p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
                                     {% endif %}
                                     {% if sighting.note %}
-                                    <p>{{ sighting.note }}</p>
+                                    {{ sighting.note|linebreaks }}
                                     {% endif %}
                                     </li>
                                 {% endfor %}
