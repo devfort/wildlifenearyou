@@ -93,19 +93,21 @@ def profile_image(request, username, just_the_image_please=False):
     user = get_object_or_404(User, username=username)
     parts = [p.part for p in user.selectedfaceparts.all()]
     
-    # Use part.image.path as full path to the file
-    im = Image.open(os.path.join(
-        settings.OUR_ROOT, 'static/img/blank-face.png'
-    ))
-    for part in parts:
-        im2 = Image.open(part.image.path)
-        paste_transparent(im, None, im2)
+    if parts:
+        im = Image.open(os.path.join(
+            settings.OUR_ROOT, 'static/img/blank-face.png'
+        ))
+        for part in parts:
+            im2 = Image.open(part.image.path)
+            paste_transparent(im, None, im2)
+    else:
+        im = Image.open(os.path.join(
+            settings.OUR_ROOT, 'static/img/default_face.png'
+        ))
     
     if just_the_image_please:
         return im
     
-    if not im or not parts:
-        return HttpResponseRedirect('/static/img/default_face.png')
     response = HttpResponse(content_type = 'image/png')
     im.save(response, format = 'png')
     return response
