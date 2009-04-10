@@ -87,7 +87,14 @@ class Profile(models.Model):
         return 'helpful macaque'
 
     def avatar_img(self):
-        return mark_safe('<img src="/faces/%s.png" alt="%s\'s Avatar" width="175" height="175" />' % (self.user.username.lower(), self.user.username))
+        return mark_safe(
+            '<img src="%s" alt="%s\'s Avatar" width="175" height="175">' % (
+                reverse('profile-image', args=(
+                    self.user.username.lower(),
+                )),
+                self.user.username
+            )
+        )
 
     @models.permalink
     def get_absolute_url(self):

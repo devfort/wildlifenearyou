@@ -119,20 +119,20 @@ urlpatterns = patterns('',
     
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
     (r'^faces/profile.xml$', faces.profile_xml),
-    (r'^faces/(\w+).png$', faces.profile_image),
-    url(r'^faces/small/(\w+).png$', faces.profile_image_resized,
-        name="profile-image-resized",
-        kwargs = {
-            'width': 30,
-            'height': 30,
-        }
+    url(r'^faces/large/(?P<username>\w+).png$',
+        'faces.generate.profile_image_response',
+        name="profile-image",
+        kwargs = {'size': 'large'}
     ),
-    url(r'^faces/medium/(\w+).png$', faces.profile_image_resized,
+    url(r'^faces/small/(?P<username>\w+).png$',
+        'faces.generate.profile_image_response',
+        name="profile-image-resized",
+        kwargs = {'size': 'small'}
+    ),
+    url(r'^faces/medium/(?P<username>\w+).png$',
+        'faces.generate.profile_image_response',
         name="profile-image-resized-medium",
-        kwargs = {
-            'width': 75,
-            'height': 75,
-        }
+        kwargs = {'size': 'medium'}
     ),
     (r'^faces/users/(\w+).xml$', faces.profile_image_xml),
     (r'^faces/update/$', faces.update),

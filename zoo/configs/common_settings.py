@@ -20,6 +20,8 @@ DATABASE_PASSWORD = ''
 DATABASE_HOST = ''
 DATABASE_PORT = ''
 
+CACHE_BACKEND = 'file:///tmp/wildlifenearyou_cache'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -122,8 +124,6 @@ INSTALLED_APPS = [
 ]
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
-
-CACHE_BACKEND = 'dummy:///'
 
 INTERNAL_IPS = ('127.0.0.1',)
 

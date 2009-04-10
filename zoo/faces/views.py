@@ -7,9 +7,9 @@ from models import FaceAreaCategory, FaceArea
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-from PIL import Image
 from django.contrib.auth.decorators import login_required
 from zoo.shortcuts import render
+from zoo.faces import generate
 
 """
 <profileImages>
@@ -79,48 +79,6 @@ def profile_image_xml(request, username):
 from django.conf import settings
 import os
 
-def paste_transparent(dest, position, src):
-    """
-    Split RGBA src images into RGB and A to avoid
-    modifying the alpha channel of the dest image.
-    """
-    rgba = src.split()
-    mask = rgba[3]
-    rgb_src = Image.merge('RGB', rgba[:3])
-    dest.paste(rgb_src, position, mask)
-
-def profile_image(request, username, just_the_image_please=False):
-    user = get_object_or_404(User, username=username)
-    parts = [p.part for p in user.selectedfaceparts.all()]
-    
-    if parts:
-        im = Image.open(os.path.join(
-            settings.OUR_ROOT, 'static/img/blank-face.png'
-        ))
-        for part in parts:
-            im2 = Image.open(part.image.path)
-            paste_transparent(im, None, im2)
-    else:
-        im = Image.open(os.path.join(
-            settings.OUR_ROOT, 'static/img/default_face.png'
-        ))
-    
-    if just_the_image_please:
-        return im
-    
-    response = HttpResponse(content_type = 'image/png')
-    im.save(response, format = 'png')
-    return response
-
-def profile_image_resized(request, username, width=30, height=30):
-    im = profile_image(request, username, just_the_image_please=True)
-    if not im:
-        return HttpResponseRedirect('/static/img/default_face.png')
-    im.thumbnail((width, height), Image.ANTIALIAS) # modifies in place
-    response = HttpResponse(content_type = 'image/png')
-    im.save(response, format = 'png')
-    return response
-
 class XmlResponse(HttpResponse):
     def __init__(self, xml):
         super(XmlResponse, self).__init__(
@@ -153,6 +111,8 @@ def update(request):
                     user = user,
                     area = FaceArea.objects.get(pk = area_id),
                 )
+            # Clear the cache
+            generate.clear_cached_images(user.username)
             msg = 'Updated!'
             if flash:
                 return XmlResponse('<result status="ok" />')
