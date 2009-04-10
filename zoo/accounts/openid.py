@@ -1,7 +1,7 @@
 from zoo.accounts.models import Profile
 from django_openid.registration import RegistrationConsumer
 from django_openid.forms import RegistrationForm
-
+from django.http import HttpResponseRedirect
 from django.conf import settings
 
 class CustomRegistrationForm(RegistrationForm):
@@ -38,5 +38,9 @@ class RegistrationConsumer(RegistrationConsumer):
         # Create their Profile
         Profile.objects.create(user=user)
         return user
+    
+    def on_registration_complete(self, request):
+        return HttpResponseRedirect('/%s/' % request.user.username)
+
 
 endpoint = RegistrationConsumer()
