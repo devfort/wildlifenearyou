@@ -4,6 +4,24 @@
 
 {% block extra_head %}
 <script type="text/javascript" src="/static/js/star-select-replace.js"></script>
+<script type="text/javascript">
+jQuery(function($) {
+    var div = $('#edit-sightings');
+    div.find('div:first').hide();
+    var p = $("<p><a href='#'>+ Edit this trip's sightings</a></p>");
+    p.find('a').click(function() {
+        p.remove();
+        div.find('div:first').slideDown('fast');
+        return false;
+    });
+    div.append(p);
+})
+</script>
+<style type="text/css">
+#edit-sightings textarea {
+    height: 3em;
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -43,6 +61,22 @@
 	</select>
     <p class="meta">(optional, one star is worst, five stars is best)</p>
 </div>
+
+<div class="container" id="edit-sightings">
+    <div>
+        <h2>Edit sightings</h2>
+        {{ sightings_formset.management_form }}
+        {% for form in sightings_formset.forms %}
+        <p>
+            {{ form.id }}
+            Note about <strong>{{ form.instance.species_name }}</strong> (delete {{ form.DELETE }})
+            {{ form.note }}
+        </p>
+        {% endfor %}
+    </div>
+</div>
+
+
 <div class="container">
     <input type="submit" name="save-trip" value="Save changes">
 </div>

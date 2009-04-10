@@ -427,6 +427,14 @@ class EditTripForm(AddTripForm):
             # This feels wrong. But it works.
             self.initial['start'] = kwargs['instance'].formatted_start_date()
 
+from django.forms.models import inlineformset_factory
+SightingFormSet = inlineformset_factory(
+    parent_model = Trip,
+    model = Sighting,
+    fields = ('note',),
+    extra = 0
+)
+
 @login_required
 def edit_trip(request, username, trip_id):
     user = get_object_or_404(User, username=username)
@@ -436,23 +444,29 @@ def edit_trip(request, username, trip_id):
 
     if request.method=='POST':
         form = EditTripForm(request.POST, instance=trip)
-        if form.is_valid():
+        sightings_formset = SightingFormSet(request.POST, instance=trip)
+        
+        if form.is_valid() and sightings_formset.is_valid():
             dates_match = False
             if trip.end == trip.start:
                 dates_match = True
             trip2 = form.save(commit = False)
             if trip2.end == trip.end and dates_match:
-                # Preserve matching start/end dates unless the end date has been explicitly changed
-                # (which won't happen at the moment as we don't offer it in the interface)
+                # Preserve matching start/end dates unless the end date has 
+                # been explicitly changed (which won't happen at the moment as 
+                # we don't offer it in the interface)
                 trip2.end = trip.start
             trip2.save()
+            sightings_formset.save()
             return Redirect(reverse('trip-view', args=(username, trip_id,)))
     else:
         form = EditTripForm(instance=trip)
+        sightings_formset = SightingFormSet(instance = trip)
     
     return render(request, 'trips/trip_edit.html', {
         'trip': trip,
         'form': form,
+        'sightings_formset': sightings_formset,
     })
 
 @login_required
