@@ -350,6 +350,9 @@ div.spotter-list {
 .tripbook .posted-by {
   background-image: url('/static/img/bg/art_talkbubble_logbook_point.png');
 }
+.tripbook .no-description .posted-by {
+  background-image: none;
+}
 
 .tripbook .trip-by a {
   font-weight: bold;

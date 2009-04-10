@@ -232,10 +232,6 @@ class Place(AuditedModel):
         ).order_by('-created_at')
         return trips
 
-    def most_recent_trips_with_desc(self):
-        trips = self.most_recent_trips().exclude(description='')
-        return trips
-
     def most_common_animal(self):
         "The animal with the most sightings"
         from zoo.animals.models import Species

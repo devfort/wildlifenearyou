@@ -137,7 +137,7 @@ jQuery(function($) {
     {% endif %}
 {% endwith %}
 
-{% if place.most_recent_trips_with_desc %}
+{% if place.most_recent_trips %}
 <h2>Recent trips here</h2>
 
 {% if been_here %}
@@ -147,9 +147,9 @@ jQuery(function($) {
 {% endif %}
 
 <ol class="comments tripbook">
-{% for trip in place.most_recent_trips_with_desc|slice:":5" %}
-	<li>
-	<blockquote><p>{{ trip.description|truncatewords:100 }}</p></blockquote>
+{% for trip in place.most_recent_trips|slice:":5" %}
+	<li{% if not trip.description %} class="no-description"{% endif %}>
+	{% if trip.description %}<blockquote><p>{{ trip.description|truncatewords:100 }}</p></blockquote>{% endif %}
 	<p class="posted-by">
 	<img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
 <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> on <a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
