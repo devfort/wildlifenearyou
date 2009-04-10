@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     'zoo.freebase',
     'zoo.search',
     'zoo.common',
+    'zoo.launchsignups',
     'django_openid',
     'pagination',
 ]

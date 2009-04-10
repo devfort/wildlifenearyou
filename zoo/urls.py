@@ -38,10 +38,13 @@ urlpatterns = patterns('',
     }),
     
     (r'^account/(.*?)$', RegistrationConsumer()),
-    
+
     # Landing Page
     url(r'^$', 'zoo.homepage.views.landing',
         name='landing-page'),
+
+    # Launch signups POST handler
+    (r'^launchsignups/$', 'zoo.launchsignups.views.signup'),
 
     # shortcuts
     url(r'^tripbook/$', 'zoo.trips.views.tripbook_default',

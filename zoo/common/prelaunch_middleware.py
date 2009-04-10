@@ -15,6 +15,7 @@ LOGIN_TEMPLATE = """
 class PreLaunchMiddleware(object):
     cookie_name = 'prelaunch'
     form_field_name = 'set_the_prelaunch_cookie'
+    exclude_paths = ('/launchsignups/',)
     
     def get_password(self):
         return settings.PRELAUNCH_PASSWORD
@@ -24,7 +25,8 @@ class PreLaunchMiddleware(object):
         if request.method == 'POST' and self.form_field_name in request.POST:
             return self.login_screen(request)
         
-        if request.COOKIES.get(self.cookie_name, '') != self.get_password():
+        if request.COOKIES.get(self.cookie_name, '') != self.get_password() \
+            and request.path not in self.exclude_paths:
             return self.login_screen(request)
     
     def login_screen(self, request):
