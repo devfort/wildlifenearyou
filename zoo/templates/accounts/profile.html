@@ -61,7 +61,7 @@
                 <li>
                         <div class="thumb-75">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                         <p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
-                        <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>
+                        <p class="meta">({{ trip.sightings.count }} sighting{{ trip.sightings.count|pluralize }})</p>
                 </li>
 	{% endfor %}
 	</ol>
