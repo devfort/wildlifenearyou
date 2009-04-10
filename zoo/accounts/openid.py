@@ -33,10 +33,10 @@ class RegistrationConsumer(RegistrationConsumer):
             request, 'You cannot log in', message,
         )
     
-    def save_form(self, form):
+    def create_user(self, data, openid=None):
+        user = super(RegistrationConsumer, self).create_user(data, openid)
         # Create their Profile
-        user = super(RegistrationConsumer, self).save_form(form)
         Profile.objects.create(user=user)
         return user
-    
+
 endpoint = RegistrationConsumer()

@@ -48,6 +48,8 @@ def location_from_request(request):
     otherwise. Pulls from profile first, cookie second, else fails.
     """
     # Location in profile over-rides location in cookie
+    if not hasattr(request, 'user'):
+        return ('', (None, None))
     if not request.user.is_anonymous():
         profile = request.user.get_profile()
         if profile.latitude and profile.longitude:
