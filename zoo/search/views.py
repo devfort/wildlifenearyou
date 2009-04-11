@@ -4,6 +4,8 @@ import re
 from pprint import pformat
 from djape.client import Query, Client
 
+PER_PAGE = 20
+
 from zoo.shortcuts import render
 from zoo.search import search_places, search_known_species, search_near, \
     search_locations, SEARCH_ALL, search_species, search_users
@@ -29,7 +31,7 @@ def search_split(request, what, near):
             )
     
     results, results_info, results_corrected_q = search_places(
-        what or SEARCH_ALL, details=True, latlon=(lat, lon), num=20
+        what or SEARCH_ALL, details=True, latlon=(lat, lon), num=PER_PAGE
     )
     species_results, species_results_info, species_results_corrected_q = \
         search_known_species(
@@ -107,7 +109,7 @@ def search_single(request, q, bypass=False):
     
     if q:
         results, results_info, results_corrected_q = \
-            search_places(q, details=True, num=20)
+            search_places(q, details=True, num=PER_PAGE)
         species_results, species_results_info, species_results_corrected_q = \
             search_known_species(q, details=True, default_op=Query.OP_OR)
         users_results, users_results_info, users_results_corrected_q = \
