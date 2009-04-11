@@ -239,7 +239,10 @@ def finish_add_sightings_to_place(request, country_code, slug):
                     )
             return Redirect(place.get_absolute_url())
         
-        form = AddTripForm(request.POST, initial = {'place': place})
+        form = AddTripForm(
+            request.POST, initial = {'place': place}, user = request.user,
+            place = place
+        )
         if form.is_valid():
             if request.POST.get('add-to-existing'):
                 # if the user chose this option they want to add this sighting to an existing trip of theirs
@@ -291,7 +294,10 @@ def finish_add_sightings_to_place(request, country_code, slug):
             else:
                 whos_trip += "'s"
         whos_trip += ' trip'
-        form = AddTripForm(initial = {'name': whos_trip, 'place': place})
+        form = AddTripForm(
+            initial = {'name': whos_trip, 'place': place},
+            user = request.user, place = place
+        )
 
     tcount = request.user.created_trip_set.all().filter(place=place).count()
     
@@ -314,7 +320,7 @@ class TripForm(forms.ModelForm):
         super(TripForm, self).__init__(*args, **kwargs)
         self.fields['rating'] = forms.ChoiceField(
             required = False,
-            choices = [(i,i) for i in range(1,6)]
+            choices = [(i, i) for i in range(1, 6)]
         )
     
     def save(self):
@@ -327,25 +333,46 @@ class FinishAddSightingsForm(forms.Form):
     name = forms.CharField(max_length=100, label='Trip title')
 
 class AddTripForm(forms.ModelForm):
-    # In the model this is a date, but we do some magic to allow more flexibility (see clean_start below).
+    # In the model this is a date, but we do some magic to allow more 
+    # flexibility (see clean_start below).
     start = forms.CharField(required = False, label='Trip date')
     # And this has to be there or it won't be saved
-    start_accuracy = forms.CharField(required = False, label='Start accuracy (hidden)')
-    # Override the default for this, since we need it to match the widget we're using
-    rating = forms.ChoiceField(required = False, choices=[ (i,i) for i in range(1,6) ])
-
+    start_accuracy = forms.CharField(
+        required = False, label='Start accuracy (hidden)'
+    )
+    # Override the default for this, since we need it to match the widget 
+    # we're using
+    rating = forms.ChoiceField(
+        required = False, choices=[(i, i) for i in range(1, 6)]
+    )
+    
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        place = kwargs.pop('place', None)
         super(AddTripForm, self).__init__(*args, **kwargs)
         self.fields['name'].label = 'Trip title'
-        self.fields['description'].label = 'Notes'
-        self.fields.keyOrder = self.Meta.fields
+        self.fields['description'].label = 'Your thoughts on this place'
+        self.fields['description'].widget.attrs['rows'] = 5
+        # Add field to select from previous user trips, if relevant
+        if user and place:
+            self.fields['user_trips'] = forms.ChoiceField(
+                required = False,
+                choices = [
+                    (trip.id, trip.title())
+                    for trip in user.created_trip_set.all().filter(
+                        place = place
+                    )
+                ]
+            )
+            self.fields.keyOrder = self.Meta.fields + ('user_trips',)
 
     class Meta:
         model = Trip
         fields = (
-            # Do start_accuracy before start so that when we adjust it in clean_start
-            # it doesn't get wiped over by its own (implicit) clean processing
-            'start_accuracy', 'start', 'name', 'description', 'rating',
+            # Do start_accuracy before start so that when we adjust it in 
+            # clean_start it doesn't get wiped over by its own (implicit) 
+            # clean processing
+            'start_accuracy', 'start', 'name', 'description', 'rating', 
         )
 
     def clean_start(self):

@@ -61,15 +61,6 @@
 {% endfor %}
 </ul>
 
-{% ifnotequal tcount 0 %}
-<h2>Add these sightings to an existing trip</h2>
-	{{ form.user_trips.errors }}
-	<label for="id_user_trips">Your previous trips to {{ place.known_as }}:</label>
-	{{ form.user_trips }}
-    <input type="submit" name="add-to-existing" value="Add to this trip">
-    <p class="meta">You've previously added a trip to {{ place.known_as }}. Was this a new trip?</p>
-{% endifnotequal %}
-
 {% else %}
 
 <h2>No animals seen</h2>
@@ -90,6 +81,16 @@
 </div>
 
 </div>
+
+{% ifnotequal tcount 0 %}
+<div class="secondary">
+<h2>Add them to an existing trip</h2>
+	{{ form.user_trips.errors }}
+	<label for="id_user_trips">Your previous trips to {{ place.known_as }}:</label>
+	{{ form.user_trips }}
+    <input type="submit" name="add-to-existing" value="Add sightings to this previous trip">
+</div>
+{% endifnotequal %}
 
 <!--
 <div class="secondary">

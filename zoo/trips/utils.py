@@ -21,11 +21,16 @@ def lookup_xapian_or_django_id(id):
             return Species.objects.get(freebase_id = details['freebase_id'])
         except Species.DoesNotExist:
             # Save it to the database
+            slug = slugify(details['common_name'].lower())
+            while Species.objects.filter(slug = slug).count():
+                slug = slug + '-'
             obj, created = Species.objects.get_or_create(
-                slug = slugify(details['common_name'].lower()),
-                common_name = details['common_name'],
-                latin_name = details['scientific_name'],
                 freebase_id = details['freebase_id'],
+                defaults = {
+                    'slug': slug,
+                    'common_name': details['common_name'],
+                    'latin_name': details['scientific_name'],
+                }
             )
             return obj
     else:
