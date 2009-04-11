@@ -21,7 +21,7 @@
 {% endif %}
 
 {% if nearest %}
-<p>The nearest {{ species.common_name }} to you is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, {{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away from {{ location_description }}. (Is that not where you are? <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">Change your current location</a>.)</p>
+<p>Your nearest <strong>{{ species.common_name }}</strong> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, <strong>{{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away</strong> from {{ location_description }} (not where you are? <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">Set your location</a>)</p>
 {% else %}
 {% if not location_description %}
 <p>
