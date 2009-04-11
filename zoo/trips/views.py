@@ -542,8 +542,11 @@ class AddPlaceForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddPlaceForm, self).__init__(*args, **kwargs)
         self.fields['known_as'].label = 'Place name'
+        self.fields['known_as'].widget.attrs['size'] = 50
         self.fields['url'].label = 'URL'
         self.fields['zip'].label = 'Postal code / ZIP'
+        for key in ('address_line_1', 'address_line_2'):
+            self.fields[key].widget.attrs['size'] = 30
         self.fields.keyOrder = self.Meta.fields
     
     class Meta:
