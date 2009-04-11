@@ -492,12 +492,17 @@ def add_trip_select_place(request):
     if not q:
         return render(request, 'trips/add_trip_select_place.html')
     
-    # User searched
+    # TODO: use the search engine for this
     places = Place.objects.filter(known_as__icontains = q)
+    
+    suggested_title = q
+    if not re.search('[A-Z]', suggested_title):
+        suggested_title = suggested_title.title()
+    
     return render(request, 'trips/add_trip_select_place_results.html', {
         'q': q,
         'places': places,
-        'form': AddPlaceForm(initial={'known_as': q.title()}),
+        'form': AddPlaceForm(initial={'known_as': suggested_title}),
     })
 
 @login_required
