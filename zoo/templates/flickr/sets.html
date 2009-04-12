@@ -1,0 +1,18 @@
+{% extends base %}
+
+{% block title %}Your sets{% endblock %}
+
+{% block primary_content %}
+
+<h1>Pick one of your sets</h1>
+
+<ul>
+	{% for set in sets %}
+	<li>
+		{% if show_photos %}<img src="{{ set.square }}" class="pull-left">{% endif %}
+		<p><a href="{{ set.id }}/"><strong>{{ set.title }}</strong></a>{% if set.description %} - {{ set.description|safe }}{% endif %} ({{ set.photos }} photo{{ set.photos|pluralize }})</p>
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

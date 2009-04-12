@@ -23,6 +23,10 @@ def parse_json(rest_json):
         if 'photosets' in json and 'photoset' in json['photosets']:
             annotate_photos(json['photosets']['photoset'])
         
+        # And for photoset results e.g. photosets.getPhotos
+        if 'photoset' in json and 'photo' in json['photoset']:
+            annotate_photos(json['photoset']['photo'])
+        
         # Recurse through fixing anything with a single '_content' key
         recursively_fix_content(json)
         

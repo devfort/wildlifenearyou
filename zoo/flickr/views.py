@@ -29,7 +29,6 @@ def flickr_callback(request):
     response.delete_cookie('flickr_return_to')
     return response
 
-
 @login_required
 def index(request):
     flickr_token = request.COOKIES.get('flickr_token')
@@ -40,7 +39,9 @@ def index(request):
     user_id = token_info['auth']['user']['nsid']
     
     # TODO: refactor this to share logic in photo_picker method
-    recent = client.photos_search(user_id = 'me', per_page=20)['photos']['photo']
+    recent = client.photos_search(
+        user_id = 'me',per_page=20
+    )['photos']['photo']
     for photo in recent:
         photo['signed'] = signed.dumps({
             'id': photo['photo_id'],
@@ -49,7 +50,6 @@ def index(request):
             'server': photo['server'],
             'title': photo['title'],
         })
-    
     
     return render(request, 'flickr/index.html', {
         'info': client.people_getInfo(user_id = user_id),
@@ -99,6 +99,36 @@ def group(request, group_nsid):
     )
 
 @login_required
+def sets(request):
+    flickr_token = request.COOKIES.get('flickr_token')
+    if not flickr_token:
+        return flickr_redirect(request.path)
+    client = Flickr(token = flickr_token)
+    sets = client.photosets_getList()['photosets']['photoset']
+    return render(request, 'flickr/sets.html', {
+        'sets': sets,
+        'show_photos': len(sets) <= 30,
+    })
+
+@login_required
+def single_set(request, set_id):
+    flickr_token = request.COOKIES.get('flickr_token')
+    if not flickr_token:
+        return flickr_redirect(request.path)
+    client = Flickr(token = flickr_token)
+    token_info = client.auth_checkToken()
+    user_id = token_info['auth']['user']['nsid']
+    photos = client.photosets_getPhotos(
+        photoset_id = set_id, media = 'photos'
+    )['photoset']['photo']
+    set_title = client.photosets_getInfo(
+        photoset_id = set_id
+    )['photoset']['title']
+    return photo_picker(
+        request, photos, 'Your set: %s' % set_title
+    )
+
+@login_required
 def place(request, woe_id):
     flickr_token = request.COOKIES.get('flickr_token')
     if not flickr_token:
@@ -110,6 +140,7 @@ def place(request, woe_id):
     photos = client.photos_search(
         woe_id = woe_id, user_id = user_id
     )['photos']['photo']
+    import pdb; pdb.set_trace()
     return photo_picker(
         request, photos, 'Your photos in %s' % place_info['place']['name']
     )
@@ -199,96 +230,4 @@ def bulk_assign(request):
     )
     return render(request, 'flickr/bulk_assign.html', {
         'photos': photos,
-    })
-
-@login_required
-def import_photos(request):
-    # Does the user have a Flickr auth cookie? We use a cookie because Flickr
-    # say "Authentication cookies should only be stored for a single session"
-    # on this page: http://www.flickr.com/services/api/auth.spec.html
-    flickr_token = request.COOKIES.get('flickr_token')
-    if flickr_token:
-        # Show the user their sets so they can pick one
-        sets = Flickr(
-            token = flickr_token
-        ).photosets_getList()['photosets']['photoset']
-        return render(request, 'flickr/pick_a_set.html', {
-            'trip': trip,
-            'sets': sets,
-        })
-    else:
-        return flickr_redirect(request.path)
-
-@login_required
-def import_trip_from_set(request, username, trip_id, set_id):
-    "Allows the user to pick photos from a Flickr set that they wish to import"
-    user = get_object_or_404(User, username=username)
-    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
-    assert username == request.user.username
-    
-    # Load the photos from the set
-    flickr_token = request.COOKIES.get('flickr_token')
-    if not flickr_token:
-        return flickr_error(request, 'Your Flickr token is missing')
-    
-    flickr = Flickr(token = flickr_token)
-    set_info = flickr.photosets_getInfo(set_id)
-    photos = flickr.photosets_getPhotos(set_id)
-    
-    if request.method == 'POST':
-        # Actually do the import
-        assert False, request.POST
-    
-    return render(request, 'flickr/pick_photos_from_set.html', {
-        'photos': photos,
-        'set': set_info,
-    })
-
-# OLD METHODS - will probably delete these
-
-@login_required
-def import_trip(request, username, trip_id):
-    user = get_object_or_404(User, username=username)
-    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
-    assert username == request.user.username
-    
-    # Does the user have a Flickr auth cookie? We use a cookie because Flickr
-    # say "Authentication cookies should only be stored for a single session"
-    # on this page: http://www.flickr.com/services/api/auth.spec.html
-    flickr_token = request.COOKIES.get('flickr_token')
-    if flickr_token:
-        # Show the user their sets so they can pick one
-        sets = Flickr(
-            token = flickr_token
-        ).photosets_getList()['photosets']['photoset']
-        return render(request, 'flickr/pick_a_set.html', {
-            'trip': trip,
-            'sets': sets,
-        })
-    else:
-        return flickr_redirect(requset.path)
-
-@login_required
-def import_trip_from_set(request, username, trip_id, set_id):
-    "Allows the user to pick photos from a Flickr set that they wish to import"
-    user = get_object_or_404(User, username=username)
-    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
-    assert username == request.user.username
-    
-    # Load the photos from the set
-    flickr_token = request.COOKIES.get('flickr_token')
-    if not flickr_token:
-        return flickr_error(request, 'Your Flickr token is missing')
-    
-    flickr = Flickr(token = flickr_token)
-    set_info = flickr.photosets_getInfo(set_id)
-    photos = flickr.photosets_getPhotos(set_id)
-    
-    if request.method == 'POST':
-        # Actually do the import
-        assert False, request.POST
-    
-    return render(request, 'flickr/pick_photos_from_set.html', {
-        'photos': photos,
-        'set': set_info,
     })

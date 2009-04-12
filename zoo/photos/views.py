@@ -259,7 +259,20 @@ def user_photos_bulk_assign(request, user):
     ).order_by('created_at').distinct()
     
     if request.method == 'POST':
-        assert False
+        photo_ids = request.POST.getlist('selected_photos')
+        trip_id = request.POST.get('trip')
+        photos = Photo.objects.filter(id__in = photo_ids).filter(
+            created_by = request.user
+        )
+        trip = get_object_or_404(Trip, pk=trip_id, created_by=request.user)
+        # Assign the photos to that trip
+        for p in photos:
+            p.trip = trip
+            p.save()
+        # Force a re-index of trip
+        trip.save()
+        # Redirect to that trip's page (TODO: trip's photo page instead)
+        return HttpResponseRedirect(trip.get_absolute_url())
     
     return render(request, 'photos/user_photos_bulk_assign.html', {
         'profile': user.get_profile(),
