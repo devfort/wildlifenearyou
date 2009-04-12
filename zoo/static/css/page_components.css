@@ -860,3 +860,63 @@ ul.teaserlist h3 span {
 	background-image: none;
 	text-align: left;
 }
+
+/* @group Flickr listing */
+
+.flickr {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 1em;
+	margin-top: 1.5em;
+}
+
+.flickr li {
+	margin: 0;
+	padding: 0;
+	background: 0;
+	width: 95px;
+	background-color: #E2F1F9;
+	float: left;
+	margin-right: 1em;
+	margin-bottom: 1em;
+	display: inline;
+}
+
+.flickr img {
+	margin: 10px auto;
+	display: block;
+	border: 2px solid white;
+}
+.flickr input,
+.flickr label {
+	display: inline;
+}
+
+.flickr .import input {
+	vertical-align: text-bottom;
+}
+
+.flickr .import {
+	margin: 0 5px 0 5px;
+}
+
+.flickr .view {
+	margin: 0.3em 10px 10px 10px;
+}
+
+.flickr .view a:link,
+.flickr .view a:visited,
+.flickr .view a:hover,
+.flickr .view a:focus,
+.flickr .view a:active {
+	background-image:  url('/static/img/icons/go.gif');
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+/* @end */
+
+

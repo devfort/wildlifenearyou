@@ -2,7 +2,7 @@
 
 {% block title %}Import from Flickr{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
 <h1>Import from Flickr</h1>
 
@@ -18,16 +18,16 @@
 <h2>Your most recent photos</h2>
 
 <form action="/flickr/selected/" method="post">
-<ul>
-    {% for photo in recent %}
-    <li style="clear: both">
-        <img src="{{ photo.square }}" class="pull-left" width="75" height="75">
-        <p><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> <label for="import_{{ photo.id }}">Import this</label></p>
-        <p><a href="http://www.flickr.com/photo.gne?id={{ photo.id }}">View on Flickr</a></p>
-    </li>
-    {% endfor %}
-</ul>
-<p><input type="submit" class="submit" value="Import these photos"></p>
+	<ul class="flickr">
+	    {% for photo in recent %}
+	    <li>
+	        <img src="{{ photo.square }}" width="75" height="75">
+	        <p class="import"><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> <label for="import_{{ photo.id }}">Import</label></p>
+	        <p class="view"><a href="http://www.flickr.com/photo.gne?id={{ photo.id }}">View</a></p>
+	    </li>
+	    {% endfor %}
+	</ul>
+	<div class="button-container"><input type="submit" class="submit" value="Import these photos"></div>
 </form>
 
 {% endif %}
