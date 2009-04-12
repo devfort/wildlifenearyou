@@ -18,6 +18,26 @@ jQuery(function($) {
 			$(this).val(this.defaultValue);
 		}
 	});
+	
+	$('form .flickr').before('<p><a href="#" class="select-all">select all</a> | <a href="#" class="select-none">select none</a></p>');
+	
+	$('a.select-all').live("click", function() {
+		$(this).parents('form:first').find('input[type="checkbox"]').each(
+			function() { 
+				$(this).attr({checked: 'checked'});
+			}
+		);
+		return false;
+	});
+	
+	$('a.select-none').live("click", function() {
+		$(this).parents('form:first').find('input[type="checkbox"]').each(
+			function() { 
+				$(this).attr({checked: ''});
+			}
+		);
+		return false;
+	});
 
 	//	Make the targets of internal links toggleable.
 	$('a.toggler').each(function() {
