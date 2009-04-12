@@ -47,14 +47,6 @@ class UploadPhotoForm(forms.ModelForm):
         model = Photo
 
 @login_required
-def upload_place(request, country_code, slug):
-    place = get_object_or_404(Place,
-        slug=slug,
-        country__country_code=country_code
-    )
-    return upload(request, place, redirect_to = place.get_absolute_url())
-
-@login_required
 def upload_trip(request, username, trip_id):
     user = get_object_or_404(User, username=username)
     trip = get_object_or_404(Trip, id=trip_id, created_by=user)
