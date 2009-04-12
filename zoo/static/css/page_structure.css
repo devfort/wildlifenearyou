@@ -132,6 +132,9 @@
     padding: 1em;
     margin: 0;
 }
+.footer a.copyright {
+	text-decoration: none;
+}
 
 /* @end */
 
