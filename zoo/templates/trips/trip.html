@@ -1,6 +1,5 @@
 {% extends base %}
 
-{% load thumbnail %}
 {% load zoocommon %}
 
 {% block title %}{{ trip.title }}{% endblock %}
@@ -17,69 +16,69 @@
 {% block primary_content %}
 
 <div class="comments tripbook">
-        {% if trip.description %}
-        <blockquote>{{ trip.description|linebreaks }}</blockquote>
-        <p class="posted-by">
-        {% else %}
-        <p class="trip-by">
-        {% endif %}
-        <img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
-        <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> went to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
+		{% if trip.description %}
+		<blockquote>{{ trip.description|linebreaks }}</blockquote>
+		<p class="posted-by">
+		{% else %}
+		<p class="trip-by">
+		{% endif %}
+		<img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
+		<a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> went to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
 </div>
 
 {% with trip.sightings.all as sightings %}
-        {% regroup sightings by place.known_as as sightings_by_place %}
-    
-        {% with sightings_by_place|length as sl %}
-        {% ifequal 1 sl %}
-                {% for place in sightings_by_place %}
-                        <h2>Sighting{{ trip.sightings.count|pluralize }}</h2>
-                        <ul class="animal-list">
-                                {% for sighting in place.list %}
-                                    <li>
-                                    {% if sighting.species %}
-                                    {% with sighting.species as species %}
-                                            <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-                                            <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
-                                            <p><i class="scientific">{{ species.latin_name }}</i></p>
-                                    {% endwith %}
-                                    {% else %}
-                                            <div class="thumbnail"></div>
-                                            <p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
-                                    {% endif %}
-                                    {% if sighting.note %}
-                                    {{ sighting.note|linebreaks }}
-                                    {% endif %}
-                                    </li>
-                                {% endfor %}
-                        </ul>
-                {% endfor %}
-        {% else %}
-                <h2>Sighting{{ trip.sightings.count|pluralize }}</h2>
-                {% for place in sightings_by_place %}
-                        <h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
-                {% endfor %}</h3>
-                <p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
+		{% regroup sightings by place.known_as as sightings_by_place %}
+	
+		{% with sightings_by_place|length as sl %}
+		{% ifequal 1 sl %}
+				{% for place in sightings_by_place %}
+						<h2>Sighting{{ trip.sightings.count|pluralize }}</h2>
+						<ul class="animal-list">
+								{% for sighting in place.list %}
+									<li>
+									{% if sighting.species %}
+									{% with sighting.species as species %}
+											<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+											<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+											<p><i class="scientific">{{ species.latin_name }}</i></p>
+									{% endwith %}
+									{% else %}
+											<div class="thumbnail"></div>
+											<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+									{% endif %}
+									{% if sighting.note %}
+									{{ sighting.note|linebreaks }}
+									{% endif %}
+									</li>
+								{% endfor %}
+						</ul>
+				{% endfor %}
+		{% else %}
+				<h2>Sighting{{ trip.sightings.count|pluralize }}</h2>
+				{% for place in sightings_by_place %}
+						<h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
+				{% endfor %}</h3>
+				<p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
 
-                <ul class="animal-list">
-                        {% for sighting in place.list %}
-                        {% if sighting.species %}
-                        <li>{% with sighting.species as species %}
-                                <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-                                <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
-                                <p><i class="scientific">{{ species.latin_name }}</i></p>
-                        {% endwith %}</li>
-                        {% else %}
-                        <li>
-                                <div class="thumbnail"></div>
-                                <p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                </ul>
-                {% endfor %}
-        {% endifequal %}
-        {% endwith %}
+				<ul class="animal-list">
+						{% for sighting in place.list %}
+						{% if sighting.species %}
+						<li>{% with sighting.species as species %}
+								<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+								<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
+								<p><i class="scientific">{{ species.latin_name }}</i></p>
+						{% endwith %}</li>
+						{% else %}
+						<li>
+								<div class="thumbnail"></div>
+								<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+						</li>
+						{% endif %}
+						{% endfor %}
+				</ul>
+				{% endfor %}
+		{% endifequal %}
+		{% endwith %}
 {% endwith %}
 
 {% endblock %}
@@ -99,53 +98,53 @@
 	<p>You haven&rsquo;t rated this trip yet; don&rsquo;t worry though, you can do this by editing the trip.</p>
 	{% endif %}
 
-        <!-- TODO: Users should see their OWN photos even if they have not 
-            yet been moderated, with a visual indication of this e.g. red border
-        -->
-        {% with visible_photos.count as visible_photo_count %}
-        	{% if visible_photo_count %}
-                        <h2>Photos</h2>
-        		{% ifequal visible_photo_count 1 %}{# Only one photo #}
-        			<div class="gallery">
-        			{% for photo in visible_photos.all %}
-        				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
-        			{% endfor %}
-        			</div>
-        		{% else %}{# More than one photo #}
-        		{% with visible_photos.all|first as chosen %}
-        		<div class="gallery">
-                		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
-                		<div class="slideshow">
-                			<ul id="thumbnails">
-        			                {% for photo in visible_photos|slice:":30" %}
-        			                {% ifnotequal chosen photo %}
-                		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
-                		                {% endifnotequal %}
-        			                {% endfor %}
-        			        </ul><!-- /#thumbnails -->
-        		        </div><!-- /.slideshow -->
-        	        </div>
-        	        {% endwith %}
-        		{% endifequal %}
-                {% if belongs_to_user %}<h2>Got any more?</h2>{% endif %}
-                {% else %}
-                {% if belongs_to_user %}<h2>Did you take any photos?</h2>{% endif %}
-                {% endif %}
-        {% endwith %}
-        {% if belongs_to_user %}
-        <form enctype="multipart/form-data" action="{{ request.path }}upload/" method="post">
-            <div class="container"><input type="file" name="photo" id="id_photo"></div>
-            <div class="container button-container"><input type="submit" value="Upload"></div>
-        </form>
-        {% endif %}
+		<!-- TODO: Users should see their OWN photos even if they have not 
+			yet been moderated, with a visual indication of this e.g. red border
+		-->
+		{% with visible_photos.count as visible_photo_count %}
+			{% if visible_photo_count %}
+						<h2>Photos</h2>
+				{% ifequal visible_photo_count 1 %}{# Only one photo #}
+					<div class="gallery">
+					{% for photo in visible_photos.all %}
+						<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_100_url }}"></a>
+					{% endfor %}
+					</div>
+				{% else %}{# More than one photo #}
+				{% with visible_photos.all|first as chosen %}
+				<div class="gallery">
+						<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
+						<div class="slideshow">
+							<ul id="thumbnails">
+									{% for photo in visible_photos|slice:":30" %}
+									{% ifnotequal chosen photo %}
+										<li>{{ photo.thumb_75 }}</li>
+										{% endifnotequal %}
+									{% endfor %}
+							</ul><!-- /#thumbnails -->
+						</div><!-- /.slideshow -->
+					</div>
+					{% endwith %}
+				{% endifequal %}
+				{% if belongs_to_user %}<h2>Got any more?</h2>{% endif %}
+				{% else %}
+				{% if belongs_to_user %}<h2>Did you take any photos?</h2>{% endif %}
+				{% endif %}
+		{% endwith %}
+		{% if belongs_to_user %}
+		<form enctype="multipart/form-data" action="{{ request.path }}upload/" method="post">
+			<div class="container"><input type="file" name="photo" id="id_photo"></div>
+			<div class="container button-container"><input type="submit" value="Upload"></div>
+		</form>
+		{% endif %}
 
-        {% if belongs_to_user %}
-        <p class="highlight"><a class="edit" href="{{ trip.urls.edit }}">Edit this trip</a> <a class="remove" href="delete/">Delete this trip</a></p>
-        {% endif %}
+		{% if belongs_to_user %}
+		<p class="highlight"><a class="edit" href="{{ trip.urls.edit }}">Edit this trip</a> <a class="remove" href="delete/">Delete this trip</a></p>
+		{% endif %}
 
 <h2>Comments</h2>
 {% with trip as object %}
-    {% include "comments/_comments.html" %}
+	{% include "comments/_comments.html" %}
 {% endwith %}
 
 

@@ -24,6 +24,7 @@ class Photo(models.Model):
         thumbnail={'size': (75, 75), 'options': ('crop', 'upscale')},
         extra_thumbnails={
             'admin': {'size': (70, 50), 'options': ('sharpen',)},
+            't': {'size': (100, 100), 'options': ('sharpen',)},
         }
     )
     # If the photo lives on Flickr, we store those details instead
@@ -97,8 +98,24 @@ class Photo(models.Model):
             )
         )
 
+    def thumb_75(self, extra_class=''):
+        title = escape(self.detailed_title())
+        return mark_safe(
+            '<a href="%s" title="%s">%s</a>' % (
+                self.get_absolute_url(),
+                title,
+                self.thumb_75_img(),
+            )
+        )
+
     def thumb_75_pull_left(self):
         return self.thumb_75(extra_class = 'pull-left')
+    
+    def thumb_100_url(self):
+        if self.flickr_id:
+            return 'http://static.flickr.com/%(flickr_server)s/%(flickr_id)s_%(flickr_secret)s_t.jpg' % self.__dict__
+        else:
+            return self.photo.extra_thumbnails['t'].absolute_url
     
     def thumb_75_url(self):
         if self.flickr_id:
