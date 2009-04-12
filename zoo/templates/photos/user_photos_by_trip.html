@@ -15,6 +15,11 @@
     <a href="{% url user-photos profile.user.username %}">all photos</a> | <strong>photos by trip</strong> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a>
 </p>
 
+{% if not trips %}
+<p class="notification">{% ifequal profile.user user %}You have not yet created any trips. <a href="{% url add-trip %}">Create one now?</a>
+{% else %}This user has not yet created any trips.{% endifequal %}
+</p>
+{% else %}
 <h2>Photos</h2>
 {% for trip in trips %}
 <h3>{{ trip.trip }}</h3>
@@ -27,7 +32,7 @@
 </ul>
 <p><a href="{{ trip.trip.get_absolute_url }}">More on this trip</a>{% if trip.more_photos %} (including {{ trip.more_photos }} more photo{{ trip.more_photos|pluralize }}){% endif %}
 {% endfor %}
-
+{% endif %}
 {% ifequal profile.user user %}<p><a class="add" href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 
 {% endblock %}

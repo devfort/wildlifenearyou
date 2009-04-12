@@ -14,7 +14,7 @@
 	{% for set in sets %}
 	<li>
 		{% if show_photos %}<img src="{{ set.square }}" class="pull-left">{% endif %}
-		<p><strong><a href="{{ set.id }}/">{{ set.title }}</a> ({{ set.photos }} photo{{ set.photos|pluralize }})</strong></p>
+		<p><strong><a href="{{ set.id }}/">{{ set.title }}</a></strong> ({{ set.photos }} photo{{ set.photos|pluralize }})</p>
 		{% if set.description %}<p>{{ set.description|safe }}</p>{% endif %}
 	</li>
 	{% endfor %}
