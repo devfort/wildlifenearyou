@@ -206,6 +206,27 @@ def all(request):
         'photos': Photo.objects.all().order_by('-created_at'),
     })
 
+def user_photos(request, username):
+    user = get_object_or_404(User, username = username)
+    return render(request, 'photos/user_photos.html', {
+        'profile': user.get_profile(),
+        'photos': get_visible_photos(request, user),
+    })
+
+def user_photos_by_trip(request, username):
+    user = get_object_or_404(User, username = username)
+    return render(request, 'photos/user_photos_by_trip.html', {
+        'profile': user.get_profile(),
+        'photos': get_visible_photos(request, user),
+    })
+
+def user_photos_unassigned(request, username):
+    user = get_object_or_404(User, username = username)
+    return render(request, 'photos/user_photos_unassigned.html', {
+        'profile': user.get_profile(),
+        'photos': get_visible_photos(request, user),
+    })
+
 @login_required
 def moderate(request):
     if not request.user.is_staff:
@@ -228,3 +249,11 @@ def moderate(request):
     else:
         photos = Photo.objects.filter(is_visible=False).filter(moderated_by=None)
         return render(request, 'photos/moderate.html', { 'photos': photos[:10], 'total': photos.count() })
+
+def get_visible_photos(request, user):
+    if user == request.user:
+        return user.photos
+    else:
+        return user.photos.filter(
+            is_visible = True
+        ).distinct()

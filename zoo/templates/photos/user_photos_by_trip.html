@@ -1,0 +1,36 @@
+{% extends base %}
+
+{% load pagination_tags %}
+
+{% block title %}{{ profile.user|title }}'s photos{% endblock %}
+
+{% block content %}
+
+<h1><a href="{{ profile.urls.absolute }}">{{ profile.user|title }}</a>{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+{% if profile.badges.all %}
+<ul>{{ profile.badges.all|unordered_list }}</ul>
+{% endif %}
+
+<p>
+    <a href="{% url user-photos profile.user.username %}">all photos</a> | <strong>photos by trip</strong> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a>
+</p>
+
+<div>
+        <h2>Photos</h2>
+
+        {% with photos.all as photos %}
+        {% autopaginate photos 30 %}
+        {% paginate %}
+        <ul class="photos-list">
+                {% for photo in photos.all %}
+                        <li>
+                                <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+                        </li>
+                {% endfor %}
+        </ul>
+        {% paginate %}
+        {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
+        {% endwith %}
+</div>
+
+{% endblock %}

@@ -6,18 +6,20 @@
 
 {% block content %}
 
-<h1>{{ profile.user|title }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+<h1><a href="{{ profile.urls.absolute }}">{{ profile.user|title }}</a>{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
 {% if profile.badges.all %}
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
-<p>Why not check out <a href="{{ profile.urls.absolute }}">{{ profile.user|title }}'s full profile</a>?</p>
+<p>
+    <a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong>
+</p>
 
 <div>
         <h2>Photos</h2>
 
         {% with photos.all as photos %}
-        {% autopaginate photos 10 %}
+        {% autopaginate photos 30 %}
         {% paginate %}
         <ul class="photos-list">
                 {% for photo in photos.all %}

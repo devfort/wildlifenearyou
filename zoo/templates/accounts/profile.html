@@ -168,7 +168,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
         			                {% endfor %}
         			        </ul><!-- /#thumbnails -->
         		        </div><!-- /.slideshow -->
-                	        <p><a href='{% url accounts-profile-photos profile.user.username %}'>See all {% ifequal user profile.user %}your{% else %}their {% endifequal %} photos.</a></p>
+                	        <p><a href='{% url user-photos profile.user.username %}'>See all {% ifequal user profile.user %}your{% else %}their {% endifequal %} photos.</a></p>
         	        </div>
         	        {% endwith %}
         		{% endifequal %}

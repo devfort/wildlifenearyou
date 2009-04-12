@@ -81,7 +81,7 @@ jQuery(function($) {
                     <p><span class="animal-name">{{  form.instance.species_inexact }}</span></p>
             {% endif %}
             {{ form.note }}
-            <label for="id_sightings-{{ forloop.counter0 }}-DELETE">Delete sighting:</label> {{ form.DELETE }}
+            <label for="id_sightings-{{ forloop.counter0 }}-DELETE">Remove:</label> {{ form.DELETE }}
             </li>
         {% endfor %}
         </ul>

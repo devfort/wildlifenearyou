@@ -218,7 +218,7 @@
 				</ul>
 				{% endif %}
 				{% if profile.visible_photos.count %}
-					<p>Why not <a href="{% url accounts-profile-photos profile.user.username %}">check out their photos</a>?</p>
+					<p>Why not <a href="{% url user-photos profile.user.username %}">check out their photos</a>?</p>
 				{% endif %}
                     	        {% endwith %}
                     	        {% else %}
