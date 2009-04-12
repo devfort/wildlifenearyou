@@ -75,7 +75,7 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
     <ol class="animal-list">
     {% for species in species_results %}
             <li>
-                    <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                    <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                     <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
                     <p><i class="scientific">{{ species.latin_name }}</i></p>
             </li>

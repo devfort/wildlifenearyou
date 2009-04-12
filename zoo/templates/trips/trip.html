@@ -39,12 +39,12 @@
                                     <li>
                                     {% if sighting.species %}
                                     {% with sighting.species as species %}
-                                            <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                                            <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                                             <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
                                             <p><i class="scientific">{{ species.latin_name }}</i></p>
                                     {% endwith %}
                                     {% else %}
-                                            <div class="thumb-75"></div>
+                                            <div class="thumbnail"></div>
                                             <p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
                                     {% endif %}
                                     {% if sighting.note %}
@@ -65,13 +65,13 @@
                         {% for sighting in place.list %}
                         {% if sighting.species %}
                         <li>{% with sighting.species as species %}
-                                <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                                <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                                 <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
                                 <p><i class="scientific">{{ species.latin_name }}</i></p>
                         {% endwith %}</li>
                         {% else %}
                         <li>
-                                <div class="thumb-75"></div>
+                                <div class="thumbnail"></div>
                                 <p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
                         </li>
                         {% endif %}

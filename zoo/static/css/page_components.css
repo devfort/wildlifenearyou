@@ -47,7 +47,7 @@ div.place-list {
   overflow: hidden;
 }
 
-.place-list .thumb-75 {
+.place-list .thumbnail {
   float: left;
   margin-right: 1em;
 }
@@ -87,7 +87,7 @@ div.animal-list {
   overflow: hidden;
 }
 
-.animal-list .thumb-75 {
+.animal-list .thumbnail {
   float: left;
   margin-right: 1em;
 }
@@ -131,7 +131,7 @@ div.trip-list {
   overflow: hidden;
 }
 
-.trip-list .thumb-75 {
+.trip-list .thumbnail {
   float: left;
   margin-right: 1em;
 }
@@ -171,7 +171,7 @@ div.spotter-list {
   overflow: hidden;
 }
 
-.spotter-list .thumb-75 {
+.spotter-list .thumbnail {
   float: left;
   margin-right: 1em;
 }

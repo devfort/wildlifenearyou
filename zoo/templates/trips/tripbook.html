@@ -17,7 +17,7 @@
 	<ol class='trip-list'>
         	{% for trip in tripbook %}
                         <li>
-                                <div class="thumb-75">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                                <div class="thumbnail">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                                 <p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
                                 <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>
                         </li>

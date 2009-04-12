@@ -20,7 +20,7 @@
 <ul class='animal-list'>
 {% for species in species_list %}
 <li>
-        <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+        <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
         <p><a class="animal-name" href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.count|oncetimes }})</span></p>
         <p><i class="scientific">{{ species.latin_name }}</i></p>
 </li>

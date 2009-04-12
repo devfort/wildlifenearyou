@@ -326,7 +326,7 @@ a.action:active span,
 	margin-bottom: 0.6em;
 }
 
-.thumb-75 {
+.thumbnail {
   width: 75px;
   height: 75px;
   background-image: url(/static/img/bg/animal_75.png);

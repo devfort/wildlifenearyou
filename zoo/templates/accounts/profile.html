@@ -59,7 +59,7 @@
 	<ol class="trip-list">
 	{% for trip in profile.user.created_trip_set.all|slice:":5" %}
                 <li>
-                        <div class="thumb-75">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                        <div class="thumbnail">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                         <p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
                         <p class="meta">({{ trip.sightings.count }} sighting{{ trip.sightings.count|pluralize }})</p>
                 </li>
@@ -85,7 +85,7 @@
 	<ol class='animal-list'>
 	{% for species in profile.passport.seen_species %}
                 <li>
-                        <div class="thumb-75">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                        <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                         <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
                         <p><i class="scientific">{{ species.latin_name }}</i></p>
                 </li>
@@ -126,7 +126,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 	<ol class="animal-list">
                 {% for favourite in profile.user.favourite_species.all %}
                 <li>
-                        <div class="thumb-75">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                        <div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
                         <p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
                         <p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
                         {% ifequal user profile.user %}
