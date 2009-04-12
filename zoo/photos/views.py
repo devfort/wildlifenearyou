@@ -238,12 +238,40 @@ def user_photos_by_trip(request, username):
 
 def user_photos_unassigned(request, username):
     user = get_object_or_404(User, username = username)
+    if request.user == user:
+        return user_photos_bulk_assign(request, user)
+    
     return render(request, 'photos/user_photos_unassigned.html', {
         'profile': user.get_profile(),
-        'photos': Photo.objects.filter(
-            created_by = user, trip__isnull=True
-        ).order_by('created_at').distinct()
+        'photos': filter_visible_photos(
+            photos = Photo.objects.filter(
+                created_by = user, trip__isnull=True
+            ).order_by('created_at').distinct(),
+            user = request.user
+        )
     })
+
+@login_required
+def user_photos_bulk_assign(request, user):
+    assert user == request.user
+    photos = Photo.objects.filter(
+        created_by = user, trip__isnull=True
+    ).order_by('created_at').distinct()
+    
+    if request.method == 'POST':
+        assert False
+    
+    return render(request, 'photos/user_photos_bulk_assign.html', {
+        'profile': user.get_profile(),
+        'photos': photos,
+        'form': TripSelectForm(user)
+    })
+
+class TripSelectForm(forms.Form):
+    trip = forms.ModelChoiceField(Trip)
+    def __init__(self, user, *args, **kwargs):
+        super(TripSelectForm, self).__init__(*args, **kwargs)
+        self.fields['trip'].queryset = Trip.objects.filter(created_by=user)
 
 @login_required
 def moderate(request):
