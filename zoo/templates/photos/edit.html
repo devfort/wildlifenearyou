@@ -11,14 +11,6 @@
 {% else %}
 <img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg">
 {% endif %}
-<p><a href="{{ photo.get_absolute_url }}">Cancel</a> and return to photo</p>
-
-
-{% endblock %}
-
-{% block secondary_content %}
-<h2>Photo details</h2>
-
 
 <form method="post" action="{{ request.path }}">
 
@@ -39,6 +31,12 @@
 
 </form>
 
+<p><a href="{{ photo.get_absolute_url }}">Cancel</a> and return to photo</p>
+
+
+{% endblock %}
+
+{% block secondary_content %}
 
 {% if photo.trip %}
 <h2>Species in this photo</h2>

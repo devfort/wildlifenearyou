@@ -141,6 +141,27 @@ def edit_photo(request, username, photo_id):
     })
 
 @login_required
+def delete_photo(request, username, photo_id):
+    user = get_object_or_404(User, username=username)
+    photo = get_object_or_404(Photo, id=photo_id, created_by=user)
+    assert request.user.id == user.id, "You can only delete your own trips!"
+    if request.POST.get('confirm_delete'):
+        # Delete the photo
+        trip = photo.trip
+        photo.delete()
+        if trip:
+            trip.save() # Re-index to update denormalised stuff
+        
+        return HttpResponseRedirect(
+            reverse('accounts-profile', args=(username,))
+        )
+    
+    return render(request, 'photos/delete.html', {
+        'photo': photo,
+    })
+
+
+@login_required
 def set_species(request, username, photo_id):
     from zoo.trips.models import Sighting
     if username != request.user.username:

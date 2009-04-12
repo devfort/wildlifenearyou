@@ -25,10 +25,6 @@
 
 <p>By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by|title }}</a>, uploaded {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view original{% if photo.flickr_id %} on Flickr{% endif %}</a>)</p>
 
-{% ifequal photo.created_by request.user %}
-<p><a href="{% url photo-edit photo.created_by.username photo.id %}">Edit this photo's details</a></p>
-{% endifequal %}
-
 {% with photo.sightings.all as sightings %}
 {% if sightings %}
 <h2>Species in this photo:</h2>
@@ -43,6 +39,10 @@
 {% endblock %}
 
 {% block secondary_content %}
+{% ifequal photo.created_by request.user %}
+<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
+{% endifequal %}
+
 {% with photo as object %}
     {% include "comments/_comments.html" %}
 {% endwith %}
