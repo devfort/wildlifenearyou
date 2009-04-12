@@ -21,7 +21,7 @@
         {% with photos.all as photos %}
         {% autopaginate photos 30 %}
         {% paginate %}
-        <ul class="photos-list">
+        <ul class="photo-display">
                 {% for photo in photos.all %}
                         <li>
                                 <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
@@ -29,7 +29,7 @@
                 {% endfor %}
         </ul>
         {% paginate %}
-        {% ifequal profile.user user %}<p><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
+        {% ifequal profile.user user %}<p><a class="add" href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
         {% endwith %}
 </div>
 

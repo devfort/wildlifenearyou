@@ -277,6 +277,7 @@ def user_photos_bulk_assign(request, user):
     return render(request, 'photos/user_photos_bulk_assign.html', {
         'profile': user.get_profile(),
         'photos': photos,
+        'trip_count': Trip.objects.filter(created_by=user).count(),
         'form': TripSelectForm(user)
     })
 
