@@ -236,7 +236,9 @@ def user_photos_unassigned(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'photos/user_photos_unassigned.html', {
         'profile': user.get_profile(),
-        'photos': get_visible_photos(request, user),
+        'photos': Photo.objects.filter(
+            created_by = user, trip__isnull=True
+        ).order_by('created_at').distinct()
     })
 
 @login_required
