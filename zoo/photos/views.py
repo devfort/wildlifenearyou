@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.db.models import Q
 
 from models import Photo
 from zoo.shortcuts import render
@@ -210,14 +211,25 @@ def user_photos(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'photos/user_photos.html', {
         'profile': user.get_profile(),
-        'photos': get_visible_photos(request, user),
+        'photos': filter_visible_photos(user.photos, request.user),
     })
 
 def user_photos_by_trip(request, username):
     user = get_object_or_404(User, username = username)
+    trips = []
+    for trip in Trip.objects.filter(
+            created_by = user, photos__isnull = False
+        ).distinct().order_by('-start'):
+        trips.append({
+            'trip': trip,
+            'visible_photos': filter_visible_photos(
+                trip.photos, request.user
+            )[:5]
+        })
+    
     return render(request, 'photos/user_photos_by_trip.html', {
         'profile': user.get_profile(),
-        'photos': get_visible_photos(request, user),
+        'trips': trips,
     })
 
 def user_photos_unassigned(request, username):
@@ -247,13 +259,17 @@ def moderate(request):
                 photo.save()
         return HttpResponseRedirect(reverse('moderate-photos'))
     else:
-        photos = Photo.objects.filter(is_visible=False).filter(moderated_by=None)
-        return render(request, 'photos/moderate.html', { 'photos': photos[:10], 'total': photos.count() })
+        photos = Photo.objects.filter(
+            is_visible=False).filter(moderated_by=None
+        )
+        return render(request, 'photos/moderate.html', {
+            'photos': photos[:10],
+            'total': photos.count()
+        })
 
-def get_visible_photos(request, user):
-    if user == request.user:
-        return user.photos
-    else:
-        return user.photos.filter(
-            is_visible = True
-        ).distinct()
+def filter_visible_photos(photos, user):
+    "photos is a QuerySet of photos, user is the user who wants to view them"
+    return photos.filter(
+        Q(is_visible = True) | Q(created_by = user)
+    ).distinct()
+

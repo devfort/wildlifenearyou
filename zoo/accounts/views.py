@@ -14,7 +14,7 @@ from zoo.accounts.models import Profile
 from zoo.animals.models import Species
 from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm, UserEditProfileBitsForm
 from zoo.search import nearest_places_with_species
-from zoo.photos.views import get_visible_photos
+from zoo.photos.views import filter_visible_photos
 
 def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
     if request.user.is_authenticated():
@@ -158,7 +158,7 @@ def profile(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'accounts/profile.html', {
         'profile': user.get_profile(),
-        'photos': get_visible_photos(request, user),
+        'photos': filter_visible_photos(user.photos, request.user),
     })
 
 def profile_edit(request, username):
