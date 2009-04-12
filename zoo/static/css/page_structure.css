@@ -1,11 +1,11 @@
 .wrapper {
 	text-align: left;
-	width: 69em;
+	width: 60em;
 	max-width: 100%;
 	margin: 0 auto;
 }
 .main .contents {
-	padding: 0 1em;
+	padding: 0 2em;
 	overflow: hidden;
 	zoom: 1;
 }
@@ -18,9 +18,10 @@
 	background-position: left bottom;
 }
 .header .contents {
-	padding: 1.5em 0.8em 1.5em 1em;
+	padding: 1.5em 2em 1.5em 2em;
 	position: relative;
 	min-height: 20px;
+	overflow: hidden;
 }
 .header .wrapper {
 	text-align: right;
@@ -29,10 +30,10 @@
 /* @group Logo */
 
 .header p.heading {
-	position: absolute;
-	top: 0.5em;
-	left: 1em;
-	width: 25em;
+	float: left;
+	margin:0;
+	width: 230px;
+	height: 60px;
 	margin: 0;
 	text-align: left;
 }
@@ -51,16 +52,15 @@
 /* @group Navigation */
 
 .header ul {
-	display: inline;
+	display: block;
 	text-transform: uppercase;
-    font-size: 0.9em;
+    font-size: 0.8em;
     font-weight: bold;
+    margin-bottom: 1em;
+    margin-top: 0.385em;
 }
 .header ul li {
 	display: inline;
-	padding-right: 0.6em;
-	margin-right: 0.6em;
-	border-right: solid 1px #7d965f;
 	background-image: none;
 	padding-left: 0;
 	margin-bottom: 0;
@@ -69,13 +69,25 @@
 .header ul li a:visited {
 	color: #0063dc;
 	text-decoration: none;
+	border-left: 1px solid #7d965f;
+	padding-left: 0.6em;
+	margin-left: 0.6em;
 }
+
 .header ul li a:active, 
 .header ul li a:focus, 
 .header ul li a:hover {
 	color: black;
+	border-left: 1px solid #7d965f;
 }
 
+.header ul li:first-child a:link, 
+.header ul li:first-child a:visited,
+.header ul li:first-child a:active, 
+.header ul li:first-child a:focus, 
+.header ul li:first-child a:hover {
+	border: none;
+}
 /* @end */
 
 /* @group Search */
@@ -88,9 +100,11 @@
     white-space: nowrap;
 }
 .header form label {
-	margin-right: 0.3em;
 	margin-bottom: 0;
 	display: inline;
+}
+.header input {
+	margin-left: 0.5em;
 }
 .header form div {
 	display: inline;
