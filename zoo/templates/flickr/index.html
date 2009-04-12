@@ -6,13 +6,14 @@
 
 <h1>Import from Flickr</h1>
 
-<p>Search for photos to import from your Flickr account by text or tag:</p>
+
 
 <form action="{% url flickr-search %}" method="get">
-    <p><input type="search" name="q"> <input type="submit" value="Search your photos"></p>
+	<p><label for="flickrsearch">Search for photos to import from your Flickr account by text or tag:</label></p>
+    <p><input id="flickrsearch" type="search" name="q"> <input type="submit" value="Search your photos"></p>
 </form>
 
-<p>Or pick photos from <a href="{% url flickr-sets %}">your sets</a>, <a href="{% url flickr-places %}">your places</a> or <a href="{% url flickr-groups %}">your groups</a>.</p>
+<p>Or choose from photos in <a href="{% url flickr-sets %}">your sets</a>, <a href="{% url flickr-places %}">your places</a> or <a href="{% url flickr-groups %}">your groups</a>.</p>
 
 {% if recent %}
 <h2>Your most recent photos</h2>
@@ -21,8 +22,8 @@
 	<ul class="flickr">
 	    {% for photo in recent %}
 	    <li>
-	        <img src="{{ photo.square }}" width="75" height="75">
-	        <p class="import"><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> <label for="import_{{ photo.id }}">Import</label></p>
+	        <p><label for="import_{{ photo.id }}"><img src="{{ photo.square }}" width="75" height="75" alt="">
+	        <span class="import"><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> Import</span></label></p>
 	        <p class="view"><a href="http://www.flickr.com/photo.gne?id={{ photo.id }}">View</a></p>
 	    </li>
 	    {% endfor %}

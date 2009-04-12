@@ -1,18 +1,32 @@
 {% extends base %}
 
-{% block title %}Your sets{% endblock %}
+{% block title %}Import from your sets on flickr{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
 <h1>Pick one of your sets</h1>
+
+<p class="notification">Or choose from <a href="{% url flickr %}">all your photos</a>, <a href="{% url flickr-places %}">your places</a> or <a href="{% url flickr-groups %}">your groups</a>.</p>
+
+{% if sets %}
 
 <ul>
 	{% for set in sets %}
 	<li>
 		{% if show_photos %}<img src="{{ set.square }}" class="pull-left">{% endif %}
-		<p><a href="{{ set.id }}/"><strong>{{ set.title }}</strong></a>{% if set.description %} - {{ set.description|safe }}{% endif %} ({{ set.photos }} photo{{ set.photos|pluralize }})</p>
+		<p><strong><a href="{{ set.id }}/">{{ set.title }}</a> ({{ set.photos }} photo{{ set.photos|pluralize }})</strong></p>
+		{% if set.description %}<p>{{ set.description|safe }}</p>{% endif %}
 	</li>
 	{% endfor %}
 </ul>
+
+{% else %}
+	<p class="notification">You dont appear to have any flickr sets. Why not choose from <a href="{% url flickr %}">all your photos</a>, <a href="{% url flickr-sets %}">your sets</a> or <a href="{% url flickr-groups %}">your groups</a>.</p>
+
+	<form action="{% url flickr-search %}" method="get">
+		<p><label for="flickrsearch">Search for photos to import from your Flickr account by text or tag:</label></p>
+	    <p><input id="flickrsearch" type="search" name="q"> <input type="submit" value="Search your photos"></p>
+	</form>
+{% endif %}
 
 {% endblock %}

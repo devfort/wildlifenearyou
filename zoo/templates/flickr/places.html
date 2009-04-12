@@ -1,19 +1,27 @@
 {% extends base %}
 
-{% block title %}Import from Flickr Places{% endblock %}
+{% block title %}Import from your places on flickr{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
-<h1>Your places on Flickr</h1>
+<h1>Pick one of your places</h1>
 
 {% if places.places.place %}
+
+<p class="notification">Or choose from <a href="{% url flickr %}">all your photos</a>, <a href="{% url flickr-sets %}">your sets</a> or <a href="{% url flickr-groups %}">your groups</a>.</p>
+
 <ul>
     {% for place in places.places.place %}
-    <li><a href="/flickr/your-places/{{ place.woeid }}/">{{ place.content }}</a>, {{ place.photo_count }} photo{{ place.photo_count|pluralize }}</li>
+    <li><p><strong><a href="/flickr/your-places/{{ place.woeid }}/">{{ place.content }}</a></strong> ({{ place.photo_count }} photo{{ place.photo_count|pluralize }})</p></li>
     {% endfor %}
 </ul>
 {% else %}
-<p>None of your Flickr photos belong to a place - maybe you haven't geotagged any photos yet?</p>
+	<p class="notification">None of your Flickr photos belong to a place - maybe you haven't geotagged any photos yet? why not choose from <a href="{% url flickr %}">all your photos</a>, <a href="{% url flickr-sets %}">your sets</a> or <a href="{% url flickr-groups %}">your groups</a>.</p>
+	
+	<form action="{% url flickr-search %}" method="get">
+		<p><label for="flickrsearch">Search for photos to import from your Flickr account by text or tag:</label></p>
+	    <p><input id="flickrsearch" type="search" name="q"> <input type="submit" value="Search your photos"></p>
+	</form>
 {% endif %}
 
 {% endblock %}

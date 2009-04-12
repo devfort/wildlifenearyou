@@ -900,6 +900,7 @@ ul.teaserlist h3 span {
 
 .flickr .import {
 	margin: 0 5px 0 5px;
+	display: block;
 }
 
 .flickr .view {

@@ -78,10 +78,11 @@ Your nearest <a href="{{ random_animal.url }}">{{ random_animal.name }}</a> is {
 Our sharp-eyed animal lovers have spotted <strong>{{ total_num_of_species|intcomma }}</strong> species.
 {% endifequal %}</p>
 
-	<p class="nav"><span><a class="copyright" href="{% url flatpage "legal/" %}">&copy;</a> <a href="{% url flatpage "legal/" %}">WildLifeNearYou.com Ltd</a></span>
-	| <a href="{% url flatpage "about/" %}">About</a>
-	| <a href="{% url feedback %}">Contact</a>
-	</p>
+		<p class="nav"><span><a class="copyright" href="{% url flatpage "legal/" %}">&copy;</a> <a href="{% url flatpage "legal/" %}">WildLifeNearYou.com Ltd</a></span>
+		| <a href="{% url flatpage "about/" %}">About</a>
+		| <a href="{% url feedback %}">Contact</a>
+		</p>
+	</div>
 </div>
 {{ GOOGLE_ANALYTICS_CODE }}
 </body>

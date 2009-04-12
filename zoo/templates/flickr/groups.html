@@ -2,17 +2,25 @@
 
 {% block title %}Import from Flickr Groups{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
-<h1>Your Flickr Groups</h1>
+<h1>Pick one of your Flickr Groups</h1>
+
 {% if groups.groups.group %}
+<p class="notification">Or choose from <a href="{% url flickr %}">all your photos</a>, <a href="{% url flickr-sets %}">your sets</a> or <a href="{% url flickr-places %}">your places</a>.</p>
 <ul>
 {% for group in groups.groups.group %}
-<li><a href="{{ group.nsid|urlencode }}/">{{ group.name }}</a></li>
+<li><p><a href="{{ group.nsid|urlencode }}/">{{ group.name }}</a></p></li>
 {% endfor %}
 </ul>
 {% else %}
-<p>You do not belong to any groups on Flickr.</p>
+<p class="notification">You do not belong to any groups on Flickr, why not choose from <a href="{% url flickr %}">all your photos</a>, <a href="{% url flickr-sets %}">your sets</a> or <a href="{% url flickr-places %}">your places</a>.</p>
+
+<form action="{% url flickr-search %}" method="get">
+	<p><label for="flickrsearch">Search for photos to import from your Flickr account by text or tag:</label></p>
+    <p><input id="flickrsearch" type="search" name="q"> <input type="submit" value="Search your photos"></p>
+</form>
+
 {% endif %}
 
 {% endblock %}

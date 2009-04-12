@@ -2,19 +2,19 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
 <h1>{{ title }}</h1>
 
 {% if photos %}
-    <p>Select the photos you wish to import</p>
+    <p class="notification">Select the photos you wish to import</p>
 
     <form action="/flickr/selected/" method="post">
 	    <ul class="flickr">
 	        {% for photo in photos %}
 	        <li>
-	            <img src="{{ photo.square }}" width="75" height="75">
-	            <p class="import"><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> <label for="import_{{ photo.id }}">Import</label></p>
+	            <p><label for="import_{{ photo.id }}"><img src="{{ photo.square }}" width="75" height="75" alt="">
+		        <span class="import"><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> Import</span></label></p>
 	            <p class="view"><a href="http://www.flickr.com/photo.gne?id={{ photo.id }}">View</a></p>
 	        </li>
 	        {% endfor %}

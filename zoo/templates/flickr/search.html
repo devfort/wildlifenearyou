@@ -2,14 +2,13 @@
 
 {% block title %}Search your photos{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
 <h1>Search your photos</h1>
 
 <form action="/flickr/search/" method="get">
-    <p><input type="search" name="q">
-        <input type="submit" value="Search">
-    </p>
+    <div class="input-container"><input type="search" name="q"></div>
+     <div class="button-container"><input type="submit" value="Search"></div>
 </form>
 
 {% endblock %}

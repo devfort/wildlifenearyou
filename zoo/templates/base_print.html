@@ -69,11 +69,19 @@
 </div>
 
 <div class="footer">
-	<p style="float:right">Our sharp-eyed animal lovers have spotted {{ total_num_of_species }} species</p>
-	<p><a href="{% url flatpage "legal/" %}">&copy; WildLifeNearYou.com Limited</a>
-	| <a href="{% url flatpage "about/" %}">About</a>
-	| <a href="{% url flatpage "contact/" %}">Contact</a>
-</p>
+	<div class="contents">
+		<p class="context">{% ifequal rand 1 %}
+Your nearest <a href="{{ random_animal.url }}">{{ random_animal.name }}</a> is {{ random_animal.dist }} mile{{ random_animal.dist|pluralize }} away, at <a href="{{ random_animal.place_url }}">{{ random_animal.place_name }}</a>.
+{% else %}
+Our sharp-eyed animal lovers have spotted <strong>{{ total_num_of_species|intcomma }}</strong> species.
+{% endifequal %}</p>
+
+		<p class="nav"><span><a class="copyright" href="{% url flatpage "legal/" %}">&copy;</a> <a href="{% url flatpage "legal/" %}">WildLifeNearYou.com Ltd</a></span>
+		| <a href="{% url flatpage "about/" %}">About</a>
+		| <a href="{% url feedback %}">Contact</a>
+		</p>
+	</div>
 </div>
+
 </body>
 </html>
