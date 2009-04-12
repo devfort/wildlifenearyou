@@ -10,7 +10,7 @@
     <p class="notification">Select the photos you wish to import</p>
 
     <form action="/flickr/selected/" method="post">
-	    <ul class="flickr">
+	    <ul class="photo-display">
 	        {% for photo in photos %}
 	        <li>
 	            <p><label for="import_{{ photo.id }}"><img src="{{ photo.square }}" width="75" height="75" alt="">

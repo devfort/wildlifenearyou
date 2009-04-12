@@ -19,7 +19,7 @@
 <h2>Your most recent photos</h2>
 
 <form action="/flickr/selected/" method="post">
-	<ul class="flickr">
+	<ul class="photo-display">
 	    {% for photo in recent %}
 	    <li>
 	        <p><label for="import_{{ photo.id }}"><img src="{{ photo.square }}" width="75" height="75" alt="">

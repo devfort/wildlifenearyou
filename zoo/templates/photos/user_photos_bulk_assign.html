@@ -19,11 +19,11 @@
     <form action="{{ request_path }}" method="post">
     {{ form }}
     {% with photos.all as photos %}
-    <ul class="photos-list">
+    <ul class="photo-display">
     {% for photo in photos.all %}
         <li>
-            <label for="selectphoto_{{ photo.id }}">{{ photo.thumb_75_img }}</label>
-            <input id="selectphoto_{{ photo.id }}" type="checkbox" name="selected_photos" value="{{ photo.id }}">
+            <label for="selectphoto_{{ photo.id }}">{{ photo.thumb_75_img }}
+            <span class="import"><input id="selectphoto_{{ photo.id }}" type="checkbox" name="selected_photos" value="{{ photo.id }}"> add</span></label>
         </li>
     {% endfor %}
     </ul>

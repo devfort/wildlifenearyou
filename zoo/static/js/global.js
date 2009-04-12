@@ -19,7 +19,7 @@ jQuery(function($) {
 		}
 	});
 	
-	$('form .flickr').before('<p><a href="#" class="select-all">select all</a> | <a href="#" class="select-none">select none</a></p>');
+	$('form .photo-display').before('<p><a href="#" class="select-all">select all</a> | <a href="#" class="select-none">select none</a></p>');
 	
 	$('a.select-all').live("click", function() {
 		$(this).parents('form:first').find('input[type="checkbox"]').each(

@@ -770,47 +770,6 @@ div#ajax-feedback-form {
 
 /* @end */
 
-/* @group Photostrip */
-
-.photostrip {
-	margin: 0;
-	padding: 0;
-	height: 75px;
-	list-style-type: none;
-	width: 9000em;
-	overflow: hidden;
-	/* For people with really, really wide screens: */
-	background-image: url(/static/img/bg/sneaky.jpg);
-}
-.photostrip li {
-	margin: 0;
-	padding: 0;
-	float: left;
-}
-
-.photostrip img {
-	display: block;
-}
-
-/* @end */
-
-/* @group Photos list */
-
-.photos-list {
-  list-style: none;
-  padding: 4px;
-  margin: 0;
-  text-align: center;
-}
-
-.photos-list li {
-  display: inline;
-  padding: 4px;
-  margin: 0;
-}
-
-/* @end */
-
 /* @group Pagination */
 
 .pagination {
@@ -861,9 +820,50 @@ ul.teaserlist h3 span {
 	text-align: left;
 }
 
-/* @group Flickr listing */
+/* @group Photostrip */
 
-.flickr {
+.photostrip {
+	margin: 0;
+	padding: 0;
+	height: 75px;
+	list-style-type: none;
+	width: 9000em;
+	overflow: hidden;
+	/* For people with really, really wide screens: */
+	background-image: url(/static/img/bg/sneaky.jpg);
+}
+.photostrip li {
+	margin: 0;
+	padding: 0;
+	float: left;
+}
+
+.photostrip img {
+	display: block;
+}
+
+/* @end */
+
+/* @group Photos list */
+
+.photos-list {
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+  text-align: center;
+}
+
+.photos-list li {
+  display: inline;
+  padding: 4px;
+  margin: 0;
+}
+
+/* @end */
+
+/* @group Flickr listing or other photo display */
+
+.photo-display {
 	margin: 0;
 	padding: 0;
 	width: 100%;
@@ -872,7 +872,7 @@ ul.teaserlist h3 span {
 	margin-top: 1.5em;
 }
 
-.flickr li {
+.photo-display li {
 	margin: 0;
 	padding: 0;
 	background: 0;
@@ -881,37 +881,38 @@ ul.teaserlist h3 span {
 	float: left;
 	margin-right: 1em;
 	margin-bottom: 1em;
+	padding-bottom: 10px;
 	display: inline;
 }
 
-.flickr img {
+.photo-display img {
 	margin: 10px auto;
 	display: block;
 	border: 2px solid white;
 }
-.flickr input,
-.flickr label {
+.photo-display input,
+.photo-display label {
 	display: inline;
 }
 
-.flickr .import input {
+.photo-display .import input {
 	vertical-align: text-bottom;
 }
 
-.flickr .import {
+.photo-display .import {
 	margin: 0 5px 0 5px;
 	display: block;
 }
 
-.flickr .view {
+.photo-display .view {
 	margin: 0.3em 10px 10px 10px;
 }
 
-.flickr .view a:link,
-.flickr .view a:visited,
-.flickr .view a:hover,
-.flickr .view a:focus,
-.flickr .view a:active {
+.photo-display .view a:link,
+.photo-display .view a:visited,
+.photo-display .view a:hover,
+.photo-display .view a:focus,
+.photo-display .view a:active {
 	background-image:  url('/static/img/icons/go.gif');
 	background-position: left center;
 	background-repeat: no-repeat;
