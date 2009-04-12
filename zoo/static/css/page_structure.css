@@ -101,6 +101,7 @@
 .header form label {
 	margin-bottom: 0;
 	display: inline;
+	color: #29140C;
 }
 .header input {
 	margin-left: 0.5em;
