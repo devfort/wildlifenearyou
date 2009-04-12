@@ -216,18 +216,5 @@ def selected(request):
         added_ids.append(p.id)
     
     return HttpResponseRedirect(
-        '/flickr/bulk-assign/?ids=%s' % ','.join(map(str, added_ids))
+        '/%s/photos/unassigned/' % request.user.username
     )
-
-@login_required
-def bulk_assign(request):
-    if request.method == 'POST':
-        assert False, request.POST
-    ids = request.GET.get('ids', '').split(',')
-    photos = Photo.objects.filter(
-        pk__in = ids,
-        created_by = request.user,
-    )
-    return render(request, 'flickr/bulk_assign.html', {
-        'photos': photos,
-    })
