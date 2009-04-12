@@ -85,7 +85,7 @@
 {% endblock %}
 
 {% block secondary_content %}
-	<h2>Trip Rating</h2>
+	<h2>Trip rating</h2>
 	{% if rating.on %}
 	<p class="rating" title="{{ rating.on|length }} out of 5 stars">
 	{% for i in rating.on %}
@@ -142,4 +142,11 @@
         {% if belongs_to_user %}
         <p class="highlight"><a class="edit" href="{{ trip.urls.edit }}">Edit this trip</a> <a class="remove" href="delete/">Delete this trip</a></p>
         {% endif %}
+
+<h2>Comments</h2>
+{% with trip as object %}
+    {% include "comments/_comments.html" %}
+{% endwith %}
+
+
 {% endblock %}
