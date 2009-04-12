@@ -20,6 +20,7 @@ jQuery(function($) {
 <style type="text/css">
 #edit-sightings textarea {
     height: 3em;
+    width: 80%;
 }
 </style>
 {% endblock %}
@@ -66,13 +67,24 @@ jQuery(function($) {
     <div>
         <h2>Edit sightings</h2>
         {{ sightings_formset.management_form }}
+        <ul class="animal-list">
         {% for form in sightings_formset.forms %}
-        <p>
+            <li>
             {{ form.id }}
-            Note about <strong>{{ form.instance.species_name }}</strong> (delete {{ form.DELETE }})
+            {% if form.instance.species %}
+            {% with form.instance.species as species %}
+                    <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+                    <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+            {% endwith %}
+            {% else %}
+                    <div class="thumbnail"></div>
+                    <p><span class="animal-name">{{  form.instance.species_inexact }}</span></p>
+            {% endif %}
             {{ form.note }}
-        </p>
+            <label for="id_sightings-{{ forloop.counter0 }}-DELETE">Delete sighting:</label> {{ form.DELETE }}
+            </li>
         {% endfor %}
+        </ul>
     </div>
 </div>
 
