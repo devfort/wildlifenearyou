@@ -4,10 +4,9 @@
 	max-width: 100%;
 	margin: 0 auto;
 }
-.main .contents {
+.contents {
 	padding: 0 2em;
 	overflow: hidden;
-	zoom: 1;
 }
 
 /* @group Header */
@@ -18,10 +17,10 @@
 	background-position: left bottom;
 }
 .header .contents {
-	padding: 1.5em 2em 1.5em 2em;
+	padding-top: 1.5em;
+	padding-bottom: 2em;
 	position: relative;
 	min-height: 20px;
-	overflow: hidden;
 }
 .header .wrapper {
 	text-align: right;
@@ -118,19 +117,34 @@
 /* @group Footer */
 
 .footer {
-/*	padding-top: 176px;
-	background-image: url(/static/img/bg/animals_small.gif);
-	background-repeat: no-repeat;
-	background-position: 98% top;*/
-    background-color: #ffffff;
     border-top: solid 1em #ffffff;
+    background-color: #c6ddab;
+   	background-image: url(/static/img/bg/footer_bg.jpg);
+	background-repeat: repeat-x;
+	background-position: left top;
 }
 .footer p {
     text-align: left;
     color: #534741;
-    background-color: #c6ddab;
-    padding: 1em;
+    padding: 1em 0;
     margin: 0;
+    font-size: 0.8em;
+}
+.footer .nav {
+	margin-right: 1em;
+}
+.footer strong {
+	font-size:1.5em;
+	line-height: 1em;
+	color: black;
+	vertical-align: text-top;
+	margin: 0 0.3em;
+}
+.footer .context {
+	float: right;
+}
+.footer .nav span {
+	white-space: nowrap;
 }
 .footer a.copyright {
 	text-decoration: none;
@@ -143,9 +157,6 @@
 .main {
 	clear: both;
 	background-color: #f9fcfe;
-	/*background-image: url(/static/img/bg/bg_gradient_blue_white.png);
-	background-repeat: repeat-x;
-	background-position: top left;*/
 	width: 100%;
 	overflow: hidden;
 	padding-top: 2em;
@@ -179,6 +190,7 @@
 /* @end */
 
 /* @group 2-cols */
+
 .halfwidth {
   width: 50%;
   float: left;
