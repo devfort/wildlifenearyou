@@ -193,8 +193,8 @@ jQuery(function($) {
 <p class="add">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
 
 <p class="suggest-changes">
-	Found incorrect information on the page?
-	<a href="{{ place.urls.suggest_changes }}">Let us know! You won’t hurt our feelings.</a>
+	Have we got our facts right? 
+	<a href="{{ place.urls.suggest_changes }}">Suggest changes</a> to our information
 </p>
 
 {% with place.visible_photos.count as visible_photo_count %}
