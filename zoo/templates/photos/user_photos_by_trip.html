@@ -26,7 +26,7 @@
         </li>
     {% endfor %}
     </ul>
-    <p><a href="{{ trip.trip.get_absolute_url }}">More on this trip</a>
+    <p><a href="{{ trip.trip.get_absolute_url }}">More on this trip</a>{% if trip.more_photos %} (including {{ trip.more_photos }} more photo{{ trip.more_photos|pluralize }}){% endif %}
     {% endfor %}
 </div>
 

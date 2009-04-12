@@ -217,14 +217,18 @@ def user_photos(request, username):
 def user_photos_by_trip(request, username):
     user = get_object_or_404(User, username = username)
     trips = []
+    photos_to_display_per_trip = 5
     for trip in Trip.objects.filter(
             created_by = user, photos__isnull = False
         ).distinct().order_by('-start'):
+        photos = filter_visible_photos(
+            trip.photos, request.user
+        )
+        photo_count = photos.count()
         trips.append({
             'trip': trip,
-            'visible_photos': filter_visible_photos(
-                trip.photos, request.user
-            )[:5]
+            'visible_photos': photos[:photos_to_display_per_trip],
+            'more_photos': max(photo_count - photos_to_display_per_trip, 0),
         })
     
     return render(request, 'photos/user_photos_by_trip.html', {
