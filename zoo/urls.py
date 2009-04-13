@@ -38,6 +38,8 @@ urlpatterns = patterns('',
     }),
     
     (r'^account/(.*?)$', RegistrationConsumer()),
+    
+    (r'^blog/', include('basic.blog.urls')),
 
     # Landing Page
     url(r'^$', 'zoo.homepage.views.landing',

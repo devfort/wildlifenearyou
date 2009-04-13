@@ -122,6 +122,11 @@ INSTALLED_APPS = [
     'zoo.launchsignups',
     'django_openid',
     'pagination',
+    # The next four items are dependencies for basic.blog
+    'basic.blog',
+    'basic.inlines',
+    'tagging',
+    'django.contrib.markup'
 ]
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
