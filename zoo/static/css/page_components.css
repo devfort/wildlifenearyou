@@ -804,6 +804,7 @@ ul.teaserlist img.image {
 ul.teaserlist h3 {
 	font-family: Calibri, "Helvetica Neue", sans-serif;
 	margin-bottom: 0.3em;
+	margin-top: 0.6em;
 }
 ul.teaserlist p {
 	margin: 0;
@@ -831,6 +832,11 @@ ul.teaserlist h3 span {
 	overflow: hidden;
 	/* For people with really, really wide screens: */
 	background-image: url(/static/img/bg/sneaky.jpg);
+	background-position: top left;
+	background-repeat: repeat-x;
+	border-top: 2px solid white;
+	border-bottom: 2px solid #AFD580;
+	padding-bottom: 2px;
 }
 .photostrip li {
 	margin: 0;

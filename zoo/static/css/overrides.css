@@ -103,7 +103,7 @@
     line-height: 1;
     font-family: Rockwell, Georgia, "Times New Roman", "Century Schoolbook L", Times, serif;
     color: #362f2d;
-	position: absolute;  	top: 0.5em;	left: 0.538em;	margin: 0;
+	position: absolute;  	top: 0.5em;	left: 1.3em;	margin: 0;
 }
 
 #home .look-for .examples {
@@ -123,13 +123,9 @@
 	background-color: #fff;
 	width: 82%;	border: 2px solid white;
 }
-#home .look-for .contents {	position: relative;}#home .look-for input.submit {	position: absolute;	top: 0;	right: 0.538em;	font-size: 1.5714em;	border-width: 2px;
+#home .look-for .contents {	position: relative;}#home .look-for input.submit {	position: absolute;	top: 0;	right: 1.3em;	font-size: 1.5714em;	border-width: 2px;
 }
 
-#home .photostrip {
-	border-top: 1px solid #6D9053;
-	border-bottom: 1px solid #6D9053;
-}
 
 /* @end */
 
