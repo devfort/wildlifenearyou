@@ -6,7 +6,7 @@
 {% block body_id %}post_{{ object.id }}{% endblock %}
 
 {% block content %}
-  {% load blog markup comments tagging_tags %}
+  {% load blog comments tagging_tags %}
   <h1>{{ object.title }}</h1>
   <p class="other_posts">
     {% if object.get_previous_by_publish %}
@@ -20,7 +20,7 @@
   <p class="date notification">{{ object.publish|date:"j F Y" }}</p>
   
   <div class="body">
-    {{ object.body|markdown:"safe" }}
+    {{ object.body|safe }}
   </div>
   
   {% tags_for_object object as tag_list %}

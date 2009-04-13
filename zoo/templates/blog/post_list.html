@@ -1,9 +1,8 @@
 {% extends "blog/base_blog.html" %}
 
 
-{% block title %}Post archive{% endblock %}
+{% block title %}Blog{% endblock %}
 {% block body_class %}{{ block.super }} post_list{% endblock %}
-{% load markup %}
 
 {% block content %}
   <div class="post_list">
@@ -11,7 +10,7 @@
     <div>
       <h2 class="title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
       <p class="date">{{ post.publish|date:"Y F d" }}</p>
-      <p class="body">{{ post.body|markdown:"safe" }}</p>
+      <p class="body">{{ post.body|safe }}</p>
     </div>
     {% endfor %}
   </div>
