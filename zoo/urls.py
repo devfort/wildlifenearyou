@@ -26,6 +26,8 @@ from photos import views as photos
 #from accounts.openid import RegistrationConsumer
 from invitereg.views import InviteRegistrationConsumer as RegistrationConsumer
 
+registration_consumer = RegistrationConsumer()
+
 urlpatterns = patterns('',
     # Example:
     # (r'^zoo/', include('zoo.foo.urls')),
@@ -38,7 +40,13 @@ urlpatterns = patterns('',
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
     
-    (r'^account/(.*?)$', RegistrationConsumer()),
+    url(r'^account/login/$', registration_consumer, {
+        'rest_of_url': 'login',
+    }, name='accounts-login'),
+    url(r'^account/logout/$', registration_consumer, {
+        'rest_of_url': 'logout',
+    }, name='accounts-logout'),
+    (r'^account/(.*?)$', registration_consumer),
     
     (r'^blog/', include('basic.blog.urls')),
 
@@ -95,12 +103,16 @@ urlpatterns = patterns('',
         name='flickr-selected'),
     
     # User accounts stuff
-    url(r'^login/$', 'accounts.views.login', {
-        'template_name': 'accounts/login.html'
-    }, name='accounts-login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {
-        'next_page': '/login/'
-    }, name='accounts-logout'),
+    #url(r'^login/$', 'accounts.views.login', {
+    #    'template_name': 'accounts/login.html'
+    #}, name='accounts-login'),
+    
+    #url(r'^login/$', 'accounts.views.login', {
+    #    'template_name': 'accounts/login.html'
+    #}, name='accounts-login'),
+    #url(r'^logout/$', 'django.contrib.auth.views.logout', {
+    #    'next_page': '/login/'
+    #}, name='accounts-logout'),
 
     url(r'^forgotten_password/$', 'accounts.views.forgotten_password',
         name='forgotten-password'),

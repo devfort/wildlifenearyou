@@ -42,5 +42,4 @@ class RegistrationConsumer(RegistrationConsumer):
     def on_registration_complete(self, request):
         return HttpResponseRedirect('/%s/' % request.user.username)
 
-
 endpoint = RegistrationConsumer()
