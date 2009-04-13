@@ -80,7 +80,9 @@
 			{% endif %}
 			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 			{% if user.is_authenticated %}
-			<p class="intro">If you've spotted some animals since you last checked in with us, why not add the trip in, and also upload any photos you took? If not, why not check out some recent trips others have taken, and record your thoughts on the animals they've spotted and the photos they've taken? Or you could <a href="{% url invite-friends %}">invite some friends</a> to join in the fun!</p>
+			<p class="intro">
+				Seen any more animals? Why not <a href="{% url add-trip %}">add another trip</a>,
+				<a href="{% url user-photos user.username %}">upload</a> some photos or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun!</p>
 			{% else %}
 			<p class="intro"><strong>Wild Life Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
 			{% endif %}

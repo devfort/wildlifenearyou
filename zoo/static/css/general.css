@@ -239,6 +239,13 @@ pre, code, kbd, tt, samp, tt {
 	font-family: "andale mono", monospace;
 }
 
+pre {
+	background-color: white;
+	padding: 1em;
+	margin: 1em 0;
+	border: 1px solid #E2F1F9;
+}
+
 ins {
 	text-decoration: underline;
 }
