@@ -68,7 +68,7 @@
 
 #home .intro-block label {
 	float: left;
-	width: 9em;
+	width: 8em;
 	font-weight: normal;
 	line-height: 1em;
 	margin-right: 1em;
@@ -83,6 +83,7 @@
 #home .intro-block .text-container input {
 	border: 1px solid #B7C6CE;
 	padding: 0.2em 0.2em;
+	width: 10em;
 }
 #home .intro-block .submit {
 	margin-left: 10em;
@@ -93,6 +94,42 @@
 }
 #home form {
 	margin-bottom: 0;
+}
+
+#home .intro-block input.openid {
+	background-image: url(/account/logo/);
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	padding-left: 1.5em;
+	width: 8.7em;
+}
+#home .intro-block input:focus {
+	outline: none;
+}
+#home div.login-wrapper {
+	background-color: #93B1C1;
+	overflow: hidden;
+	padding-top: 0.5em;
+	margin-top: 0.5em;
+	padding-bottom: 0.7em;
+	margin-bottom: 1em;
+}
+#home div#what-is-openid,
+#home div#what-is-openid2 {
+	font-size: 0.8em;
+	clear: both;
+	margin: 1em 1em 0 1em;
+}
+#home div#what-is-openid p,
+#home div#what-is-openid2 p {
+	margin-bottom: 0;
+	margin-top: 0;
+	margin-left: 9em;
+}
+#home .login-wrapper .toggler {
+	display: block;
+	font-size: 0.8em;
 }
 
 /* @end */

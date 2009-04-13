@@ -6,25 +6,7 @@
 <script type="text/javascript" src="/static/js/jquery-autocomplete/jquery.autocomplete.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/js/jquery-autocomplete/jquery.autocomplete.css">
 <script type="text/javascript" src="/static/js/home.js"></script>
-<style type="text/css">
-#home .intro-block input.openid {
-	background-image: url(/account/logo/);
-	background-color: #fff;
-	background-repeat: no-repeat;
-	background-position: 0 50%;
-	padding-left: 16px;
-	width: 140px;
-}
-div.login-wrapper {
-	background-color: #93B1C1;
-	overflow: hidden;
-	padding-top: 0.2em;
-}
-div#what-is-openid {
-	font-size: 0.8em;
-}
-</style>
-</style>
+
 {% endblock %}
 
 {% block extra_body %} id="home"{% endblock %}
@@ -58,7 +40,7 @@ div#what-is-openid {
 			{% else %}
 			<div class="interact" id="register-box">
 				<h2>Register now</h2>
-				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in now</span></a></p>
+				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in</span></a></p>
 				<form action="/account/register/" method="post">
 					<div class="container text-container">
 						<label for="id_username">desired username</label>
@@ -66,17 +48,17 @@ div#what-is-openid {
 					</div>
 					<div class="container text-container">
 						<label for="id_email">e-mail</label>
-						<input id="id_email" type="text" name="email" maxlength="75" />
+						<input id="id_email" type="text" name="email" maxlength="75">
 					</div>
 					<!-- We're thinking we might ask them to set a password
 						AFTER they've validated their e-mail! -->
 					<div class="login-wrapper">
 						<div class="container text-container">
 							<label for="id_password">password</label>
-							<input type="password" name="password" id="id_password" />
+							<input type="password" name="password" id="id_password">
 						</div>
 						<div class="container text-container">
-							<label for="id_openid_url"><strong>or</strong> OpenID<br><small><a href="#what-is-openid" class="toggler">what is this?</a></small></label>
+							<label for="id_openid_url"><strong>or</strong> OpenID<a href="#what-is-openid" class="toggler">what is this?</a></label>
 							<input type="text" name="openid_url" id="id_openid_url" class="openid" />
 						</div>
 						<div id="what-is-openid">
@@ -88,22 +70,26 @@ div#what-is-openid {
 				</form>
 			</div>
 			<div class="interact" id="login-box" style="display: none;">
-				<h2>Login</h2>
-				<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register now</span></a></p>
+				<h2>Login now</h2>
+				<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register</span></a></p>
 				<form action="/account/login/" method="post">
 					<div class="container text-container">
 						<label for="id_username">username</label>
-						<input id="id_username" type="text" name="username" maxlength="30" />
+						<input id="id_username" type="text" name="username" maxlength="30">
 					</div>
 					<div class="container text-container">
 						<label for="id_password">password</label>
-						<input type="password" name="password" id="id_password" />
+						<input type="password" name="password" id="id_password">
 					</div>
 					<div class="login-wrapper">
 						<div class="container text-container">
-							<label for="id_openid_url-login"><strong>or</strong> use OpenID</label>
-							<input type="text" name="openid_url" id="id_openid_url-login" class="openid" />
+							<label for="id_openid_url-login"><strong>or</strong> use OpenID<a href="#what-is-openid2" class="toggler">what is this?</a></label>
+							<input type="text" name="openid_url" id="id_openid_url-login" class="openid">
+							<div id="what-is-openid2">
+								<p>OpenID allows you to use the same account on many different websites. Read more at <a href="http://openid.net/">openid.net</a>.</p>
+							</div>
 						</div>
+						
 					</div>
 					<p class="meta"><a href="/account/recover/">I've forgotten my password or can't log in!</a></p>
 					<div><input type="submit" class="submit" value="&raquo; Login"></div>
