@@ -17,12 +17,11 @@ div.all-photos img {
 {% endblock %}
 
 {% block content %}
-{% load thumbnail %}
 <h1>All photos</h1>
 
 <div class="all-photos">
 {% for photo in photos %}
-<a href="{{ photo.urls.absolute }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{% thumbnail photo.photo 150x150 crop %}"></a>
+<a href="{{ photo.urls.absolute }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{{ photo.thumb_100_url }}"></a>
 {% endfor %}
 </div>
 

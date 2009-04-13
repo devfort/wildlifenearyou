@@ -166,7 +166,7 @@ creatures that inhabit our beloved Planet.</p>
 	    {% with featured.species as species %}
 	    {% with species.random_photo as photo %}
 	    {% if photo %}
-	    <img src="{% thumbnail photo.photo 75x75 crop %}" alt="{{ species.common_name }}">
+	    <img src="{{ photo.thumb_75_url }}" alt="{{ species.common_name }}">
 	    {% endif %}
 	    {% endwith %}
 	    <p><a href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>

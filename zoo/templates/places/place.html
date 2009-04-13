@@ -1,7 +1,5 @@
 {% extends base %}
 
-{% load thumbnail %}
-
 {% block title %}{{ place.known_as|title }}{% endblock %}
 
 {% block extra_head %}
@@ -204,18 +202,18 @@ jQuery(function($) {
 		{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
 			{% for photo in place.visible_photos.all %}
-				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
+				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_100_url }}"></a>
 			{% endfor %}
 			</div>
 		{% else %}{# More than one photo #}
 		{% with place.photo as chosen %}
 		<div class="gallery">
-        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
+        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ photo.thumb_100_url }}"></a>
         		<div class="slideshow">
         			<ul id="thumbnails">
 			                {% for photo in place.visible_photos.all %}
 			                {% ifnotequal chosen photo %}
-        		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+        		                <li>{{ photo.thumb_75 }}</li>
         		                {% endifnotequal %}
 			                {% endfor %}
 			        </ul><!-- /#thumbnails -->

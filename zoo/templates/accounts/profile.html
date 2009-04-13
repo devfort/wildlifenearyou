@@ -1,7 +1,6 @@
 {% extends base %}
 
 {% load favourites_extras %}
-{% load thumbnail %}
 {% load zoocommon %}
 
 {% block title %}{{ profile.user|title }}{% endblock %}
@@ -152,18 +151,18 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
         		{% ifequal visible_photo_count 1 %}{# Only one photo #}
         			<div class="gallery">
         			{% for photo in photos.all %}
-        				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 150x1000 %}"></a>
+        				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_100_url }}"></a>
         			{% endfor %}
         			</div>
         		{% else %}{# More than one photo #}
         		{% with photos.all|first as chosen %}
         		<div class="gallery">
-                		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{% thumbnail chosen.photo 150x1000 %}"></a>
+                		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
                 		<div class="slideshow">
                 			<ul id="thumbnails">
         			                {% for photo in photos.all|slice:":30" %}
         			                {% ifnotequal chosen photo %}
-                		                <li><a href="{% url photo photo.created_by.username,photo.id %}"><img src="{% thumbnail photo.photo 75x75 crop %}"></a></li>
+                		                <li>{{ photo.thumb_75 }}</li>
                 		                {% endifnotequal %}
         			                {% endfor %}
         			        </ul><!-- /#thumbnails -->
