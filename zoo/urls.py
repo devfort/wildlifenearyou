@@ -44,7 +44,10 @@ urlpatterns = patterns('',
     # Landing Page
     url(r'^$', 'zoo.homepage.views.landing',
         name='landing-page'),
-
+        
+    
+    url(r'^debug/urls/$', 'zoo.debug.views.show_url_patterns'),
+    
     # Launch signups POST handler
     (r'^launchsignups/$', 'zoo.launchsignups.views.signup'),
 
