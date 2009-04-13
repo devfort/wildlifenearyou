@@ -31,39 +31,39 @@ div.see-more-animals p.have-not-heard {
 /* @group Place list */
 
 .place-list {
-  margin-left: 0;
-  margin-right: 0;
-  padding: 0;
-  list-style: none;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+	list-style: none;
 }
 
 .place-list li,
 div.place-list {
-  margin: 0 0 0.5em 0;
-  padding: 0;
-  background-image: none;
-  clear: both;
-  width: 100%;
-  overflow: hidden;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+	background-image: none;
+	clear: both;
+	width: 100%;
+	overflow: hidden;
 }
 
 .place-list .thumbnail {
-  float: left;
-  margin-right: 1em;
+	float: left;
+	margin-right: 1em;
 }
 
 .place-list p {
-  margin-top: 0.3em;
-  margin-bottom: 0.4em;
+	margin-top: 0.3em;
+	margin-bottom: 0.4em;
 }
 
 .place-list .meta {
-  margin-left: 0.2em;
+	margin-left: 0.2em;
 }
 
 .place-list .place-name {
-  font-size: 1.375em;
-  font-weight: bold;
+	font-size: 1.375em;
+	font-weight: bold;
 }
 
 /* @end */
@@ -71,43 +71,43 @@ div.place-list {
 /* @group Animal list */
 
 .animal-list {
-  margin-left: 0;
-  margin-right: 0;
-  padding: 0;
-  list-style: none;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+	list-style: none;
 }
 
 .animal-list li,
 div.animal-list {
-  margin: 0 0 0.5em 0;
-  padding: 0;
-  background-image: none;
-  clear: both;
-  width: 100%;
-  overflow: hidden;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+	background-image: none;
+	clear: both;
+	width: 100%;
+	overflow: hidden;
 }
 
 .animal-list .thumbnail {
-  float: left;
-  margin-right: 1em;
+	float: left;
+	margin-right: 1em;
 }
 
 .animal-list p {
-  margin-top: 0.3em;
-  margin-bottom: 0.4em;
+	margin-top: 0.3em;
+	margin-bottom: 0.4em;
 }
 
 .animal-list .meta {
-  margin-left: 0.2em;
+	margin-left: 0.2em;
 }
 
 .animal-list .animal-name {
-  font-size: 1.375em;
-  font-weight: bold;
+	font-size: 1.375em;
+	font-weight: bold;
 }
 
 .animal-list i.scientific {
-  color: black;
+	color: black;
 }
 
 /* @end */
@@ -115,39 +115,39 @@ div.animal-list {
 /* @group Trip list */
 
 .trip-list {
-  margin-left: 0;
-  margin-right: 0;
-  padding: 0;
-  list-style: none;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+	list-style: none;
 }
 
 .trip-list li,
 div.trip-list {
-  margin: 0 0 0.5em 0;
-  padding: 0;
-  background-image: none;
-  clear: both;
-  width: 100%;
-  overflow: hidden;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+	background-image: none;
+	clear: both;
+	width: 100%;
+	overflow: hidden;
 }
 
 .trip-list .thumbnail {
-  float: left;
-  margin-right: 1em;
+	float: left;
+	margin-right: 1em;
 }
 
 .trip-list p {
-  margin-top: 0.3em;
-  margin-bottom: 0.4em;
+	margin-top: 0.3em;
+	margin-bottom: 0.4em;
 }
 
 .trip-list .meta {
-  margin-left: 0.2em;
+	margin-left: 0.2em;
 }
 
 .trip-list .trip-name {
-  font-size: 1.375em;
-  font-weight: bold;
+	font-size: 1.375em;
+	font-weight: bold;
 }
 
 /* @end */
@@ -155,39 +155,39 @@ div.trip-list {
 /* @group Spotter list */
 
 .spotter-list {
-  margin-left: 0;
-  margin-right: 0;
-  padding: 0;
-  list-style: none;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+	list-style: none;
 }
 
 .spotter-list li,
 div.spotter-list {
-  margin: 0 0 0.5em 0;
-  padding: 0;
-  background-image: none;
-  clear: both;
-  width: 100%;
-  overflow: hidden;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+	background-image: none;
+	clear: both;
+	width: 100%;
+	overflow: hidden;
 }
 
 .spotter-list .thumbnail {
-  float: left;
-  margin-right: 1em;
+	float: left;
+	margin-right: 1em;
 }
 
 .spotter-list p {
-  margin-top: 0.3em;
-  margin-bottom: 0.4em;
+	margin-top: 0.3em;
+	margin-bottom: 0.4em;
 }
 
 .spotter-list .meta {
-  margin-left: 0.2em;
+	margin-left: 0.2em;
 }
 
 .spotter-list .spotter-name {
-  font-size: 1.375em;
-  font-weight: bold;
+	font-size: 1.375em;
+	font-weight: bold;
 }
 
 /* @end */
@@ -343,19 +343,19 @@ div.spotter-list {
 }
 
 .tripbook blockquote p {
-  margin-top: 0.5em;
-  margin-bottom: 1em;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
 }
 
 .tripbook .posted-by {
-  background-image: url('/static/img/bg/art_talkbubble_logbook_point.png');
+	background-image: url('/static/img/bg/art_talkbubble_logbook_point.png');
 }
 .tripbook .no-description .posted-by {
-  background-image: none;
+	background-image: none;
 }
 
 .tripbook .trip-by a {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 /* @end */
@@ -363,20 +363,20 @@ div.spotter-list {
 /* @group Profile badges */
 
 .badges {
-  margin: 0 0 1.3em 0;
-  padding: 0;
-  font-size: 0.8em;
+	margin: 0 0 1.3em 0;
+	padding: 0;
+	font-size: 0.8em;
 }
 
 .badges li {
-  margin: 0 1em 0 0;
-  padding: 0.3em 0.6em;
-  background-image: none;
-  list-style: none;
-  display: inline;
-  background-color: #dcedc9;
-  color: #5c822f;
-  -moz-border-radius: 5px;
+	margin: 0 1em 0 0;
+	padding: 0.3em 0.6em;
+	background-image: none;
+	list-style: none;
+	display: inline;
+	background-color: #dcedc9;
+	color: #5c822f;
+	-moz-border-radius: 5px;
 }
 
 /* @end */
@@ -424,19 +424,19 @@ ul.currency li {
 /* @group Opening hours */
 
 .opening-list {
-  list-style-type: none;
-  margin-left: 0;
+	list-style-type: none;
+	margin-left: 0;
 }
 
 .opening-list li {
-  margin-left: 25px; /* line up with text in facilities lists */
-  margin-bottom: 0.5em;
-  padding: 0;
-  background-image: none;
+	margin-left: 25px; /* line up with text in facilities lists */
+	margin-bottom: 0.5em;
+	padding: 0;
+	background-image: none;
 }
 
 .opening-days {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 /* @end */
@@ -746,8 +746,8 @@ div#ajax-feedback-form {
 /* @group Avatars */
 
 .avatar-container {
-  margin: 0 auto;
-  width: 175px;
+	margin: 0 auto;
+	width: 175px;
 }
 
 /* @end */
@@ -773,9 +773,9 @@ div#ajax-feedback-form {
 /* @group Pagination */
 
 .pagination {
-  text-align: center;
-  margin: 0.2em 0.5em 0.5em 0.5em;
-  padding: 0;
+	text-align: center;
+	margin: 0.2em 0.5em 0.5em 0.5em;
+	padding: 0;
 }
 
 /* @end */
@@ -853,16 +853,16 @@ ul.teaserlist h3 span {
 /* @group Photos list */
 
 .photos-list {
-  list-style: none;
-  padding: 4px;
-  margin: 0;
-  text-align: center;
+	list-style: none;
+	padding: 4px;
+	margin: 0;
+	text-align: center;
 }
 
 .photos-list li {
-  display: inline;
-  padding: 4px;
-  margin: 0;
+	display: inline;
+	padding: 4px;
+	margin: 0;
 }
 
 /* @end */
@@ -919,7 +919,7 @@ ul.teaserlist h3 span {
 .photo-display .view a:hover,
 .photo-display .view a:focus,
 .photo-display .view a:active {
-	background-image:  url('/static/img/icons/go.gif');
+	background-image:	url('/static/img/icons/go.gif');
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding-left: 20px;

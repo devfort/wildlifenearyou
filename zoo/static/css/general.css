@@ -63,16 +63,16 @@ p {
 
 
 body {
-	 /* max-width: 61em;1098px */
+	/* max-width: 61em;1098px */
 	margin: 0 auto;
 	padding: 0;
-    background-color: #c6ddab;
-    color: #534741;
+	background-color: #c6ddab;
+	color: #534741;
 	font-family: Calibri, "Helvetica Neue", sans-serif;
-    font-size:16px;
-    line-height:1.125em; /* Baseline grid of 18px */
-    text-align: center;
-    -moz-opacity: 0.999999; /* Fix boldness glitch in Firefox */
+	font-size:16px;
+	line-height:1.125em; /* Baseline grid of 18px */
+	text-align: center;
+	-moz-opacity: 0.999999; /* Fix boldness glitch in Firefox */
 }
 
 /* @group Links */
@@ -91,7 +91,7 @@ button.link:hover,
 button.link:focus span {
 	color: #000000; 
 }
-a:active,  
+a:active,
 button.link:active span {
 	color: #000000; 
 }
@@ -103,8 +103,8 @@ button.link:active span {
 /* size headings using classic scale of 14, 16, 18, (21), 24 */
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: Rockwell, Georgia, "Times New Roman", "Century Schoolbook L", Times, serif;
-    color: #362f2d;
+	font-family: Rockwell, Georgia, "Times New Roman", "Century Schoolbook L", Times, serif;
+	color: #362f2d;
 }
 
 h1 {
@@ -118,7 +118,7 @@ h2 {
 	font-size: 1.5714em;   /* 18px */ 
 	margin-top:1.5em;	   /* 27px */
 	margin-bottom: 0.5em;  /* 9px */
-    line-height: 1;
+	line-height: 1;
 }
 h3 { 
 	font-size: 1.2857em;
@@ -127,7 +127,7 @@ h3 {
 }
 h4 { 
 	font-size: 0.875em;   /* 14px */ 
-	margin-top:1.6875em;     /* 27px */
+	margin-top:1.6875em;	 /* 27px */
 	margin-bottom: 0.5625em; /* 9px */	
 	margin-top:1.286em;	   /* 18px */
 	margin-bottom: 0.643em; /* 9px */
@@ -170,9 +170,9 @@ ol {	/* ordered lists usually DO require bullets */
 
 dt {
 	font-weight: bold;
-    float: left;
-    margin: 0 1em 0 0;
-    clear: left;
+	float: left;
+	margin: 0 1em 0 0;
+	clear: left;
 }
 /* @end */
 
@@ -215,7 +215,7 @@ th, td {
 
 blockquote {
 	font-style: italic;
-	margin:0  1.385em  1.385em 1.385em; /* 18px */
+	margin:0 1.385em 1.385em 1.385em; /* 18px */
 }
 
 p+p+blockquote {

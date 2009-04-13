@@ -53,10 +53,10 @@
 .header ul {
 	display: block;
 	text-transform: uppercase;
-    font-size: 0.8em;
-    font-weight: bold;
-    margin-bottom: 1em;
-    margin-top: 0.385em;
+	font-size: 0.8em;
+	font-weight: bold;
+	margin-bottom: 1em;
+	margin-top: 0.385em;
 }
 .header ul li {
 	display: inline;
@@ -95,8 +95,8 @@
 	display: inline;
 	text-transform: uppercase;
 	font-size: 0.9em;
-    font-weight: bold;
-    white-space: nowrap;
+	font-weight: bold;
+	white-space: nowrap;
 }
 .header form label {
 	margin-bottom: 0;
@@ -118,18 +118,18 @@
 /* @group Footer */
 
 .footer {
-    border-top: solid 1em #ffffff;
-    background-color: #c6ddab;
-   	background-image: url(/static/img/bg/footer_bg.jpg);
+	border-top: solid 1em #ffffff;
+	background-color: #c6ddab;
+	background-image: url(/static/img/bg/footer_bg.jpg);
 	background-repeat: repeat-x;
 	background-position: left top;
 }
 .footer p {
-    text-align: left;
-    color: #534741;
-    padding: 1em 0;
-    margin: 0;
-    font-size: 0.8em;
+	text-align: left;
+	color: #534741;
+	padding: 1em 0;
+	margin: 0;
+	font-size: 0.8em;
 }
 .footer .nav {
 	margin-right: 1em;
@@ -165,27 +165,27 @@
 }
 
 .primary {
-  float: left;
-  width: 60%;
-  display: inline;
+	float: left;
+	width: 60%;
+	display: inline;
 }
 .primary h2:first-child,
 .primary h3:first-child {
-  margin-top: 0;
+	margin-top: 0;
 }
 
 .primary h2 {
-  clear: left;
+	clear: left;
 }
 
 .secondary {
-  float: right;
-  width: 34%;
-  display: inline;
+	float: right;
+	width: 34%;
+	display: inline;
 }
 .secondary h2:first-child,
 .secondary h3:first-child {
-  margin-top: 0;
+	margin-top: 0;
 }
 
 /* @end */
@@ -193,16 +193,16 @@
 /* @group 2-cols */
 
 .halfwidth {
-  width: 50%;
-  float: left;
-  display: inline;
+	width: 50%;
+	float: left;
+	display: inline;
 }
 .halfwidth h2:first-child,
 .halfwidth h3:first-child {
-  margin-top: 0;
+	margin-top: 0;
 }
 .halfway h2 {
-  clear: left;
+	clear: left;
 }
 
 /* @end */

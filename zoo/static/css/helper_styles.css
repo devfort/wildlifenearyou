@@ -157,8 +157,8 @@ a.button:focus {
 	background-position: bottom left;
 	background-repeat: repeat-x;
 	border: 1px outset #2356d6;
-    padding: 0.18em 0.7em;
-    cursor: pointer;
+	padding: 0.18em 0.7em;
+	cursor: pointer;
 }
 input.cancel {
 	background-color: #8B9B78;
@@ -188,7 +188,7 @@ input.active {
 
 /* @group Text indicators */
 .meta { 
-        font-size: 0.8571em;
+		font-size: 0.8571em;
 }
 .notification {
 	margin-top: 1.357em;
@@ -231,19 +231,19 @@ input.active {
 /* @group Header auxiliary styles */
 
 h2 .meta {
-    font-size: 0.6364em;
-    font-style: italic;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: lowercase;
+	font-size: 0.6364em;
+	font-style: italic;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: lowercase;
 	font-family: Calibri, "Helvetica Neue", sans-serif;
-    color: #666666;
+	color: #666666;
 }
 
 h1 i.scientific {
-    font-style: italic;
-    font-weight: normal;
-    font-size: smaller;
+	font-style: italic;
+	font-weight: normal;
+	font-size: smaller;
 }
 
 /* @end */
@@ -327,10 +327,10 @@ a.action:active span,
 }
 
 .thumbnail {
-  width: 75px;
-  height: 75px;
-  background-image: url(/static/img/bg/animal_75.png);
-  background-repeat: no-repeat;
+	width: 75px;
+	height: 75px;
+	background-image: url(/static/img/bg/animal_75.png);
+	background-repeat: no-repeat;
 }
 
 /* @end */
