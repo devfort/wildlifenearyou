@@ -46,6 +46,10 @@ urlpatterns = patterns('',
     url(r'^account/logout/$', registration_consumer, {
         'rest_of_url': 'logout',
     }, name='accounts-logout'),
+    url(r'^account/register/$', registration_consumer, {
+        'rest_of_url': 'register',
+    }, name='accounts-register'),
+
     (r'^account/(.*?)$', registration_consumer),
     
     (r'^blog/', include('basic.blog.urls')),
@@ -127,10 +131,10 @@ urlpatterns = patterns('',
             'template_name': 'accounts/change_password_done.html'
         }, name='change-password-done'),
 
-    url(r'^register/$', accounts.register,
-        name='accounts-register'),
-    url(r'^register/complete/$', accounts.registration_complete,
-        name='accounts-registration-complete'),
+    #url(r'^register/$', accounts.register,
+    #    name='accounts-register'),
+    #url(r'^register/complete/$', accounts.registration_complete,
+    #    name='accounts-registration-complete'),
     url(r'^register/validate/(\w+)/([a-f0-9]+)/([a-f0-9]{32})/$', 'accounts.views.validate_email',
         name='validate-email'),
     url(r'^register/validated/$', 'accounts.views.validate_email_success',
