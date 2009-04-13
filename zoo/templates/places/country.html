@@ -6,15 +6,15 @@
 
 <h1>{{ country.name }} Places</h1>
 {% if places %}
-    <ul class='place-list'>
-    {% for place in places %}
-    <li>
-    {% include "places/_place.html" %}
-    </li>
-    {% endfor %}
-    </ul>
+	<ul class='place-list'>
+	{% for place in places %}
+	<li>
+	{% include "places/_place.html" %}
+	</li>
+	{% endfor %}
+	</ul>
 {% else %}
-    <p>No places are in this country yet.</p>
+	<p>No places are in this country yet.</p>
 {% endif %}
 
 {% endblock %}

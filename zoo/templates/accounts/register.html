@@ -11,7 +11,7 @@ on other people's trips and photos, set up your profile, and help us find out mo
 animals.</p>
 
 <form action="{% url accounts-register %}" method="post">
-        {{ form.errors }}
+		{{ form.errors }}
 	<div class="container text-container">
 		<label for="id_username">desired username</label>
 		<input id="id_username" type="text" name="username" maxlength="30" />
@@ -26,9 +26,9 @@ animals.</p>
 		<label for="id_password">password</label>
 		<input type="password" name="password" id="id_password" />
 	</div>
-        <p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
+		<p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
 	<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
-        <input type="hidden" name="next" value="{{ next }}">
+		<input type="hidden" name="next" value="{{ next }}">
 </form>
 
 {% endblock %}

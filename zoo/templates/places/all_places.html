@@ -11,11 +11,11 @@
 {% autopaginate all_places 10 %}
 {% paginate %}
 <ul class='place-list'>
-        {% for place in all_places %}
-        <li>
-                {% include "places/_place.html" %}
-        </li>
-        {% endfor %}
+		{% for place in all_places %}
+		<li>
+				{% include "places/_place.html" %}
+		</li>
+		{% endfor %}
 </ul>
 {% paginate %}
 {% else %}

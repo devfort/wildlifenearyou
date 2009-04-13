@@ -1,29 +1,29 @@
 	{% if user.is_staff %}<a class="toggler" href="#devlinks" style="position:absolute; top:5px; left:5px; border:3px solid black; background-color: yellow; padding: 10px">Dev Links</a>{% endif %}
 	<div id="devlinks" style="text-align:left">
 	{% if current_location %}
-	    <p>Your location: {{ current_location }}</p>
+		<p>Your location: {{ current_location }}</p>
 	{% endif %}
-	    <form action="/set-location/" method="POST">
-	        <p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location"> <input type="submit" value="Go"></p>
-	    </form>
+		<form action="/set-location/" method="POST">
+			<p><label for="id_location">Where are you?</label> <input type="text" name="location" id="id_location"> <input type="submit" value="Go"></p>
+		</form>
 
-	    <p><a href="{% url popular %}">Check out the most popular animals!</a></p>
+		<p><a href="{% url popular %}">Check out the most popular animals!</a></p>
 
 		{% if random_zoo %}<p>Why not visit <a href="{{ random_zoo.urls.absolute }}">{{ random_zoo }}</a>? You might see a <a href="{{ random_zoo.most_common_animal.get_absolute_url }}">{{ random_zoo.most_common_animal.common_name }}</a>!{% endif %}
 
-	    <h2>Look Around</h2>
-	    <ul>
-	        <li><a href="{% url all-species-latin %}">Our menagerie of animals by Latin name</a></li>
-	        <li><a href="{% url all-species %}">Our menagerie of animals by the name you&rsquo;re most likely to know them by</a></li>
-	        <li><a href="{% url accounts-all-profiles %}">All User Profiles</a></li>
-	        <li><a href="{% url countries %}">All countries in our database</a></li>
-	        <li><a href="{% url places %}">All places in our database</a></li>
-	    </ul>
+		<h2>Look Around</h2>
+		<ul>
+			<li><a href="{% url all-species-latin %}">Our menagerie of animals by Latin name</a></li>
+			<li><a href="{% url all-species %}">Our menagerie of animals by the name you&rsquo;re most likely to know them by</a></li>
+			<li><a href="{% url accounts-all-profiles %}">All User Profiles</a></li>
+			<li><a href="{% url countries %}">All countries in our database</a></li>
+			<li><a href="{% url places %}">All places in our database</a></li>
+		</ul>
 
-	    <h2>Admin &amp; Dev</h2>
-	    <ul>
-	        <li><a href="/admin/">Admin</a></li>
-	        <li><a href="/databrowse/">Data Browser</a></li>
-	        <li><a href="{% url admin-moderation %}">Moderation queue</a></li>
-	    </ul>
+		<h2>Admin &amp; Dev</h2>
+		<ul>
+			<li><a href="/admin/">Admin</a></li>
+			<li><a href="/databrowse/">Data Browser</a></li>
+			<li><a href="{% url admin-moderation %}">Moderation queue</a></li>
+		</ul>
 	</div>

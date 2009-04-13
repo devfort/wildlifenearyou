@@ -12,10 +12,10 @@
 
 {% block content %}
   <form action="." method="get" id="post_search_form">
-    <p>
-      <input type="text" name="q" value="{{ search_term }}" id="search">
-      <input type="submit" class="button" value="Search">
-    </p>
+	<p>
+	  <input type="text" name="q" value="{{ search_term }}" id="search">
+	  <input type="submit" class="button" value="Search">
+	</p>
   </form>
   
   {% if message %}
@@ -24,14 +24,14 @@
   
   {% if object_list %}
   <div class="post_list">
-    {% for post in object_list %}
-    <div>
-      <h3 class="title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-      <p class="date">{{ post.publish|date:"Y F d" }}</p>
-      <p class="tease">{{ post.tease }}</p>
-      <p class="comments">{% if comment_count %}{{ comment_count }} comment{{ comment_count|pluralize }}{% endif %}</p>
-    </div>
-    {% endfor %}
+	{% for post in object_list %}
+	<div>
+	  <h3 class="title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+	  <p class="date">{{ post.publish|date:"Y F d" }}</p>
+	  <p class="tease">{{ post.tease }}</p>
+	  <p class="comments">{% if comment_count %}{{ comment_count }} comment{{ comment_count|pluralize }}{% endif %}</p>
+	</div>
+	{% endfor %}
   </div>
   {% endif %}
 {% endblock %}

@@ -11,11 +11,11 @@
 {% block primary_content %}
 
 <form action="/search/" method="GET">
-    <div class="container text-container">
-        <input type="text" name="what" value="{% if what %}{{ what }}{% else %}Everything{% endif %}" size="20"{% if not what %} class="remove-default"{% endif %}>
-        near <input type="text" name="near" value="{{ near }}" size="25">
-        <input type="submit" value="Search">
-    </div>
+	<div class="container text-container">
+		<input type="text" name="what" value="{% if what %}{{ what }}{% else %}Everything{% endif %}" size="20"{% if not what %} class="remove-default"{% endif %}>
+		near <input type="text" name="near" value="{{ near }}" size="25">
+		<input type="submit" value="Search">
+	</div>
 </form>
 
 {% if what %}
@@ -28,16 +28,16 @@ or <a href="/search/?near={{ near|urlencode }}">everything near &ldquo;{{ near }
 {% if locations %}
 <p>We are using the location {{ location_used.description }}.</p>
 <ul>
-    {% for location in locations %}
-    <li>Did you mean <a href="/search/?what={{ what|urlencode }};near={{ location.description|urlencode }}">{{ what }} near {{ location.description }}</a>?</li>
-    {% endfor %}
+	{% for location in locations %}
+	<li>Did you mean <a href="/search/?what={{ what|urlencode }};near={{ location.description|urlencode }}">{{ what }} near {{ location.description }}</a>?</li>
+	{% endfor %}
 </ul>
 {% endif %}
 
 {% if not results %}
 <p class="notification">I&rsquo;m afraid your search returned no results. Try something else?</p>
 {% if request.user.is_staff %}
-    <p class="notification">If you&rsquo;re a developer, try running <samp>./manage.py reindex_places</samp></p>
+	<p class="notification">If you&rsquo;re a developer, try running <samp>./manage.py reindex_places</samp></p>
 {% endif %}
 {% endif %}
 
@@ -50,20 +50,20 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 {% endif %}
 
 {% if results %}
-    <ol class="place-list">
-    {% for place in results %}
-    <li>
-    {% include "places/_place.html" %}
-    </li>
-    {% endfor %}
-    </ol>
+	<ol class="place-list">
+	{% for place in results %}
+	<li>
+	{% include "places/_place.html" %}
+	</li>
+	{% endfor %}
+	</ol>
 
 <p><a href="#" onclick="showMap(); return false;">Show on a map</a></p>
 
 {% endif %}
 {% if request.user.is_staff %}
-    <h4><a class="toggler" href="#debug-results">Debug info (developers only)</a></h4>
-    <pre id="debug-results" style="font-size:0.85em">{{ results_info }}</pre>
+	<h4><a class="toggler" href="#debug-results">Debug info (developers only)</a></h4>
+	<pre id="debug-results" style="font-size:0.85em">{{ results_info }}</pre>
 {% endif %}
 
 {% endblock %}
@@ -71,41 +71,41 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 {% block secondary_content %}
 
 {% if species_results %}
-    <h4>Matching species</h4>
-    <ol class="animal-list">
-    {% for species in species_results %}
-            <li>
-                    <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-                    <p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
-                    <p><i class="scientific">{{ species.latin_name }}</i></p>
-            </li>
-    {% endfor %}
-    </ol>
-    {% if species_results_more %}
-            <a href="{% url species-search %}?q={{ what|urlencode }}">More species matching &ldquo;{{ what }}&rdquo;…</a>
-    {% endif %}
+	<h4>Matching species</h4>
+	<ol class="animal-list">
+	{% for species in species_results %}
+			<li>
+					<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+					<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+					<p><i class="scientific">{{ species.latin_name }}</i></p>
+			</li>
+	{% endfor %}
+	</ol>
+	{% if species_results_more %}
+			<a href="{% url species-search %}?q={{ what|urlencode }}">More species matching &ldquo;{{ what }}&rdquo;…</a>
+	{% endif %}
 {% endif %}
 
 {% if request.user.is_staff %}
-    <h4><a class="toggler" href="#debug-species-results">Debug info (developers only)</a></h4>
-    <pre id="debug-species-results" style="font-size:0.85em">{{ species_results_info }}</pre>
+	<h4><a class="toggler" href="#debug-species-results">Debug info (developers only)</a></h4>
+	<pre id="debug-species-results" style="font-size:0.85em">{{ species_results_info }}</pre>
 {% endif %}
 
 {% if users_results %}
-    <h4>Matching users</h4>
-    <ol class="spotter-list">
-            {% for profile in users_results %}
-            <li>
-                    <img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
-                    <p><a class="spotter-name" href="{{ profile.urls.absolute }}">{{ profile.user }}</a></p>
-            </li>
-            {% endfor %}
-    </ol>
+	<h4>Matching users</h4>
+	<ol class="spotter-list">
+			{% for profile in users_results %}
+			<li>
+					<img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
+					<p><a class="spotter-name" href="{{ profile.urls.absolute }}">{{ profile.user }}</a></p>
+			</li>
+			{% endfor %}
+	</ol>
 {% endif %}
 
 {% if request.user.is_staff %}
-    <h4><a class="toggler" href="#debug-users-results">Debug info (developers only)</a></h4>
-    <pre id="debug-users-results" style="font-size:0.85em">{{ users_results_info }}</pre>
+	<h4><a class="toggler" href="#debug-users-results">Debug info (developers only)</a></h4>
+	<pre id="debug-users-results" style="font-size:0.85em">{{ users_results_info }}</pre>
 {% endif %}
 
 {% endblock %}

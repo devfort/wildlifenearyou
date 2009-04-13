@@ -15,11 +15,11 @@ ul li { list-style-type: none; }
 {% for section in sections %}
 <h2>{{ section.search }}<input type="hidden" name="saw.{{ section.id }}.s" value="{{ section.search }}"></h2>
 {% if section.options %}<p>I know the exact species, it was a...</p>
-    <ul>
-    {% for option in section.options %}
-    <li><input {% if option.checked %}checked="checked"{% endif %}type="radio" name="saw.{{ section.id }}.o" value="{{ option.id }}" id="choice_{{ option.label_id }}"> <label for="choice_{{ option.label_id }}">{{ option.common_name }} <i class="scientific">({{ option.scientific_name }})</i></label></li>
-    {% endfor %}
-    </ul>
+	<ul>
+	{% for option in section.options %}
+	<li><input {% if option.checked %}checked="checked"{% endif %}type="radio" name="saw.{{ section.id }}.o" value="{{ option.id }}" id="choice_{{ option.label_id }}"> <label for="choice_{{ option.label_id }}">{{ option.common_name }} <i class="scientific">({{ option.scientific_name }})</i></label></li>
+	{% endfor %}
+	</ul>
 <p>Or...</p>
 {% endif %}
 <ul>

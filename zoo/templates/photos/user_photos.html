@@ -12,25 +12,25 @@
 {% endif %}
 
 <p>
-    <strong>all photos</strong> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a>
+	<strong>all photos</strong> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a>
 </p>
 
 <div>
-        <h2>Photos</h2>
+		<h2>Photos</h2>
 
-        {% with photos.all as photos %}
-        {% autopaginate photos 30 %}
-        {% paginate %}
-        <ul class="photo-display">
-                {% for photo in photos.all %}
-                        <li>
-                                <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-                        </li>
-                {% endfor %}
-        </ul>
-        {% paginate %}
-        {% ifequal profile.user user %}<p><a class="add" href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
-        {% endwith %}
+		{% with photos.all as photos %}
+		{% autopaginate photos 30 %}
+		{% paginate %}
+		<ul class="photo-display">
+				{% for photo in photos.all %}
+						<li>
+								<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+						</li>
+				{% endfor %}
+		</ul>
+		{% paginate %}
+		{% ifequal profile.user user %}<p><a class="add" href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
+		{% endwith %}
 </div>
 
 {% endblock %}

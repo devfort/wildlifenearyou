@@ -16,18 +16,18 @@
 
 <h2>Comments</h2>
 {% with place_species as object %}
-    {% include "comments/_comments.html" %}
+	{% include "comments/_comments.html" %}
 {% endwith %}
 
 <h2>Spotted by</h2>
 
 <ul class="spotter-list">
 {% for sighting in sightings %}
-        <li>
-                <img src="/faces/medium/{{ sighting.created_by.username }}.png" width="75" height="75" alt="" class="pull-left">
-                <p><a class="spotter-name" href="{{ sighting.created_by.get_profile.urls.absolute }}">{{ sighting.created_by }}</a></p>
-                <p class="meta">{% if sighting.trip %}on <a href="{{ sighting.trip.get_absolute_url }}">{{ sighting.trip }}</a>{% else %}reported on {{ sighting.created_at|date:"jS F Y" }}{% endif %}</p>
-        </li>
+		<li>
+				<img src="/faces/medium/{{ sighting.created_by.username }}.png" width="75" height="75" alt="" class="pull-left">
+				<p><a class="spotter-name" href="{{ sighting.created_by.get_profile.urls.absolute }}">{{ sighting.created_by }}</a></p>
+				<p class="meta">{% if sighting.trip %}on <a href="{{ sighting.trip.get_absolute_url }}">{{ sighting.trip }}</a>{% else %}reported on {{ sighting.created_at|date:"jS F Y" }}{% endif %}</p>
+		</li>
 {% endfor %}
 </ul>
 
@@ -37,9 +37,9 @@
 
 {% with place_species.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
-	        <h2>Photos</h2>
+			<h2>Photos</h2>
 
-                <p>Of the <a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a> at <a href='{{ place.urls.absolute }}'>{{ place.known_as }}</a>.</p>
+				<p>Of the <a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a> at <a href='{{ place.urls.absolute }}'>{{ place.known_as }}</a>.</p>
 
 		{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
@@ -50,18 +50,18 @@
 		{% else %}{# More than one photo #}
 		{% with place_species.visible_photos.all|first as chosen %}
 		<div class="gallery">
-        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
-        		<div class="slideshow">
-        			<ul id="thumbnails">
-			                {% for photo in place_species.visible_photos.all %}
-			                {% ifnotequal chosen photo %}
-        		                <li>{{ photo.thumb_75 }}</li>
-        		                {% endifnotequal %}
-			                {% endfor %}
-			        </ul><!-- /#thumbnails -->
-		        </div><!-- /.slideshow -->
-	        </div>
-	        {% endwith %}
+				<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
+				<div class="slideshow">
+					<ul id="thumbnails">
+							{% for photo in place_species.visible_photos.all %}
+							{% ifnotequal chosen photo %}
+								<li>{{ photo.thumb_75 }}</li>
+								{% endifnotequal %}
+							{% endfor %}
+					</ul><!-- /#thumbnails -->
+				</div><!-- /.slideshow -->
+			</div>
+			{% endwith %}
 		{% endifequal %}
 	{% endif %}
 {% endwith %}

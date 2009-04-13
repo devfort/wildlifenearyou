@@ -6,24 +6,24 @@
 
 {% block content %}
   <div class="post_list">
-    {% for post in object_list %}
-    <div>
-      <h2 class="title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-      <p class="date">{{ post.publish|date:"Y F d" }}</p>
-      <p class="body">{{ post.body|safe }}</p>
-    </div>
-    {% endfor %}
+	{% for post in object_list %}
+	<div>
+	  <h2 class="title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+	  <p class="date">{{ post.publish|date:"Y F d" }}</p>
+	  <p class="body">{{ post.body|safe }}</p>
+	</div>
+	{% endfor %}
   </div>
   
   {% if is_paginated %}
   <p class="pagination">
-    {% if has_next %}
-    <a class="older" href="?page={{ next }}">Older</a>
-    {% endif %}
-    {% if has_next and has_previous %} | {% endif %}
-    {% if has_previous %}
-    <a class="newer" href="?page={{ previous }}">Newer</a>
-    {% endif %}
+	{% if has_next %}
+	<a class="older" href="?page={{ next }}">Older</a>
+	{% endif %}
+	{% if has_next and has_previous %} | {% endif %}
+	{% if has_previous %}
+	<a class="newer" href="?page={{ previous }}">Newer</a>
+	{% endif %}
   </p>
   {% endif %}
 {% endblock %}

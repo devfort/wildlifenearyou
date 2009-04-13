@@ -8,32 +8,32 @@
 <h1>Animals to spot at {{ place.known_as }}</h1>
 
 <table>
-        <thead>
-        <tr>
-                <th width='15%'>Common name</th>
-                <th width='15%'>Latin name</th>
-                <th width='40%'>Your comments</th>
-                <th width='5%'>Spotted?</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for species in species_list %}
-        <tr>
-                <td>{{ species.common_name }}</td>
-                <td><i class='scientific'>{{ species.latin_name }}</i></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-        </tr>
-        {% endfor %}
-        {% for i in 12345|make_list %}
-        <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-        </tr>
-        {% endfor %}
-        </tbody>
+		<thead>
+		<tr>
+				<th width='15%'>Common name</th>
+				<th width='15%'>Latin name</th>
+				<th width='40%'>Your comments</th>
+				<th width='5%'>Spotted?</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for species in species_list %}
+		<tr>
+				<td>{{ species.common_name }}</td>
+				<td><i class='scientific'>{{ species.latin_name }}</i></td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+		</tr>
+		{% endfor %}
+		{% for i in 12345|make_list %}
+		<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+		</tr>
+		{% endfor %}
+		</tbody>
 </table>
 
 <p>We've left some space at the bottom in case you spot something no one has told us about!</p>

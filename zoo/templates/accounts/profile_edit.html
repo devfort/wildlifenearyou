@@ -17,16 +17,16 @@
 <div id="flashMovie">We're really sorry, but you can't edit your avatar without having both Flash and Javascript installed and enabled in your browser.</div>
 
 <script type="text/javascript">
-    var so = new SWFObject(
-        "/static/swf/profilepicture.swf", "flashMovie", 470, 470, 9,
-        "#e2f1f9"
-    );
-    so.addParam("quality", "high");
-    so.addVariable("profile_xml", "/faces/profile.xml");
-    so.addVariable("profile_images_xml", "/faces/profile-images.xml");
-    so.addVariable("profile_update", "/faces/update/");
-    so.useExpressInstall("/static/swf/swfobject/expressinstall.swf");
-    so.write("flashMovie");
+	var so = new SWFObject(
+		"/static/swf/profilepicture.swf", "flashMovie", 470, 470, 9,
+		"#e2f1f9"
+	);
+	so.addParam("quality", "high");
+	so.addVariable("profile_xml", "/faces/profile.xml");
+	so.addVariable("profile_images_xml", "/faces/profile-images.xml");
+	so.addVariable("profile_update", "/faces/update/");
+	so.useExpressInstall("/static/swf/swfobject/expressinstall.swf");
+	so.write("flashMovie");
 </script>
 </div>
 

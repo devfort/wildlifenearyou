@@ -31,73 +31,73 @@
    <ul>
    {% for cr in pending_changes %}
    {% with cr.get_real as crs %}
-    <li>
-     {% switch cr.subclass %}
-      {% case "ChangeAttributeRequest" %}
-       Change the &ldquo;{{ crs.get_attribute_display }}&rdquo; attribute
-        on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
-        from &ldquo;<em>{{ crs.get_old_value_display }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.get_new_value_display }}</em>&rdquo;
+	<li>
+	 {% switch cr.subclass %}
+	  {% case "ChangeAttributeRequest" %}
+	   Change the &ldquo;{{ crs.get_attribute_display }}&rdquo; attribute
+		on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
+		from &ldquo;<em>{{ crs.get_old_value_display }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.get_new_value_display }}</em>&rdquo;
 
-        {% if crs.conflicts %}
-         <strong>(change conflicts; current value is <em>{{ crs.get_current_value_display }}</em>)</strong>
-        {% endif %}
+		{% if crs.conflicts %}
+		 <strong>(change conflicts; current value is <em>{{ crs.get_current_value_display }}</em>)</strong>
+		{% endif %}
 
-       {% if crs.conflicts %}
-         {% include "changerequests/form_force.html" %}
-       {% else %}
-         {% include "changerequests/form_apply.html" %}
-       {% endif %}
+	   {% if crs.conflicts %}
+		 {% include "changerequests/form_force.html" %}
+	   {% else %}
+		 {% include "changerequests/form_apply.html" %}
+	   {% endif %}
 
-       {% include "changerequests/form_delete.html" %}
-      {% endcase %}
+	   {% include "changerequests/form_delete.html" %}
+	  {% endcase %}
 
-      {% case "DeleteObjectRequest" %}
-       Delete
-      
-       {% if crs.content_object %}
-        the <em>{{ crs.content_object }}</em>
-       {% else %}
-        an <em>already deleted</em>
-       {% endif %}
-       
-       {{ crs.content_type }}.
+	  {% case "DeleteObjectRequest" %}
+	   Delete
+	  
+	   {% if crs.content_object %}
+		the <em>{{ crs.content_object }}</em>
+	   {% else %}
+		an <em>already deleted</em>
+	   {% endif %}
+	   
+	   {{ crs.content_type }}.
 
-       {% if crs.conflicts %}
-        <strong>(conflicting change: object already deleted)</strong>
-       {% else %}
-         {% include "changerequests/form_apply.html" %}
-       {% endif %}
+	   {% if crs.conflicts %}
+		<strong>(conflicting change: object already deleted)</strong>
+	   {% else %}
+		 {% include "changerequests/form_apply.html" %}
+	   {% endif %}
 
-       {% include "changerequests/form_delete.html" %}
-      {% endcase %}
+	   {% include "changerequests/form_delete.html" %}
+	  {% endcase %}
 
-      {% case "CreateObjectRequest" %}
-        Create a {% if crs.parent %}nested {% endif %}{{ crs.content_type }} object {% if crs.children %}and their children below{% endif %} with the following properties:
+	  {% case "CreateObjectRequest" %}
+		Create a {% if crs.parent %}nested {% endif %}{{ crs.content_type }} object {% if crs.children %}and their children below{% endif %} with the following properties:
 
-      <dl>
-      {% for key, value in crs.get_attributes_display.items %}
-        <dt>{{ key }}</dt>
-        {% if value.get_absolute_url %}
-          <dl><a href="{{ value.get_absolute_url }}">{{ value }}</a></dl>
-        {% else %}
-          <dl>{{ value }}</dl>
-        {% endif %}
-      {% endfor %}
-      </dl>
+	  <dl>
+	  {% for key, value in crs.get_attributes_display.items %}
+		<dt>{{ key }}</dt>
+		{% if value.get_absolute_url %}
+		  <dl><a href="{{ value.get_absolute_url }}">{{ value }}</a></dl>
+		{% else %}
+		  <dl>{{ value }}</dl>
+		{% endif %}
+	  {% endfor %}
+	  </dl>
 
-       {% if not crs.parent %}
-         {% include "changerequests/form_apply.html" %}
-         {% include "changerequests/form_delete.html" %}
-       {% endif %}
-      {% endcase %}
+	   {% if not crs.parent %}
+		 {% include "changerequests/form_apply.html" %}
+		 {% include "changerequests/form_delete.html" %}
+	   {% endif %}
+	  {% endcase %}
 
-      {% defaultcase %}
-       <strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass: {{ cr.subclass }}
-      {% enddefaultcase %}
+	  {% defaultcase %}
+	   <strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass: {{ cr.subclass }}
+	  {% enddefaultcase %}
 
-     {% endswitch %}
+	 {% endswitch %}
 
-    </li>
+	</li>
 
    {% endwith %}
    {% endfor %}

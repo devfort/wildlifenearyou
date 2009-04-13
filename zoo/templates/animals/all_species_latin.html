@@ -10,15 +10,15 @@
 {% if all_species %}
 {% autopaginate all_species 10 %}
 {% paginate %}
-        <ul class='animal-list'>
-                {% for species in all_species %}
-                        <li>
-                                <div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-                                <p><a class="animal-name" href="{{ species.urls.absolute }}"><i class="scientific">{{ species.latin_name }}</li></a></p>
-                                <p>{{ species.common_name }}</p>
-                        </li>
-                {% endfor %}
-        </ul>
+		<ul class='animal-list'>
+				{% for species in all_species %}
+						<li>
+								<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+								<p><a class="animal-name" href="{{ species.urls.absolute }}"><i class="scientific">{{ species.latin_name }}</li></a></p>
+								<p>{{ species.common_name }}</p>
+						</li>
+				{% endfor %}
+		</ul>
 {% paginate %}
 {% else %}
 <p>Eek! Our menagerie is empty.</p>

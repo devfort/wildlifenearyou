@@ -7,9 +7,9 @@
 <h1>Suggest changes</h1>
 
 <p class="suggest-changes">
-    Have you found incorrect information on the {{ place }} page?
-    Letting us know will improve the site for everybody, and you won’t hurt our feelings.
-    Changes are moderated but are added as soon as possible.
+	Have you found incorrect information on the {{ place }} page?
+	Letting us know will improve the site for everybody, and you won’t hurt our feelings.
+	Changes are moderated but are added as soon as possible.
 </p>
 
 <form action="{{ path }}" method="post">
@@ -19,71 +19,71 @@
 {% endif %}
 
 <div>
-    {% if form.deleted %}
-        {{ form.render_deleted }}
+	{% if form.deleted %}
+		{{ form.render_deleted }}
 
-        <p><strong>You have marked {{ place }} for deletion.</strong></p>
+		<p><strong>You have marked {{ place }} for deletion.</strong></p>
 
-        <p>If you are sure you wish to do this, select &ldquo;<em>Confirm deletion</em>&rdquo;, otherwise select &ldquo;<em>Undo deletion</em>&rdquo;.</p>
+		<p>If you are sure you wish to do this, select &ldquo;<em>Confirm deletion</em>&rdquo;, otherwise select &ldquo;<em>Undo deletion</em>&rdquo;.</p>
 
-        <input type="submit" name="submit" value="Confirm deletion">
-        {{ form.undelete_form.undelete }}
+		<input type="submit" name="submit" value="Confirm deletion">
+		{{ form.undelete_form.undelete }}
 
-    {% else %}
+	{% else %}
 
-        <p><input type="submit" name="submit" value="Suggest all changes"></p>
+		<p><input type="submit" name="submit" value="Suggest all changes"></p>
 
-        {{ form.main.as_p }}
-        
-        <h2>Facilities</h2>
-        <p class="suggest-changes">
-            You can associate various facilities with {{ place }} such as baby-changing facilities and whether {{ place }} can cater for large groups; if the name of the facility isn't quite right for this place then set the description and we'll use that instead. If you are unsure about any of the facilities, just leave them out.
-        </p>
+		{{ form.main.as_p }}
+		
+		<h2>Facilities</h2>
+		<p class="suggest-changes">
+			You can associate various facilities with {{ place }} such as baby-changing facilities and whether {{ place }} can cater for large groups; if the name of the facility isn't quite right for this place then set the description and we'll use that instead. If you are unsure about any of the facilities, just leave them out.
+		</p>
 
-        {% for f in form.facility.subuforms %}
-            {% if f.deleted %}
-                <div>
-                    {{ f.render_deleted }}
-                    {{ f.undelete_form.undelete }}
-                </div>
-            {% else %}
-                <div class="nested-edit">
-                {{ f.main.as_p }}
-                {{ f.delete_form.as_p }}
-                </div>
-            {% endif %}
-        {% endfor %}
+		{% for f in form.facility.subuforms %}
+			{% if f.deleted %}
+				<div>
+					{{ f.render_deleted }}
+					{{ f.undelete_form.undelete }}
+				</div>
+			{% else %}
+				<div class="nested-edit">
+				{{ f.main.as_p }}
+				{{ f.delete_form.as_p }}
+				</div>
+			{% endif %}
+		{% endfor %}
 
-        <p>
-            {{ form.facility.addform }}
-        </p>
-        <span id="form-facility"></span>
+		<p>
+			{{ form.facility.addform }}
+		</p>
+		<span id="form-facility"></span>
 
-        <h2>Opening hours</h2>
-        <p class="suggest-changes">
-            You can associate opening hours for {{ place }}. If you are unsure about the opening hours, just don't worry about them!
-        </p>
+		<h2>Opening hours</h2>
+		<p class="suggest-changes">
+			You can associate opening hours for {{ place }}. If you are unsure about the opening hours, just don't worry about them!
+		</p>
 
-        {% for o in form.opening.subuforms %}
-        <div class="nested-edit">
-            {{ o.main.as_p }}
-            {{ o.delete_form.as_p }}
-        </div>
-        {% endfor %}
+		{% for o in form.opening.subuforms %}
+		<div class="nested-edit">
+			{{ o.main.as_p }}
+			{{ o.delete_form.as_p }}
+		</div>
+		{% endfor %}
 
-        <p>
-            {{ form.opening.addform }}
-        </p>
-        <span id="form-opening"></span>
-        
-	    <hr>
+		<p>
+			{{ form.opening.addform }}
+		</p>
+		<span id="form-opening"></span>
+		
+		<hr>
 
-	    <p>
-            <input type="submit" name="submit" value="Suggest all changes">
-	    </p>
-    {% endif %}
+		<p>
+			<input type="submit" name="submit" value="Suggest all changes">
+		</p>
+	{% endif %}
 
-    </div>
+	</div>
 
 
 </form>

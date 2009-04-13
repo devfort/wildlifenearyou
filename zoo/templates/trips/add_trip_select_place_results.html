@@ -9,18 +9,18 @@
 <p>Where did you go?</p>
 
 <form action="." method="GET">
-    <p>
-        <input type="search" name="q" value="{{ q }}">
-        <input type="submit" value="Search">
-    </p>
+	<p>
+		<input type="search" name="q" value="{{ q }}">
+		<input type="submit" value="Search">
+	</p>
 </form>
 
 {% if places %}
 <h2>Was it one of these?</h2>
 <ul>
-    {% for place in places %}
-    <li><a href="{{ place.get_absolute_url }}add-trip/">{{ place }}</a> ({{ place.country }})</li>
-    {% endfor %}
+	{% for place in places %}
+	<li><a href="{{ place.get_absolute_url }}add-trip/">{{ place }}</a> ({{ place.country }})</li>
+	{% endfor %}
 </ul>
 <p>If not, tell us about the place you went to using the form below.</p>
 {% else %}

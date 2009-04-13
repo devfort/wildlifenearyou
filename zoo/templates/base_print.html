@@ -1,53 +1,53 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd">
+	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <title>{% block title %}{% endblock %} - Print version</title>
-    <script type="text/javascript" src="/static/js/jquery-1.2.6.js"></script>
+	<title>{% block title %}{% endblock %} - Print version</title>
+	<script type="text/javascript" src="/static/js/jquery-1.2.6.js"></script>
 	<!--
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
 		google.load("jquery", "1");
 		</script>
 	-->
-    <script type="text/javascript" src="/static/js/global.js"></script>
-    <link rel="stylesheet" href="/static/css/general.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/helper_styles.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/page_structure.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/page_components.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/overrides.css" type="text/css">
-    <!--[if IE]>
-    <link rel="stylesheet" type="text/css" href="/static/css/ie.css">
-    <![endif]-->
-    {% block extra_head %}{% endblock %}
+	<script type="text/javascript" src="/static/js/global.js"></script>
+	<link rel="stylesheet" href="/static/css/general.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/helper_styles.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/page_structure.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/page_components.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/overrides.css" type="text/css">
+	<!--[if IE]>
+	<link rel="stylesheet" type="text/css" href="/static/css/ie.css">
+	<![endif]-->
+	{% block extra_head %}{% endblock %}
 </head>
 <body>
 <div class="header">
-    <div class="wrapper">
-            <div class="contents">
+	<div class="wrapper">
+			<div class="contents">
 	<p class="heading">
 		<a href="/"><img src="/static/img/wny_logo.gif" alt="Wildlife near you"></a>
 		<!--<span>We love wildlife!{#Can I Keep It?#}</span>-->
 	</p>
 	<ul>
-        	{% comment %} This has to all be on one line. {% endcomment %}
-        	{% if user.is_authenticated %}<li>{{ user.username }}</li><li><a href="{% url accounts-profile user %}">Profile</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?suppress-register=true&amp;next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
+			{% comment %} This has to all be on one line. {% endcomment %}
+			{% if user.is_authenticated %}<li>{{ user.username }}</li><li><a href="{% url accounts-profile user %}">Profile</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?suppress-register=true&amp;next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
 	</ul>
 	{% block search_form %}
-    <form action="/search/" method="GET" accept-charset="utf-8">
-        <div>
+	<form action="/search/" method="GET" accept-charset="utf-8">
+		<div>
 			<label for="search_term">Look for</label>
 			<input type="text" name="q" id="search_term" value="">
 			<input type="submit" value="search">
 		</div>
-    </form>
-    {% endblock %}
-    </div>
-    </div>
+	</form>
+	{% endblock %}
+	</div>
+	</div>
 </div>	
 <div class="main">
 <div class="wrapper">
-        <div class="contents">
+		<div class="contents">
 	{% block content %}
 	{% block content_title %}
 	{% endblock %}
@@ -69,19 +69,11 @@
 </div>
 
 <div class="footer">
-	<div class="contents">
-		<p class="context">{% ifequal rand 1 %}
-Your nearest <a href="{{ random_animal.url }}">{{ random_animal.name }}</a> is {{ random_animal.dist }} mile{{ random_animal.dist|pluralize }} away, at <a href="{{ random_animal.place_url }}">{{ random_animal.place_name }}</a>.
-{% else %}
-Our sharp-eyed animal lovers have spotted <strong>{{ total_num_of_species|intcomma }}</strong> species.
-{% endifequal %}</p>
-
-		<p class="nav"><span><a class="copyright" href="{% url flatpage "legal/" %}">&copy;</a> <a href="{% url flatpage "legal/" %}">WildLifeNearYou.com Ltd</a></span>
-		| <a href="{% url flatpage "about/" %}">About</a>
-		| <a href="{% url feedback %}">Contact</a>
-		</p>
-	</div>
+	<p style="float:right">Our sharp-eyed animal lovers have spotted {{ total_num_of_species }} species</p>
+	<p><a href="{% url flatpage "legal/" %}">&copy; WildLifeNearYou.com Limited</a>
+	| <a href="{% url flatpage "about/" %}">About</a>
+	| <a href="{% url flatpage "contact/" %}">Contact</a>
+</p>
 </div>
-
 </body>
 </html>

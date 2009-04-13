@@ -37,23 +37,23 @@
 	<h3>{% if date_ranges.range %}{{ date_ranges.range|safe }}{% else %}Normal opening hours{% endif %}</h3>
 
 	{% for section_title, days in date_ranges.sections.items %}
-	 	{% if section_title %}
-	 	<h4>{{ section_title }}</h4>
-	 	{% endif %}
+		 {% if section_title %}
+		 <h4>{{ section_title }}</h4>
+		 {% endif %}
 
 	<ul class="opening-list">
 	{% for day in days %}
 		{% if day %}
-        		<li>
-        			{% if day.name %}
-        				<span class="opening-days">{{ day.name }}</span>
-        			{% else %}
-        				<span class="opening-days">Every day</span>
-        			{% endif %}
-        			<span class="opening-hours">
-        				{% if day.closed %}Closed{% endif %}
-        				{{ day.times }}
-        			</span>
+				<li>
+					{% if day.name %}
+						<span class="opening-days">{{ day.name }}</span>
+					{% else %}
+						<span class="opening-days">Every day</span>
+					{% endif %}
+					<span class="opening-hours">
+						{% if day.closed %}Closed{% endif %}
+						{{ day.times }}
+					</span>
 			</li>
 		{% endif %}
 	{% endfor %}
@@ -79,13 +79,13 @@
 {% endwith %}
 
 {% with place.direction.all as directions %}
-    {% if directions %}
+	{% if directions %}
 	<h2>Directions</h2>
 	{% for direction in directions %}
-    	<h3 class="direction_{{direction.mode}}">By {{ direction.mode }}</h3>
+		<h3 class="direction_{{direction.mode}}">By {{ direction.mode }}</h3>
 		<p>{{ direction.route }}</p>
 	{% endfor %}
-    {% endif %}
+	{% endif %}
 {% endwith %}
 
 {% endblock %}

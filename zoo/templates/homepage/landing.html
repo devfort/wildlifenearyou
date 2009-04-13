@@ -26,57 +26,57 @@
 	<div class="wrapper">
 		<div class="contents">
 			{% if user.is_authenticated %}
-        			<div class="interact">
-        				<h2>Where have you been?</h2>
-        				<form action="/add-trip/" method="GET">
-        					<div class="container text-container">
-        						<label for="search-place">I've been to…</label>
-        						<input type="text" class="text" name="q" id="search-place">
-        					</div>
-        					<div>
-        						<input type="submit" value="Find this place" class="submit">
-        					</div>
-        				</form>
-        			</div>
+					<div class="interact">
+						<h2>Where have you been?</h2>
+						<form action="/add-trip/" method="GET">
+							<div class="container text-container">
+								<label for="search-place">I've been to…</label>
+								<input type="text" class="text" name="q" id="search-place">
+							</div>
+							<div>
+								<input type="submit" value="Find this place" class="submit">
+							</div>
+						</form>
+					</div>
 			{% else %}
-        			<div class="interact" id="register-box">
-        				<h2>Register now</h2>
-        				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in now</span></a></p>
-        				<form action="{% url accounts-register %}" method="post">
-        					<div class="container text-container">
-        						<label for="id_username">desired username</label>
-        						<input id="id_username" type="text" name="username" maxlength="30" />
-        					</div>
-        					<div class="container text-container">
-        						<label for="id_email">e-mail</label>
-        						<input id="id_email" type="text" name="email" maxlength="75" />
-        					</div>
-        					<!-- We're thinking we might ask them to set a password
-        						AFTER they've validated their e-mail! -->
-        					<div class="container text-container">
-        						<label for="id_password">password</label>
-        						<input type="password" name="password" id="id_password" />
-        					</div>
-                                                <p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
-        					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
-        				</form>
+					<div class="interact" id="register-box">
+						<h2>Register now</h2>
+						<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in now</span></a></p>
+						<form action="{% url accounts-register %}" method="post">
+							<div class="container text-container">
+								<label for="id_username">desired username</label>
+								<input id="id_username" type="text" name="username" maxlength="30" />
+							</div>
+							<div class="container text-container">
+								<label for="id_email">e-mail</label>
+								<input id="id_email" type="text" name="email" maxlength="75" />
+							</div>
+							<!-- We're thinking we might ask them to set a password
+								AFTER they've validated their e-mail! -->
+							<div class="container text-container">
+								<label for="id_password">password</label>
+								<input type="password" name="password" id="id_password" />
+							</div>
+												<p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
+							<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
+						</form>
 				</div>
-        			<div class="interact" id="login-box" style="display: none;">
-        				<h2>Login</h2>
-        				<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register now</span></a></p>
-        				<form action="{% url accounts-login %}" method="post">
-                                                <div class="container text-container">
-                                                        <label for="id_username">username</label>
-                                                        <input id="id_username" type="text" name="username" maxlength="30" />
-                                                </div>
-                                                <div class="container text-container">
-                                                        <label for="id_password">password</label>
-                                                        <input type="password" name="password" id="id_password" />
-                                                </div>
-                                                <p class="meta"><a href="{% url forgotten-password %}">I&rsquo;ve forgotten my password, please send help!</a></p>
-                                                <div><input type="submit" class="submit" value="&raquo; Login"></div>
-        				</form>
-        		        </div>
+					<div class="interact" id="login-box" style="display: none;">
+						<h2>Login</h2>
+						<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register now</span></a></p>
+						<form action="{% url accounts-login %}" method="post">
+												<div class="container text-container">
+														<label for="id_username">username</label>
+														<input id="id_username" type="text" name="username" maxlength="30" />
+												</div>
+												<div class="container text-container">
+														<label for="id_password">password</label>
+														<input type="password" name="password" id="id_password" />
+												</div>
+												<p class="meta"><a href="{% url forgotten-password %}">I&rsquo;ve forgotten my password, please send help!</a></p>
+												<div><input type="submit" class="submit" value="&raquo; Login"></div>
+						</form>
+						</div>
 			{% endif %}
 			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 			{% if user.is_authenticated %}
@@ -140,7 +140,7 @@
 					<span class="postal-code">NW1 4RY</span>, <abbr class="country-name" title="United Kingdom">GB</abbr>
 				</p>-->
 <!--				<p class="description">ZSL London Zoo is the world's oldest scientific zoo. It was opened in London on April 27, 1828, and was originally intended to be used as a collection for scientific study. </p> -->
-                                {% if place.species %}
+								{% if place.species %}
 				<h4>Animals spotted here</h4>
 				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
 				and <a href="{{ place.urls.species }}">more&hellip;</a>
@@ -189,23 +189,23 @@
 			</div>
 			<div class="column">
 				<h2>Featured spotter</h2>
-                    	        {% if featured.profile %}
-                    	        {% with featured.profile as profile %}
+								{% if featured.profile %}
+								{% with featured.profile as profile %}
 				<img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
 				<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
 				{% if profile.passport.seen_species %}
 				<p>Has spotted
-                                {% if profile.passport.favourite_species.count %}
-                                {% with profile.passport.favourite_species.0 as favourite %}
+								{% if profile.passport.favourite_species.count %}
+								{% with profile.passport.favourite_species.0 as favourite %}
 				{% for species in profile.passport.seen_species|slice:":5" %}{% ifnotequal favourite species %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endifnotequal %}{% endfor %}
 				and really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
 				{% endwith %}
-                                {% else %}
+								{% else %}
 				{% for species in profile.passport.seen_species|slice:":5" %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.
 				{% endif %}
 				{% else %}
 				{% if profile.passport.favourite_species.count %}
-                                {% with profile.passport.favourite_species.0 as favourite %}
+								{% with profile.passport.favourite_species.0 as favourite %}
 				Hasn't spotted anything yet, but really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
 				{% endwith %}
 				{% endif %}
@@ -214,7 +214,7 @@
 				{% if profile.user.created_trip_set.count %}
 				<h4>Recent trips</h4>
 				<ul>
-				        {% for trip in profile.user.created_trip_set.all|slice:":2" %}
+						{% for trip in profile.user.created_trip_set.all|slice:":2" %}
 					<li><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a> {{ trip.formatted_date }}</li>
 					{% endfor %}
 				</ul>
@@ -222,10 +222,10 @@
 				{% if profile.visible_photos.count %}
 					<p>Why not <a href="{% url user-photos profile.user.username %}">check out their photos</a>?</p>
 				{% endif %}
-                    	        {% endwith %}
-                    	        {% else %}
-                    	        <p>There is no currently featured spotter. If you start adding your trips, you could be highlighted here!</p>
-                    	        {% endif %}
+								{% endwith %}
+								{% else %}
+								<p>There is no currently featured spotter. If you start adding your trips, you could be highlighted here!</p>
+								{% endif %}
 			</div>
 		</div>
 	</div>

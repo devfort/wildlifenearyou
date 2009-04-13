@@ -7,7 +7,7 @@
 <h1>All Profiles</h1>
 <ul>
 {% for user in all_users %}
-    <li><a href="{{ user.get_profile.urls.absolute }}">{{ user.username|title }}</a></li>
+	<li><a href="{{ user.get_profile.urls.absolute }}">{{ user.username|title }}</a></li>
 {% endfor %}
 </ul>
 

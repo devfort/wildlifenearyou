@@ -24,23 +24,23 @@
 {% else %}
 {% if not location_description %}
 <p>
-        {% if user.is_authenticated %}
-        <a href="/set-location/">Set your location</a>
-        {% else %}
-        <a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a>
-        {% endif %}
-         to find {{ species.article }} {{ species.common_name }} near you (or just <a href="/search/?q={{ species.common_name|iriencode }}">search for one</a>).</p>
+		{% if user.is_authenticated %}
+		<a href="/set-location/">Set your location</a>
+		{% else %}
+		<a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a>
+		{% endif %}
+		 to find {{ species.article }} {{ species.common_name }} near you (or just <a href="/search/?q={{ species.common_name|iriencode }}">search for one</a>).</p>
 {% endif %}
 {% endif %}
 
 {% if species.seen_at %}
 <h2>See them here</h2>
 <ul class="place-list">
-    {% for place in species.seen_at %}
-    <li>
-            {% include "places/_place.html" %}
-    </li>
-    {% endfor %}
+	{% for place in species.seen_at %}
+	<li>
+			{% include "places/_place.html" %}
+	</li>
+	{% endfor %}
 </ul>
 {% endif %}
 
@@ -48,11 +48,11 @@
 <h2>Spotted by</h2>
 <ul class="spotter-list">
 {% for spotter in spotters %}
-        <li>
-                <img src="/faces/medium/{{ spotter.username }}.png" width="75" height="75" alt="" class="pull-left">
-                <p><a class="spotter-name" href="{{ spotter.get_profile.urls.absolute }}">{{ spotter }}</a></p>
-{% comment %}                <p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>{% endcomment %}
-        </li>
+		<li>
+				<img src="/faces/medium/{{ spotter.username }}.png" width="75" height="75" alt="" class="pull-left">
+				<p><a class="spotter-name" href="{{ spotter.get_profile.urls.absolute }}">{{ spotter }}</a></p>
+{% comment %}				<p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>{% endcomment %}
+		</li>
 {% endfor %}
 </ul>
 {% if more_spotters %}
@@ -78,11 +78,11 @@
 
 <!-- TODO add in profile icons here of people who have favourited it -->
 <p>Favourited by <strong>{{ favourites }}</strong> {{ favourites|pluralize:"person,people" }}{% if hit_parade %}
-        &mdash; currently the <a href="{% url popular %}">{{ hit_parade|ordinal }} most favourited animal</a>{% endif %}.</p>
+		&mdash; currently the <a href="{% url popular %}">{{ hit_parade|ordinal }} most favourited animal</a>{% endif %}.</p>
 
 {% with species.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
-                <h2>Photos</h2>
+				<h2>Photos</h2>
 		{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
 			{% for photo in species.visible_photos.all %}
@@ -92,25 +92,25 @@
 		{% else %}{# More than one photo #}
 		{% with species.photo as chosen %}
 		<div class="gallery">
-        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
-        		<div class="slideshow">
-        			<ul id="thumbnails">
-			                {% for photo in species.visible_photos|slice:":30" %}
-			                {% ifnotequal chosen photo %}
-        		                <li>{{ photo.thumb_75 }}</li>
-        		                {% endifnotequal %}
-			                {% endfor %}
-			        </ul><!-- /#thumbnails -->
-		        </div><!-- /.slideshow -->
-	        </div>
-	        {% endwith %}
+				<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
+				<div class="slideshow">
+					<ul id="thumbnails">
+							{% for photo in species.visible_photos|slice:":30" %}
+							{% ifnotequal chosen photo %}
+								<li>{{ photo.thumb_75 }}</li>
+								{% endifnotequal %}
+							{% endfor %}
+					</ul><!-- /#thumbnails -->
+				</div><!-- /.slideshow -->
+			</div>
+			{% endwith %}
 		{% endifequal %}
 	{% endif %}
 {% endwith %}
 
 <h2>Comments</h2>
 {% with species as object %}
-    {% include "comments/_comments.html" %}
+	{% include "comments/_comments.html" %}
 {% endwith %}
 
 {% endblock %}

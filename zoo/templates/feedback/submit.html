@@ -7,11 +7,11 @@
 <h1>Send us feedback</h1>
 
 <form action="/feedback/" method="POST">
-    {% include "feedback/_form.html" %}
-    <div class="container button-container">
-        <input type="submit" value="Send">
-        <input type="hidden" name="from-page" value="{{ from_page }}">
-    </div>
+	{% include "feedback/_form.html" %}
+	<div class="container button-container">
+		<input type="submit" value="Send">
+		<input type="hidden" name="from-page" value="{{ from_page }}">
+	</div>
 </form>
 
 {% endblock %}

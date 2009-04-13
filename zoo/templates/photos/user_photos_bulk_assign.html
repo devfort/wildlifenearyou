@@ -10,7 +10,7 @@
 {% endif %}
 
 <p>
-    <a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong>
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong>
 </p>
 
 
@@ -23,10 +23,10 @@
 {% with photos.all as photos %}
 <ul class="photo-display">
 {% for photo in photos.all %}
-    <li>
-        <label for="selectphoto_{{ photo.id }}">{{ photo.thumb_75_img }}
-        <span class="import"><input id="selectphoto_{{ photo.id }}" type="checkbox" name="selected_photos" value="{{ photo.id }}"> add</span></label>
-    </li>
+	<li>
+		<label for="selectphoto_{{ photo.id }}">{{ photo.thumb_75_img }}
+		<span class="import"><input id="selectphoto_{{ photo.id }}" type="checkbox" name="selected_photos" value="{{ photo.id }}"> add</span></label>
+	</li>
 {% endfor %}
 </ul>
 <p><input type="submit" value="Assign selected photos to the trip"></p>
@@ -38,11 +38,11 @@
 <p class="notification">You have not yet created any trips. You must <a href="{% url add-trip %}">create a trip</a> before you can assign any photos.</p>
 {% with photos.all as photos %}
 <ul class="photo-display">
-        {% for photo in photos.all %}
-                <li>
-                        <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-                </li>
-        {% endfor %}
+		{% for photo in photos.all %}
+				<li>
+						<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+				</li>
+		{% endfor %}
 </ul>
 {% endwith %}
 {% endif %}

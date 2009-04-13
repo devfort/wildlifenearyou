@@ -9,21 +9,21 @@
 <script type="text/javascript" src="/static/js/i-saw-and-a.js"></script>
 <script type="text/javascript">
 jQuery(function($) {
-    $('#locationmap').hide();
-    // Create the map link
-    var a = $('<span> (<a href="http://maps.google.com/?ll=' + 
-      '{{ place.latitude }},{{ place.longitude }}&amp;z=13" ' + 
-      'id="maplink">map</a>)</span>'
-    ).insertAfter($('#countrylink')).find('a');
-    a.toggle(function() {
-        $('#locationmap').slideDown(500);
-        a.text('hide map');
-        return false;
-    }, function() {
-        $('#locationmap').slideUp(500);
-        a.text('map');
-        return false;
-    });
+	$('#locationmap').hide();
+	// Create the map link
+	var a = $('<span> (<a href="http://maps.google.com/?ll=' + 
+	  '{{ place.latitude }},{{ place.longitude }}&amp;z=13" ' + 
+	  'id="maplink">map</a>)</span>'
+	).insertAfter($('#countrylink')).find('a');
+	a.toggle(function() {
+		$('#locationmap').slideDown(500);
+		a.text('hide map');
+		return false;
+	}, function() {
+		$('#locationmap').slideUp(500);
+		a.text('map');
+		return false;
+	});
 });
 </script>
 {% endblock %}
@@ -69,13 +69,13 @@ jQuery(function($) {
 {% endif %}
 
 <div class="see-more-animals highlight"><a name="addsightings"></a>
-    <h3 class="add">Have you been here{% if been_here %} again{% endif %}?</h3>
-    <p>Tell us which animals you saw.</p>
-    <form action="{{ request.path }}pick-sightings/" method="GET">
-        <div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1" class="text"></div>
-        <div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw.2.s" id="saw_2" class="text"> <span class="meta optional">(optional)</span></div>
-        <div><input type="submit" value="Add my animals"></div>
-    </form>
+	<h3 class="add">Have you been here{% if been_here %} again{% endif %}?</h3>
+	<p>Tell us which animals you saw.</p>
+	<form action="{{ request.path }}pick-sightings/" method="GET">
+		<div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1" class="text"></div>
+		<div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw.2.s" id="saw_2" class="text"> <span class="meta optional">(optional)</span></div>
+		<div><input type="submit" value="Add my animals"></div>
+	</form>
 </div>
 
 {% if opening_times %}
@@ -84,23 +84,23 @@ jQuery(function($) {
 	<h3>{% if date_ranges.range %}{{ date_ranges.range|safe }}{% else %}Normal opening hours{% endif %}</h3>
 
 	{% for section_title, days in date_ranges.sections.items %}
-	 	{% if section_title %}
-	 	<h4>{{ section_title }}</h4>
-	 	{% endif %}
+		 {% if section_title %}
+		 <h4>{{ section_title }}</h4>
+		 {% endif %}
 
 	<ul class="opening-list">
 	{% for day in days %}
 		{% if day %}
-        		<li>
-        			{% if day.name %}
-        				<span class="opening-days">{{ day.name }}</span>
-        			{% else %}
-        				<span class="opening-days">Every day</span>
-        			{% endif %}
-        			<span class="opening-hours">
-        				{% if day.closed %}Closed{% endif %}
-        				{{ day.times }}
-        			</span>
+				<li>
+					{% if day.name %}
+						<span class="opening-days">{{ day.name }}</span>
+					{% else %}
+						<span class="opening-days">Every day</span>
+					{% endif %}
+					<span class="opening-hours">
+						{% if day.closed %}Closed{% endif %}
+						{{ day.times }}
+					</span>
 			</li>
 		{% endif %}
 	{% endfor %}
@@ -126,13 +126,13 @@ jQuery(function($) {
 {% endwith %}
 
 {% with place.direction.all as directions %}
-    {% if directions %}
+	{% if directions %}
 	<h2>Directions</h2>
 	{% for direction in directions %}
-    	<h3 class="direction_{{direction.mode}}">By {{ direction.mode }}</h3>
+		<h3 class="direction_{{direction.mode}}">By {{ direction.mode }}</h3>
 		<p>{{ direction.route }}</p>
 	{% endfor %}
-    {% endif %}
+	{% endif %}
 {% endwith %}
 
 {% if place.most_recent_trips %}
@@ -161,14 +161,14 @@ jQuery(function($) {
 -->
 
 {% with place.news.all as news %}
-    {% if news %}
+	{% if news %}
 	<h2>News about {{ place.known_as }}</h2>
-    <ul>
-    {% for story in news %}
-        <li>{{ story.story_date|date:"jS M Y" }}: <a href="{{ story.url }}">{{ story.headline }}</a></li>
-    {% endfor %}
-    </ul>
-    {% endif %}
+	<ul>
+	{% for story in news %}
+		<li>{{ story.story_date|date:"jS M Y" }}: <a href="{{ story.url }}">{{ story.headline }}</a></li>
+	{% endfor %}
+	</ul>
+	{% endif %}
 {% endwith %}
 
 {% endblock %}
@@ -197,7 +197,7 @@ jQuery(function($) {
 
 {% with place.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
-                <h2>Photos</h2>
+				<h2>Photos</h2>
 
 		{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
@@ -208,18 +208,18 @@ jQuery(function($) {
 		{% else %}{# More than one photo #}
 		{% with place.photo as chosen %}
 		<div class="gallery">
-        		<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ photo.thumb_100_url }}"></a>
-        		<div class="slideshow">
-        			<ul id="thumbnails">
-			                {% for photo in place.visible_photos.all %}
-			                {% ifnotequal chosen photo %}
-        		                <li>{{ photo.thumb_75 }}</li>
-        		                {% endifnotequal %}
-			                {% endfor %}
-			        </ul><!-- /#thumbnails -->
-		        </div><!-- /.slideshow -->
-	        </div>
-	        {% endwith %}
+				<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ photo.thumb_100_url }}"></a>
+				<div class="slideshow">
+					<ul id="thumbnails">
+							{% for photo in place.visible_photos.all %}
+							{% ifnotequal chosen photo %}
+								<li>{{ photo.thumb_75 }}</li>
+								{% endifnotequal %}
+							{% endfor %}
+					</ul><!-- /#thumbnails -->
+				</div><!-- /.slideshow -->
+			</div>
+			{% endwith %}
 		{% endifequal %}
 	{% endif %}
 {% endwith %}
@@ -242,7 +242,7 @@ jQuery(function($) {
 
 <h2>Comments</h2>
 {% with place as object %}
-    {% include "comments/_comments.html" %}
+	{% include "comments/_comments.html" %}
 {% endwith %}
 
 {% endblock %}

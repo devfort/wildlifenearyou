@@ -4,63 +4,63 @@
 <h4>Was it one of these?</h4>
 <div style="height: 200px; overflow: auto; padding: 5px">
 <ul>
-    {% if seen_here %}
-    <li>{% if seen_elsewhere or not_seen %}
-    <h5>Previously spotted here:</h5>
-    {% endif %}
-    <ul>
-    {% for result in seen_here %}
-        <li class="species-pick" id="{{ result.select_id }}">
-            {% if result.photo %}
-            <img src="{{ result.photo }}" alt="{{ result.common_name }}">
-            {% endif %}
-            <h6>{{ result.common_name }}{% if result.num_sightings %}
-            <span class="meta">Spotted here {{ result.num_sightings|oncetimes }}</span>
-            {% endif %}</h6>
-            <p><i>{{ result.scientific_name }}</i></p>
-        </li>
-    {% endfor %}
-    </ul>
-    </li>
-    {% endif %}
-    {% if seen_elsewhere %}
-    <li>{% if seen_here or not_seen %}
-    <h5>Spotted elsewhere:</h5>
-    {% endif %}
-    <ul>
-    {% for result in seen_elsewhere %}
-        <li class="species-pick" id="{{ result.select_id }}">
-            {% if result.photo %}
-            <img src="{{ result.photo }}" alt="{{ result.common_name }}">
-            {% endif %}
-            <h6>{{ result.common_name }}{% if result.num_sightings %}
-            <span class="meta">Spotted {{ result.num_sightings|oncetimes }}</span>
-            {% endif %}</h6>
-            <p><i>{{ result.scientific_name }}</i></p>
-        </li>
-    {% endfor %}
-    </ul>
-    </li>
-    {% endif %}
-    {% if not_seen %}
-    <li>{% if seen_here or seen_elsewhere %}
-    <h5>Not yet spotted:</h5>
-    {% endif %}
-    <ul>
-    {% for result in not_seen %}
-        <li class="species-pick" id="{{ result.select_id }}">
-            {% if result.photo %}
-            <img src="{{ result.photo }}" alt="{{ result.common_name }}">
-            {% endif %}
-            <h6>{{ result.common_name }}{% if result.num_sightings %}
-            <span class="meta">Spotted {{ result.num_sightings|oncetimes }}</span>
-            {% endif %}</h6>
-            <p><i>{{ result.scientific_name }}</i></p>
-        </li>
-    {% endfor %}
-    </ul>
-    </li>
-    {% endif %}
+	{% if seen_here %}
+	<li>{% if seen_elsewhere or not_seen %}
+	<h5>Previously spotted here:</h5>
+	{% endif %}
+	<ul>
+	{% for result in seen_here %}
+		<li class="species-pick" id="{{ result.select_id }}">
+			{% if result.photo %}
+			<img src="{{ result.photo }}" alt="{{ result.common_name }}">
+			{% endif %}
+			<h6>{{ result.common_name }}{% if result.num_sightings %}
+			<span class="meta">Spotted here {{ result.num_sightings|oncetimes }}</span>
+			{% endif %}</h6>
+			<p><i>{{ result.scientific_name }}</i></p>
+		</li>
+	{% endfor %}
+	</ul>
+	</li>
+	{% endif %}
+	{% if seen_elsewhere %}
+	<li>{% if seen_here or not_seen %}
+	<h5>Spotted elsewhere:</h5>
+	{% endif %}
+	<ul>
+	{% for result in seen_elsewhere %}
+		<li class="species-pick" id="{{ result.select_id }}">
+			{% if result.photo %}
+			<img src="{{ result.photo }}" alt="{{ result.common_name }}">
+			{% endif %}
+			<h6>{{ result.common_name }}{% if result.num_sightings %}
+			<span class="meta">Spotted {{ result.num_sightings|oncetimes }}</span>
+			{% endif %}</h6>
+			<p><i>{{ result.scientific_name }}</i></p>
+		</li>
+	{% endfor %}
+	</ul>
+	</li>
+	{% endif %}
+	{% if not_seen %}
+	<li>{% if seen_here or seen_elsewhere %}
+	<h5>Not yet spotted:</h5>
+	{% endif %}
+	<ul>
+	{% for result in not_seen %}
+		<li class="species-pick" id="{{ result.select_id }}">
+			{% if result.photo %}
+			<img src="{{ result.photo }}" alt="{{ result.common_name }}">
+			{% endif %}
+			<h6>{{ result.common_name }}{% if result.num_sightings %}
+			<span class="meta">Spotted {{ result.num_sightings|oncetimes }}</span>
+			{% endif %}</h6>
+			<p><i>{{ result.scientific_name }}</i></p>
+		</li>
+	{% endfor %}
+	</ul>
+	</li>
+	{% endif %}
 </ul>
 </div>
 <h4>Or&hellip;</h4>
