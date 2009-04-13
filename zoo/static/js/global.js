@@ -205,74 +205,74 @@ jQuery(function($) {
 
 /* Funky feedback form effect */
 jQuery(function($) {
-    // Don't add it if we are already on the /feedback/ page
-    if (location.pathname == '/feedback/') {
-        return;
-    }
-    
-    var feedback_showing = false;
-    function hideFeedback() {
-        $('#ajax-feedback-form').slideUp('fast', function() {
-            $('#ajax-feedback-form').remove();
-            feedback_showing = false;
-        });
-        return false;
-    }
-    
-    function wireUpForm(div) {
-        // Hook up the 'cancel' button
-        div.find('input[name=close]').click(hideFeedback);
-        // Wire up the form to do an Ajax submit
-        div.find('form').submit(function() {
-            var data = $(this).serialize(); // A query string style thing
-            $.ajax({
-                'url': this.action,
-                'type': 'POST',
-                'data': data,
-                'success': function(html) {
-                    var height = div.height();
-                    var newDiv = $(html);
-                    div.replaceWith(newDiv);
-                    wireUpForm(newDiv);
-                    var newHeight = newDiv.height();
-                    /* If does NOT contain an errorlist, close after a delay */
-                    if (!newDiv.find('ul.errorlist').length) {
-                        setTimeout(function() {
-                            newDiv.slideUp('slow', function() {
-                                newDiv.remove();
-                                feedback_showing = false;
-                            });
-                        }, 2000);
-                    }
-                },
-                'error': function() {
-                    alert('Your feedback could not be recorded');
-                    div.remove();
-                    feedback_showing = false;
-                }
-            });
-            return false;
-        });
-    }
-    
-    $('#feedback-link').click(function() {
-        if (feedback_showing) {
-            hideFeedback();
-            return false;
-        }
-        // Not showing; show the feedback form
-        feedback_showing = true;
-        $.get(this.href, function(html) {
-            var div = $(html).hide().insertAfter('.header').slideDown('fast');
-            wireUpForm(div);
-        });
-        return false;
-    });
+	// Don't add it if we are already on the /feedback/ page
+	if (location.pathname == '/feedback/') {
+		return;
+	}
+	
+	var feedback_showing = false;
+	function hideFeedback() {
+		$('#ajax-feedback-form').slideUp('fast', function() {
+			$('#ajax-feedback-form').remove();
+			feedback_showing = false;
+		});
+		return false;
+	}
+	
+	function wireUpForm(div) {
+		// Hook up the 'cancel' button
+		div.find('input[name=close]').click(hideFeedback);
+		// Wire up the form to do an Ajax submit
+		div.find('form').submit(function() {
+			var data = $(this).serialize(); // A query string style thing
+			$.ajax({
+				'url': this.action,
+				'type': 'POST',
+				'data': data,
+				'success': function(html) {
+					var height = div.height();
+					var newDiv = $(html);
+					div.replaceWith(newDiv);
+					wireUpForm(newDiv);
+					var newHeight = newDiv.height();
+					/* If does NOT contain an errorlist, close after a delay */
+					if (!newDiv.find('ul.errorlist').length) {
+						setTimeout(function() {
+							newDiv.slideUp('slow', function() {
+								newDiv.remove();
+								feedback_showing = false;
+							});
+						}, 2000);
+					}
+				},
+				'error': function() {
+					alert('Your feedback could not be recorded');
+					div.remove();
+					feedback_showing = false;
+				}
+			});
+			return false;
+		});
+	}
+	
+	$('#feedback-link').click(function() {
+		if (feedback_showing) {
+			hideFeedback();
+			return false;
+		}
+		// Not showing; show the feedback form
+		feedback_showing = true;
+		$.get(this.href, function(html) {
+			var div = $(html).hide().insertAfter('.header').slideDown('fast');
+			wireUpForm(div);
+		});
+		return false;
+	});
 
-    $('#jump_to_form').each(function() {
-        var elem_name = '#form-' + $(this).val();
+	$('#jump_to_form').each(function() {
+		var elem_name = '#form-' + $(this).val();
 	$('html,body').animate({scrollTop: $(elem_name).offset().top + 350}, 500); 
-    });
+	});
 });
 
 
