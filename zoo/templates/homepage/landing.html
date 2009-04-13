@@ -6,8 +6,26 @@
 <script type="text/javascript" src="/static/js/jquery-autocomplete/jquery.autocomplete.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/js/jquery-autocomplete/jquery.autocomplete.css">
 <script type="text/javascript" src="/static/js/home.js"></script>
+<style type="text/css">
+#home .intro-block input.openid {
+	background-image: url(/account/logo/);
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	padding-left: 16px;
+	width: 140px;
+}
+div.login-wrapper {
+	background-color: #93B1C1;
+	overflow: hidden;
+	padding-top: 0.2em;
+}
+div#what-is-openid {
+	font-size: 0.8em;
+}
+</style>
+</style>
 {% endblock %}
-
 
 {% block extra_body %} id="home"{% endblock %}
 
@@ -21,70 +39,85 @@
 	{% endfor %}
 </ul>
 
-
 <div class="receptacle intro-block">
 	<div class="wrapper">
 		<div class="contents">
 			{% if user.is_authenticated %}
-					<div class="interact">
-						<h2>Where have you been?</h2>
-						<form action="/add-trip/" method="GET">
-							<div class="container text-container">
-								<label for="search-place">I've been to…</label>
-								<input type="text" class="text" name="q" id="search-place">
-							</div>
-							<div>
-								<input type="submit" value="Find this place" class="submit">
-							</div>
-						</form>
+			<div class="interact">
+				<h2>Where have you been?</h2>
+				<form action="/add-trip/" method="GET">
+					<div class="container text-container">
+						<label for="search-place">I've been to…</label>
+						<input type="text" class="text" name="q" id="search-place">
 					</div>
+					<div>
+						<input type="submit" value="Find this place" class="submit">
+					</div>
+				</form>
+			</div>
 			{% else %}
-					<div class="interact" id="register-box">
-						<h2>Register now</h2>
-						<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in now</span></a></p>
-						<form action="{% url accounts-register %}" method="post">
-							<div class="container text-container">
-								<label for="id_username">desired username</label>
-								<input id="id_username" type="text" name="username" maxlength="30" />
-							</div>
-							<div class="container text-container">
-								<label for="id_email">e-mail</label>
-								<input id="id_email" type="text" name="email" maxlength="75" />
-							</div>
-							<!-- We're thinking we might ask them to set a password
-								AFTER they've validated their e-mail! -->
-							<div class="container text-container">
-								<label for="id_password">password</label>
-								<input type="password" name="password" id="id_password" />
-							</div>
-												<p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
-							<div><input type="submit" class="submit" value="&raquo; Go for it"></div>	
-						</form>
-				</div>
-					<div class="interact" id="login-box" style="display: none;">
-						<h2>Login</h2>
-						<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register now</span></a></p>
-						<form action="{% url accounts-login %}" method="post">
-												<div class="container text-container">
-														<label for="id_username">username</label>
-														<input id="id_username" type="text" name="username" maxlength="30" />
-												</div>
-												<div class="container text-container">
-														<label for="id_password">password</label>
-														<input type="password" name="password" id="id_password" />
-												</div>
-												<p class="meta"><a href="{% url forgotten-password %}">I&rsquo;ve forgotten my password, please send help!</a></p>
-												<div><input type="submit" class="submit" value="&raquo; Login"></div>
-						</form>
+			<div class="interact" id="register-box">
+				<h2>Register now</h2>
+				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in now</span></a></p>
+				<form action="/account/register/" method="post">
+					<div class="container text-container">
+						<label for="id_username">desired username</label>
+						<input id="id_username" type="text" name="username" maxlength="30" />
+					</div>
+					<div class="container text-container">
+						<label for="id_email">e-mail</label>
+						<input id="id_email" type="text" name="email" maxlength="75" />
+					</div>
+					<!-- We're thinking we might ask them to set a password
+						AFTER they've validated their e-mail! -->
+					<div class="login-wrapper">
+						<div class="container text-container">
+							<label for="id_password">password</label>
+							<input type="password" name="password" id="id_password" />
 						</div>
+						<div class="container text-container">
+							<label for="id_openid_url"><strong>or</strong> OpenID<br><small><a href="#what-is-openid" class="toggler">what is this?</a></small></label>
+							<input type="text" name="openid_url" id="id_openid_url" class="openid" />
+						</div>
+						<div id="what-is-openid">
+							<p>OpenID allows you to use the same account on many different websites. Read more at <a href="http://openid.net/">openid.net</a>.</p>
+						</div>
+					</div>
+					<p class="meta">By registering with Wildlife Near You, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
+					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>
+				</form>
+			</div>
+			<div class="interact" id="login-box" style="display: none;">
+				<h2>Login</h2>
+				<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register now</span></a></p>
+				<form action="/account/login/" method="post">
+					<div class="container text-container">
+						<label for="id_username">username</label>
+						<input id="id_username" type="text" name="username" maxlength="30" />
+					</div>
+					<div class="container text-container">
+						<label for="id_password">password</label>
+						<input type="password" name="password" id="id_password" />
+					</div>
+					<div class="login-wrapper">
+						<div class="container text-container">
+							<label for="id_openid_url-login"><strong>or</strong> use OpenID</label>
+							<input type="text" name="openid_url" id="id_openid_url-login" class="openid" />
+						</div>
+					</div>
+					<p class="meta"><a href="/account/recover/">I've forgotten my password or can't log in!</a></p>
+					<div><input type="submit" class="submit" value="&raquo; Login"></div>
+				</form>
+			</div>
 			{% endif %}
 			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 			{% if user.is_authenticated %}
 			<p class="intro">
-				Seen any more animals? Why not <a href="{% url add-trip %}">add another trip</a>,
-				<a href="{% url user-photos user.username %}">upload</a> some photos or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun!</p>
+				Seen any more animals? Why not <a href="{% url add-trip %}">add another trip</a> or 
+				<a href="{% url user-photos user.username %}">upload</a> some photos.<!-- or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun! --></p>
+				
 			{% else %}
-			<p class="intro"><strong>Wild Life Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
+			<p class="intro"><strong>Wildlife Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
 			{% endif %}
 		</div>
 	</div>
@@ -140,7 +173,7 @@
 					<span class="postal-code">NW1 4RY</span>, <abbr class="country-name" title="United Kingdom">GB</abbr>
 				</p>-->
 <!--				<p class="description">ZSL London Zoo is the world's oldest scientific zoo. It was opened in London on April 27, 1828, and was originally intended to be used as a collection for scientific study. </p> -->
-								{% if place.species %}
+				{% if place.species %}
 				<h4>Animals spotted here</h4>
 				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
 				and <a href="{{ place.urls.species }}">more&hellip;</a>
@@ -195,17 +228,17 @@
 				<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
 				{% if profile.passport.seen_species %}
 				<p>Has spotted
-								{% if profile.passport.favourite_species.count %}
-								{% with profile.passport.favourite_species.0 as favourite %}
-				{% for species in profile.passport.seen_species|slice:":5" %}{% ifnotequal favourite species %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endifnotequal %}{% endfor %}
-				and really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
-				{% endwith %}
-								{% else %}
+					{% if profile.passport.favourite_species.count %}
+					{% with profile.passport.favourite_species.0 as favourite %}
+					{% for species in profile.passport.seen_species|slice:":5" %}{% ifnotequal favourite species %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endifnotequal %}{% endfor %}
+					and really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
+					{% endwith %}
+				{% else %}
 				{% for species in profile.passport.seen_species|slice:":5" %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.
 				{% endif %}
 				{% else %}
 				{% if profile.passport.favourite_species.count %}
-								{% with profile.passport.favourite_species.0 as favourite %}
+				{% with profile.passport.favourite_species.0 as favourite %}
 				Hasn't spotted anything yet, but really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
 				{% endwith %}
 				{% endif %}
@@ -214,7 +247,7 @@
 				{% if profile.user.created_trip_set.count %}
 				<h4>Recent trips</h4>
 				<ul>
-						{% for trip in profile.user.created_trip_set.all|slice:":2" %}
+					{% for trip in profile.user.created_trip_set.all|slice:":2" %}
 					<li><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a> {{ trip.formatted_date }}</li>
 					{% endfor %}
 				</ul>
@@ -222,10 +255,10 @@
 				{% if profile.visible_photos.count %}
 					<p>Why not <a href="{% url user-photos profile.user.username %}">check out their photos</a>?</p>
 				{% endif %}
-								{% endwith %}
-								{% else %}
-								<p>There is no currently featured spotter. If you start adding your trips, you could be highlighted here!</p>
-								{% endif %}
+				{% endwith %}
+				{% else %}
+				<p>There is no currently featured spotter. If you start adding your trips, you could be highlighted here!</p>
+				{% endif %}
 			</div>
 		</div>
 	</div>

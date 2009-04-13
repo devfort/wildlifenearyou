@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>{% block fulltitle %}{% block title %}{% endblock %} | WildLifeNearYou.com{% endblock %}</title>
+	<title>{% block fulltitle %}{% block title %}{% endblock %} | Wildlife Near You{% endblock %}</title>
 	<script type="text/javascript" src="/static/js/jquery-1.3.2.js"></script>
 	<!--
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -33,7 +33,7 @@
 	<div class="wrapper">
 		<div class="contents">
 			<p class="heading">
-				<a href="/"><img src="/static/img/wny_logo.gif" alt="Wildlife near you"></a>
+				<a href="/"><img src="/static/img/wny_logo.gif" alt="WildlifeNearYou.com"></a>
 				<!--<span>We love wildlife!{#Can I Keep It?#}</span>-->
 			</p>
 			<ul>
@@ -83,7 +83,7 @@
 	Our sharp-eyed animal lovers have spotted <strong>{{ total_num_of_species|intcomma }}</strong> species.
 	{% endifequal %}</p>
 
-			<p class="nav"><span><a class="copyright" href="{% url flatpage "legal/" %}">&copy;</a> <a href="{% url flatpage "legal/" %}">WildLifeNearYou.com Ltd</a></span>
+			<p class="nav"><span><a class="copyright" href="{% url flatpage "legal/" %}">&copy;</a> <a href="{% url flatpage "legal/" %}">WildlifeNearYou.com Ltd</a></span>
 			| <a href="{% url flatpage "about/" %}">About</a>
 			| <a href="{% url feedback %}">Contact</a>
 			| <a href="{% url blog_index %}">Blog</a>

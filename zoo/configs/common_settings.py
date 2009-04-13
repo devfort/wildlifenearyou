@@ -122,6 +122,7 @@ INSTALLED_APPS = [
     'zoo.launchsignups',
     'django_openid',
     'pagination',
+    'zoo.invitereg',
     # The next four items are dependencies for basic.blog
     'basic.blog',
     'basic.inlines',

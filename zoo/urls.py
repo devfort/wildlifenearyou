@@ -23,7 +23,8 @@ from accounts import views as accounts
 from faces import views as faces
 from photos import views as photos
 
-from accounts.openid import RegistrationConsumer
+#from accounts.openid import RegistrationConsumer
+from invitereg.views import InviteRegistrationConsumer as RegistrationConsumer
 
 urlpatterns = patterns('',
     # Example:
@@ -50,6 +51,9 @@ urlpatterns = patterns('',
     
     # Launch signups POST handler
     (r'^launchsignups/$', 'zoo.launchsignups.views.signup'),
+
+    # Invitation URL (sent out in invite e-mail)
+    (r'^invitation/(\w+)/$', 'zoo.invitereg.views.invitation'),
 
     # shortcuts
     url(r'^tripbook/$', 'zoo.trips.views.tripbook_default',

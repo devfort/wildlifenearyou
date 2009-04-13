@@ -212,6 +212,7 @@ def delete_location(request):
 
 @login_required
 def invite_friends(request):
+    raise Http404, 'Feature temporarily disabled during invite-only alpha'
     msg = None
     if request.method=='POST':
         email = request.POST.get('email', None)

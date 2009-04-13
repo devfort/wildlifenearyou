@@ -1,7 +1,7 @@
 Hello {{ user.username }},
 
 We're truly chuffed to bits that you've chosen to be a part of
-WildlifeNearYou and taken the time to sign up--we think you're wonderful!
+WildlifeNearYou and taken the time to sign up -- we think you're wonderful!
 Now you're an official member of WildlifeNearYou, you get access to what we
 hope you think are some really nice things.
 
@@ -9,12 +9,16 @@ hope you think are some really nice things.
       your own little avatar, we think they're so cute! Tell us your
       location and we'll give you info as to where your nearest favourite
       animals are.
+      
     * We actively encourage you to create trips to share your experiences
       about a particular place you've visited. You can describe your trip
       and include a list of animals/creatures you spotted on your day out.
+      
     * Share your photos of your trips.
+    
     * You have the ability to rate a trip, which will let others know how
       awesome it was for you.
+      
     * We have also given you our beloved users the power to keep the
       information about the places the site knows about accurate. Any time
       you spot something that isn't right, please tell us about it so we can
