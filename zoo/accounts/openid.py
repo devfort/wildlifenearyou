@@ -16,11 +16,16 @@ class CustomRegistrationForm(RegistrationForm):
 
 class RegistrationConsumer(RegistrationConsumer):
     base_template = 'base.html'
+    on_complete_url = '/account/complete/'
+    trust_root = '/account/'
     
     RegistrationForm = CustomRegistrationForm
     
     def user_can_login(self, request, user):
         # User must have validated their e-mail address
+        
+        return True
+        
         return user.is_active and user.get_profile().email_validated
     
     def show_you_cannot_login(self, request, user, openid):
@@ -33,8 +38,10 @@ class RegistrationConsumer(RegistrationConsumer):
             request, 'You cannot log in', message,
         )
     
-    def create_user(self, data, openid=None):
-        user = super(RegistrationConsumer, self).create_user(data, openid)
+    def create_user(self, request, data, openid=None):
+        user = super(RegistrationConsumer, self).create_user(
+            request, data, openid
+        )
         # Create their Profile
         Profile.objects.create(user=user)
         return user
