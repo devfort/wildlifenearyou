@@ -55,8 +55,8 @@ urlpatterns = patterns('',
     (r'^blog/', include('basic.blog.urls')),
 
     # Landing Page
-    url(r'^$', 'zoo.homepage.views.landing',
-        name='landing-page'),
+    url(r'^$', 'zoo.homepage.views.homepage',
+        name='homepage'),
         
     
     url(r'^debug/urls/$', 'zoo.debug.views.show_url_patterns'),

@@ -1,4 +1,5 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseRedirect, Http404, \
+    HttpResponseServerError
 from zoo.shortcuts import render
 from django.conf import settings
 
@@ -10,7 +11,7 @@ from zoo.accounts.models import Profile
 from zoo.photos.models import Photo
 from zoo.utils import location_from_request
 
-def landing(request):
+def homepage(request):
     places_with_sightings = Place.objects.filter(sighting__isnull=False)
     if places_with_sightings.count():
         random_zoo = places_with_sightings.order_by('?')[0]
@@ -23,7 +24,9 @@ def landing(request):
     recent_sightings_favourites = None
     if request.user.is_authenticated():
         favourite_animals = Species.objects.filter(favourited=request.user)
-        recent_sightings_favourites = Sighting.objects.filter(species__in=favourite_animals).order_by('-created_at')
+        recent_sightings_favourites = Sighting.objects.filter(
+            species__in=favourite_animals
+        ).order_by('-created_at')
 
     featured = {}
 
@@ -46,7 +49,9 @@ def landing(request):
     if featured['place']:
         # Have to do this as django template method calls can't take params.
         try:
-            featured['place'].species = featured['place'].get_species(limit=10)
+            featured['place'].species = featured['place'].get_species(
+                limit=10
+            )
         except Species.DoesNotExist:
             featured['place'].species = None
 
@@ -54,7 +59,9 @@ def landing(request):
         location, (lat, lon) = location_from_request(request)
         if (lat, lon) != (None, None):
             from zoo.search import nearest_places_with_species as npws
-            nearest_species = npws(featured['species'].common_name, (lat, lon))
+            nearest_species = npws(
+                featured['species'].common_name, (lat, lon)
+            )
             if nearest_species:
                 featured['species'].nearest = nearest_species[0]
     
@@ -63,7 +70,7 @@ def landing(request):
     else:
         default_search = 'SEARCH CURRENTLY DISABLED'
     
-    return render(request, 'homepage/landing.html', {
+    return render(request, 'homepage.html', {
         'random_zoo': random_zoo,
         'featured': featured,
         'num_of_places': num_of_places,

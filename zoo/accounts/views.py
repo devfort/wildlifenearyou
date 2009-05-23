@@ -239,7 +239,7 @@ def invite_friends(request):
     # FIXME: sample email renders with url/link as relative not absolute
     return render(request, 'accounts/invite_friends.html', {
         'msg': msg,
-        'url': reverse('landing-page'),
+        'url': reverse('homepage'),
         'to_name': 'friend',
         'link': ref,
         })

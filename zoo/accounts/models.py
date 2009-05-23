@@ -152,7 +152,7 @@ class Profile(models.Model):
                         {'user': self.user,
                          'to_name': to_name,
                          'to_email': to_email,
-                         'url': reverse('landing-page'),
+                         'url': reverse('homepage'),
                          'link': ref,
                          },
                          to_email)
