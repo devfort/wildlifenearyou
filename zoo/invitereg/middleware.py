@@ -25,9 +25,12 @@ class InviteOnlyMiddleware(object):
         if not request.user.is_anonymous():
             return None
         
-        cookie = request.COOKIES.get('invite_code', '')
-        try:
-            InviteCode.objects.get(code = cookie)
-        except InviteCode.DoesNotExist:
-            return render(request, 'invitereg/enter_code.html')
-        return None
+        cookie = request.COOKIES.get('invite_code', '').strip()
+        if cookie:
+            try:
+                InviteCode.objects.get(code = cookie)
+                return None
+            except InviteCode.DoesNotExist:
+                pass
+        
+        return render(request, 'invitereg/enter_code.html')
