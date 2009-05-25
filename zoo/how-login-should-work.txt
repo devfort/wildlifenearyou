@@ -1,0 +1,101 @@
+Invite codes can create one and only one account
+Registration system needs to check for invite codes, but only in alpha
+
+Going to ANY PAGE ON THE SITE for the first time (or without a cookie):
+    Show splash screen asking for invite code
+Going to ANY PAGE ON THE SITE with a invite cookie:
+    Logged in: just works
+    Logged out: 
+        You can LOG IN:
+            See below.
+        You can REGISTER:
+            Register needs to check for invite that has not been used yet
+            Invite HAS been used:
+                Display a message saying only one account per invite code
+                Link to invite request page
+            Invite has NOT been used: 
+                Register normally, see below
+
+Login:
+    With Username and Password:
+        (has link to switch to OpenID)
+        Incorrect login:
+            They get their username wrong:
+                Tell them their username was wrong
+            They get their password wrong:
+                Tell them their password was wrong
+        Correct login:
+            Have they verified their e-mail address?
+                YES:
+                    Log them in to that account.
+                NO:
+                    Tell them to verify their e-mail address
+                    Option: send me that e-mail AGAIN
+    With OpenID:
+        (has link to switch to username/password)
+        OpenID is invalid or authentication fails:
+            Tell them what happened, don't log them in
+            Show login or register UI
+        OpenID is VALID and CORRESPONDS to an existing account:
+            Have they verified their e-mail address?
+                YES:
+                    Log them in to that account.
+                NO:
+                    Tell them to verify their e-mail address
+                    Option: send me that e-mail AGAIN
+        OpenID is VALID but does NOT correspond to an existing account:
+            Tell them, and offer a link to the registration form.
+                
+Registration:
+    Do they have an unused invite code?
+        No:
+            Tell them they can only create one account per invite code
+            Option to enter a different invite code, or request a new one
+        Yes:
+            Register with username/password:
+                Username/e-mail/password please
+                Repeat until valid
+                Mark invitation as having been used by that user
+                Send verification e-mail
+                Tell them "just one more step: click link in your e-mail"
+            Register WITH OpenID:
+                Enter your OpenID:
+                    OpenID is valid:
+                        And NOT associated with existing account:
+                            Show registration form, pre-filled with any
+                            details from OpenID provider
+                        And ASSOCIATED with existing account:
+                            Log them in - jump to "have they verified their 
+                            e-mail address" bit in login with OpenID flow
+                    OpenID is INVALID:
+                        Tell them what happened, link to login page
+                        
+
+E-mail verification link clicked:
+    Is verification code valid?
+        YES:
+            Mark that account as verified
+            Set an INVITATION cookie to avoid the splash screen - we know what
+                this is because we marked it as being used by THAT user
+            Log them straight in to that account
+        NO:
+            Tell them it's invalid.
+            Provide a link to the homepage.
+
+Recover account flow:
+    Ask them for their:
+        E-mail address
+        OR Username
+        OR OpenID
+    If valid information:
+        Send them an e-mail with a magic log-you-in link in it
+    If INVALID:
+        Tell them no account found.
+        Show form again.
+
+Recover link clicked:
+    If valid:
+        Set invite code cookie as above
+        Log them in
+    If invalid:
+        Tell them to go away, link to homepage
