@@ -116,7 +116,6 @@ INSTALLED_APPS = [
     'zoo.trips',
     'zoo.favourites',
     'django.contrib.comments',
-    'schedule', # from zoo.ext
     'zoo.feedback',
     'zoo.freebase',
     'zoo.search',
