@@ -6,6 +6,54 @@
 <h1>Search: {% if what %}&ldquo;{{ what }}&rdquo;{% else %}Everything{% endif %} near {{ location_used.description }}</h1>
 {% endblock %}
 
+{% block extra_head %}
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(function($) {
+    function makeWindow(name, href) {
+        return '<a href="' + href + '">' + name + '</a>';
+    }
+    var placelist = $('ol.place-list')
+    var p = $('<p><a href="#">Show results on a map</a></p>');
+    p.find('a').click(function() {
+        p.remove();
+        showMap();
+        return false;
+    });
+    placelist.before(p);
+    
+    function showMap() {
+        var mapdiv = $('<div></div>').width(
+            placelist.width()
+        ).height(400).css('margin-bottom', '2em');
+        placelist.before(mapdiv);
+        window.gmap = new GMap2(mapdiv[0]);
+        gmap.addControl(new GLargeMapControl());
+        gmap.addControl(new GMapTypeControl());
+        gmap.setMapType(G_NORMAL_MAP);
+        // Add the markers
+        var bounds = new GLatLngBounds();
+        placelist.find('li').each(function() {
+            var title = $(this).find('span').attr('title');
+            var bits = title.split(', ');
+            var lat = bits[0], lon = bits[1];
+            var point = new GLatLng(lat, lon);
+            bounds.extend(point);
+            var a = $(this).find('a.place-name');
+            var name = a.text();
+            var href = a.attr('href');
+            var marker = new GMarker(point);
+            gmap.addOverlay(marker);
+            GEvent.addListener(marker, 'click', function() {
+                marker.openInfoWindow(makeWindow(name, href));
+            });
+        });
+        gmap.setCenter(bounds.getCenter(), gmap.getBoundsZoomLevel(bounds));
+    }
+});
+</script>
+{% endblock %}
+
 {% block search_form %}{% endblock %}
 
 {% block primary_content %}
@@ -47,15 +95,11 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 {% if results %}
 	<ol class="place-list">
 	{% for place in results %}
-	<li>
-	{% include "places/_place.html" %}
-	</li>
+		<li>{% include "places/_place.html" %}</li>
 	{% endfor %}
 	</ol>
-
-<p><a href="#" onclick="showMap(); return false;">Show on a map</a></p>
-
 {% endif %}
+
 {% if request.user.is_staff %}
 	<h4><a class="toggler" href="#debug-results">Debug info (developers only)</a></h4>
 	<pre id="debug-results" style="font-size:0.85em">{{ results_info }}</pre>
@@ -77,7 +121,7 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 	{% endfor %}
 	</ol>
 	{% if species_results_more %}
-			<a href="{% url species-search %}?q={{ what|urlencode }}">More species matching &ldquo;{{ what }}&rdquo;…</a>
+		<a href="{% url species-search %}?q={{ what|urlencode }}">More species matching &ldquo;{{ what }}&rdquo;…</a>
 	{% endif %}
 {% endif %}
 
