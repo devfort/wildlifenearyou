@@ -42,6 +42,11 @@ def enter_invite_code(request):
         return invitation(request, request.POST.get('invite', ''))
     return render(request, 'invitereg/enter_code.html')
 
+def clear_invite_code(request):
+    response = HttpResponseRedirect('/')
+    response.delete_cookie('invite_code')
+    return response
+
 def invitation(request, code):
     try:
         invite_code = InviteCode.objects.get(code = code, claimed = False)

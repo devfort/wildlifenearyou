@@ -37,6 +37,9 @@ urlpatterns = patterns('',
     url(r'^invitation/$', 'zoo.invitereg.views.enter_invite_code',
         name = 'enter-invite-code'
     ),
+    url(r'^invitation/clear/$', 'zoo.invitereg.views.clear_invite_code',
+        name = 'clear-invite-code'
+    ),
     (r'^invitation/(\w+)/$', 'zoo.invitereg.views.invitation'),
     
     url(r'^account/register/$', registration_consumer, {
