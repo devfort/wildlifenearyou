@@ -29,44 +29,36 @@ from accounts.openid import RegistrationConsumer
 registration_consumer = RegistrationConsumer()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^zoo/', include('zoo.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
     
-    url(r'^account/login/$', registration_consumer, {
-        'rest_of_url': 'login',
-    }, name='accounts-login'),
-    url(r'^account/logout/$', registration_consumer, {
-        'rest_of_url': 'logout',
-    }, name='accounts-logout'),
     url(r'^account/register/$', registration_consumer, {
-        'rest_of_url': 'register',
-    }, name='accounts-register'),
-
+        'rest_of_url': 'register/',
+    }, name = 'accounts-register'),
+    url(r'^account/login/$', registration_consumer, {
+        'rest_of_url': 'login/',
+    }, name = 'accounts-login'),
+    url(r'^account/logout/$', registration_consumer, {
+        'rest_of_url': 'logout/',
+    }, name = 'accounts-logout'),
     (r'^account/(.*?)$', registration_consumer),
     
     (r'^blog/', include('basic.blog.urls')),
-
+    
     # Landing Page
     url(r'^$', 'zoo.homepage.views.homepage',
-        name='homepage'),
-        
+        name='homepage'
+    ),
     
     url(r'^debug/urls/$', 'zoo.debug.views.show_url_patterns'),
     
     # Launch signups POST handler
     (r'^launchsignups/$', 'zoo.launchsignups.views.signup'),
-
+    
     # Invitation URL (sent out in invite e-mail)
     (r'^invitation/(\w+)/$', 'zoo.invitereg.views.invitation'),
-
+    
     # shortcuts
     url(r'^tripbook/$', 'zoo.trips.views.tripbook_default',
         name='tripbook-default'),
@@ -74,11 +66,12 @@ urlpatterns = patterns('',
         name='accounts-default'),
     url(r'^invite/$', accounts.invite_friends,
         name='invite-friends'),
-
-    url(r'^search/species/$', 'zoo.search.views.search_species', name='species-search'),
+    
+    url(r'^search/species/$', 'zoo.search.views.search_species', 
+        name='species-search'),
     url(r'^search/$', 'zoo.search.views.search',
         name='search'),
-
+    
     # Ajax autocompleters
     url(r'^autocomplete/species/(\d+)/$', 
         'zoo.trips.views.autocomplete_species',
@@ -106,43 +99,30 @@ urlpatterns = patterns('',
     url(r'^flickr/selected/$', 'zoo.flickr.views.selected',
         name='flickr-selected'),
     
-    # User accounts stuff
-    #url(r'^login/$', 'accounts.views.login', {
-    #    'template_name': 'accounts/login.html'
-    #}, name='accounts-login'),
-    
-    #url(r'^login/$', 'accounts.views.login', {
-    #    'template_name': 'accounts/login.html'
-    #}, name='accounts-login'),
-    #url(r'^logout/$', 'django.contrib.auth.views.logout', {
-    #    'next_page': '/login/'
-    #}, name='accounts-logout'),
-
     url(r'^forgotten_password/$', 'accounts.views.forgotten_password',
         name='forgotten-password'),
     url(r'^password_key_sent/$', 'accounts.views.password_key_sent',
         name='password-key-sent'),
-    url(r'^recover_password/(\w+)/([a-f0-9]+)/([a-f0-9]{32})/$', 'accounts.views.recover_password',
+    url(r'^recover_password/(\w+)/([a-f0-9]+)/([a-f0-9]{32})/$', 
+        'accounts.views.recover_password',
         name='recover-password'),
     url(r'^change_password/$', 'django.contrib.auth.views.password_change', {
             'template_name': 'accounts/change_password.html'
         }, name='change-password'),
-    url(r'^change_password_done/$', 'django.contrib.auth.views.password_change_done', {
+    url(r'^change_password_done/$', 
+        'django.contrib.auth.views.password_change_done', {
             'template_name': 'accounts/change_password_done.html'
         }, name='change-password-done'),
-
-    #url(r'^register/$', accounts.register,
-    #    name='accounts-register'),
-    #url(r'^register/complete/$', accounts.registration_complete,
-    #    name='accounts-registration-complete'),
-    url(r'^register/validate/(\w+)/([a-f0-9]+)/([a-f0-9]{32})/$', 'accounts.views.validate_email',
+    
+    url(r'^register/validate/(\w+)/([a-f0-9]+)/([a-f0-9]{32})/$', 
+        'accounts.views.validate_email',
         name='validate-email'),
     url(r'^register/validated/$', 'accounts.views.validate_email_success',
         name='validate-email-success'),
-
+    
     url(r'^profiles/$', accounts.all_profiles,
         name='accounts-all-profiles'),
-
+    
     url(r'^add-trip/$', 'trips.views.add_trip_select_place', name='add-trip'),
     url(r'^add-trip/add-place/$', 'trips.views.add_trip_add_place', 
         name='add-trip-add-place'),
@@ -166,62 +146,71 @@ urlpatterns = patterns('',
     ),
     (r'^faces/users/(\w+).xml$', faces.profile_image_xml),
     (r'^faces/update/$', faces.update),
-
+    
     url(r'^photos/upload/$', photos.upload, name="upload-photos"),
     (r'^photos/$', photos.all),
-    url(r'^moderation/photos/$', 'zoo.photos.views.moderate', name='moderate-photos'),
-
+    url(r'^moderation/photos/$', 'zoo.photos.views.moderate', 
+        name='moderate-photos'),
+    
     (r'^set-location/$', 'zoo.accounts.views.set_location'),
     (r'^set-location/delete/$', 'zoo.accounts.views.delete_location'),
     url(r'location-complete/$', 'zoo.search.views.location_complete',
         name="location-complete"),
-
+    
     (r'^comments/', include('django.contrib.comments.urls')),
     url(r'^feedback/$', 'zoo.feedback.views.submit', name='feedback'),
-
+    
     # Django built-in admin
     (r'^admin/(.*)', admin.site.root),
-
+    
     # Databrowse
     (r'^databrowse/(.*)', databrowse.site.root),
-
+    
     url(r'^animals/$', 'zoo.animals.views.all_species',
         name='all-species'),
     url(r'^animals/all\.xml$', 'zoo.animals.views.species_xml',
         name='species-xml'),
     url(r'^animals/(?P<slug>[^/]+)/$', 'zoo.animals.views.species',
         name='species'),
-    url(r'^animals/(?P<slug>[^/]+)/spotters/$', 'zoo.animals.views.species_spotters',
+    url(r'^animals/(?P<slug>[^/]+)/spotters/$', 
+        'zoo.animals.views.species_spotters',
         name='species-spotters'),
-
-    url(r'^favourite/(?P<action>add|remove)/$', 'zoo.favourites.views.handle_favourite',
+    
+    url(r'^favourite/(?P<action>add|remove)/$', 
+        'zoo.favourites.views.handle_favourite',
         name='favourite-species'),
-
+    
     url(r'^latin/$', 'zoo.animals.views.all_species_latin',
         name='all-species-latin'),
-    url(r'^latin/(?P<latin_name>[^/]+)/$', 'zoo.animals.views.species_latin',),
-
+    url(r'^latin/(?P<latin_name>[^/]+)/$', 
+        'zoo.animals.views.species_latin',),
+    
     url(r'^popular/$', 'zoo.favourites.views.hit_parade',
         name='popular'),
-
-    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/$', 'zoo.places.views.place',
+    
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/$', 
+        'zoo.places.views.place',
         name='place'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>.*?)/suggest-changes/$',
         'zoo.places.views.place_edit', name='place-edit'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>.*?)/changes-suggested/$',
         'zoo.places.views.place_edit_done', name='place-edit-done'),
-    url(r'^(?P<country_code>\w{2})/(?P<slug>.*?)/summary/$', 'zoo.places.views.place_summary',
+    url(r'^(?P<country_code>\w{2})/(?P<slug>.*?)/summary/$', 
+        'zoo.places.views.place_summary',
         name='place-summary'),
-
+    
     url(r'^places/$', 'zoo.places.views.all_places',
         name='places'),
     url(r'^places/autocomplete/$', 'zoo.search.views.place_complete',
         name='places-autocomplete'),
-    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animal-checklist/$', 'zoo.places.views.place_animal_checklist',
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animal-checklist/$', 
+        'zoo.places.views.place_animal_checklist',
         name='place-animal-checklist'),
-    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/$', 'zoo.places.views.place_species',
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/$', 
+        'zoo.places.views.place_species',
         name='place-species'),
-    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/(?P<species_slug>[^/]+)/$', 'zoo.places.views.place_species_view',
+    url(r'^(?P<country>\w{2})/(?P<place>[^/]+)/animals/(?P<species>[^/]+)/$',
+        'zoo.places.views.place_species_view',
         name='place-species-view'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/add-trip/$',
         'zoo.trips.views.add_trip',
@@ -232,16 +221,16 @@ urlpatterns = patterns('',
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/add-sightings/$',
         'zoo.trips.views.finish_add_sightings_to_place',
         name='place-add_sightings_to_place'),
-
+    
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/support/$',
         'zoo.places.views.support',
         name='place-support'),    
-
+    
     url(r'^(?P<country_code>\w{2})/$', 'zoo.places.views.country',
         name='country'),
     url(r'^countries/$', 'zoo.places.views.all_countries',
         name='countries'),
-
+    
     url(r'^404/$', direct_to_template, {'template':'404.html'}),
     url(r'^500/$', direct_to_template, {'template':'500.html'}),
 )
@@ -280,7 +269,8 @@ urlpatterns += patterns('',
     
     url(r'^(?P<username>\w+)/tripbook/$', 'zoo.trips.views.tripbook',
         name='tripbook'),
-    url(r'^(?P<username>\w+)/trip/(?P<trip_id>\d+)/$', 'zoo.trips.views.trip_view',
+    url(r'^(?P<username>\w+)/trip/(?P<trip_id>\d+)/$', 
+        'zoo.trips.views.trip_view',
         name='trip-view'),
     url(r'^(?P<username>\w+)/trip/(?P<trip_id>\d+)/edit/$',
         'zoo.trips.views.edit_trip', name='edit-trip'),
@@ -294,5 +284,3 @@ urlpatterns += patterns('',
 urlpatterns += patterns('django.contrib.flatpages.views',
     url(r'^(?P<url>.*)$', 'flatpage', name='flatpage'),
 )
-
-

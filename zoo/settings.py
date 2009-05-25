@@ -8,6 +8,11 @@ DATABASE_ENGINE = 'mysql'
 DATABASE_NAME = 'sedf'
 DATABASE_USER = 'sedf'
 
+# run "python -m smtpd -n -c DebuggingServer localhost:1025" to see outgoing
+# messages dumped to the terminal
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+
 SECRET_KEY = '6p-br^04irwt=+&4dag12(-7_!p4&t=u+h1+#$xrvr0n6=+o^d'
 
 #CACHE_BACKEND = 'db://django_cache'

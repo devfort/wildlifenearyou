@@ -162,11 +162,13 @@ def place_species(request, country_code, slug):
         'species_list': species_list,
     })
 
-def place_species_view(request, country_code, slug, species_slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-    species = get_object_or_404(Species, slug=species_slug)
-    place_species_list = PlaceSpeciesSolelyForLinking.objects.filter(place=place).filter(species=species)
+def place_species_view(request, country, place, species):
+    country = get_object_or_404(Country, country_code=country)
+    place = get_object_or_404(Place, slug=place, country=country)
+    species = get_object_or_404(Species, slug=species)
+    place_species_list = PlaceSpeciesSolelyForLinking.objects.filter(
+        place=place
+    ).filter(species=species)
     if len(place_species_list)==0:
         # auto-create here
         place_species = PlaceSpeciesSolelyForLinking(

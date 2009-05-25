@@ -18,6 +18,7 @@ class RegistrationConsumer(RegistrationConsumer):
     base_template = 'base.html'
     on_complete_url = '/account/complete/'
     trust_root = '/account/'
+    urlname_pattern = 'accounts-%s'
     
     RegistrationForm = CustomRegistrationForm
     
