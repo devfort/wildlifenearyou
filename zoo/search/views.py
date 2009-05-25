@@ -102,6 +102,8 @@ def search_single(request, q, bypass=False):
     users_results = None
     users_results_info = None
     users_results_corrected_q = None
+    suggested_location_name = None
+    lat, lon = None, None
     
     if q:
         results, results_info, results_corrected_q = \
