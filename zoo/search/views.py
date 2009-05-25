@@ -12,15 +12,13 @@ from zoo.search import search_places, search_known_species, search_near, \
 from zoo.trips.models import Sighting
 from zoo.utils import location_from_request
 
+from zoo.search.geocoders import google_geocode, placemaker_geocode
+
 def search_split(request, what, near):
-    # First, let us look up the location
-    locations = search_locations(near)
-    locations = list(locations)
-    if locations:
-        location_used = locations.pop(0)
-        lat, lon = location_used['latlon']
-    else:
-        location_used = None
+    # Look up location using Google geocoder (more likely to return results)
+    name, (lat, lon) = google_geocode(near)
+    if not name:
+        # Treat as a lat/long pair instead, see if that works
         c = Client(settings.XAPIAN_BASE_URL, settings.XAPIAN_PERSONAL_PREFIX)
         result = c.parse_latlong(near)
         if result['ok']:
@@ -59,8 +57,7 @@ def search_split(request, what, near):
     return render(request, 'search/search_split.html', {
         'what': what,
         'near': near,
-        'locations': locations,
-        'location_used': location_used,
+        'location_name': name,
         'results': results,
         'results_info': pformat(results_info),
         'results_corrected_q': results_corrected_q,
@@ -95,7 +92,7 @@ def search_single(request, q, bypass=False):
     m = re.match('(.*?)\s*(?:near|in)\s+(.*)$', q)
     if m and not bypass:
         return search_split(request, *m.groups())
-
+    
     results = None
     results_info = None
     results_corrected_q = None
@@ -105,7 +102,6 @@ def search_single(request, q, bypass=False):
     users_results = None
     users_results_info = None
     users_results_corrected_q = None
-    location_results = None
     
     if q:
         results, results_info, results_corrected_q = \
@@ -116,7 +112,10 @@ def search_single(request, q, bypass=False):
             search_users(q, details=True, default_op=Query.OP_OR)
 
         #near_results = search_near('', q)
-        location_results = search_locations(q, 3)
+        # Did you mean "stuff near X" uses Yahoo! Placemaker - it's much less 
+        # likely to suggest crazy stuff for animal names than Google geocoder
+        suggested_location_name, (lat, lon) = placemaker_geocode(q)
+
         # Annotate results with a special species list that has a flag on 
         # any species which came up in the species results as well
         for result in results:
@@ -138,14 +137,15 @@ def search_single(request, q, bypass=False):
         'results': results,
         'results_info': pformat(results_info),
         'results_corrected_q': results_corrected_q,
-        'species_results': species_results[:5],
+        'species_results': (species_results or [])[:5],
         'species_results_info': pformat(species_results_info),
         'species_results_corrected_q': species_results_corrected_q,
-        'species_results_more': len(species_results)>5,
+        'species_results_more': len(species_results or [])>5,
         'users_results': users_results,
         'users_results_info': pformat(users_results_info),
         'users_results_corrected_q': users_results_corrected_q,
-        'location_results': location_results,
+        'suggested_location_name': suggested_location_name,
+        'suggested_lat_lon': '%s,%s' % (lat, lon)
     })
 
 def search(request):

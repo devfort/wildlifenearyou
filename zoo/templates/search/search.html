@@ -32,11 +32,9 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 
 {% endif %}
 
-{% if location_results %}
+{% if suggested_location_name %}
 <ul>
-	{% for location in location_results %}
-	<li>Did you mean places <a href="/search/?near={{ location.description|urlencode }}">near {{ location.description }}</a>?</li>
-	{% endfor %}
+	<li>Did you mean places <a href="/search/?near={{ suggested_location_name|urlencode }}">near {{ suggested_location_name }}</a>?</li>
 </ul>
 {% endif %}
 

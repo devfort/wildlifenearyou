@@ -25,13 +25,8 @@ or <a href="/search/?near={{ near|urlencode }}">everything near &ldquo;{{ near }
 </p>
 {% endif %}
 
-{% if locations %}
-<p>We are using the location {{ location_used.description }}.</p>
-<ul>
-	{% for location in locations %}
-	<li>Did you mean <a href="/search/?what={{ what|urlencode }};near={{ location.description|urlencode }}">{{ what }} near {{ location.description }}</a>?</li>
-	{% endfor %}
-</ul>
+{% if location_name %}
+<p><strong>{{ what|default:"Everything" }}</strong> near <strong>{{ location_name }}</strong></p>
 {% endif %}
 
 {% if not results %}

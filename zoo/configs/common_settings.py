@@ -158,6 +158,10 @@ RESERVED_USERNAMES = set(
 
 GOOGLE_MAPS_API_KEY = ''
 GOOGLE_ANALYTICS_CODE = ''
+GOOGLE_GEOCODE_API_KEY = 'wildlifenearyou.com'
+# Registered by simonwillison, for www.wildlifenearyou.com
+PLACEMAKER_API_KEY = \
+    'dElrnn3V34EGmyfAgIpBKYa9m35k00NrPz_WyOifWUKfBeCX91hrRA6IPV6o1_X9KrY2Jg--'
 
 # Used solely to display to the user what the file upload limit is;
 # this is actually set in nginx configuration. In bytes.
