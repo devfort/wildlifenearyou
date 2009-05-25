@@ -64,11 +64,13 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'zoo.invitereg.middleware.InviteOnlyMiddleware',        
     'zoo.common.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django_openid.registration.RegistrationConsumer',
     'zoo.common.middleware.Custom403',
     'pagination.middleware.PaginationMiddleware',
+
 ]
 
 ROOT_URLCONF = 'zoo.urls'

@@ -33,6 +33,12 @@ urlpatterns = patterns('',
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
     }),
     
+    # Invitation URL (sent out in invite e-mail)
+    url(r'^invitation/$', 'zoo.invitereg.views.enter_invite_code',
+        name = 'enter-invite-code'
+    ),
+    (r'^invitation/(\w+)/$', 'zoo.invitereg.views.invitation'),
+    
     url(r'^account/register/$', registration_consumer, {
         'rest_of_url': 'register/',
     }, name = 'accounts-register'),
@@ -55,9 +61,6 @@ urlpatterns = patterns('',
     
     # Launch signups POST handler
     (r'^launchsignups/$', 'zoo.launchsignups.views.signup'),
-    
-    # Invitation URL (sent out in invite e-mail)
-    (r'^invitation/(\w+)/$', 'zoo.invitereg.views.invitation'),
     
     # shortcuts
     url(r'^tripbook/$', 'zoo.trips.views.tripbook_default',

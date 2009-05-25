@@ -1,0 +1,18 @@
+{% extends base %}
+
+{% block title %}Enter invite code{% endblock %}
+
+{% block content %}
+<h1>Enter your invite code</h1>
+
+<p>Got an invite code? Enter it here:</p>
+
+<form action="{% url enter-invite-code %}" method="POST">
+<p>
+    <input type="text" name="invite">
+    <input type="submit" value="Submit code">
+</p>
+</form>
+
+<p>Already got an account? <a href="{% url accounts-login %}">Log in here</a>.</p>
+{% endblock %}

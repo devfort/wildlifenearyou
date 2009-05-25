@@ -1,4 +1,5 @@
 from zoo.accounts.openid import RegistrationConsumer
+from zoo.shortcuts import render
 from models import InviteCode
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -36,11 +37,16 @@ class InviteRegistrationConsumer(RegistrationConsumer):
             pass
         return user
 
+def enter_invite_code(request):
+    if request.method == 'POST':
+        return invitation(request, request.POST.get('invite', ''))
+    return render(request, 'invitereg/enter_code.html')
+
 def invitation(request, code):
     try:
         invite_code = InviteCode.objects.get(code = code, claimed = False)
     except InviteCode.DoesNotExist:
-        return HttpResponse('Invalid invitation code')
-    response = HttpResponseRedirect('/account/register/')
+        return render(request, 'invitereg/invalid_code.html')
+    response = HttpResponseRedirect('/')
     response.set_cookie('invite_code', invite_code.code)
     return response
