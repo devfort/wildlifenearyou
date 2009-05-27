@@ -13,7 +13,7 @@ def google_geocode(q):
         })
     ))
     try:
-        lat, lon = json['Placemark'][0]['Point']['coordinates'][:2]
+        lon, lat = json['Placemark'][0]['Point']['coordinates'][:2]
     except KeyError, IndexError:
         return None, (None, None)
     name = json['Placemark'][0]['address']
