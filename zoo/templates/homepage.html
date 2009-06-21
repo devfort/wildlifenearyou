@@ -50,8 +50,6 @@
 						<label for="id_email">e-mail</label>
 						<input id="id_email" type="text" name="email" maxlength="75">
 					</div>
-					<!-- We're thinking we might ask them to set a password
-						AFTER they've validated their e-mail! -->
 					<div class="login-wrapper">
 						<div class="container text-container">
 							<label for="id_password">password</label>
@@ -69,30 +67,35 @@
 					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>
 				</form>
 			</div>
-			<div class="interact" id="login-box" style="display: none;">
+			<div class="interact" id="login-box" style="display:none">
 				<h2>Login now</h2>
-				<p class="meta">Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register</span></a></p>
+				<p>Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register</span></a></p>
 				<form action="/account/login/" method="post">
-					<div class="container text-container">
-						<label for="id_username">username</label>
-						<input id="id_username" type="text" name="username" maxlength="30">
-					</div>
-					<div class="container text-container">
-						<label for="id_password">password</label>
-						<input type="password" name="password" id="id_password">
-					</div>
-					<div class="login-wrapper">
+					<div id="login-with-password">
 						<div class="container text-container">
-							<label for="id_openid_url-login"><strong>or</strong> use OpenID<a href="#what-is-openid2" class="toggler">what is this?</a></label>
+							<label for="id_username">username</label>
+							<input id="id_username" type="text" name="username" maxlength="30">
+						</div>
+						<div class="container text-container">
+							<label for="id_password">password</label>
+							<input type="password" name="password" id="id_password">
+							<p class="meta"><a href="/account/recover/">I've forgotten my password!</a></p>
+						</div>
+						<p>Or <a onclick="$('#login-with-password').hide(); $('#login-with-openid').show(); return false;" href="#login-with-openid">log in with <strong class="openid">OpenID</strong></a></p>
+					</div>
+					<div id="login-with-openid" style="display: none">
+						<div class="container text-container">
+							<label for="id_openid_url-login">OpenID<br><a href="#what-is-openid2" class="toggler">what is this?</a></label>
 							<input type="text" name="openid_url" id="id_openid_url-login" class="openid">
-							<div id="what-is-openid2">
+							<div id="what-is-openid2" style="display:none">
 								<p>OpenID allows you to use the same account on many different websites. Read more at <a href="http://openid.net/">openid.net</a>.</p>
 							</div>
 						</div>
-						
+						<p>Or <a onclick="$('#login-with-openid').hide(); $('#login-with-password').show(); return false;" href="#login-with-password">log in with a username and password</a></p>
 					</div>
-					<p class="meta"><a href="/account/recover/">I've forgotten my password or can't log in!</a></p>
-					<div><input type="submit" class="submit" value="&raquo; Login"></div>
+					<div>
+						<input type="submit" class="submit" value="&raquo; Login">
+					</div>
 				</form>
 			</div>
 			{% endif %}
