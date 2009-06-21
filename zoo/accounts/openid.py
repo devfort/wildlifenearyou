@@ -3,6 +3,7 @@ from django_openid.registration import RegistrationConsumer
 from django_openid.forms import RegistrationForm
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 class CustomRegistrationForm(RegistrationForm):
     extra_required = ('email',) # first/last name are optional
@@ -19,7 +20,12 @@ class RegistrationConsumer(RegistrationConsumer):
     on_complete_url = '/account/complete/'
     trust_root = '/account/'
     urlname_pattern = 'accounts-%s'
-    
+    account_recovery_url = '/account/recover/'
+    unknown_openid_message = mark_safe("""
+        That OpenID is not recognised. Would you like to 
+        <a href="/account/register/">create an account?</a>
+    """.strip())
+
     RegistrationForm = CustomRegistrationForm
     
     def user_can_login(self, request, user):
