@@ -2,6 +2,7 @@ from zoo.accounts.openid import RegistrationConsumer
 from zoo.shortcuts import render
 from models import InviteCode
 from django.http import HttpResponse, HttpResponseRedirect
+import datetime
 
 class InviteRegistrationConsumer(RegistrationConsumer):
     
@@ -20,9 +21,9 @@ class InviteRegistrationConsumer(RegistrationConsumer):
             request, message
         )
     
-    def create_user(self, data, openid=None):
+    def create_user(self, request, data, openid=None):
         user = super(InviteRegistrationConsumer, self).create_user(
-            data, openid
+            request, data, openid
         )
         # ... and mark their invitation code as having been used
         try:
