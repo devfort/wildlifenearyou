@@ -61,6 +61,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = [
+    'common.wsgi_error_middleware.WsgiLogErrors',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -70,7 +71,6 @@ MIDDLEWARE_CLASSES = [
     'django_openid.registration.RegistrationConsumer',
     'zoo.common.middleware.Custom403',
     'pagination.middleware.PaginationMiddleware',
-
 ]
 
 ROOT_URLCONF = 'zoo.urls'
