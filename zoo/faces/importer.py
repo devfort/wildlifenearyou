@@ -61,7 +61,7 @@ def import_faceparts(filepath = IMPORT_FROM):
     for area in areas:
         facearea, created = FaceArea.objects.get_or_create(
             name = area['name'],
-            defaults = {'plural': area['name'] + 's', 'description': ''}
+            defaults = {'description': ''}
         )
         # Now find and save all the parts in that facearea
         to_add = []
