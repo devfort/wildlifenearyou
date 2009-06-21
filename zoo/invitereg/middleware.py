@@ -5,6 +5,7 @@ class InviteOnlyMiddleware(object):
     allowed_paths = (
         '/account/login/',
         '/account/complete/',
+        '/account/recover/',
         '/account/login/logo/',
         '/launchsignups/',
     )
@@ -13,6 +14,7 @@ class InviteOnlyMiddleware(object):
         '/feedback/',
         '/invitation/',
         '/admin/',
+        '/account/r/',
     )
     
     def process_request(self, request):
