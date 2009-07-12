@@ -114,11 +114,11 @@ class Species(AbstractSpecies):
                     'store': True,
                     'freetext': {'language': 'en'}
                 },
-            }, { # Searching for the place address.
+            }, { # Latin name.
                 'field_name': 'latin_name',
                 'django_fields': ['latin_name'],
                 'config': {'store': True},
-            }, { # Searching for the place address.
+            }, { # Description of species.
                 'field_name': 'description',
                 'django_fields': ['description'],
                 'config': {'freetext': {'language': 'en'}},
