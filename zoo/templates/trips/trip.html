@@ -100,6 +100,8 @@
 
 		<!-- TODO: Users should see their OWN photos even if they have not 
 			yet been moderated, with a visual indication of this e.g. red border
+			(note: this is debatable, and currently the weight of opinion is in favour
+			of not giving trolls an indication that we know they're trolling - sja)
 		-->
 		{% with visible_photos.count as visible_photo_count %}
 			{% if visible_photo_count %}
