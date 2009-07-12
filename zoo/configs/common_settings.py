@@ -166,3 +166,6 @@ PLACEMAKER_API_KEY = \
 # Used solely to display to the user what the file upload limit is;
 # this is actually set in nginx configuration. In bytes.
 FILE_UPLOAD_SIZE_LIMIT = 2*1024*1024
+
+# Used by zoo.utils.make_absolute_url to get the right netloc.
+HTTP_PORT = 8000

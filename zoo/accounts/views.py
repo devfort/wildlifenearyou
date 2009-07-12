@@ -15,6 +15,7 @@ from zoo.animals.models import Species
 from zoo.accounts.forms import RegistrationForm, OurAuthenticationForm, ProfileEditForm, UserEditProfileBitsForm
 from zoo.search import nearest_places_with_species
 from zoo.photos.views import filter_visible_photos
+from zoo.utils import make_absolute_url as absurl
 
 def login(request, template_name='registration/login.html', redirect_field_name=REDIRECT_FIELD_NAME):
     if request.user.is_authenticated():
@@ -217,7 +218,7 @@ def invite_friends(request):
     if request.method=='POST':
         email = request.POST.get('email', None)
         name = request.POST.get('name', '')
-        ref = request.POST.get('link', '')
+        ref = absurl(request.POST.get('link', ''))
 
         if name:
             rcpt = name
@@ -226,7 +227,6 @@ def invite_friends(request):
 
         try:
             if email:
-                # FIXME: link is relative not absolute
                 request.user.get_profile().send_invitation_email(to_name=name, to_email=email, link=ref)
                 msg = u"Invitation sent to %s" % rcpt
         except Exception, e:
@@ -235,11 +235,10 @@ def invite_friends(request):
             else:
                 msg = u"An error occurred while sending an invitation to %s." % (rcpt,)
     elif request.method=='GET':
-        ref = request.GET.get('link', '')
-    # FIXME: sample email renders with url/link as relative not absolute
+        ref = absurl(request.GET.get('link', ''))
     return render(request, 'accounts/invite_friends.html', {
         'msg': msg,
-        'url': reverse('homepage'),
+        'url': absurl(reverse('homepage')),
         'to_name': 'friend',
         'link': ref,
         })

@@ -14,6 +14,7 @@ from django.utils.safestring import mark_safe
 
 import zoo.utils
 from zoo.utils import attrproperty
+from zoo.utils import make_absolute_url as absurl
 from zoo.trips.models import Trip, Sighting
 from zoo.animals.models import Species
 from zoo.common.models import AuditedModel
@@ -152,8 +153,8 @@ class Profile(models.Model):
                         {'user': self.user,
                          'to_name': to_name,
                          'to_email': to_email,
-                         'url': reverse('homepage'),
-                         'link': ref,
+                         'url': absurl(reverse('homepage')),
+                         'link': absurl(ref),
                          },
                          to_email)
     send_invitation_email.alters_data = True
@@ -179,15 +180,21 @@ class Profile(models.Model):
 
     def email_validation_url_for_user(self):
         (hash, days) = self._generate_user_hash(self.user.username)
-        return reverse('validate-email',
-                       args=(self.user.username.lower(), days, hash,)
-                       )
+        return absurl(
+            reverse(
+                'validate-email',
+                args=(self.user.username.lower(), days, hash,)
+            )
+        )
 
     def password_key_url_for_user(self):
         (hash, days) = self._generate_user_hash(self.user.username)
-        return reverse('recover-password',
-                       args=(self.user.username.lower(), days, hash,)
-                       )
+        return absurl(
+            reverse(
+                'recover-password',
+                args=(self.user.username.lower(), days, hash,)
+            )
+        )
 
     def hash_is_valid(self, days, hash):
         if md5.new(settings.SECRET_KEY + days + self.user.username).hexdigest() != hash:

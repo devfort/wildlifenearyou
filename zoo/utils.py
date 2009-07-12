@@ -1,5 +1,37 @@
-import datetime, md5
+import datetime, md5, urlparse
 from django.conf import settings
+from django.contrib.sites.models import Site
+
+def make_absolute_url(relative_url, use_https=False, port=None):
+    """Look up the hostname of the running site (we only have one) and construct an absolute URL."""
+    site = Site.objects.all()[0] # there can be only one.
+    if use_https:
+        default_port = 443
+        if not port:
+            port = default_port
+    else:
+        default_port = 80
+    if not port:
+        port = settings.HTTP_PORT
+    if port and port!=default_port:
+        netloc = "%s:%i" % (site.domain, port,)
+    else:
+        netloc = site.domain
+    url_bits = [
+        'http',
+        netloc,
+        None,
+        None,
+        None,
+        None,
+    ]
+    if use_https:
+        url_bits[0] = 'https'
+    base_url = "%s://%s/" % (url_bits[0], url_bits[1])
+    return urlparse.urljoin(
+        base_url,
+        relative_url
+    )
 
 def attrproperty(getter_function):
     ''' usage:
