@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect as Redirect
+from django.http import HttpResponseRedirect as Redirect, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import DotExpandedDict
 from django import forms
@@ -89,6 +89,11 @@ def pick_sightings(request, redirect_to):
     
     If called with no arguments, starts off with an empty "I saw" form
     
+    Additionally, if you include a `trip` parameter in the query string, that's
+    the id of the trip we'll add to directly; this just gets passed through to
+    
+    (This is an ugly implementation in terms of URLs, but was the easiest.)
+    
     """
     if request.GET.getlist('saw'):
         # Convert ?saw= arguments to ?saw.1.s= type things
@@ -122,13 +127,20 @@ def pick_sightings(request, redirect_to):
     # Are we done yet? The aim is for every key to have a valid option 
     # provided that isn't 'search-again'.
     if saw and is_valid_saw_list(saw.values()):
-        return Redirect(redirect_to + '?' + '&'.join([
+        next_vars = [
             urllib.urlencode({
                 'saw': d['o'] == 'as-is' and d.get('s') or d['o']
             })
             for d in saw.values()
             if d.get('s') and (d['o'] != 'cancel')
-        ]))
+        ]
+        if request.GET.get('trip', None):
+            next_vars.append(
+                urllib.urlencode({
+                    'trip': request.GET['trip']
+                })
+            )
+        return Redirect(redirect_to + '?' + '&'.join(next_vars))
     
     # We aren't done, so we need to build up all of the information required
     # to construct our big form full of options, search results etc
@@ -180,6 +192,7 @@ def pick_sightings(request, redirect_to):
         'sections': sections,
         'redirect_to': redirect_to,
         'bonus_label_id': section_id,
+        'trip_id': request.GET.get('trip', None),
     })
 
 def is_valid_saw_list(saw_list):
@@ -205,6 +218,15 @@ def finish_add_sightings_to_place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
     place = get_object_or_404(Place, slug=slug, country=country)
     saw_ids = request.REQUEST.getlist('saw')
+    trip_id = request.REQUEST.get('trip', None)
+    if trip_id:
+        trip = get_object_or_404(Trip, pk=trip_id)
+        if request.user.is_anonymous() or request.user != trip.created_by:
+            # somehow they ended up trying to add something to a trip they didn't own
+            return HttpResponseForbidden()
+    else:
+        trip = None
+        
     hiddens = []
     for saw_id in saw_ids:
         hiddens.append(
@@ -238,28 +260,32 @@ def finish_add_sightings_to_place(request, country_code, slug):
                         note = note
                     )
             return Redirect(place.get_absolute_url())
-        
-        form = AddTripForm(
-            request.POST, initial = {'place': place}, user = request.user,
-            place = place
-        )
-        if form.is_valid():
-            if request.POST.get('add-to-existing'):
-                # if the user chose this option they want to add this sighting to an existing trip of theirs
-                trip = Trip.objects.get(id=form.cleaned_data['user_trips'])
-            else:
-                # create a new trip
-                trip = Trip(
-                    name = form.cleaned_data['name'],
-                    start = form.cleaned_data['start'],
-                    start_accuracy = form.cleaned_data['start_accuracy'],
-                    description = form.cleaned_data['description'],
-                    rating = form.cleaned_data['rating'],
-                    place = place,
-                )
-                trip.save()
-                # created_by should happen automatically
-            
+
+        # if we don't have a trip yet, create or find one via AddTripForm
+        if not trip:
+            form = AddTripForm(
+                request.POST, initial = {'place': place}, user = request.user,
+                place = place
+            )
+            if form.is_valid():
+                if request.POST.get('add-to-existing'):
+                    # if the user chose this option they want to add this sighting to an existing trip of theirs
+                    trip = Trip.objects.get(id=form.cleaned_data['user_trips'])
+                else:
+                    # create a new trip
+                    trip = Trip(
+                        name = form.cleaned_data['name'],
+                        start = form.cleaned_data['start'],
+                        start_accuracy = form.cleaned_data['start_accuracy'],
+                        description = form.cleaned_data['description'],
+                        rating = form.cleaned_data['rating'],
+                        place = place,
+                    )
+                    trip.save()
+                    # created_by should happen automatically
+
+        # by now we should have a trip. If not, then it probably means the form was invalid
+        if trip:    
             # Now we finally add the sightings!
             for i, id in enumerate(saw_ids):
                 # Look up the id
@@ -282,8 +308,7 @@ def finish_add_sightings_to_place(request, country_code, slug):
                 # sightings
             
             return Redirect(trip.get_absolute_url())
-        
-    else:
+    elif not trip:
         # We pre-populate the name
         if not request.user.first_name:
             whos_trip = 'My'
@@ -298,16 +323,26 @@ def finish_add_sightings_to_place(request, country_code, slug):
             initial = {'name': whos_trip, 'place': place},
             user = request.user, place = place
         )
-
-    tcount = request.user.created_trip_set.all().filter(place=place).count()
     
-    return render(request, 'trips/why-not-add-to-your-tripbook.html', {
-        'hiddens': hiddens,
-        'place': place,
-        'form': form,
-        'tcount': tcount,
-        'sightings': sightings,
-    })
+    if trip_id:
+        if len(sightings)==0:
+            # no sightings to add, so just redirect to the trip
+            return Redirect(trip.urls.absolute)
+        return render(request, 'trips/confirm-add-to-trip.html', {
+            'hiddens': hiddens,
+            'place': place,
+            'sightings': sightings,
+            'trip': trip,
+        })
+    else:
+        tcount = request.user.created_trip_set.all().filter(place=place).count()
+        return render(request, 'trips/why-not-add-to-your-tripbook.html', {
+            'hiddens': hiddens,
+            'place': place,
+            'form': form,
+            'tcount': tcount,
+            'sightings': sightings,
+        })
 
 class TripForm(forms.ModelForm):
     class Meta:
@@ -491,7 +526,32 @@ def edit_trip(request, username, trip_id):
                 trip2.end = trip.start
             trip2.save()
             sightings_formset.save()
-            return Redirect(reverse('trip-view', args=(username, trip_id,)))
+            
+            # we need to make a dictionary of all POST variables starting 'saw.' since these
+            # are generated by the inline sightings-to-add-to-this-trip bit (whether in script
+            # or noscript mode).
+            #
+            # We only bother using this (via the pick sightings for given place view) if there's
+            # actual data in there (so the default blank couple of input boxes doesn't excite us).
+            next_vars = {}
+            add_sightings = False
+            for k in request.POST.keys():
+                if k.startswith('saw.'):
+                    next_vars[k] = request.POST[k]
+                    if next_vars[k]:
+                        add_sightings = True
+            if add_sightings:
+                next_vars['trip'] = trip2.pk
+                return Redirect(
+                    reverse(
+                        'place-pick_sightings_for_place',
+                        args=(trip2.place.country.country_code, trip2.place.slug,)
+                    ) + '?' + urllib.urlencode(
+                        next_vars
+                    )
+                )
+            else:
+                return Redirect(reverse('trip-view', args=(username, trip_id,)))
     else:
         form = EditTripForm(instance=trip)
         sightings_formset = SightingFormSet(instance = trip)

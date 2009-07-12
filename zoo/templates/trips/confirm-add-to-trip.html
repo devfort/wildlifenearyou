@@ -1,0 +1,55 @@
+{% extends base %}
+
+{% block title %}Confirm new sightings on {{ trip }}{% endblock %}
+
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/star-select-replace.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<h1>Confirm new sightings on {{ trip }}</h1>
+
+<form action="{{ request.path }}" method="POST">
+
+<div class="primary">
+
+<div class="container">
+{% if sightings %}
+
+<h2>Animals seen</h2>
+<ul>
+{% for sighting in sightings %}
+	<li><strong>{% if sighting.urls.absolute %}<a href="{{ sighting.urls.absolute }}">{{ sighting.common_name }}</a>{% else %}{{ sighting }}{% endif %}</strong> (optionally add a note)
+	<p>
+	<textarea name="sighting_note_{{ forloop.counter0 }}" cols="40" rows="2"></textarea>
+	</p>
+	</li>
+{% endfor %}
+</ul>
+
+{% else %}
+
+<h2>No animals seen</h2>
+
+<p>If you hit the button, you'll add no sightings to your trip. You should never get to this state; sorry!</p>
+
+{% endif %}
+
+
+{% for hidden in hiddens %}
+	<input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
+{% endfor %}
+<input type='hidden' name='trip' value='{{ trip.id }}'>
+
+</div>
+
+<div class="container">
+	<input type="submit" name="save-trip" value="Save new sightings">
+</div>
+
+</div>
+
+</form>
+
+{% endblock %}

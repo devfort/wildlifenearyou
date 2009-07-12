@@ -35,6 +35,9 @@ ul li { list-style-type: none; }
 {% for hidden in hiddens %}
 <input type="hidden" name="{{ hidden.name }}" value="{{ hidden.value }}">
 {% endfor %}
+{% if trip_id %}
+<input type='hidden' name='trip' value='{{ trip_id }}'>
+{% endif %}
 </p>
 </form>
 

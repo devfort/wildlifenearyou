@@ -15,9 +15,14 @@ function unusedSawId() {
 }
 
 jQuery(function($) {
+        var form_in_container = false;
+        
+        if ($('.see-more-animals form').length > 0) {
+                form_in_container = true;
+        }
 	
 	function ensureFirstContainerUsesISawA(form) {
-		form.find('div.container:first').find(
+		$('.see-more-animals div.container:first').find(
 			'strong.label:first,label:first'
 		).text('I saw a');
 	}
@@ -36,7 +41,8 @@ jQuery(function($) {
 			'name': 'saw.' + unused_id + '.s'
 		}).removeClass('is-setup');
 		and_a.find('label').attr('for', 'saw_' + unused_id);
-		and_a.insertBefore('.see-more-animals :submit:last');
+		//and_a.insertBefore('.see-more-animals :submit:last');
+		and_a.insertAfter('.see-more-animals .and-a:last');
 		setupSawBoxes();
 	}
 	function setupSawBoxes() {
@@ -90,7 +96,7 @@ jQuery(function($) {
 						'span'
 					).remove().end().text());
 					div.remove();
-					var container = input.parents('div.container');
+					var container = $(input.parents('div.container')[0]);
 					var ltext = container.find('label').text();
 					var inputname = input.attr('name');
 					var hiddenname = inputname.replace('.s', '.o');
@@ -178,22 +184,31 @@ jQuery(function($) {
 	setupSawBoxes();
 	addAnotherBoxIfNeeded();
 	
+        // Find the form we need to submit for these controls
+        var which_form;
+	if (form_in_container) {
+	        which_form = $('div.see-more-animals form')[0];
+        } else {
+                which_form = $('.see-more-animals').parents('form')[0];
+        }
+
 	// Since we're using autocomplete, the form should not submit unless the 
 	// button is directly clicked.
-	$('div.see-more-animals form').submit(function() {
-		return false;
-	});
+	$(which_form).submit(function() {
+	        return false;
+        })
+        
 	// Problem: if you hit "enter" in one of the fields, Firefox fires the 
 	// click() event on the first submit button in the form. So, to create 
 	// a submit button that can be clicked to submit the form WITHOUT it 
 	// being magically clicked when you hit enter inside another field, you 
 	// need to clone the original submit button, hide it and set up the 
 	// click behaviour on that clone. Crazy but it works.
-	var submit = $('div.see-more-animals :submit');
+	var submit = $(which_form).find(':submit');
 	var submit2 = submit.clone();
 	submit2.insertAfter(submit);
 	submit.hide();
-	submit2.click(function() {
-		$('div.see-more-animals form')[0].submit();
-	});
+        submit2.click(function() {
+	        which_form.submit();
+        });
 });
