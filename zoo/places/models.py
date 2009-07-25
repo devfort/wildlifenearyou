@@ -75,8 +75,8 @@ class Place(AuditedModel):
     
     #mapping stuff - and Grid Ref for reserves
     gridref = models.CharField(max_length=8, null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
-    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True)
+    latitude = models.FloatField(null=True)
     
     # We can (optionally) editorially select a photo to be featured for this place
     chosen_photo = models.ForeignKey('photos.Photo', null=True, blank=True, related_name='place_we_feature_for')
