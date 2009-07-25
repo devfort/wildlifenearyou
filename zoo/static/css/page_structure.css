@@ -16,6 +16,9 @@
 	background-repeat: repeat-x;
 	background-position: left bottom;
 }
+.header div {
+	text-align: right;
+}
 .header .contents {
 	padding-top: 1.5em;
 	padding-bottom: 2em;

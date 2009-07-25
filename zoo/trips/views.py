@@ -634,6 +634,12 @@ class AddPlaceForm(forms.ModelForm):
         self.fields['zip'].label = 'Postal code / ZIP'
         for key in ('address_line_1', 'address_line_2'):
             self.fields[key].widget.attrs['size'] = 30
+        # Ugly workaround to set custom empty_label
+        from django.forms.models import ModelChoiceField
+        self.fields['country'] = ModelChoiceField(
+            self.fields['country'].queryset,
+            empty_label = u'-- please choose a country --'
+        )
         self.fields.keyOrder = self.Meta.fields
     
     class Meta:
@@ -647,7 +653,7 @@ from zoo.search import search_species
 def autocomplete_species(request, place_id):
     place = get_object_or_404(Place, pk = place_id)
     q = request.GET.get('q', '')
-    results = list(search_species(q))
+    results = list(search_species(q, 30))
     # We're going to build three groups - species that have been sighted at 
     # this place, species that have been sighted somewhere else, and species 
     # that have not been sighted at all.

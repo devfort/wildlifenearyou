@@ -15,7 +15,7 @@ var accuracyToZoomLevel = [
 
 jQuery(window).load(function() {
 	var $ = jQuery;
-	var mapwrapper = $('<div />').css('position', 'relative');
+	var mapwrapper = $('<div class="gmap" />').css('position', 'relative');
 	var mapdiv = $('<div />').css({
 		width: '100%',
 		height: '300px'
@@ -34,10 +34,11 @@ jQuery(window).load(function() {
 	});
 	mapwrapper.append(mapdiv);
 	mapwrapper.append(crosshair);
-	$('fieldset#location div:first').before(mapwrapper);
+	$('#id_latitude').parent().before(mapwrapper);
 	window.gmap = new GMap2(mapdiv[0]);
-	gmap.addControl(new GLargeMapControl());
+	gmap.addControl(new GSmallMapControl());
 	gmap.addControl(new GMapTypeControl());
+	//gmap.enableGoogleBar();
 	gmap.setMapType(G_NORMAL_MAP);
 	gmap.setCenter(new GLatLng(44.08758, -21.796875), 2);
 	GEvent.addListener(gmap, 'move', function() {
@@ -69,69 +70,69 @@ jQuery(window).load(function() {
 	});
 });
 </script>
-<form action="/add-trip/add-place/" method="POST">
-<fieldset><legend>Required fields</legend>
-<div>
-	{{ form.known_as.errors }}
-	<label for="id_{{ form.known_as.html_name }}">Name of the place</label>
-	{{ form.known_as }}
-</div>
-<div>
-	{{ form.country.errors }}
-	<label for="id_{{ form.country.html_name }}">{{ form.country.label }}</label>
-	{{ form.country }}
-</div>
-</fieldset>
-<fieldset id="location"><legend>Location (required)</legend>
-<div>
-	{{ form.latitude.errors }}
-	<label for="id_{{ form.latitude.html_name }}">{{ form.latitude.label }}</label>
-	{{ form.latitude }}
-</div>
-<div>
-	{{ form.longitude.errors }}
-	<label for="id_{{ form.longitude.html_name }}">{{ form.longitude.label }}</label>
-	{{ form.longitude }}
-</div>
-</fieldset>
-<fieldset><legend>Contact details (optional)</legend>
-<div>
-	{{ form.phone.errors }}
-	<label for="id_{{ form.phone.html_name }}">Phone number</label>
-	{{ form.phone }}
-</div>
-<div>
-	{{ form.url.errors }}
-	<label for="id_{{ form.url.html_name }}">{{ form.url.label }}</label>
-	{{ form.url }}
-</div>
-</fieldset>
-<fieldset><legend>Address (optional)</legend>
-<div>
-	{{ form.address_line_1.errors }}
-	<label for="id_{{ form.address_line_1.html_name }}">{{ form.address_line_1.label }}</label>
-	{{ form.address_line_1 }}
-</div>
-<div>
-	{{ form.address_line_2.errors }}
-	<label for="id_{{ form.address_line_2.html_name }}">{{ form.address_line_2.label }}</label>
-	{{ form.address_line_2 }}
-</div>
-<div>
-	{{ form.town.errors }}
-	<label for="id_{{ form.town.html_name }}">{{ form.town.label }}</label>
-	{{ form.town }}
-</div>
-<div>
-	{{ form.state.errors }}
-	<label for="id_{{ form.state.html_name }}">{{ form.state.label }}</label>
-	{{ form.state }}
-</div>
-<div>
-	{{ form.zip.errors }}
-	<label for="id_{{ form.zip.html_name }}">{{ form.zip.label }}</label>
-	{{ form.zip }}
-</div>
-</fieldset>
-	<p><input type="submit" value="Add place"></p>
+<form action="/add-trip/add-place/" method="post" class="place">
+	<div class="required text-container container">
+		<label for="id_{{ form.known_as.html_name }}">Name of the place <img src="/static/img/icons/required_white.gif" alt="Required" title="Required"></label>
+		{{ form.known_as.errors }}
+		{{ form.known_as }}
+	</div>
+	<div class="location">
+		<div class="required select-container container country">
+			<label for="id_{{ form.country.html_name }}">{{ form.country.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+			{{ form.country.errors }}
+			{{ form.country }}
+		</div>
+		<div class="required text-container container">
+			<label for="id_{{ form.latitude.html_name }}">{{ form.latitude.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+			{{ form.latitude.errors }}
+			{{ form.latitude }}
+		</div>
+		<div class="required text-container container">
+			<label for="id_{{ form.longitude.html_name }}">{{ form.longitude.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+			{{ form.longitude.errors }}
+			{{ form.longitude }}
+		</div>
+	</div>
+	<div class="contact">
+		<div class="text-container container">
+			<label for="id_{{ form.phone.html_name }}">Phone number</label>
+			{{ form.phone.errors }}
+			{{ form.phone }}
+		</div>
+		<div class="text-container container">
+			<label for="id_{{ form.url.html_name }}">{{ form.url.label }}</label>
+			{{ form.url.errors }}
+			{{ form.url }}
+		</div>
+	</div>
+	<div class="address">
+		<div class="text-container container">
+			<label for="id_{{ form.address_line_1.html_name }}">{{ form.address_line_1.label }}</label>
+			{{ form.address_line_1.errors }}
+			{{ form.address_line_1 }}
+		</div>
+		<div class="text-container container">
+			<label for="id_{{ form.address_line_2.html_name }}">{{ form.address_line_2.label }}</label>
+			{{ form.address_line_2.errors }}
+			{{ form.address_line_2 }}
+		</div>
+		<div class="text-container container">
+			<label for="id_{{ form.town.html_name }}">{{ form.town.label }}</label>
+			{{ form.town.errors }}
+			{{ form.town }}
+		</div>
+		<div class="text-container container">
+			<label for="id_{{ form.state.html_name }}">{{ form.state.label }}</label>
+			{{ form.state.errors }}
+			{{ form.state }}
+		</div>
+		<div class="text-container container">
+			<label for="id_{{ form.zip.html_name }}">{{ form.zip.label }}</label>
+			{{ form.zip.errors }}
+			{{ form.zip }}
+		</div>
+	</div>
+	<div class="button-container container">
+		<input type="submit" value="Add place">
+	</div>
 </form>

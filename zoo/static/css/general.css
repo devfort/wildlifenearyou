@@ -74,6 +74,9 @@ body {
 	text-align: center;
 	-moz-opacity: 0.999999; /* Fix boldness glitch in Firefox */
 }
+body div {
+	text-align: left;
+}
 
 /* @group Links */
 

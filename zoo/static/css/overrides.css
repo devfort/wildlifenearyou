@@ -260,3 +260,44 @@
 /* @end */
 
 /* @end */
+
+/* @group Add place form */
+
+form.place .location {
+	background-color: #E2F1F9;
+	padding: 1em;
+	overflow: hidden;
+	margin-bottom: 1em;
+	zoom: 1;
+}
+form.place .gmap {
+	clear: both;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+form.place .contact {
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 1em;
+}
+form.place .location .container {
+	float: left;
+	width: 46%;
+	margin: 0;
+}
+
+form.place .location .country {
+	margin-bottom: 1em;
+	float: none;
+	clear: both;
+	width: 100%;
+}
+
+form.place .contact .container {
+	float: left;
+	width: 46%;
+	margin-top: 1em;
+	margin-bottom: 0;
+}
+
+/* @end */
