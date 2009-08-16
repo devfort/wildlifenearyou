@@ -3,14 +3,18 @@
 {% block title %}Add a trip to {{ place }}{% endblock %}
 
 {% block extra_head %}
-<script type="text/javascript">var PLACE_ID = {{ place.id }};</script>
-<script type="text/javascript" src="/static/js/i-saw-and-a.js"></script>
+
 {% endblock %}
 
-{% block content %}
+{% block content_title %}
+<h1>What did you see at <a href="{{ place.get_absolute_url }}">{{ place }}</a>?</h1>
+<form action="{{ request_path }}" method="post">
 
-<h1>What did you see at {{ place }}?</h1>
+{% endblock %}
 
+{% block primary_content %}
+
+<!--
 <div class="see-more-animals highlight"><a name="addsightings"></a>
 	<form action="../pick-sightings/" method="GET">
 		<div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1"></div>
@@ -18,5 +22,112 @@
 		<div><input type="submit" value="Add my animals"></div>
 	</form>
 </div>
+-->
+    <p>I saw a <input type="text" name="q" value="{{ q }}"> <input type="submit" value="Search"></p>
+    
+    <div id="results">
+    
+    {% if q and not results %}
+    <p>No matching species found for "{{ q }}"</p>
+    {% endif %}
+    
+    {% if results %}
+    <h2>Which of these was it?</h2>
+    
+	<ul class="animal-list">
+	    
+    {% for result in results %}
+    
+        <li>
+    	{% if result.obj %}
+    	{% with result.obj as species %}
+    			<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+    			<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+    			<p><i class="scientific">{{ species.latin_name }}</i></p>
+    	{% endwith %}
+    	{% else %}
+    			<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail"></div>
+    			<p><span class="animal-name">{{ result.name }}</span></p>
+    			{% if result.scientific_name %}
+    			    <p><i class="scientific">{{ result.scientific_name }}</i></p>
+    			{% endif %}
+    	{% endif %}
+    	<input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
+    	</li>
+    <!--
+        <li{% if forloop.first %} class="first"{% endif %}>
+            
+             <input type="image" src="/static/img/icons/add.gif" name="add_selected_{{ forloop.counter0 }}">        
+                <a href="#">{{ result.name }} <em>{{ result.scientific_name|default:"" }}</em>
+                {% if result.alias %}
+                    <small>Also known as
+                    {% for a in result.alias %}
+                        "{{ a }}"{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </small>
+                {% endif %}
+                </a>
+                <input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
+        </li>
+    -->
+        <!-- 
+        <input type="image" src="/static/img/icons/add.gif" name="add_selected_{{ forloop.counter0 }}">        
+        {{ result.name }} <em>{{ result.scientific_name|default:"" }}</em>
+        {% if result.alias %}
+            <small>Also known as
+            {% for a in result.alias %}
+                "{{ a }}"{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </small>
+        {% endif %}
+        <input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
+        <br>
+        -->
+    {% endfor %}
+    </ul>
+    
+    {% endif %}
+    
+    {% if q %}
+    <input type="hidden" name="add_unknown_text" value="{{ q }}">
+    Or <input type="submit" name="add_unknown" value="just add &quot;{{ q }}&quot;"> as an unknown species.
+    {% endif %}
+    
+    </div>
+    
+    {% comment %}
+    <pre>{{ debug }}</pre>
+    {% endcomment %}
+    
+{% endblock %}
 
+{% block secondary_content %}
+
+{% if selected_details or unknowns %}
+    <h2>Species you saw:</h2>
+    {% for item in selected_details %}
+        <input type="image" src="/static/img/icons/cancel.png" name="remove_selected_{{ forloop.counter0 }}">
+        {{ item.name }}
+        <input type="hidden" name="selected_{{ forloop.counter0 }}" value="{{ item.id }}">
+        <br>
+    {% endfor %}
+    {% if unknowns %}<hr>{% endif %}
+    {% for name in unknowns %}
+        <input type="image" src="/static/img/icons/cancel.png" name="remove_unknown_{{ forloop.counter0 }}">
+        {{ name }} <em>Unknown species</em>
+        <input type="hidden" name="unknown_{{ forloop.counter0 }}" value="{{ name }}">
+        <br>
+    {% endfor %}
+    <p>
+        <input type="submit" name="finish" value="Finish adding this trip">
+    </p>
+{% else %}
+    <p>You need to add some species before you can save your trip.</p>
+{% endif %}
+
+{% endblock %}
+
+{% block after_content %}
+    </form>
+    
 {% endblock %}

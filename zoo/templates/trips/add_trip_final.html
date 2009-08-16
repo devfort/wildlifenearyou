@@ -1,0 +1,121 @@
+{% extends base %}
+
+{% block title %}Add your sightings{% endblock %}
+
+{% block extra_head %}
+<script type="text/javascript" src="/static/js/star-select-replace.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<h1>Tell us about your trip</h1>
+
+<form action="{{ request_path }}" method="POST">
+
+<div class="primary">
+
+<h2>Save these sightings as a new trip</h2>
+<div class="container text-container">
+	{{ form.name.errors }}
+	<label for="id_name">Title</label>
+	{{ form.name }}
+	to {{ place }}
+	<p class="meta">(e.g. '2nd trip', 'Family outing'... use titles to differentiate trips to the same place)</p>
+</div>
+<div class="container text-container">
+	{{ form.start.errors }}
+	<label for="id_start">Date of trip</label>
+	{{ form.start }}
+	<p class="meta">(optional, as accurate as you can remember; e.g. &ldquo;13/4/2007&rdquo;, &ldquo;May 2008&rdquo;, &ldquo;2005&rdquo;)</p>
+</div>
+<div class="container textarea-container">
+	{{ form.description.errors }}
+	{{ form.description.label_tag }}
+	{{ form.description }}
+	<p class="meta">(optional)</p>
+</div>
+<div class="select-container container">
+	<label for="rating">Your rating for this trip:</label>
+	<select id="rating" name="rating">
+		<option></option>
+		<option value="1" class="worst">*</option>
+		<option value="2" class="bad">**</option>
+		<option value="3" class="fair">***</option>
+		<option value="4" class="good">****</option>
+		<option value="5" class="best">*****</option>
+	</select>
+	<p class="meta">(optional, one star is worst, five stars is best)</p>
+</div>
+
+<div class="container">
+{% if selected or unknowns %}
+
+<h2>Animals seen</h2>
+<ul>
+{% for detail in selected_details %}
+	<li><strong>{% if detail.obj %}<a href="{{ detail.obj.urls.absolute }}">{{ detail.obj.common_name }}</a>{% else %}{{ detail.name }}{% endif %}</strong> (optionally add a note)
+	    <p>
+	        <textarea name="selected_note_{{ forloop.counter0 }}" cols="40" rows="2"></textarea>
+	        <input type="hidden" name="selected_{{ forloop.counter0 }}" value="{{ detail.id }}">
+	    </p>
+	</li>
+{% endfor %}
+{% for unknown in unknowns %}
+	<li><strong>{{ unknown }}</strong> (optionally add a note)
+	    <p>
+	        <textarea name="unknown_note_{{ forloop.counter0 }}" cols="40" rows="2"></textarea>
+	        <input type="hidden" name="unknown_{{ forloop.counter0 }}" value="{{ unknown }}">
+	    </p>
+	</li>
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<h2>No animals seen</h2>
+
+<p>Is this really what you mean? You're about to create a trip without having seen any animals!</p>
+
+{% endif %}
+
+
+</div>
+
+<div class="container">
+    <input type="hidden" name="add_trip_form_displayed" value="1">
+    <input type="hidden" name="finish" value="1">
+	<input type="submit" name="save-trip" value="Save my trip report">
+</div>
+
+</div>
+
+{% comment %}
+{% ifnotequal tcount 0 %}
+<div class="secondary">
+<h2>Add them to an existing trip</h2>
+	{{ form.user_trips.errors }}
+	<label for="id_user_trips">Your previous trips to {{ place.known_as }}:</label>
+	{{ form.user_trips }}
+	<input type="submit" name="add-to-existing" value="Add sightings to this previous trip">
+</div>
+{% endifnotequal %}
+{% endcomment %}
+
+<!--
+<div class="secondary">
+
+{% if sightings %}
+<h2>Report the sightings but don't save a trip</h2>
+<p class="meta">Use this option if you haven't actually been to the place but know that these animals can be seen there.</p>
+<div class="container">
+	<input type="submit" name="just-sightings" value="Just report the sightings">
+</div>
+{% endif %}
+
+</div>
+-->
+
+</form>
+
+{% endblock %}

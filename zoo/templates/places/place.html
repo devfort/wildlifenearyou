@@ -71,11 +71,17 @@ jQuery(function($) {
 <div class="see-more-animals highlight"><a name="addsightings"></a>
 	<h3 class="add">Have you been here{% if been_here %} again{% endif %}?</h3>
 	<p>Tell us which animals you saw.</p>
+	
+	<form action="{{ request.path }}add-trip/" method="post">
+		<div class="container"><label for="saw_1">I saw a </label><input type="text" name="q" id="saw_1" class="text"> <input type="submit" value="Search"></div>
+	</form>
+	<!-- 
 	<form action="{{ request.path }}pick-sightings/" method="GET">
 		<div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1" class="text"></div>
 		<div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw.2.s" id="saw_2" class="text"> <span class="meta optional">(optional)</span></div>
 		<div><input type="submit" value="Add my animals"></div>
 	</form>
+    -->
 </div>
 
 {% if opening_times %}
