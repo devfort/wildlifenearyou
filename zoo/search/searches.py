@@ -171,7 +171,7 @@ else:
         return return_an_empty_list
     
     def make_db_deleter(*args, **kwargs):
-        return lambda x: None
+        return lambda: None
 
 search_locations = make_searcher(
     settings.XAPIAN_LOCATION_DB, latlon_fields = ['latlon']
