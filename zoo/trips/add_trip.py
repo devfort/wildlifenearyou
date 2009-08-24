@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect as Redirect, HttpResponseForbidden
+from django.http import \
+    HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.template.defaultfilters import slugify
@@ -20,6 +21,7 @@ from zoo.trips.utils import lookup_xapian_or_django_id
 
 import add_trip_utils
 
+@login_required
 def add_trip(request, country_code, slug):
     place = place = get_object_or_404(Place,
         slug = slug,
@@ -32,16 +34,18 @@ def add_trip(request, country_code, slug):
     if 'finish' in request.POST and (selected or unknowns):
         return finish_add_trip(request, place, selected, unknowns)
     
-    q = request.POST.get('q', '').strip()
+    q = request.REQUEST.get('q', '').strip()
     # Clear search if they selected one of the options
     if _add_selected_was_pressed(request.POST):
         q = ''
     
     results = []
     if q:
-        results = add_trip_utils.search(q)
+        # Search for 10 but only show the first 5, so our custom ordering 
+        # that shows animals spotted here before can take effect
+        results = add_trip_utils.search(q, limit=10, place=place)[:5]
     
-    details = add_trip_utils.bulk_lookup(selected)
+    details = add_trip_utils.bulk_lookup(selected, place=place)
     
     return render(request, 'trips/add_trip.html', {
         'place': place,
@@ -52,6 +56,20 @@ def add_trip(request, country_code, slug):
         'request_path': request.path,
         'debug': pformat(request.POST.lists())
     })
+
+def ajax_search_species(request, country_code, slug):
+    place = place = get_object_or_404(Place,
+        slug = slug,
+        country__country_code = country_code
+    )
+    q = request.GET.get('q', '')
+    if len(q) >= 3:
+        return render(request, 'trips/ajax_search_species.html', {
+            'q': q,
+            'results': add_trip_utils.search(q, limit=10, place=place)[:5],
+        })
+    else:
+        return render(request, 'trips/_add_trip_help.html')
 
 @login_required
 def finish_add_trip(request, place, selected, unknowns):
@@ -89,7 +107,7 @@ def finish_add_trip(request, place, selected, unknowns):
                     note = request.POST.get('unknown_note_%s' % i, ''),
                 )
             # And we're done!
-            return Redirect(trip.get_absolute_url())
+            return HttpResponseRedirect(trip.get_absolute_url())
     
     return render(request, 'trips/add_trip_final.html', {
         'form': form,
@@ -155,7 +173,7 @@ def _get_unknowns(POST):
             if ('remove_unknown_%s.y' % i) not in POST:
                 unknowns.append(POST[key])
     
-    if 'add_unknown' in POST:
+    if 'add_unknown' in POST or 'add_unknown.x' in POST:
         unknowns.append(POST['add_unknown_text'])
     
     return unknowns

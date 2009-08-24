@@ -72,7 +72,7 @@ jQuery(function($) {
 	<h3 class="add">Have you been here{% if been_here %} again{% endif %}?</h3>
 	<p>Tell us which animals you saw.</p>
 	
-	<form action="{{ request.path }}add-trip/" method="post">
+	<form action="{{ request.path }}add-trip/" method="get">
 		<div class="container"><label for="saw_1">I saw a </label><input type="text" name="q" id="saw_1" class="text"> <input type="submit" value="Search"></div>
 	</form>
 	<!-- 

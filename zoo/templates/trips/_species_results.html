@@ -1,0 +1,61 @@
+{% spaceless %}
+
+{% if not q and not results %}
+    {% include "trips/_add_trip_help.html" %}
+{% endif %}
+
+{% if q and not results %}
+<p>No matching species found for "{{ q }}"</p>
+
+{% if q %}
+<ul class="animal-list">
+<li class="unknown">
+    <input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_unknown">
+    <input type="hidden" name="add_unknown_text" value="{{ q }}">
+    <div class="thumbnail"></div>
+    <p><span class="animal-name">{{ q }}</span></p>
+    <p><i class="scientific">Add "{{ q }}" as an unknown species</i></p>
+</li>
+</ul>
+{% endif %}
+
+{% endif %}
+
+{% if results %}
+<h2>Which of these was it?</h2>
+
+<ul class="animal-list">
+	
+{% for result in results %}{% load zoocommon %}
+	<li>
+	{% if result.obj %}
+	{% with result.obj as species %}
+			<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+			<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+			<p><i class="scientific">{{ species.latin_name }}</i></p>
+			{% if result.local_sightings %}
+			    <p>Spotted here {{ result.local_sightings|oncetimes }}</p>
+			{% endif %}
+	{% endwith %}
+	{% else %}
+			<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail"></div>
+			<p><span class="animal-name">{{ result.name }}</span></p>
+			{% if result.scientific_name %}
+				<p><i class="scientific">{{ result.scientific_name }}</i></p>
+			{% endif %}
+	{% endif %}
+	<input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
+	</li>
+{% endfor %}
+<li class="unknown">
+    <input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_unknown">
+    <input type="hidden" name="add_unknown_text" value="{{ q }}">
+    <div class="thumbnail"></div>
+    <p><span class="animal-name">{{ q }}</span></p>
+    <p><i class="scientific">Add "{{ q }}" as an unknown species</i></p>
+</li>
+</ul>
+
+{% endif %}
+
+{% endspaceless %}

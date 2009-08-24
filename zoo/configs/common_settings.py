@@ -65,7 +65,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'zoo.invitereg.middleware.InviteOnlyMiddleware',        
+#    'zoo.invitereg.middleware.InviteOnlyMiddleware',        
     'zoo.common.middleware.AutoCreatedAndModifiedFields',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django_openid.registration.RegistrationConsumer',
@@ -80,7 +80,7 @@ AUTHENTICATION_BACKENDS = (
 )
 AUTH_PROFILE_MODULE = 'accounts.profile'
 LOGIN_REDIRECT_URL = '/profile/'
-LOGIN_URL = '/login/'
+LOGIN_URL = '/account/login/'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

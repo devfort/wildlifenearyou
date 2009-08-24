@@ -3,7 +3,104 @@
 {% block title %}Add a trip to {{ place }}{% endblock %}
 
 {% block extra_head %}
-
+<script type="text/javascript"
+    src="/static/js/jquery-ui/minified/ui.core.min.js"></script>
+<script type="text/javascript"
+    src="/static/js/jquery-ui/minified/effects.core.min.js"></script>
+<script type="text/javascript"
+    src="/static/js/jquery-ui/minified/effects.transfer.min.js"></script>
+<style type="text/css">
+.ui-effects-transfer {
+    border: 2px solid black;
+    background-color: #CBD7E0;
+    opacity: 0.5;
+}
+</style>
+<script type="text/javascript">
+jQuery(function($) {
+    $('ul.animal-list :image').live('click', function(ev) {
+        // Add this species to the spotted list
+        ev.preventDefault();
+        var selected = $(this).closest('li');
+        var ul = getSpottedList();
+        var name = selected.find('.animal-name').text();
+        var freebase_id = selected.find(':input:hidden').val();
+        var counter = getMaxSuffix(ul.find(':input:hidden')) + 1;
+        var type = 'selected';
+        if (selected.is('.unknown')) {
+            type = 'unknown';
+        }
+        var li = $(
+            '<li><input type="image" src="/static/img/icons/cancel.png" ' + 
+            'name="remove_' + type + '_' + counter + '"> ' + name + 
+            '<input type="hidden" name="' + type + '_' + counter + 
+            '" value="' + freebase_id + '"></li>'
+        );
+        ul.append(li);
+        $(this).closest('li').effect('transfer', {
+            'to': li
+        }, 500);
+        $('#results').empty();
+        $('#i-saw-a-q').val('').focus();
+        return false;
+    });
+    
+    // Rig up the Ajax search when 'Search' button is clicked
+    var search = $('#i-saw-a-q').parent().find(':submit');
+    search.click(function(ev) {
+        ev.preventDefault();
+        var q = $('#i-saw-a-q').val();
+        $('#results').load(
+            '{{ request_path }}ajax-search/?q=' + encodeURIComponent(q)
+        );
+    });
+    
+    function getSpottedList() {
+        var ul = $('#species-spotted ul');
+        if (ul.length) {
+            return ul;
+        }
+        $('p#you-need-to-add').remove();
+        var spotted_list = $('<ul></ul>').appendTo('#species-spotted');
+        $(
+            '<p><input type="submit" name="finish" ' + 
+            'value="Finish adding this trip"></p>'
+        ).insertAfter(spotted_list);
+        return spotted_list;
+    }
+    
+    function getMaxSuffix(els, attr) {
+        attr = attr || 'name';
+        var max = 0;
+        els.each(function() {
+            var value = parseInt($(this).attr(attr).split('_').pop(), 10);
+            if (value > max) {
+                max = value;
+            }
+        });
+        return max;
+    }
+    
+    $('#species-spotted :image').live('click', function(ev) {
+        ev.preventDefault();
+        $(this).closest('li').remove();
+    });
+    
+    // Utterly ridiculous delighter
+    $('input#i-saw-a-q').prev('label').append(
+        $('<span>n</span>').css('opacity', 0)
+    );
+    $('input#i-saw-a-q').keyup(function() {
+        var $this = $(this);
+        var span = $this.prev('label').find('span');
+        if (/^[aeiouAEIOU]/.exec($this.val())) {
+            span.css('opacity', 1);
+        } else {
+            span.css('opacity', 0);
+        }
+    });
+});
+</script>
 {% endblock %}
 
 {% block content_title %}
@@ -13,85 +110,11 @@
 {% endblock %}
 
 {% block primary_content %}
-
-<!--
-<div class="see-more-animals highlight"><a name="addsightings"></a>
-	<form action="../pick-sightings/" method="GET">
-		<div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1"></div>
-		<div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw.2.s" id="saw_2"> <span class="meta">(optional)</span></div>
-		<div><input type="submit" value="Add my animals"></div>
-	</form>
-</div>
--->
-    <p>I saw a <input type="text" name="q" value="{{ q }}"> <input type="submit" value="Search"></p>
+    <div class="container compact"><label for="i-saw-a-q">I saw a</label> <input type="text" name="q" id="i-saw-a-q" value="{{ q }}" size="30"> <input type="submit" value="Search"></div>
     
     <div id="results">
     
-    {% if q and not results %}
-    <p>No matching species found for "{{ q }}"</p>
-    {% endif %}
-    
-    {% if results %}
-    <h2>Which of these was it?</h2>
-    
-	<ul class="animal-list">
-	    
-    {% for result in results %}
-    
-        <li>
-    	{% if result.obj %}
-    	{% with result.obj as species %}
-    			<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-    			<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
-    			<p><i class="scientific">{{ species.latin_name }}</i></p>
-    	{% endwith %}
-    	{% else %}
-    			<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail"></div>
-    			<p><span class="animal-name">{{ result.name }}</span></p>
-    			{% if result.scientific_name %}
-    			    <p><i class="scientific">{{ result.scientific_name }}</i></p>
-    			{% endif %}
-    	{% endif %}
-    	<input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
-    	</li>
-    <!--
-        <li{% if forloop.first %} class="first"{% endif %}>
-            
-             <input type="image" src="/static/img/icons/add.gif" name="add_selected_{{ forloop.counter0 }}">        
-                <a href="#">{{ result.name }} <em>{{ result.scientific_name|default:"" }}</em>
-                {% if result.alias %}
-                    <small>Also known as
-                    {% for a in result.alias %}
-                        "{{ a }}"{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                    </small>
-                {% endif %}
-                </a>
-                <input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
-        </li>
-    -->
-        <!-- 
-        <input type="image" src="/static/img/icons/add.gif" name="add_selected_{{ forloop.counter0 }}">        
-        {{ result.name }} <em>{{ result.scientific_name|default:"" }}</em>
-        {% if result.alias %}
-            <small>Also known as
-            {% for a in result.alias %}
-                "{{ a }}"{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            </small>
-        {% endif %}
-        <input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
-        <br>
-        -->
-    {% endfor %}
-    </ul>
-    
-    {% endif %}
-    
-    {% if q %}
-    <input type="hidden" name="add_unknown_text" value="{{ q }}">
-    Or <input type="submit" name="add_unknown" value="just add &quot;{{ q }}&quot;"> as an unknown species.
-    {% endif %}
+    {% include "trips/_species_results.html" %}
     
     </div>
     
@@ -102,29 +125,30 @@
 {% endblock %}
 
 {% block secondary_content %}
-
+<div id="species-spotted">
+<h2>Species spotted</h2>
 {% if selected_details or unknowns %}
-    <h2>Species you saw:</h2>
+    <ul>
     {% for item in selected_details %}
-        <input type="image" src="/static/img/icons/cancel.png" name="remove_selected_{{ forloop.counter0 }}">
+        <li><input type="image" src="/static/img/icons/cancel.png" name="remove_selected_{{ forloop.counter0 }}">
         {{ item.name }}
         <input type="hidden" name="selected_{{ forloop.counter0 }}" value="{{ item.id }}">
-        <br>
+        </li>
     {% endfor %}
-    {% if unknowns %}<hr>{% endif %}
     {% for name in unknowns %}
-        <input type="image" src="/static/img/icons/cancel.png" name="remove_unknown_{{ forloop.counter0 }}">
+        <li><input type="image" src="/static/img/icons/cancel.png" name="remove_unknown_{{ forloop.counter0 }}">
         {{ name }} <em>Unknown species</em>
         <input type="hidden" name="unknown_{{ forloop.counter0 }}" value="{{ name }}">
-        <br>
+        </li>
     {% endfor %}
+    </ul>
     <p>
         <input type="submit" name="finish" value="Finish adding this trip">
     </p>
 {% else %}
-    <p>You need to add some species before you can save your trip.</p>
+    <p id="you-need-to-add">You need to add some species before you can save your trip.</p>
 {% endif %}
-
+</div>
 {% endblock %}
 
 {% block after_content %}
