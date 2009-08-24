@@ -244,6 +244,9 @@ def invite_friends(request):
         })
 
 from zoo.utils import location_from_request
+
+from search.geocoders import google_geocode
+
 def set_location(request):
     """
     Logged in users use this view to set the location on their profile -
@@ -256,11 +259,8 @@ def set_location(request):
     msg = ''
 
     if location:
-        results = list(search_locations(location))
-        if len(results):
-            result = results[0]
-            (lat, lon) = result['latlon']
-            description = result['description']
+        description, (lat, lon) = google_geocode(location)
+        if description is not None:
             msg = 'Your location has been set to <strong>%s</strong>.' % description
             try:
                 random_animal = Species.objects.order_by('?')[0]
