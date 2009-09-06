@@ -9,7 +9,7 @@ class AnonymousForm(forms.ModelForm):
 class LoggedInForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ('body')
+        fields = ('body',)
 
 def form_for_request(request):
     if request.user.is_anonymous():
