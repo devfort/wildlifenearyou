@@ -11,7 +11,7 @@ class CustomRegistrationForm(RegistrationForm):
     def __init__(self, *args, **kwargs):
         kwargs['reserved_usernames'] = settings.RESERVED_USERNAMES
         super(CustomRegistrationForm, self).__init__(*args, **kwargs)
-        
+    
     class Meta(RegistrationForm.Meta):
         fields = ('username', 'email')
 
@@ -27,6 +27,15 @@ class RegistrationConsumer(RegistrationConsumer):
     """.strip())
 
     RegistrationForm = CustomRegistrationForm
+    
+    def do_register(self, request, message=None):
+        # If user has entered a password AND it's the same as what they 
+        # entered in the OpenID field, ignore the OpenID field
+        if 'openid_url' in request.POST and 'password' in request.POST and \
+            request.POST['openid_url'] == request.POST['password']:
+                request.POST._mutable = True
+                request.POST['openid_url'] = ''
+        return super(RegistrationConsumer, self).do_register(request, message)
     
     def user_can_login(self, request, user):
         # User must have validated their e-mail address

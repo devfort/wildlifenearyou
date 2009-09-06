@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.http import HttpResponseRedirect as Redirect
+from django.http import HttpResponseRedirect as Redirect, HttpResponse
 from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -162,8 +162,11 @@ def profile(request, username):
         'photos': filter_visible_photos(user.photos, request.user),
     })
 
+@login_required
 def profile_edit(request, username):
     user = get_object_or_404(User, username = username)
+    if username != request.user.username:
+        return HttpResponse('You cannot edit that user profile')
     profile = user.get_profile()
     if request.method == 'POST':
         f = ProfileEditForm(request.POST, instance=profile)
