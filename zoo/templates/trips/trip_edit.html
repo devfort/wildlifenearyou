@@ -5,7 +5,6 @@
 {% block extra_head %}
 <script type="text/javascript">var PLACE_ID = {{ trip.place.id }};</script>
 <script type="text/javascript" src="/static/js/star-select-replace.js"></script>
-<script type="text/javascript" src="/static/js/i-saw-and-a.js"></script>
 <script type="text/javascript">
 jQuery(function($) {
 	var div = $('#edit-sightings');
@@ -88,13 +87,7 @@ jQuery(function($) {
 		{% endfor %}
 		</ul>
 	</div>
-	<div class='see-more-animals'>
-		<h3>Add sightings</h3>
-		<div class="container"><label for="saw_1">I saw a </label><input type="text" name="saw.1.s" id="saw_1" class="text"></div>
-		<div class="container and-a"><label for="saw_2">and a </label><input type="text" name="saw.2.s" id="saw_2" class="text"> <span class="meta optional">(optional)</span></div>		
-	</div>
 </div>
-
 
 <div class="container">
 	<input type="submit" name="save-trip" value="Save changes">

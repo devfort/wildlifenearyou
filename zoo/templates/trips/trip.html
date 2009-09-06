@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content_title %}
-<h1>{{ trip.compact_title }}</h1>
+<h1>{{ trip.title }}</h1>
 {% endblock %}
 
 {% block primary_content %}
@@ -134,10 +134,11 @@
 				{% endif %}
 		{% endwith %}
 		{% if belongs_to_user %}
-		<form enctype="multipart/form-data" action="{{ request.path }}upload/" method="post">
+		<!--<form enctype="multipart/form-data" action="{{ request.path }}upload/" method="post">
 			<div class="container"><input type="file" name="photo" id="id_photo"></div>
 			<div class="container button-container"><input type="submit" value="Upload"></div>
-		</form>
+		</form>-->
+		<p><a href="/flickr/">Import your photos</a> from Flickr</p>
 		{% endif %}
 
 		{% if belongs_to_user %}
