@@ -1,0 +1,66 @@
+#! /bin/sh
+BIN_PATH=/Users/simon/Development/sedf/searchserver/searchserver.py
+PIDFILE_PATH=/var/run/searchserver.pid
+
+RUN_AS=simon
+
+set -e
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DESC="djape search server"
+
+#
+#       Function that starts the daemon/service.
+#
+d_start()
+{
+    # Starting daemon
+    if [ -f $PIDFILE_PATH ]; then
+        echo -n " already running"
+    else
+        start-stop-daemon --start --pidfile $PIDFILE_PATH --chuid $RUN_AS --make-pidfile --background \
+            --exec /usr/bin/env -- $BIN_PATH
+        chmod 400 $PIDFILE_PATH
+    fi
+}
+
+#
+#       Function that stops the daemon/service.
+#
+d_stop() {
+    start-stop-daemon --stop --pidfile $PIDFILE_PATH || echo -n " not running"
+    if [ -f $PIDFILE_PATH ]; then
+       rm -f $PIDFILE_PATH
+    fi
+}
+
+ACTION="$1"
+case "$ACTION" in
+    start)
+        echo -n "Starting $DESC"
+        d_start
+        echo "."
+        ;;
+
+    stop)
+        echo -n "Stopping $DESC"
+        d_stop
+        echo "."
+        ;;
+
+    restart|force-reload)
+        echo -n "Restarting $DESC"
+        d_stop
+        sleep 1
+        d_start
+        echo "."
+        ;;
+
+    *)
+        echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+        exit 3
+        ;;
+esac
+
+exit 0
+
