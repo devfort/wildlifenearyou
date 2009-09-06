@@ -33,7 +33,7 @@ class Photo(models.Model):
     flickr_server = models.CharField(max_length=16, blank=True)
     
     # Moderation flags
-    is_visible = models.BooleanField(default=False)
+    is_visible = models.BooleanField(default=True)
     moderated_by = models.ForeignKey(
         User, related_name='photos_moderated', null=True, blank=True,
     )
