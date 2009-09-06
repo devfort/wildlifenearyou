@@ -391,7 +391,7 @@ class PlacePrice(AuditedModel):
 
 class PlaceOpening(models.Model):
     start_date = models.DateField(null=True, blank=True,
-        help_text="Range of dates for which these times apply - leave either or both blank for an open-ended range",
+        help_text="Range of dates for which these times apply - leave either or both blank for an open-ended range. Enter dates as YYYY-MM-DD.",
     )
     end_date = models.DateField(null=True, blank=True)
     days_of_week = models.CharField(max_length=100, blank=True,

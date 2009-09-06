@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 import datetime
 from itertools import chain
 
-from zoo.common.fields import JSONField
+from zoo.common.fields import PickledObjectField
 
 def get_pretty_field_key(val):
     if val.endswith('_id'):
@@ -193,7 +193,7 @@ class ChangeAttributeRequest(ChangeRequest):
 class CreateObjectRequest(ChangeRequest):
     parent = models.ForeignKey('self', null=True, blank=True)
     content_type = models.ForeignKey(ContentType)
-    attributes = JSONField()
+    attributes = PickledObjectField()
     reverse_relation = models.TextField(blank=True)
 
     def children(self):
