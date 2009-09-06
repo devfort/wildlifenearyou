@@ -72,6 +72,64 @@ def ajax_search_species(request, country_code, slug):
         return render(request, 'trips/_add_trip_help.html')
 
 @login_required
+def add_sightings_to_trip(request, username, trip_id):
+    if username != request.user.username:
+        return HttpResponse('You cannot edit this trip')
+    trip = get_object_or_404(Trip,
+        pk = trip_id, created_by__username = username
+    )
+    place = trip.place
+
+    selected = _get_selected(request.POST)
+    unknowns = _get_unknowns(request.POST)
+
+    if 'finish' in request.POST and (selected or unknowns):
+        return finish_add_sightings_to_trip(request, trip, selected, unknowns)
+
+    q = request.REQUEST.get('q', '').strip()
+    # Clear search if they selected one of the options
+    if _add_selected_was_pressed(request.POST):
+        q = ''
+
+    results = []
+    if q:
+        # Search for 10 but only show the first 5, so our custom ordering 
+        # that shows animals spotted here before can take effect
+        results = add_trip_utils.search(q, limit=10, place=place)[:5]
+
+    details = add_trip_utils.bulk_lookup(selected, place=place)
+
+    return render(request, 'trips/add_trip.html', {
+        'place': place,
+        'trip': trip,
+        'results': results,
+        'selected_details': details,
+        'q': q,
+        'unknowns': unknowns,
+        'request_path': request.path,
+        'debug': pformat(request.POST.lists())
+    })
+
+@login_required
+def finish_add_sightings_to_trip(request, trip, selected, unknowns):
+    selected_details = add_trip_utils.bulk_lookup(selected)
+    # Now save the selected and unknown sightings
+    for i, details in enumerate(selected_details):
+        trip.sightings.create(
+            species = species_for_freebase_details(details),
+            place = trip.place,
+            note = ''
+        )
+    for i, name in enumerate(unknowns):
+        trip.sightings.create(
+            place = trip.place,
+            species_inexact = name,
+            note = ''
+        )
+    # And we're done!
+    return HttpResponseRedirect(trip.get_absolute_url())
+
+@login_required
 def finish_add_trip(request, place, selected, unknowns):
     selected_details = add_trip_utils.bulk_lookup(selected)
     if 'add_trip_form_displayed' not in request.POST:

@@ -79,6 +79,7 @@
 				{% endfor %}
 		{% endifequal %}
 		{% endwith %}
+		{% if belongs_to_user %}<p><a href="{{ trip.urls.add_sightings }}">Add more sightings</a> to this trip</p>{% endif %}
 {% endwith %}
 
 {% endblock %}

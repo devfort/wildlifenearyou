@@ -49,12 +49,17 @@ class Trip(AuditedModel):
             return ('trip-view', (), {
                 'username': self.created_by.username,
                 'trip_id': self.id,
-                })
+            })
         elif name == 'edit':
             return ('edit-trip', (), {
                 'username': self.created_by.username,
                 'trip_id': self.id,
-                })
+            })
+        elif name == 'add_sightings':
+            return ('add-sightings-to-trip', (), {
+                'username': self.created_by.username,
+                'trip_id': self.id,
+            })
         else:
             raise AttributeError, name
     

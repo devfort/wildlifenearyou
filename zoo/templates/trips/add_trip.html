@@ -51,7 +51,7 @@ jQuery(function($) {
         ev.preventDefault();
         var q = $('#i-saw-a-q').val();
         $('#results').load(
-            '{{ request_path }}ajax-search/?q=' + encodeURIComponent(q)
+            '{{ place.get_absolute_url }}add-trip/ajax-search/?q=' + encodeURIComponent(q)
         );
     });
     
@@ -104,7 +104,11 @@ jQuery(function($) {
 {% endblock %}
 
 {% block content_title %}
+{% if trip %}
+<h1>What else did you see on that trip?</h1>
+{% else %}
 <h1>What did you see at <a href="{{ place.get_absolute_url }}">{{ place }}</a>?</h1>
+{% endif %}
 <form action="{{ request_path }}" method="post">
 
 {% endblock %}
