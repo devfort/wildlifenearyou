@@ -214,7 +214,7 @@ jQuery(function($) {
 		{% else %}{# More than one photo #}
 		{% with place.photo as chosen %}
 		<div class="gallery">
-				<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ photo.thumb_100_url }}"></a>
+				<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
 				<div class="slideshow">
 					<ul id="thumbnails">
 							{% for photo in place.visible_photos.all %}
