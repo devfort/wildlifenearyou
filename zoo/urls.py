@@ -24,7 +24,7 @@ from faces import views as faces
 from photos import views as photos
 
 from accounts.openid import RegistrationConsumer
-from invitereg.views import InviteRegistrationConsumer as RegistrationConsumer
+#from invitereg.views import InviteRegistrationConsumer as RegistrationConsumer
 
 registration_consumer = RegistrationConsumer()
 
