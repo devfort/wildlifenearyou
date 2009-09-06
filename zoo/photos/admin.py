@@ -7,7 +7,7 @@ class PhotoAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'is_visible')
 
     def preview(self, obj):
-        return obj.photo.thumbnail_tag
+        return obj.thumb_75()
     preview.allow_tags = True
 
 admin.site.register(Photo, PhotoAdmin)
