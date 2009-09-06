@@ -4,7 +4,16 @@
 
 {% block primary_content %}
 
-<h1>Pick one of your sets</h1>
+<h1>Import from Flickr</h1>
+
+<form action="{% url flickr-search %}" method="get">
+	<p><label for="flickrsearch">Search for photos to import from your Flickr account by text or tag:</label></p>
+	<p><input id="flickrsearch" type="search" name="q"> <input type="submit" value="Search your photos"></p>
+</form>
+
+<p>Or choose from photos in <a href="{% url flickr-places %}">your places</a>, <a href="{% url flickr-groups %}">your groups</a> or <a href="{% url flickr %}">your recent photos</a>.</p>
+
+<h2>Pick one of your sets</h2>
 
 <ul>
 	{% for set in sets %}

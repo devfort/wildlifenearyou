@@ -140,7 +140,6 @@ def place(request, woe_id):
     photos = client.photos_search(
         woe_id = woe_id, user_id = user_id
     )['photos']['photo']
-    import pdb; pdb.set_trace()
     return photo_picker(
         request, photos, 'Your photos in %s' % place_info['place']['name']
     )

@@ -4,10 +4,19 @@
 
 {% block content %}
 
-<h1>Pick one of your Flickr Groups</h1>
+<h1>Import from Flickr</h1>
+
+<form action="{% url flickr-search %}" method="get">
+	<p><label for="flickrsearch">Search for photos to import from your Flickr account by text or tag:</label></p>
+	<p><input id="flickrsearch" type="search" name="q"> <input type="submit" value="Search your photos"></p>
+</form>
+
+<p>Or choose from photos in <a href="{% url flickr-sets %}">your sets</a>, <a href="{% url flickr-places %}">your places</a> or <a href="{% url flickr %}">your recent photos</a>.</p>
+
+<h2>Pick one of your Flickr Groups</h2>
 
 {% if groups.groups.group %}
-<p class="notification">Or choose from <a href="{% url flickr %}">all your photos</a>, <a href="{% url flickr-sets %}">your sets</a> or <a href="{% url flickr-places %}">your places</a>.</p>
+
 <ul>
 {% for group in groups.groups.group %}
 <li><p><a href="{{ group.nsid|urlencode }}/">{{ group.name }}</a></p></li>

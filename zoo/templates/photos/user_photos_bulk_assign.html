@@ -16,7 +16,15 @@
 
 {% if trip_count %}
 <h2>Assign photos to trips</h2>
-<p>These photos have not yet been assigned to a trip.</p>
+<p>Please tell us the trip on which you took these photos.</p>
+
+{% if they_forgot_to_select_some_photos %}
+<p class="notification">You forgot to select any photos!</p>
+{% endif %}
+{% if they_forgot_to_select_a_trip %}
+<p class="notification">You forgot to select a trip!</p>
+{% endif %}
+
 
 <form action="{{ request_path }}" method="post">
 <p>{{ form.trip.label_tag }} {{ form.trip }}</p>

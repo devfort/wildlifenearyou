@@ -44,15 +44,15 @@
 <p>These are from your trip:</p>
 
 <form action="../set-species/" method="POST">
-<ul>
+<ul class="nobullets">
 {% for sighting in photo.trip.sightings.all %}
-<li class="checkbox-container"><input type="checkbox" name="saw" value="{{ sighting.id }}" id="s{{ sighting.id }}"> <label for="s{{ sighting.id }}">{{ sighting.species_name }}</label></li>
+<li class="checkbox-container"><label for="s{{ sighting.id }}"><input type="checkbox" name="saw" value="{{ sighting.id }}" id="s{{ sighting.id }}"> {{ sighting.species_name }}</label></li>
 {% endfor %}
 </ul>
 <p><input type="submit" value="Save these species">
 </form>
 
-<p><a href="#">Add more</a> animals if you've missed any</p>
+<p><a href="{% url edit-trip photo.trip.created_by.username photo.trip.pk %}">Add more</a> animals if you've missed any</p>
 {% endif %}
 
 {% endblock %}

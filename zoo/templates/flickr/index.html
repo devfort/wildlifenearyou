@@ -6,8 +6,6 @@
 
 <h1>Import from Flickr</h1>
 
-
-
 <form action="{% url flickr-search %}" method="get">
 	<p><label for="flickrsearch">Search for photos to import from your Flickr account by text or tag:</label></p>
 	<p><input id="flickrsearch" type="search" name="q"> <input type="submit" value="Search your photos"></p>
@@ -17,7 +15,7 @@
 
 {% if recent %}
 <h2>Your most recent photos</h2>
-
+<p class="notification">Select the photos you wish to import</p>
 <form action="/flickr/selected/" method="post">
 	<ul class="photo-display">
 		{% for photo in recent %}

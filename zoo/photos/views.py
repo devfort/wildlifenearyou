@@ -258,26 +258,38 @@ def user_photos_bulk_assign(request, user):
         created_by = user, trip__isnull=True
     ).order_by('created_at').distinct()
     
+    they_forgot_to_select_some_photos = False
+    they_forgot_to_select_a_trip = False
+    
     if request.method == 'POST':
         photo_ids = request.POST.getlist('selected_photos')
         trip_id = request.POST.get('trip')
-        photos = Photo.objects.filter(id__in = photo_ids).filter(
-            created_by = request.user
-        )
-        trip = get_object_or_404(Trip, pk=trip_id, created_by=request.user)
-        # Assign the photos to that trip
-        for p in photos:
-            p.trip = trip
-            p.save()
-        # Force a re-index of trip
-        trip.save()
-        # Redirect to that trip's page (TODO: trip's photo page instead)
-        return HttpResponseRedirect(trip.get_absolute_url())
+        if not photo_ids or not trip_id:
+            if not photo_ids:
+                they_forgot_to_select_some_photos = True
+            elif not trip_id:
+                they_forgot_to_select_a_trip = True
+        else:
+            
+            photos = Photo.objects.filter(id__in = photo_ids).filter(
+                created_by = request.user
+            )
+            trip = get_object_or_404(Trip, pk=trip_id, created_by=request.user)
+            # Assign the photos to that trip
+            for p in photos:
+                p.trip = trip
+                p.save()
+            # Force a re-index of trip
+            trip.save()
+            # Redirect to that trip's page (TODO: trip's photo page instead)
+            return HttpResponseRedirect(trip.get_absolute_url())
     
     return render(request, 'photos/user_photos_bulk_assign.html', {
         'profile': user.get_profile(),
         'photos': photos,
         'trip_count': Trip.objects.filter(created_by=user).count(),
+        'they_forgot_to_select_some_photos': they_forgot_to_select_some_photos,
+        'they_forgot_to_select_a_trip': they_forgot_to_select_a_trip,
         'form': TripSelectForm(user)
     })
 

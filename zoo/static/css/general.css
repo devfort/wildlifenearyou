@@ -105,9 +105,10 @@ button.link:active span {
 
 /* size headings using classic scale of 14, 16, 18, (21), 24 */
 
-h1, h2, h3, h4, h5, h6 {
-	font-family: Rockwell, Georgia, "Times New Roman", "Century Schoolbook L", Times, serif;
+h1, h2, h3, h4, h5, h6 { /* Used to have Rockwell */
+	font-family: Georgia, "Times New Roman", "Century Schoolbook L", Times, serif;
 	color: #362f2d;
+	font-weight: normal;
 }
 
 h1 {
@@ -164,6 +165,11 @@ ul.bullets li {
 	background-repeat: no-repeat;
 	padding-left: 1.1429em;
 	margin-bottom: 0.2em;
+}
+
+ul.nobullets li {
+	background: none;
+	padding-left: 0;
 }
 
 ol {	/* ordered lists usually DO require bullets */
