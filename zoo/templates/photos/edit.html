@@ -52,7 +52,7 @@
 <p><input type="submit" value="Save these species">
 </form>
 
-<p><a href="{% url edit-trip photo.trip.created_by.username photo.trip.pk %}">Add more</a> animals if you've missed any</p>
+<p><a href="{% url add-sightings-to-trip photo.trip.created_by.username photo.trip.pk %}">Add more</a> animals if you've missed any</p>
 {% endif %}
 
 {% endblock %}
