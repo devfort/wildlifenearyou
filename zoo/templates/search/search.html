@@ -19,9 +19,11 @@
 
 {% if q and not results %}
 <p class="notification">I&rsquo;m afraid your search returned no results. Try something else?</p>
+<!--
 {% if request.user.is_staff %}
 	<p class="notification">If you&rsquo;re a developer, try running <samp>./manage.py reindex_places</samp></p>
 {% endif %}
+-->
 {% endif %}
 
 {% if q and results and results_corrected_q %}
@@ -47,11 +49,12 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 	{% endfor %}
 	</ol>
 {% endif %}
+<!--
 {% if request.user.is_staff %}
 	<h4><a class="toggler" href="#debug-results">Debug info (developers only)</a></h4>
 	<pre id="debug-results" style="font-size:0.85em">{{ results_info }}</pre>
 {% endif %}
-
+-->
 {% endblock %}
 
 {% block secondary_content %}
@@ -72,10 +75,12 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 	{% endif %}
 {% endif %}
 
+<!--
 {% if request.user.is_staff %}
 	<h4><a class="toggler" href="#debug-species-results">Debug info (developers only)</a></h4>
 	<pre id="debug-species-results" style="font-size:0.85em">{{ species_results_info }}</pre>
 {% endif %}
+-->
 
 {% if users_results %}
 	<h4>Matching users</h4>
@@ -90,9 +95,11 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 	</ol>
 {% endif %}
 
+<!--
 {% if request.user.is_staff %}
 	<h4><a class="toggler" href="#debug-users-results">Debug info (developers only)</a></h4>
 	<pre id="debug-users-results" style="font-size:0.85em">{{ users_results_info }}</pre>
 {% endif %}
+-->
 
 {% endblock %}
