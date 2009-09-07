@@ -420,7 +420,7 @@ class PlaceOpening(models.Model):
         else:
             days_of_week = 'all days'
         times = self.times or 'All day'
-        return "%s%s, %s %s %s-%s %s" % (section, self.place, closed, days_of_week, start_date, end_date, times)
+        return u"%s%s, %s %s %s-%s %s" % (section, self.place, closed, days_of_week, start_date, end_date, times)
 
 # Seriously. We named this so you'd think about it. If you do anything with this, you could cause the end of the universe.
 class PlaceSpeciesSolelyForLinking(models.Model):
@@ -451,7 +451,7 @@ class PlaceSpeciesSolelyForLinking(models.Model):
         db_table = 'places_placespecies'
 
     def __unicode__(self):
-        return unicode(self.species.common_name) + ' at ' + unicode(self.place)
+        return unicode(self.species.common_name) + u' at ' + unicode(self.place)
     
     @models.permalink
     def get_absolute_url(self):

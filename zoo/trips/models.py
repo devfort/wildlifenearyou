@@ -243,5 +243,5 @@ class Sighting(AuditedModel):
     def __unicode__(self):
         ret = u'Sighting of %s at %s' % (self.species_name(), self.place)
         if self.trip:
-            ret += ' during trip %s' % self.trip
+            ret += u' during trip %s' % self.trip
         return ret
