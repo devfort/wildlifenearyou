@@ -177,7 +177,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 						{% endifequal %}
 			{% endif %}
 		{% endwith %}
-		{% ifequal profile.user user %}<p class="add"><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
+		<!-- {% ifequal profile.user user %}<p class="add"><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}-->
 </div>
 
 {% if profile.user.comment_comments.all %}
