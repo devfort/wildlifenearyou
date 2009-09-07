@@ -117,7 +117,7 @@ INSTALLED_APPS = [
     'zoo.favourites',
     'django.contrib.comments',
     'zoo.feedback',
-    'zoo.freebase',
+    #'zoo.freebase',
     'zoo.search',
     'zoo.common',
     'zoo.launchsignups',
