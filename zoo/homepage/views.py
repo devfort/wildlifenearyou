@@ -82,7 +82,8 @@ def homepage(request):
         'recent_photos': Photo.objects.filter(
             is_visible = True
         ).order_by('-created_at')[:20],
-        'recent_trips': Trip.objects.filter(
-            start__isnull=False
-        ).order_by('-start')[:5]
+        'recent_trips': Trip.objects.order_by('-created_at')[:5],
+#        'recent_trips': Trip.objects.filter(
+#            start__isnull=False
+#        ).order_by('-start')[:5]
     })

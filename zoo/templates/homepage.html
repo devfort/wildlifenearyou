@@ -122,7 +122,7 @@
 					<input type="text" class="text" id="q" name="q" size="50" value="{{ default_search }}">
 					<input type="submit" class="submit" value="&raquo; Search">
 				</div>
-				<p class="meta examples">Try <a href="/search/?q=otters">otters</a>, <a href="/search/?q=tigers+near+{{ location|default:"london"|lower|iriencode }}">tigers near {{ location|default:"london"|lower }}</a>, <a href="/search/?q=new+zealand">new zealand</a> or your favourite animal</p>
+				<p class="meta examples">Try <a href="/search/?q=tigers">tigers</a>, <a href="/search/?q=llamas+near+brighton">llamas near brighton</a>, <a href="/search/?q=new+zealand">new zealand</a> or your favourite animal</p>
 			</form>
 		</div>
 	</div>
@@ -258,7 +258,7 @@
 	<div class="wrapper">
 		<div class="contents">
 			<div class="primary">
-				<h2>Recent Trips</h2>
+				<h2>Recently added trips</h2>
 				<ul class="teaserlist">
 					{% for trip in recent_trips %}
 					<li>
