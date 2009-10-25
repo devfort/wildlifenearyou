@@ -16,8 +16,10 @@
 </p>
 
 <div>
-		<h2>Photos</h2>
-
+	{% if not photos %}
+		<p>{{ profile.user.username }} has not yet imported any photos.</p>
+	{% else %}
+		<h2>Photos</h2>	
 		{% with photos.all as photos %}
 		{% autopaginate photos 30 %}
 		{% paginate %}
@@ -30,6 +32,7 @@
 		</ul>
 		{% paginate %}
 		{% endwith %}
+	{% endif %}
 </div>
 
 {% endblock %}
