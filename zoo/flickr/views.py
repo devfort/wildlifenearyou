@@ -37,24 +37,12 @@ def index(request):
     client = Flickr(token = flickr_token)
     token_info = client.auth_checkToken()
     user_id = token_info['auth']['user']['nsid']
-    
-    # TODO: refactor this to share logic in photo_picker method
-    recent = client.photos_search(
+    photos = client.photos_search(
         user_id = 'me',per_page=20
     )['photos']['photo']
-    for photo in recent:
-        photo['signed'] = signed.dumps({
-            'id': photo['photo_id'],
-            'farm': photo['farm'],
-            'secret': photo['secret'],
-            'server': photo['server'],
-            'title': photo['title'],
-        })
-    
-    return render(request, 'flickr/index.html', {
-        'info': client.people_getInfo(user_id = user_id),
-        'recent': recent,
-    })
+    return photo_picker(
+        request, photos, 'Your recent photos'
+    )
 
 @login_required
 def places(request):
@@ -148,6 +136,11 @@ def photo_picker(request, photos, title):
     # Enhance each photo with a signed dict for the checkbox field, so if 
     # they DO select that photo we won't have to do another API call to look 
     # up its details on Flickr
+    photo_ids = [photo['id'] for photo in photos]
+    already_imported_ids = set(Photo.objects.filter(
+        flickr_id__in = photo_ids
+    ).values_list('flickr_id', flat=True))
+    enable_button = False
     for photo in photos:
         photo['signed'] = signed.dumps({
             'id': photo['photo_id'],
@@ -156,9 +149,15 @@ def photo_picker(request, photos, title):
             'server': photo['server'],
             'title': photo['title'],
         })
+        already_imported = photo['photo_id'] in already_imported_ids
+        photo['already_imported'] = already_imported
+        if not already_imported:
+            enable_button = True
+    
     return render(request, 'flickr/photo_picker.html', {
         'title': title,
         'photos': photos,
+        'enable_button': enable_button,
     })
 
 @login_required
@@ -194,14 +193,16 @@ def selected(request):
             photos_to_add.append(signed.loads(photo))
         except ValueError:
             continue # Skip any that don't pass the signature check
-    # Save those photos
-    is_visible = (
-        request.user.get_profile().is_not_brand_new_account() or \
-        request.user.is_staff
-    )
+    # Moderation is currently disabled:
+    # is_visible = (
+    #     request.user.get_profile().is_not_brand_new_account() or \
+    #     request.user.is_staff
+    # )
+    is_visible = True
     added_ids = []
     for photo in photos_to_add:
-        # TODO: Ensure we don't import the same photo twice
+        if Photo.objects.filter(flickr_id = photo['id']).count():
+            continue
         p = Photo.objects.create(
             created_by = request.user,
             created_at = datetime.datetime.now(),

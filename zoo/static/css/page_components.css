@@ -887,8 +887,9 @@ ul.teaserlist h3 span {
 	float: left;
 	margin-right: 1em;
 	margin-bottom: 1em;
-	padding-bottom: 10px;
+	padding-bottom: 0.2em;
 	display: inline;
+	text-align: center;
 }
 
 .photo-display img {
@@ -899,19 +900,30 @@ ul.teaserlist h3 span {
 .photo-display input,
 .photo-display label {
 	display: inline;
+	margin-bottom: 0;
 }
 
 .photo-display .import input {
-	vertical-align: text-bottom;
+	vertical-align: middle;
+	margin: 0;
+	position: absolute;
+	top: 0.2em;
+	left: 10px;
 }
 
 .photo-display .import {
 	margin: 0 5px 0 5px;
 	display: block;
+	font-weight: bold;
+}
+.photo-display label .import {
+	position: relative;
+	padding-left: 1.5em;
 }
 
 .photo-display .view {
 	margin: 0.3em 10px 10px 10px;
+	text-align: left;
 }
 
 .photo-display .view a:link,

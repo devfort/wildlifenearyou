@@ -13,26 +13,41 @@
 
 <p>Or choose from photos in <a href="{% url flickr-sets %}">your sets</a>, <a href="{% url flickr-places %}">your places</a>, <a href="{% url flickr-groups %}">your groups</a> or <a href="{% url flickr %}">your recent photos</a>.</p>
 
-
 <h2>{{ title }}</h2>
 
 {% if photos %}
 	<p class="notification">Select the photos you wish to import</p>
-
 	<form action="/flickr/selected/" method="post">
 		<ul class="photo-display">
 			{% for photo in photos %}
 			<li>
-				<p><label for="import_{{ photo.id }}"><img src="{{ photo.square }}" width="75" height="75" alt="">
-				<span class="import"><input type="checkbox" name="photo" value="{{ photo.signed }}" id="import_{{ photo.id }}"> Import</span></label></p>
+				{% if photo.already_imported %}
+				<p>
+					<img src="{{ photo.square }}"
+						width="75" height="75" alt="">
+					<span class="import">Imported</span>
+				</p>
+				{% else %}
+				<p>
+					<label for="import_{{ photo.id }}"><img 
+						src="{{ photo.square }}" 
+						width="75" height="75" alt="">
+						<span class="import"><input type="checkbox" 
+							name="photo" value="{{ photo.signed }}" 
+							id="import_{{ photo.id }}"> Import</span>
+					</label>
+				</p>
+				{% endif %}
 				<p class="view"><a href="http://www.flickr.com/photo.gne?id={{ photo.id }}">View</a></p>
 			</li>
 			{% endfor %}
 		</ul>
+		{% if photos and enable_button %}
 		<div class="button-container"><input type="submit" class="submit" value="Import these photos"></div>
+		{% endif %}
 	</form>
 {% else %}
-	<p class="notification">No photos found.</p>
+	<p class="notification">No Flickr photos are available to import.</p>
 {% endif %}
 
 {% endblock %}
