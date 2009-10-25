@@ -835,7 +835,7 @@ ul.teaserlist h3 span {
 	background-position: top left;
 	background-repeat: repeat-x;
 	border-top: 2px solid white;
-	border-bottom: 2px solid #AFD580;
+	border-bottom: 10px solid #78DB29;
 	padding-bottom: 2px;
 }
 .photostrip li {

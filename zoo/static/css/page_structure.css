@@ -28,6 +28,18 @@
 .header .wrapper {
 	text-align: right;
 }
+.header a:link,
+.header a:visited,
+.header a:hover,
+.header a:focus,
+.header a:active {
+	color: white;
+}
+.header a:hover,
+.header a:focus,
+.header a:active {
+	color: #2E471A;
+}
 
 /* @group Logo */
 
@@ -44,7 +56,7 @@
 	top: 3px;
 }
 .header span {
-	color: #5c822f;
+	color: #2E471A;
 	font-style: italic;
 	font-size: 0.8em;
 }
@@ -69,7 +81,7 @@
 }
 .header ul li a:link, 
 .header ul li a:visited {
-	color: #0063dc;
+	color: #000;
 	text-decoration: none;
 	border-left: 1px solid #7d965f;
 	padding-left: 0.6em;
@@ -80,6 +92,7 @@
 .header ul li a:focus, 
 .header ul li a:hover {
 	color: black;
+	text-decoration: underline;
 	border-left: 1px solid #7d965f;
 }
 
@@ -122,14 +135,14 @@
 
 .footer {
 	border-top: solid 1em #ffffff;
-	background-color: #c6ddab;
+	background-color: #8DDA4E;
 	background-image: url(/static/img/bg/footer_bg.jpg);
 	background-repeat: repeat-x;
 	background-position: left top;
 }
 .footer p {
 	text-align: left;
-	color: #534741;
+	color: #2E471A;
 	padding: 1em 0;
 	margin: 0;
 	font-size: 0.8em;
@@ -152,6 +165,18 @@
 }
 .footer a.copyright {
 	text-decoration: none;
+}
+.footer a:link,
+.footer a:visited,
+.footer a:hover,
+.footer a:focus,
+.footer a:active {
+	color: black;
+}
+.footer a:hover,
+.footer a:focus,
+.footer a:active {
+	color: #2E471A;
 }
 
 /* @end */
