@@ -12,7 +12,7 @@
 {% endif %}
 
 <p>
-	<a href="{% url user-photos profile.user.username %}">all photos</a> | <strong>photos by trip</strong> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a>
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <strong>photos by trip</strong> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a>{% ifequal profile.user user %} | <a href="{% url flickr %}">import from Flickr</a>{% endifequal %}
 </p>
 
 {% if not trips %}
@@ -33,6 +33,5 @@
 <p><a href="{{ trip.trip.get_absolute_url }}">More on this trip</a>{% if trip.more_photos %} (including {{ trip.more_photos }} more photo{{ trip.more_photos|pluralize }}){% endif %}
 {% endfor %}
 {% endif %}
-{% ifequal profile.user user %}<p><a class="add" href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}
 
 {% endblock %}

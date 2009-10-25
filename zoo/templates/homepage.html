@@ -104,7 +104,7 @@
 			{% if user.is_authenticated %}
 			<p class="intro">
 				Seen any more animals? Why not <a href="{% url add-trip %}">add another trip</a> or 
-				<a href="{% url user-photos user.username %}">upload</a> some photos.<!-- or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun! --></p>
+				<a href="{% url flickr %}">import some photos</a> from Flickr.<!-- or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun! --></p>
 				
 			{% else %}
 			<p class="intro"><strong>Wildlife Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>

@@ -10,7 +10,7 @@
 {% endif %}
 
 <p>
-	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong>
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong>{% ifequal profile.user user %} | <a href="{% url flickr %}">import from Flickr</a>{% endifequal %}
 </p>
 
 

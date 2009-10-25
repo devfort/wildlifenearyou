@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import Q
@@ -17,6 +17,7 @@ import datetime
 
 @login_required
 def upload(request, place=None, redirect_to=None):
+    raise Http404, 'Photo upload is disabled'
     if request.method == 'POST':
         # Process uploaded photo
         form = UploadPhotoForm(request.POST, request.FILES)
@@ -49,6 +50,7 @@ class UploadPhotoForm(forms.ModelForm):
 
 @login_required
 def upload_trip(request, username, trip_id):
+    raise Http404, 'Photo upload is disabled'
     user = get_object_or_404(User, username=username)
     trip = get_object_or_404(Trip, id=trip_id, created_by=user)
     # The user should have got here via a file upload PUSH. If so, we 
