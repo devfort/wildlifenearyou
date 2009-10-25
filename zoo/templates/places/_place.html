@@ -1,4 +1,4 @@
-<div class="thumbnail">{% with place.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+<div class="thumbnail">{% if place.photo_of_species %}{{ place.photo_of_species.thumb_75 }}{% else %}{% with place.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}{% endif %}</div>
 <p><a class="place-name" href="{{ place.urls.absolute }}">{{ place.known_as }}</a></p>
 <p class="meta">
 {% if place.distance %}<span title="{{ place.latitude|floatformat:4 }}, {{ place.longitude|floatformat:4 }}">{{ place.distance|floatformat:0 }} mile{{ place.distance|pluralize }} away</span>, in{% else %}In{% endif %}

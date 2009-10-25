@@ -51,7 +51,16 @@ class AbstractSpecies(models.Model):
         return '%s (%s)' % (self.common_name, self.latin_name)
 
     def seen_at(self):
-        return Place.objects.filter(sighting__species=self).distinct()
+        places = list(Place.objects.filter(sighting__species=self).distinct())
+        for place in places:
+            photos_of_self = place.visible_photos().filter(
+                sightings__species = self
+            )
+            if photos_of_self:
+                place.photo_of_species = photos_of_self[0]
+            else:
+                place.photo_of_species = None
+        return places
 
 class Species(AbstractSpecies):
     latin_name = models.CharField(max_length=500, blank=False, null=False)
