@@ -92,17 +92,17 @@ def ensure_dependencies_ignore_installed():
     require('hosts', provided_by = [dev, staging, live])
     require('deploy_dir', provided_by = [dev, staging, live])    
     run((
-        'pip install -E  %(deploy_dir)s/venv --enable-site-packages --quiet ' 
+        'pip install -E  %(deploy_dir)s/venv --enable-site-packages ' 
         '-r  %(deploy_dir)s/current/zoo/requirements.txt --ignore-installed'
     ) % env)
 
 def deploy():
-    "svn_export make_tarball upload untar_on_server ensure_dependencies "
-    "repoint_symlink run_migrations restart_apache"
+    "svn_export make_tarball upload untar_on_server repoint_symlink "
+    "ensure_dependencies run_migrations restart_apache"
     require('deploy_dir')
     svn_export()
     make_tarball()
     upload()
     untar_on_server()
-    ensure_dependencies()
     repoint_symlink()
+    ensure_dependencies()
