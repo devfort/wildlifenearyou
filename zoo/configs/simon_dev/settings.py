@@ -8,6 +8,8 @@ TEMPLATE_DEBUG = DEBUG
 DATABASE_NAME = 'zoo_alpha_dev'
 DATABASE_USER = 'root'
 
+MEDIA_ROOT = '/srv/django-apps/dev.wildlifenearyou.com/uploaded'
+
 # Xapian settings
 SEARCH_ENABLED = True
 XAPIAN_BASE_URL = 'http://localhost:9876/search/'
