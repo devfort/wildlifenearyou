@@ -1,4 +1,5 @@
 Django==1.1.1
 pytz
 python-openid==2.2.4
+-e git://github.com/simonw/django-openid.git#egg=django-openid
 
