@@ -5,13 +5,13 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # Database settings
-DATABASE_NAME = 'zoo_alpha'
-DATABASE_USER = 'zoo_alpha'
+DATABASE_NAME = 'zoo_alpha_dev'
+DATABASE_USER = 'root'
 
 # Xapian settings
 SEARCH_ENABLED = True
 XAPIAN_BASE_URL = 'http://localhost:9876/search/'
-XAPIAN_PERSONAL_PREFIX = 'zoo_alpha'
+XAPIAN_PERSONAL_PREFIX = 'zoo_alpha_dev'
 XAPIAN_LOCATION_DB = '%s_locations' % XAPIAN_PERSONAL_PREFIX
 XAPIAN_SPECIES_DB = '%s_species' % XAPIAN_PERSONAL_PREFIX
 
