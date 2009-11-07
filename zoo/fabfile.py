@@ -5,16 +5,19 @@ import datetime
 def dev():
     "Select dev environment (on local VM)"
     env.hosts = ['localhost']
+    env.user_at_host = 'simon@localhost'
     env.deploy_dir = '/srv/django-apps/dev.wildlifenearyou.com'
 
 def staging():
     "Select staging.wildlifenearyou.com"
     env.hosts = ['wildlifenearyou.com']
+    env.user_at_host = 'simon@wildlifenearyou.com'
     env.deploy_dir = '/srv/django-apps/staging.wildlifenearyou.com'
 
 def live():
     "Select www.wildlifenearyou.com"
     env.hosts = ['wildlifenearyou.com']
+    env.user_at_host = 'simon@wildlifenearyou.com'
     env.db_name = 'zoo_alpha'
     env.deploy_dir = '/srv/django-apps/wildlifenearyou.com'
 
@@ -36,33 +39,44 @@ def svn_export():
     local('mkdir -p %(export_path)s' % env)
     local('svn export . %(export_path)s/zoo' % env)
 
-def make_tarball():
-    "Create tarball of latest code"
+def rsync_deploy():
     require('export_path', provided_by = [svn_export])
-    local(
-        'cd /tmp/fab-svn-export && ' + 
-        'tar -zcf %(deploy_date)s.tar.gz %(deploy_date)s' % env
-    )
-    local('rm -rf %(export_path)s' % env)
-
-def upload():
-    "Upload tarball of latest code"
-    require('export_path', provided_by = [make_tarball])
-    require('hosts', provided_by = [dev, staging, live])
     require('deploy_dir', provided_by = [dev, staging, live])
     run('mkdir -p %(deploy_dir)s' % env)
-    put('%(export_path)s.tar.gz' % env, env.deploy_dir)
-    env.tarball_is_uploaded = True
+    local((
+        'rsync -a --link-dest=%(deploy_date)s/current '
+        '/tmp/fab-svn-export/%(deploy_date)s '
+        '%(user_at_host)s:%(deploy_dir)s'
+    ) % env)
+    env.code_is_deployed = True
 
-def untar_on_server():
-    "Untar tarball of latest code"
-    require('tarball_is_uploaded', provided_by = [upload])
-    run('cd %(deploy_dir)s && tar -xzf %(deploy_date)s.tar.gz' % env)
-    env.tarball_is_untarred = True
+#def make_tarball():
+#    "Create tarball of latest code"
+#    require('export_path', provided_by = [svn_export])
+#    local(
+#        'cd /tmp/fab-svn-export && ' + 
+#        'tar -zcf %(deploy_date)s.tar.gz %(deploy_date)s' % env
+#    )
+#    local('rm -rf %(export_path)s' % env)
+#
+#def upload():
+#    "Upload tarball of latest code"
+#    require('export_path', provided_by = [make_tarball])
+#    require('hosts', provided_by = [dev, staging, live])
+#    require('deploy_dir', provided_by = [dev, staging, live])
+#    run('mkdir -p %(deploy_dir)s' % env)
+#    put('%(export_path)s.tar.gz' % env, env.deploy_dir)
+#    env.tarball_is_uploaded = True
+#
+#def untar_on_server():
+#    "Untar tarball of latest code"
+#    require('tarball_is_uploaded', provided_by = [upload])
+#    run('cd %(deploy_dir)s && tar -xzf %(deploy_date)s.tar.gz' % env)
+#    env.tarball_is_untarred = True
 
 def repoint_symlink():
     "Symlink $deploy_dir/current to most recent version"
-    require('tarball_is_untarred', provided_by = [untar_on_server])
+    require('code_is_deployed', provided_by = [rsync_deploy])
     with settings(warn_only = True):
         run('rm %(deploy_dir)s/previous' % env)
         run('mv %(deploy_dir)s/current %(deploy_dir)s/previous' % env)
@@ -81,7 +95,7 @@ def ensure_dependencies():
     "Ensure venv exists and has correct packages installed in it"
     require('hosts', provided_by = [dev, staging, live])
     require('deploy_dir', provided_by = [dev, staging, live])
-    require('tarball_is_untarred', provided_by = [untar_on_server])
+    require('code_is_deployed', provided_by = [rsync_deploy])
     run((
         'pip install -E  %(deploy_dir)s/venv --enable-site-packages --quiet '
         '-r  %(deploy_dir)s/%(deploy_date)s/zoo/requirements.txt'
@@ -97,12 +111,10 @@ def ensure_dependencies_ignore_installed():
     ) % env)
 
 def deploy():
-    "svn_export make_tarball upload untar_on_server repoint_symlink "
-    "ensure_dependencies run_migrations restart_apache"
+    "svn_export rsync_deploy repoint_symlink "
+    "ensure_dependencies #run_migrations restart_apache"
     require('deploy_dir')
     svn_export()
-    make_tarball()
-    upload()
-    untar_on_server()
+    rsync_deploy()
     repoint_symlink()
     ensure_dependencies()
