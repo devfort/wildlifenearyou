@@ -15,6 +15,8 @@ XAPIAN_PERSONAL_PREFIX = 'zoo_alpha'
 XAPIAN_LOCATION_DB = '%s_locations' % XAPIAN_PERSONAL_PREFIX
 XAPIAN_SPECIES_DB = '%s_species' % XAPIAN_PERSONAL_PREFIX
 
+MEDIA_ROOT = '/srv/django-apps/staging.wildlifenearyou.com/media_root'
+
 # SMTP settings
 DEFAULT_FROM_EMAIL = 'simon@simonwillison.net'
 EMAIL_FROM = DEFAULT_FROM_EMAIL
