@@ -44,35 +44,12 @@ def rsync_deploy():
     require('deploy_dir', provided_by = [dev, staging, live])
     run('mkdir -p %(deploy_dir)s' % env)
     local((
-        'rsync -a --link-dest=%(deploy_date)s/current '
-        '/tmp/fab-svn-export/%(deploy_date)s '
-        '%(user_at_host)s:%(deploy_dir)s'
+        'rsync -a -i --progress --compress '
+        '--link-dest=%(deploy_dir)s/current/ '
+        '/tmp/fab-svn-export/%(deploy_date)s/ '
+        '%(user_at_host)s:%(deploy_dir)s/%(deploy_date)s/ '
     ) % env)
     env.code_is_deployed = True
-
-#def make_tarball():
-#    "Create tarball of latest code"
-#    require('export_path', provided_by = [svn_export])
-#    local(
-#        'cd /tmp/fab-svn-export && ' + 
-#        'tar -zcf %(deploy_date)s.tar.gz %(deploy_date)s' % env
-#    )
-#    local('rm -rf %(export_path)s' % env)
-#
-#def upload():
-#    "Upload tarball of latest code"
-#    require('export_path', provided_by = [make_tarball])
-#    require('hosts', provided_by = [dev, staging, live])
-#    require('deploy_dir', provided_by = [dev, staging, live])
-#    run('mkdir -p %(deploy_dir)s' % env)
-#    put('%(export_path)s.tar.gz' % env, env.deploy_dir)
-#    env.tarball_is_uploaded = True
-#
-#def untar_on_server():
-#    "Untar tarball of latest code"
-#    require('tarball_is_uploaded', provided_by = [upload])
-#    run('cd %(deploy_dir)s && tar -xzf %(deploy_date)s.tar.gz' % env)
-#    env.tarball_is_untarred = True
 
 def repoint_symlink():
     "Symlink $deploy_dir/current to most recent version"
@@ -118,3 +95,27 @@ def deploy():
     rsync_deploy()
     repoint_symlink()
     ensure_dependencies()
+
+#def make_tarball():
+#    "Create tarball of latest code"
+#    require('export_path', provided_by = [svn_export])
+#    local(
+#        'cd /tmp/fab-svn-export && ' + 
+#        'tar -zcf %(deploy_date)s.tar.gz %(deploy_date)s' % env
+#    )
+#    local('rm -rf %(export_path)s' % env)
+#
+#def upload():
+#    "Upload tarball of latest code"
+#    require('export_path', provided_by = [make_tarball])
+#    require('hosts', provided_by = [dev, staging, live])
+#    require('deploy_dir', provided_by = [dev, staging, live])
+#    run('mkdir -p %(deploy_dir)s' % env)
+#    put('%(export_path)s.tar.gz' % env, env.deploy_dir)
+#    env.tarball_is_uploaded = True
+#
+#def untar_on_server():
+#    "Untar tarball of latest code"
+#    require('tarball_is_uploaded', provided_by = [upload])
+#    run('cd %(deploy_dir)s && tar -xzf %(deploy_date)s.tar.gz' % env)
+#    env.tarball_is_untarred = True
