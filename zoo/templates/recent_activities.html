@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Recent events{% endblock %}
+
+{% block content %}
+<h1>Recent events</h1>
+<ol>
+	{% for event in events %}
+		<li>{{ event.created|date:"jS F Y H:i:s" }}: 
+		{% if event.url %}
+			<a href="{{ event.url }}">{{ event }}</a>
+		{% else %}
+			{{ event }}
+		{% endif %}
+		{% if event.user %} (by <a href="{{ event.user.get_profile.get_absolute_url }}">{{ event.user }}</a>)
+		{% endif %}
+		</li>
+	{% endfor %}
+</ol>
+
+<p><a href="/feeds/recent/">RSS feed for this page</a></p>
+
+{% endblock %}

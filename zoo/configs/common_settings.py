@@ -121,6 +121,7 @@ INSTALLED_APPS = [
     'zoo.search',
     'zoo.common',
     'zoo.launchsignups',
+    'zoo.activities',
     'django_openid',
     'pagination',
     'zoo.invitereg',
@@ -130,6 +131,18 @@ INSTALLED_APPS = [
     'tagging',
     'django.contrib.markup'
 ]
+
+ACTIVITY_MODELS = (
+    'accounts.Profile',
+    'animals.Species',
+    'changerequests.ChangeRequestGroup',
+    'favourites.FavouriteSpecies',
+    'feedback.Feedback',
+    'photos.Photo',
+    'places.Place',
+    'trips.Trip',
+    'auth.User',
+)
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')
 

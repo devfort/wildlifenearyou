@@ -15,6 +15,8 @@ from dmigrations.migration_state import table_present
 #for model in get_models():
 #    if table_present(model._meta.db_table):
 #        databrowse.site.register(model)
+import activities.signals
+from activities.feeds import RecentEvents
 
 from django.template import add_to_builtins
 add_to_builtins('zoo.common.templatetags.switch')
@@ -31,6 +33,14 @@ registration_consumer = RegistrationConsumer()
 urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
+    }),
+    
+    # Activity stream stuff
+    (r'^recent/$', 'activities.views.recent'),
+    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {
+        'feed_dict': {
+            'recent': RecentEvents,
+        }
     }),
     
     # Invitation URL (sent out in invite e-mail)
