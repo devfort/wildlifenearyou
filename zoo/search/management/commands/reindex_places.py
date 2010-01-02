@@ -20,4 +20,3 @@ class Command(BaseCommand):
         for place in Place.objects.all():
             place.save()
             print "Re-indexed %s" % place
-        
