@@ -48,6 +48,20 @@ def trip_view(request, username, trip_id):
         'visible_photos': photos,
     })
 
+def trip_photos(request, username, trip_id):
+    user = get_object_or_404(User, username=username)
+    trip = get_object_or_404(Trip, id=trip_id, created_by=user)
+    if user == request.user:
+        photos = trip.photos.all()
+    else:
+        photos = trip.visible_photos()
+    return render(request, 'trips/trip_photos.html', {
+        'profile': user.get_profile(),
+        'trip': trip,
+        'belongs_to_user': request.user.id == user.id,
+        'visible_photos': photos,
+    })
+
 @login_required
 def pick_sightings_for_place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)

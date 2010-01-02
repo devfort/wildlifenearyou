@@ -126,6 +126,7 @@
 									{% endfor %}
 							</ul><!-- /#thumbnails -->
 						</div><!-- /.slideshow -->
+						<p><a href="{% url trip-photos profile.user.username trip.id %}">All photos from this trip</a></p>
 					</div>
 					{% endwith %}
 				{% endifequal %}
