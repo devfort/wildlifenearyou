@@ -16,7 +16,7 @@
 
 {% if trip_count %}
 <h2>Assign photos to trips</h2>
-<p>Please tell us the trip on which you took these photos.</p>
+<p>Please tell us the trip on which you took these photos, or <a href="{% url add-trip %}">add a new trip</a>.</p>
 
 {% if they_forgot_to_select_some_photos %}
 <p class="notification">You forgot to select any photos!</p>
