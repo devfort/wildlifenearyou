@@ -55,12 +55,19 @@ def search(q, place=None, limit=5):
             type = '/biology/organism_classification',
             limit = limit,
             mql_output = json.dumps([{
-                'id': None,
+                'guid': None,
                 'name': None,
                 '/biology/organism_classification/scientific_name': None,
                 '/common/topic/alias': [],
             }])
         )
+        # Add an 'id' field for each result based on the 'guid' field
+        fb_json = [
+            dict(item.items() + [
+                ('id', '/guid/%s' % item['guid'].replace('#', ''))
+            ])
+            for item in fb_json
+        ]
     
     results = _annotate_database_objects(
         map(_tidy_up_keys, fb_json), place = place
