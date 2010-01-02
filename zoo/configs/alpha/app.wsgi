@@ -10,7 +10,7 @@ sys.stdout = sys.stderr
 paths = (
     ROOT + 'current/zoo/ext',
     ROOT + 'current/zoo',
-    RoOT + 'current',
+    ROOT + 'current',
 )
 for path in paths:
     if not path in sys.path:
