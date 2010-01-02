@@ -1,3 +1,47 @@
+from django.core.management.base import BaseCommand, CommandError
+from zoo.animals.models import Species
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.comments.models import Comment
+
+class Command(BaseCommand):
+    help = """
+    ./manage.py merge_species slug1 slug2
+    
+    Merge the species with slug1 (the duplicate item) in to the species with
+    slug2 - all sightings, comments and favourites attached to slug1 will be 
+    moved over to point at slug2 instead, and slug1 will then be deleted.
+    """.strip()
+    
+    requires_model_validation = True
+    can_import_settings = True
+    
+    def handle(self, *args, **options):
+        if len(args) != 2:
+            raise CommandError, 'Usage: /manage.py merge_species slug1 slug2'
+        duplicate_slug = args[0]
+        species_slug = args[1]
+        
+        try:
+            duplicate = Species.objects.get(slug = duplicate_slug)
+        except Species.DoesNotExist:
+            raise CommandError, '%s is not a valid species' % duplicate_slug
+        try:
+            species = Species.objects.get(slug = species_slug)
+        except Species.DoesNotExist:
+            raise CommandError, '%s is not a valid species' % species_slug
+        
+        print "Move everything attached to %s to %s and delete %s ?" % (
+            duplicate.slug, species.slug, duplicate.slug
+        )
+        if not raw_input().strip().lower().startswith('y'):
+            raise CommandError, "You didn't type yes!"
+        
+        merge_duplicate_into_species(duplicate, species)
+        
+        print "You should now run:"
+        print "  ./manage.py reindex_known_species"
+        print "or the search interface is likely to break."
+
 def merge_duplicate_into_species(duplicate, species):
     "duplicate will have all attached stuff moved to species, then be deleted"
     # Shift sightings across

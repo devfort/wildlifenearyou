@@ -22,7 +22,6 @@ def ensure_freebase_ids_are_guids():
         print "    %s freebase id is now %s" % (species, new_freebase_id)
 
 from django.core.management.base import BaseCommand, CommandError
-from search import searches
 
 class Command(BaseCommand):
     help = """
