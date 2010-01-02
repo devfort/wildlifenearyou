@@ -4,6 +4,7 @@ from django_openid.forms import RegistrationForm
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.utils.safestring import mark_safe
+from django.contrib.auth import authenticate
 
 class CustomRegistrationForm(RegistrationForm):
     extra_required = ('email',) # first/last name are optional
@@ -29,6 +30,20 @@ class RegistrationConsumer(RegistrationConsumer):
     RegistrationForm = CustomRegistrationForm
     
     def do_register(self, request, message=None):
+        # If user has entered the username and password for a valid account, 
+        # log them straight in
+        if request.POST.get('username', '').strip() and \
+                request.POST.get('password', '').strip():
+            user = authenticate(
+                username = request.POST.get('username'),
+                password = request.POST.get('password')
+            )
+            if user:
+                self.log_in_user(request, user)
+                return HttpResponseRedirect(
+                    user.get_profile().get_absolute_url()
+                )
+        
         # If user has entered a password AND it's the same as what they 
         # entered in the OpenID field, ignore the OpenID field
         if 'openid_url' in request.POST and 'password' in request.POST and \
