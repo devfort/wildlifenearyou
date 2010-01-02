@@ -1,12 +1,16 @@
-import os, sys
+import os, sys, site
+
+ROOT = '/srv/django-apps/staging.wildlifenearyou.com/'
+
+site.addsitedir(ROOT + 'venv/lib/python2.6/site-packages')
 
 # Get rid of 'sys.stdout access restricted by mod_wsgi' error
 sys.stdout = sys.stderr
 
 paths = (
-    '/home/simon/sites/alpha.wildlifenearyou.com/zoo/ext',
-    '/home/simon/sites/alpha.wildlifenearyou.com/zoo',
-    '/home/simon/sites/alpha.wildlifenearyou.com',
+    ROOT + 'current/zoo/ext',
+    ROOT + 'current/zoo',
+    RoOT + 'current',
 )
 for path in paths:
     if not path in sys.path:
