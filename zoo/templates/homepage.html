@@ -39,70 +39,23 @@
 				</form>
 			</div>
 			{% else %}
-			
 			<div class="interact" id="register-box">
-				<h2>Register or login</h2>
-				<form action="/account/register/" method="post">
-					<div class="login-wrapper">
-						<div class="container text-container">
-							<label for="id_username">username</label>
-							<input id="id_username" type="text" name="username" maxlength="30" />
-						</div>
-						<div class="container text-container">
-							<label for="id_password">password</label>
-							<input type="password" name="password" id="id_password">
-						</div>
-					</div>
-					<p>If this is your first time here, to register just enter your email address below</p>
-					
-					<div class="container text-container">
-						<label for="id_email">e-mail</label>
-						<input id="id_email" type="text" name="email" maxlength="75">
-					</div>
-					
-					<p>&hellip; or use <a href="{% url accounts-login %}" id="login-now-toggle">OpenID</a> to login or register</p>
-					
-					<div><input type="submit" class="submit" value="go &raquo;"></div>
-				</form>
-			</div>
-			<div class="interact" id="login-box" style="display:none">
-				<h2>Register or login</h2>
-				<form action="/account/login/" method="post">
-					
-					<div class="container text-container">
-						<label for="id_openid_url">with OpenID</label>
-						<input type="text" name="openid_url" id="id_openid_url" class="openid" />
-					</div>
-					<p>&hellip; or <a href="{% url accounts-register %}" id="register-now-toggle">use a username or password</a></p>
-					<div><input type="submit" class="submit" value="go &raquo;"></div>
-
-				</form>
-			</div>
-			<!--<div class="interact" id="register-box">
 				<h2>Register now</h2>
 				<p class="meta">Already a member? <a href="{% url accounts-login %}" class="action" id="login-now-toggle">&raquo; <span>Log in</span></a></p>
 				<form action="/account/register/" method="post">
 					<div class="container text-container">
-						<label for="id_username">desired username</label>
+						<label for="id_username">username</label>
 						<input id="id_username" type="text" name="username" maxlength="30" />
 					</div>
 					<div class="container text-container">
 						<label for="id_email">e-mail</label>
 						<input id="id_email" type="text" name="email" maxlength="75">
 					</div>
-					<div class="login-wrapper">
-						<div class="container text-container">
-							<label for="id_password">password</label>
-							<input type="password" name="password" id="id_password">
-						</div>
-						<div class="container text-container">
-							<label for="id_openid_url"><strong>or</strong> OpenID<a href="#what-is-openid" class="toggler">what is this?</a></label>
-							<input type="text" name="openid_url" id="id_openid_url" class="openid" />
-						</div>
-						<div id="what-is-openid">
-							<p>OpenID allows you to use the same account on many different websites. Read more at <a href="http://openid.net/">openid.net</a>.</p>
-						</div>
+					<div class="container text-container">
+						<label for="id_password">password</label>
+						<input type="password" name="password" id="id_password">
 					</div>
+					<p>Or <a onclick="$('#register-box').hide(); $('#login-with-openid').show(); $('#login-with-password').hide(); $('#login-box').show(); return false;" href="#login-with-openid">register with <strong class="openid">OpenID</strong></a></p>
 					<p class="meta">By registering with Wildlife Near You, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
 					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>
 				</form>
@@ -137,7 +90,7 @@
 						<input type="submit" class="submit" value="&raquo; Login">
 					</div>
 				</form>
-			</div>-->
+			</div>-
 			{% endif %}
 			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 			{% if user.is_authenticated %}
