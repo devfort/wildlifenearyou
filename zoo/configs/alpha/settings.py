@@ -1,7 +1,7 @@
 from zoo.configs.common_settings import *
 
 # Debug settings - turn OFF before launch
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # Database settings
