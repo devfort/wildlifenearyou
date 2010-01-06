@@ -332,6 +332,9 @@ a.action:active span,
 	background-image: url(/static/img/bg/animal_75.png);
 	background-repeat: no-repeat;
 }
+.thumbnail.person {
+	background-image: none;
+}
 .unknown .thumbnail {
 	background-image: url(/static/img/bg/animal_unknown_75.png);
 }
