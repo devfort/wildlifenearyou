@@ -29,7 +29,7 @@
 {% if q and results and results_corrected_q %}
 
 <p class="notification">
-We couldn&rsquo;t find any results for {{ q }}, so we thought you might like these results for &ldquo;{{ results_corrected_q }}&rdquo;.
+We couldn&rsquo;t find any results for &ldquo;{{ q }}&rdquo;, so we thought you might like these results for &ldquo;{{ results_corrected_q }}&rdquo;.
 </p>
 
 {% endif %}
@@ -71,7 +71,7 @@ We couldn&rsquo;t find any results for {{ q }}, so we thought you might like the
 	{% endfor %}
 	</ol>
 	{% if species_results_more %}
-			<a href="{% url species-search %}?q={{ q|urlencode }}">More species matching &ldquo;{{ q }}&rdquo;…</a>
+		<p><a href="{% url species-search %}?q={{ q|urlencode }}">More species matching &ldquo;{{ q }}&rdquo;…</a></p>
 	{% endif %}
 {% endif %}
 
