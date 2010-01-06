@@ -48,7 +48,10 @@ class AbstractSpecies(models.Model):
         return 'a'
 
     def __unicode__(self):
-        return '%s (%s)' % (self.common_name, self.latin_name)
+        if self.latin_name:
+            return '%s (%s)' % (self.common_name, self.latin_name)
+        else:
+            return self.common_name
 
     def seen_at(self):
         places = list(Place.objects.filter(sighting__species=self).distinct())
