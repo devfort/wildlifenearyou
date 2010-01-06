@@ -43,9 +43,14 @@
 			{% endfor %}
 		</ul>
 		{% if photos and enable_button %}
-		<div class="button-container"><input type="submit" class="submit" value="Import these photos"></div>
+		<div class="button-container"><input type="submit" class="submit" value="Import selected photos"></div>
 		{% endif %}
 	</form>
+	{% if paginated %}<p>
+	{% if has_prev %}<a href="?page={{ prev_page }}">Previous page</a>{% endif %}
+	&middot; {{ num_pages }} pages &middot;
+	{% if has_next %}<a href="?page={{ next_page }}">Next page</a>{% endif %}
+	</p>{% endif %}
 {% else %}
 	<p class="notification">No Flickr photos are available to import.</p>
 {% endif %}

@@ -34,14 +34,28 @@ def index(request):
     flickr_token = request.COOKIES.get('flickr_token')
     if not flickr_token:
         return flickr_redirect(request.path)
+    page = request.GET.get('page', '1')
+    try:
+        page = max(int(page), 1)
+    except ValueError:
+        page = 1
     client = Flickr(token = flickr_token)
     token_info = client.auth_checkToken()
     user_id = token_info['auth']['user']['nsid']
-    photos = client.photos_search(
-        user_id = 'me',per_page=20
-    )['photos']['photo']
+    result = client.photos_search(
+        user_id = 'me', per_page = 24, page = page
+    )
+    photos = result['photos']['photo']
+    num_pages = result['photos']['pages']
     return photo_picker(
-        request, photos, 'Your recent photos'
+        request, photos, 'Your recent photos', {
+            'paginated': num_pages > 1,
+            'num_pages': num_pages,
+            'has_next': page < num_pages,
+            'next_page': page + 1,
+            'has_prev': page > 1,
+            'prev_page': page - 1,
+        }
     )
 
 @login_required
@@ -132,7 +146,7 @@ def place(request, woe_id):
         request, photos, 'Your photos in %s' % place_info['place']['name']
     )
 
-def photo_picker(request, photos, title):
+def photo_picker(request, photos, title, extra_context = None):
     # Enhance each photo with a signed dict for the checkbox field, so if 
     # they DO select that photo we won't have to do another API call to look 
     # up its details on Flickr
@@ -154,11 +168,15 @@ def photo_picker(request, photos, title):
         if not already_imported:
             enable_button = True
     
-    return render(request, 'flickr/photo_picker.html', {
+    context = {
         'title': title,
         'photos': photos,
         'enable_button': enable_button,
-    })
+    }
+    if extra_context is not None:
+        context.update(extra_context)
+    
+    return render(request, 'flickr/photo_picker.html', context)
 
 @login_required
 def search(request):
