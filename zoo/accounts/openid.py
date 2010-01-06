@@ -5,9 +5,12 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.contrib.auth import authenticate
+import re
 
 class CustomRegistrationForm(RegistrationForm):
     extra_required = ('email',) # first/last name are optional
+    invalid_username_error = 'Usernames must be three letters or more'
+    username_re = re.compile('^[a-zA-Z0-9]{3,}$')
     
     def __init__(self, *args, **kwargs):
         kwargs['reserved_usernames'] = settings.RESERVED_USERNAMES
