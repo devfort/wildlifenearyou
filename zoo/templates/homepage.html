@@ -55,42 +55,46 @@
 						<label for="id_password">password</label>
 						<input type="password" name="password" id="id_password">
 					</div>
-					<p>Or <a onclick="$('#register-box').hide(); $('#login-with-openid').show(); $('#login-with-password').hide(); $('#login-box').show(); return false;" href="#login-with-openid">register with <strong class="openid">OpenID</strong></a></p>
+					<p>Or <a onclick="$('#register-box').hide(); $('#openid-box').show(); $('#login-box').hide(); return false;" href="#openid-box">use <strong class="openid">OpenID</strong></a></p>
 					<p class="meta">By registering with Wildlife Near You, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
 					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>
 				</form>
 			</div>
 			<div class="interact" id="login-box" style="display:none">
 				<h2>Login now</h2>
-				<p>Not yet a member? <a href="{% url accounts-register %}" class="action" id="register-now-toggle">&raquo; <span>register</span></a></p>
+				<p>Not yet a member? <a href="{% url accounts-register %}" class="action" onclick="$('#register-box').show(); $('#openid-box').hide(); $('#login-box').hide(); return false;">&raquo; <span>register</span></a></p>
 				<form action="/account/login/" method="post">
-					<div id="login-with-password">
-						<div class="container text-container">
-							<label for="id_username">username</label>
-							<input id="id_username" type="text" name="username" maxlength="30">
-						</div>
-						<div class="container text-container">
-							<label for="id_password">password</label>
-							<input type="password" name="password" id="id_password">
-							<p class="meta"><a href="/account/recover/">I've forgotten my password!</a></p>
-						</div>
-						<p>Or <a onclick="$('#login-with-password').hide(); $('#login-with-openid').show(); return false;" href="#login-with-openid">log in with <strong class="openid">OpenID</strong></a></p>
+					<div class="container text-container">
+						<label for="id_username">username</label>
+						<input id="id_username" type="text" name="username" maxlength="30">
 					</div>
-					<div id="login-with-openid" style="display: none">
-						<div class="container text-container">
-							<label for="id_openid_url-login">OpenID<br><a href="#what-is-openid2" class="toggler">what is this?</a></label>
-							<input type="text" name="openid_url" id="id_openid_url-login" class="openid">
-							<div id="what-is-openid2" style="display:none">
-								<p>OpenID allows you to use the same account on many different websites. Read more at <a href="http://openid.net/">openid.net</a>.</p>
-							</div>
-						</div>
-						<p>Or <a onclick="$('#login-with-openid').hide(); $('#login-with-password').show(); return false;" href="#login-with-password">log in with a username and password</a></p>
+					<div class="container text-container">
+						<label for="id_password">password</label>
+						<input type="password" name="password" id="id_password">
+						<p class="meta"><a href="/account/recover/">I've forgotten my password!</a></p>
 					</div>
+					<p>Or <a onclick="$('#register-box').hide(); $('#openid-box').show(); $('#login-box').hide(); return false;" href="#openid-box">use <strong class="openid">OpenID</strong></a></p>
 					<div>
 						<input type="submit" class="submit" value="&raquo; Login">
 					</div>
 				</form>
-			</div>-
+			</div>
+			<div class="interact" id="openid-box" style="display:none">
+				<h2>Use OpenID</h2>
+				<form action="/account/login/" method="post">
+					<div class="container text-container">
+						<label for="id_openid_url-login">OpenID</label>
+						<input type="text" name="openid_url" id="id_openid_url-login" class="openid">
+						<div id="what-is-openid2">
+							<p>OpenID allows you to use the same account on many different websites. Read more at <a href="http://openid.net/">openid.net</a>.</p>
+						</div>
+					</div>
+					<p>Or <a onclick="$('#register-box').hide(); $('#openid-box').hide(); $('#login-box').show(); return false;" href="#login-box">use a username and password</a></p>
+					<div>
+						<input type="submit" class="submit" value="&raquo; Login">
+					</div>
+				</form>
+			</div>
 			{% endif %}
 			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 			{% if user.is_authenticated %}
