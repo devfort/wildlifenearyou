@@ -21,6 +21,10 @@ def live():
     env.db_name = 'zoo_alpha'
     env.deploy_dir = '/srv/django-apps/wildlifenearyou.com'
 
+def restart():
+    require('hosts', provided_by = [dev, staging, live])
+    sudo('/etc/init.d/apache2 restart')
+
 def mirror_db():
     "Mirror database to local machine"
     env.now = datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
