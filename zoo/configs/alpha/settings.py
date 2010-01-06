@@ -39,7 +39,7 @@ FLICKR_API_SECRET = '19db0ec3fb0c4e69'
 # Dev status bar HTML
 DEV_STATUS_HTML = """
 <div class="dev-status alpha">
- <p>This is <strong>alpha</strong>.wildlifenearyou.com - please don't link to or Twitter this yet, we're still fixing up some loose ends</p>
+ <p>This is still an <strong>alpha</strong> site - please don't link to or Twitter this yet, we're fixing up some loose ends</p>
 </div>
 """
 
