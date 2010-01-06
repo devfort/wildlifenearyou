@@ -44,7 +44,7 @@
 </div>
 
 <div>
-	<h2>{% ifequal profile.user user %}Your{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Most Recent Trips</h2>
+	<h2>Recent trips</h2>
 		{% ifequal profile.user user %}
 		<form action="/add-trip/" method="GET">
 			<div class="container">
@@ -74,7 +74,7 @@
 </div>
 
 <div>
-	<h2>Animals {% ifequal profile.user user %}you've{% else %}{{ profile.user }} has{% endifequal %} spotted</h2>
+	<h2>Animals spotted</h2>
 	<p>
 	{% ifequal profile.user user %}
 	Add {% if profile.user.created_trip_set.count %}more{% else %}some{% endif %} trips to tell us what you've seen.
@@ -121,7 +121,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 
 <div>
 	{% if profile.user.favourite_species.all %}
-	<h2 id="favourite-animals">{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Favourite Animals</h2>
+	<h2 id="favourite-animals">Favourite animals</h2>
 	<ol class="animal-list">
 				{% for favourite in profile.user.favourite_species.all %}
 				<li>
@@ -147,7 +147,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 <div>
 		{% with photos.count as visible_photo_count %}
 			{% if visible_photo_count %}
-						<h2>{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Photos</h2>
+				<h2>Photos</h2>
 				{% ifequal visible_photo_count 1 %}{# Only one photo #}
 					<div class="gallery">
 					{% for photo in photos.all %}
@@ -182,7 +182,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 
 {% if profile.user.comment_comments.all %}
 		<div>
-				<h2>{% ifequal profile.user user %}Your{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Comments</h2>
+				<h2>Comments</h2>
 				<ul class="comments">
 				{% for comment in profile.user.comment_comments.all %}
 					<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
