@@ -51,6 +51,7 @@ def index(request):
         request, photos, 'Your recent photos', {
             'paginated': num_pages > 1,
             'num_pages': num_pages,
+            'page': page,
             'has_next': page < num_pages,
             'next_page': page + 1,
             'has_prev': page > 1,

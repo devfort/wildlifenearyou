@@ -48,7 +48,7 @@
 	</form>
 	{% if paginated %}<p>
 	{% if has_prev %}<a href="?page={{ prev_page }}">Previous page</a>{% endif %}
-	&middot; {{ num_pages }} pages &middot;
+	&middot; Page {{ page }} of {{ num_pages }} &middot;
 	{% if has_next %}<a href="?page={{ next_page }}">Next page</a>{% endif %}
 	</p>{% endif %}
 {% else %}
