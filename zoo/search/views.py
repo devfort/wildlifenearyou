@@ -15,6 +15,10 @@ from zoo.utils import location_from_request
 from zoo.search.geocoders import google_geocode, placemaker_geocode
 
 def search_split(request, what, near):
+    if near.lower() == 'me':
+        (current_location, (lat, lon)) = location_from_request(request)
+        if current_location:
+            near = current_location
     # Look up location using Google geocoder (more likely to return results)
     name, (lat, lon) = google_geocode(near)
     if not name:
@@ -156,10 +160,6 @@ def search(request):
     if what.lower() == 'everything':
         what = ''
     near = request.GET.get('near', '')
-    if near.lower() == 'me':
-        (current_location, (lat, lon)) = location_from_request(request)
-        if current_location:
-            near = current_location
     if what and near:
         return search_split(request, what, near)
     elif what:
