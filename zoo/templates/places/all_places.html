@@ -8,7 +8,7 @@
 
 <h1>All Places</h1>
 {% if all_places %}
-{% autopaginate all_places 10 %}
+{% autopaginate all_places 30 %}
 {% paginate %}
 <ul class='place-list'>
 		{% for place in all_places %}
