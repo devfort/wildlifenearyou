@@ -202,6 +202,7 @@ def photo(request, username, photo_id):
     )
     return render(request, 'photos/photo.html', {
         'photo': photo,
+        'favourited': photo.is_favourited_by(request.user),
     })
 
 def all(request):
@@ -214,6 +215,13 @@ def user_photos(request, username):
     return render(request, 'photos/user_photos.html', {
         'profile': user.get_profile(),
         'photos': filter_visible_photos(user.photos, request.user),
+    })
+
+def user_favourite_photos(request, username):
+    user = get_object_or_404(User, username = username)
+    return render(request, 'photos/user_favourite_photos.html', {
+        'profile': user.get_profile(),
+        'faves': user.favourite_photos.all(),
     })
 
 def user_photos_by_trip(request, username):

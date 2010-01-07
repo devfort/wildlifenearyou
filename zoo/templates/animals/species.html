@@ -68,9 +68,19 @@
 
 {% if request.user.is_authenticated %}
 	{% if favourited %}
-	<p>This is one of <a href="{{ user.get_profile.urls.absolute }}#favourite-animals">your favourite animals</a>! {% favourite_toggler "remove" species.slug request.path %}</p>
+	<form method="post" action="/favourites/species/remove/{{ species.pk }}/">
+	<p>This is one of <a href="{{ user.get_profile.urls.absolute }}#favourite-animals">your favourite animals</a>! 
+		<input type="hidden" name="next" value="{{ request_path }}">
+		<input class="link" type="submit" value="Remove from favourites">
+	</p>
+	</form>
 	{% else %}
-	<p class="add">{% favourite_toggler "add" species.slug request.path %}</p>
+	<form method="post" action="/favourites/species/add/{{ species.pk }}/">
+	<p>
+		<input type="hidden" name="next" value="{{ request_path }}">
+		<input class="link" type="submit" value="Add to favourites">
+	</p>
+	</form>
 	{% endif %}
 {% else %}
 	<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>

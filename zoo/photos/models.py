@@ -149,6 +149,11 @@ class Photo(models.Model):
     objects = models.Manager()
     visible = VisiblePhotoManager()
 
+    def is_favourited_by(self, user):
+        if not user.is_authenticated():
+            return False
+        return user.favourite_photos.filter(photo = self).count() > 0
+
     @models.permalink
     def get_absolute_url(self):
         return ('photo', (), {

@@ -1,0 +1,32 @@
+{% extends base %}
+
+{% load pagination_tags %}
+
+{% block title %}{{ profile.user|title }}'s photos{% endblock %}
+
+{% block content %}
+
+<h1><a href="{{ profile.urls.absolute }}">{{ profile.user|title }}</a>{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+{% if profile.badges.all %}
+<ul>{{ profile.badges.all|unordered_list }}</ul>
+{% endif %}
+
+<div>
+	{% if not faves %}
+		<p>{{ profile.user.username }} has not yet picked any favourite photos.</p>
+	{% else %}
+		<h2>Favourite photos</h2>	
+		{% autopaginate faves 30 %}
+		{% paginate %}
+		<ul class="photo-display">
+				{% for fave in faves %}
+						<li>
+								<a href="{{ fave.photo.urls.absolute }}" title="{{ fave.photo.title }}">{{ fave.photo.thumb_75 }}</a>
+						</li>
+				{% endfor %}
+		</ul>
+		{% paginate %}
+	{% endif %}
+</div>
+
+{% endblock %}

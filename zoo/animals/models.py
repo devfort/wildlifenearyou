@@ -99,7 +99,7 @@ class Species(AbstractSpecies):
             return vp.order_by('?')[0]
         return None
 
-    def has_favourited(self, user):
+    def is_favourited_by(self, user):
         if not user.is_authenticated():
             return False
         return user.favourite_species.filter(species=self).count() != 0

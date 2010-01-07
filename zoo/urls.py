@@ -30,6 +30,14 @@ from accounts.openid import RegistrationConsumer
 
 registration_consumer = RegistrationConsumer()
 
+from animals.models import Species
+from photos.models import Photo
+from favourites.views import FavouriteView
+from favourites.models import FavouriteSpecies, FavouritePhoto
+
+fave_species = FavouriteView(FavouriteSpecies, 'species', Species)
+fave_photo = FavouriteView(FavouritePhoto, 'photo', Photo)
+
 urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
@@ -192,9 +200,8 @@ urlpatterns = patterns('',
         'zoo.animals.views.species_spotters',
         name='species-spotters'),
     
-    url(r'^favourite/(?P<action>add|remove)/$', 
-        'zoo.favourites.views.handle_favourite',
-        name='favourite-species'),
+    url(r'^favourites/species/(add|remove)/(\d+)/$', fave_species),
+    url(r'^favourites/photo/(add|remove)/(\d+)/$', fave_photo),
     
     url(r'^latin/$', 'zoo.animals.views.all_species_latin',
         name='all-species-latin'),
@@ -273,6 +280,9 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/photos/unassigned/$',
         'zoo.photos.views.user_photos_unassigned',
         name='user-photos-unassigned'),
+    url(r'^(?P<username>\w+)/photos/favourites/$',
+        'zoo.photos.views.user_favourite_photos',
+        name='user-photos-favourites'),
     url(r'^(?P<username>\w+)/photos/(?P<photo_id>\d+)/$',
         'zoo.photos.views.photo',
         name='photo'),

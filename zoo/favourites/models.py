@@ -4,6 +4,7 @@ from django.db import models
 
 from django.contrib.auth.models import User
 from zoo.animals.models import Species
+from zoo.photos.models import Photo
 
 class FavouriteSpecies(models.Model):
     user = models.ForeignKey(User, related_name='favourite_species')
@@ -20,7 +21,7 @@ class FavouriteSpecies(models.Model):
         super(FavouriteSpecies, self).save(force_insert=force_insert)
 
     def __unicode__(self):
-        return "%s loves %s" % (self.user.username, self.species.common_name,)
+        return "%s loves %s" % (self.user.username, self.species.common_name)
 
     @staticmethod
     def hit_parade():
@@ -36,3 +37,19 @@ class FavouriteSpecies(models.Model):
         species_list.sort(key=lambda s: s.count, reverse=True)
         return species_list
 
+class FavouritePhoto(models.Model):
+    user = models.ForeignKey(User, related_name='favourite_photos')
+    photo = models.ForeignKey(Photo, related_name='favourited')
+    when_added = models.DateTimeField(null=False, blank=False)
+
+    class Meta:
+        ordering = ['-when_added']
+        unique_together = ('user', 'photo')
+
+    def save(self, force_insert=False):
+        if not self.id:
+            self.when_added = datetime.datetime.now()
+        super(FavouritePhoto, self).save(force_insert=force_insert)
+
+    def __unicode__(self):
+        return "%s loves %s" % (self.user.username, self.photo)

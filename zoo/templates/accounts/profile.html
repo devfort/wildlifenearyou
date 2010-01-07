@@ -125,11 +125,16 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 	<ol class="animal-list">
 				{% for favourite in profile.user.favourite_species.all %}
 				<li>
-						<div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-						<p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
-						<p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
-						{% ifequal user profile.user %}
-					{% favourite_toggler "remove" favourite.species.slug request.path "link" "" "Remove" %}
+					<div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+					<p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
+					<p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
+					{% ifequal user profile.user %}
+					<form method="post" action="/favourites/species/remove/{{ favourite.species.pk }}/">
+						<p>
+							<input type="hidden" name="next" value="{{ request.path }}">
+							<input class="link" type="submit" value="Remove">
+						</p>
+					</form>
 					{% endifequal %}
 				</li>
 			{% endfor %}
@@ -167,7 +172,10 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 									{% endfor %}
 							</ul><!-- /#thumbnails -->
 						</div><!-- /.slideshow -->
-							<p><a href='{% url user-photos profile.user.username %}'>See all {% ifequal user profile.user %}your{% else %}their {% endifequal %} photos.</a></p>
+							<p><a href="{% url user-photos profile.user.username %}">All {% ifequal user profile.user %}your{% else %}their {% endifequal %} photos</a></p>
+							{% if profile.user.favourite_photos.count %}
+							<p><a href="{% url user-photos-favourites profile.user.username %}">{% ifequal user profile.user %}Your{% else %}Their {% endifequal %} favourite photos</a></p>
+							{% endif %}
 					</div>
 					{% endwith %}
 				{% endifequal %}

@@ -46,7 +46,7 @@ def species(request, slug):
     spotters = User.objects.filter(created_sighting_set__species=species).distinct()
     return render(request, 'animals/species.html', {
         'species': species,
-        'favourited': species.has_favourited(request.user),
+        'favourited': species.is_favourited_by(request.user),
         'hit_parade': hit_parade,
         'favourites': favourites,
         'nearest': nearest,
