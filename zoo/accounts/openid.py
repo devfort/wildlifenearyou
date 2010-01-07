@@ -25,12 +25,11 @@ class RegistrationConsumer(RegistrationConsumer):
     trust_root = '/account/'
     urlname_pattern = 'accounts-%s'
     account_recovery_url = '/account/recover/'
-    unknown_openid_message = mark_safe("""
-        That OpenID is not recognised. Would you like to 
-        <a href="/account/register/">create an account?</a>
-    """.strip())
 
     RegistrationForm = CustomRegistrationForm
+    
+    def show_unknown_openid(self, request, openid):
+        return HttpResponseRedirect('/account/register/')
     
     def do_register(self, request, message=None):
         # If user has entered the username and password for a valid account, 
