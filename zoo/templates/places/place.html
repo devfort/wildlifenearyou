@@ -116,8 +116,8 @@ jQuery(function($) {
 {% endif %}
 
 {% if place.price_notes %}
-<h2 class="">Prices</h2>
-<p>{{ place.price_notes }}</p>
+<h2>Prices</h2>
+{{ place.price_notes|linebreaks }}
 {% endif %}
 
 {% with place.place_facilities.all as facilities %}
