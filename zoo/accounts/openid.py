@@ -28,6 +28,10 @@ class RegistrationConsumer(RegistrationConsumer):
 
     RegistrationForm = CustomRegistrationForm
     
+    def show_i_have_logged_you_in(self, request):
+        # Default is msg: "you tried to register but I logged you in instead"
+        return self.on_registration_complete(request)
+    
     def show_unknown_openid(self, request, openid):
         return HttpResponseRedirect('/account/register/')
     
