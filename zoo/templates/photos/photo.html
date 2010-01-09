@@ -71,7 +71,7 @@ jQuery(function($) {
 {% load thumbnail %}
 
 {% if photo.photo %}
-<img src="{% thumbnail photo.photo 600x600 %}">
+<img src="{% thumbnail photo.photo 600x600 %}" style="max-width: 100%">
 {% else %}
 <img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg" style="max-width: 100%">
 {% endif %}
