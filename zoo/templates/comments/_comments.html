@@ -6,7 +6,7 @@
 {% include "comments/_comment_form.html" %}
 {% endwith %}
 {% else %}
-<p>You need to <a href="/accounts/login/?next={{ request.path }}">log in</a> to post comments.</p>
+<p>You need to <a href="/account/login/?next={{ request.path }}">log in</a> to post comments.</p>
 {% endif %}
 
 {% get_comment_list for object as comment_list %}
