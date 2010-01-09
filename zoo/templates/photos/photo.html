@@ -2,6 +2,59 @@
 
 {% block title %}{{ photo.title|default:"A photo" }} by {{ photo.created_by }}{% endblock %}
 
+{% block extra_head %}
+{% ifequal photo.created_by request.user %}
+<script type="text/javascript" src="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.js"></script>
+<link type="text/css" rel="stylesheet" href="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.css">
+<style type="text/css">
+.fbs-pane {
+	width: 275px;
+}
+</style>
+<script type="text/javascript">
+var suggest_base = {
+	response: $.suggest.suggest.prototype.response,
+	create_item: $.suggest.suggest.prototype.create_item
+}
+
+var seen_on_trip = {{ seen_on_trip|safe }};
+var seen_at_this_place = {{ seen_at_this_place|safe }};
+
+jQuery(function($) {
+	$('input#add_species').suggest({
+		type: '/biology/organism_classification',
+		flyout: false,
+		soft: true,
+		align: 'left'
+	}).bind('fb-select', function(e, data) {
+		$(this).parents('form:first')
+			.find(':hidden').val(data.guid)
+		.end();//.submit();
+	}).parents('form:first').attr('method', 'post');
+	
+	
+	
+	$.suggest.suggest.prototype.response = function(data) {
+		// TODO: re-order data.result array to put trip species first
+		suggest_base.response.apply(this, [data]);
+	}
+	$.suggest.suggest.prototype.create_item = function(data, response_data) {
+		var li = suggest_base.create_item.apply(this, [data, response_data]);
+		var s = '';
+		if (seen_at_this_place[data.guid]) {
+			s = 'Previously spotted here';
+		}
+		if (seen_on_trip[data.guid]) {
+			s = 'Seen on your trip';
+		}
+		li.find('.fbs-item-type').text(s);
+		return li;
+	}
+});
+</script>
+{% endifequal %}
+{% endblock %}
+
 {% block primary_content %}
 
 <h1>{{ photo.title }}</h1>
@@ -29,10 +82,24 @@ By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.creat
 
 {% with photo.sightings.all as sightings %}
 {% if sightings %}
-<h2>Species in this photo:</h2>
-<ul>
+<h2>Species in this photo</h2>
+<ul class="animal-list">
 	{% for sighting in sightings %}
-	<li>{% if sighting.species %}<a href="{{ sighting.species.get_absolute_url }}">{{ sighting.species }}</a>{% else %}{{ sighting.species_inexact }}{% endif %}</li>
+		<li>
+		{% if sighting.species %}
+		{% with sighting.species as species %}
+				<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+				<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+				<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
+		{% endwith %}
+		{% else %}
+				<div class="thumbnail"></div>
+				<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+		{% endif %}
+		{% if sighting.note %}
+		{{ sighting.note|linebreaks }}
+		{% endif %}
+		</li>
 	{% endfor %}
 </ul>
 {% endif %}
@@ -55,13 +122,25 @@ By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.creat
 	<form method="post" action="/favourites/photo/add/{{ photo.pk }}/">
 	<p>
 		<input type="hidden" name="next" value="{{ request_path }}">
-		<input class="link" type="submit" value="Add to favourites">
+		<input class="link" type="submit" value="Favourite this photo">
 	</p>
 	</form>
 	{% endif %}
 {% endif %}
 
 {% ifequal photo.created_by request.user %}
+<h3>Add a species to this photo</h3>
+{% if photo.trip %}
+<form action="{% url photo-add-species photo.created_by.username photo.id %}" method="get">
+	<p>
+		<input type="text" name="species" id="add_species">
+		<input type="hidden" name="guid" value="">
+		<input type="submit" value="Add">
+	</p>
+</form>
+{% else %}
+<p>You need to <a href="{% url photo-edit photo.created_by.username photo.id %}#id_trip">assign this photo to a trip</a> before you can add species to it.</p>
+{% endif %}
 <p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
 {% endifequal %}
 

@@ -1,0 +1,84 @@
+{% extends base %}
+
+{% block title %}Add species to {{ photo }}{% endblock %}
+
+{% block content_title %}
+<h1>Add species to {{ photo }}</h1>
+{% endblock %}
+
+{% block primary_content %}
+<form action="{{ request_path }}" method="post">
+    <div class="container compact"><label for="i-saw-a-q">Species: </label> <input type="text" name="species" id="i-saw-a-q" value="{{ species_q }}" size="30"> <input type="submit" value="Search"></div>
+</form>
+
+    <div id="results">
+    
+		{% if species_q and not results %}
+		<p>No matching species found for "{{ species_q }}"</p>
+
+		{% if species_q %}
+		<ul class="animal-list">
+		<li class="unknown">
+			<form action="{{ request_path }}" method="post">
+				<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_unknown">
+				<input type="hidden" name="add_unknown_text" value="{{ species_q }}">
+				<div class="thumbnail"></div>
+				<p><span class="animal-name">{{ species_q }}</span></p>
+				<p><i class="scientific">Add "{{ species_q }}" as an unknown species</i></p>
+			</form>
+		</li>
+		</ul>
+		{% endif %}
+
+		{% endif %}
+
+		{% if results %}
+		<h2>Which of these was it?</h2>
+
+		<ul class="animal-list">
+
+		{% for result in results %}{% load zoocommon %}
+			<li>
+				<form action="{{ request_path }}" method="post">
+			{% if result.obj %}
+			{% with result.obj as species %}
+					<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+					<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+					<p><i class="scientific">{{ species.latin_name }}</i></p>
+					{% if result.local_sightings %}
+					    <p>Spotted here {{ result.local_sightings|oncetimes }}</p>
+					{% endif %}
+			{% endwith %}
+			{% else %}
+					<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_selected_{{ forloop.counter0 }}"><div class="thumbnail"></div>
+					<p><span class="animal-name">{{ result.name }}</span></p>
+					{% if result.scientific_name %}
+						<p><i class="scientific">{{ result.scientific_name }}</i></p>
+					{% endif %}
+			{% endif %}
+			<input type="hidden" name="guid" value="{{ result.id }}">
+				</form>
+			</li>
+		{% endfor %}
+		<li class="unknown">
+			<form action="{{ request_path }}" method="post">
+				<input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_unknown">
+				<input type="hidden" name="add_unknown_text" value="{{ species_q }}">
+				<div class="thumbnail"></div>
+				<p><span class="animal-name">{{ species_q }}</span></p>
+				<p><i class="scientific">Add "{{ species_q }}" as an unknown species</i></p>
+			</form>
+		</li>
+		</ul>
+
+		{% endif %}
+    
+    </div>
+    
+{% endblock %}
+
+
+{% block after_content %}
+    </form>
+    
+{% endblock %}

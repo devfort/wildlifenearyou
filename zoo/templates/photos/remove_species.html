@@ -1,0 +1,15 @@
+{% extends base %}
+
+{% block title %}Remove species from photo?{% endblock %}
+
+{% block primary_content %}
+
+<h1>Remove species from photo?</h1>
+
+<p>Do you really want to remove {{ sighting.species }} from photo {{ photo }}?</p>
+
+<form action="{{ request_path }}" method="POST">
+	<p><input type="submit" name="confirm_delete" value="Remove species"></p>
+</form>
+
+{% endblock %}

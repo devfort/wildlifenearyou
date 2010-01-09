@@ -295,6 +295,13 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/photos/(?P<photo_id>\d+)/set-species/$',
         'zoo.photos.views.set_species',
         name='photo-set-species'),
+    url(r'^(?P<username>\w+)/photos/(?P<photo_id>\d+)/add-species/$',
+        'zoo.photos.views.add_species',
+        name='photo-add-species'),
+    url(r'^(?P<username>\w+)/photos/(?P<photo_id>\d+)/' + 
+            'remove-species/(?P<sighting_id>\d+)/$',
+            'zoo.photos.views.remove_species',
+        name='photo-remove-species'),
     
     url(r'^(?P<username>\w+)/tripbook/$', 'zoo.trips.views.tripbook',
         name='tripbook'),

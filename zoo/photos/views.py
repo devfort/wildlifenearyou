@@ -2,16 +2,19 @@ from django import forms
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, HttpResponseForbidden, \
+    Http404, HttpResponse
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import Q
+from django.utils import simplejson
 
 from models import Photo
 from zoo.shortcuts import render
 from zoo.trips.models import Trip, Sighting
 from zoo.places.models import Place
 from zoo.animals.forms import SpeciesField
+from zoo.animals.models import Species
 
 import datetime
 
@@ -187,6 +190,92 @@ def set_species(request, username, photo_id):
         photo.sightings.add(sighting)
     return HttpResponseRedirect(photo.get_absolute_url())
 
+from trips.add_trip import species_for_freebase_details
+from trips import add_trip_utils
+
+@login_required
+def add_species(request, username, photo_id):
+    from zoo.trips.models import Sighting
+    photo = get_object_or_404(
+        Photo, created_by__username=username, pk=photo_id
+    )
+    
+    if photo.created_by != request.user:
+        return HttpResponseForbidden()
+    
+    if not photo.trip:
+        return HttpResponse(
+            'Photo must be assigned to a trip before you can add any species'
+        )
+    
+    guid = request.POST.get('guid', None)
+    if guid:
+        # Create species page for that animal
+        selected_details = add_trip_utils.bulk_lookup(
+            [guid.replace('#', '/guid/')]
+        )
+        if len(selected_details) == 1:
+            # Now save the selected and unknown sightings
+            species = species_for_freebase_details(selected_details[0])
+            sighting, created = photo.trip.sightings.get_or_create(
+                species = species,
+                defaults = {
+                    'place': photo.trip.place,
+                    'note': ''
+                }
+            )
+            photo.sightings.add(sighting)
+            return HttpResponseRedirect(photo.get_absolute_url())
+    
+    add_unknown_text = request.POST.get('add_unknown_text', '').strip()
+    if add_unknown_text:
+        sighting, created = photo.trip.sightings.get_or_create(
+            species_inexact = add_unknown_text,
+            defaults = {
+                'place': photo.trip.place,
+                'note': ''
+            }
+        )
+        photo.sightings.add(sighting)
+        return HttpResponseRedirect(photo.get_absolute_url())
+    
+    # If we get here, we need to show search results for the 'species' string
+    # normally this means the user doesn't have JavaScript enabled
+    species_q = request.REQUEST.get('species', '')
+    results = []
+    if species_q:
+        results = add_trip_utils.search(
+            species_q, limit=10, place=photo.trip.place
+        )[:5]
+    
+    return render(request, 'photos/add_species.html', {
+        'photo': photo,
+        'species_q': species_q,
+        'results': results,
+    })
+
+@login_required
+def remove_species(request, username, photo_id, sighting_id):
+    from zoo.trips.models import Sighting
+    photo = get_object_or_404(
+        Photo, created_by__username=username, pk=photo_id
+    )
+    if photo.created_by != request.user:
+        return HttpResponseForbidden()
+    sighting = get_object_or_404(
+        Sighting, created_by = request.user, trip = photo.trip,
+        pk = sighting_id
+    )
+    if request.method == 'POST':
+        photo.sightings.remove(sighting)
+        return HttpResponseRedirect(photo.get_absolute_url())
+    
+    return render(request, 'photos/remove_species.html', {
+        'photo': photo,
+        'sighting': sighting,
+        'request_path': request.path,
+    })
+
 class PhotoEditForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(PhotoEditForm, self).__init__(*args, **kwargs)
@@ -200,9 +289,25 @@ def photo(request, username, photo_id):
     photo = get_object_or_404(
         Photo, created_by__username=username, pk=photo_id
     )
+    
+    def conv(items):
+        return dict([(item.replace('/guid/', '#'), 1) for item in items])
+    
+    seen_at_this_place = []
+    seen_on_trip = []
+    if photo.trip:
+        seen_on_trip = conv(photo.trip.species.values_list(
+            'freebase_id', flat=True
+        ))
+        seen_at_this_place = conv(Species.objects.filter(
+            sightings__place = photo.trip.place
+        ).values_list('freebase_id', flat = True).distinct())
+    
     return render(request, 'photos/photo.html', {
         'photo': photo,
         'favourited': photo.is_favourited_by(request.user),
+        'seen_at_this_place': simplejson.dumps(seen_at_this_place),
+        'seen_on_trip': simplejson.dumps(seen_on_trip),
     })
 
 def all(request):
