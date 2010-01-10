@@ -78,23 +78,19 @@ class Photo(models.Model):
         return self.title or unicode(self.photo)
     
     def thumb_75_img(self, extra_class=''):
-        title = escape(self.detailed_title())
         if extra_class:
             extra_class = 'class="%s" ' % extra_class
         return mark_safe(
-            '<img src="%s" alt="%s" %swidth="75" height="75">' % (
+            '<img src="%s" alt="%s" width="75" height="75">' % (
                 self.thumb_75_url(),
-                title,
                 extra_class,
             )
         )
     
     def thumb_75(self, extra_class=''):
-        title = escape(self.detailed_title())
         return mark_safe(
-            '<a href="%s" title="%s"%s>%s</a>' % (
+            '<a href="%s"%s>%s</a>' % (
                 self.get_absolute_url(),
-                title,
                 extra_class and ' class="%s"' % extra_class or '',
                 self.thumb_75_img(),
             )
