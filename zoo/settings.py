@@ -24,6 +24,8 @@ try:
 except ImportError:
     pass
 
+MIDDLEWARE_CLASSES.append('debug_footer.DebugFooter')
+
 EMAIL_FROM = 'zoo@example.com'
 
 # This API key is for http://localhost - over-ride it in local_settings.py

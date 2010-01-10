@@ -1,4 +1,4 @@
-{% extends base %}
+{% extends base %}{% load cache %}
 
 {% block fulltitle %}WildlifeNearYou{% endblock %}
 
@@ -105,6 +105,7 @@
 			<p class="intro"><strong>WildlifeNearYou</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
 			{% endif %}
 			
+			{% cache 30 "wlny_homepage_blog_posts" %}
 			{% if blog_posts %}
 				<h2>Site news</h2>
 				<ul>
@@ -113,6 +114,7 @@
 				{% endfor %}
 				</ul>
 			{% endif %}
+			{% endcache %}
 		</div>
 	</div>
 </div>
@@ -153,6 +155,7 @@
 	<div class="wrapper">
 		<div class="contents">
 			<div class="column first vcard">
+				{% cache 45 "wlny_homepage_featured_place" featured.place %}
 				<h2>Featured place</h2>
 				{% if featured.place %}
 				{% with featured.place as place %}
@@ -177,12 +180,13 @@
 				{% else %}
 				<p>There is no currently featured place. If you start adding your trips, your local place might be shown here!</p>
 				{% endif %}
+				{% endcache %}
 			</div>
 			<div class="column">
 				{% if featured.species %}
 				{% with featured.species as species %}
 				<h2>Featured animal</h2>
-				{% with species.random_photo as photo %}
+				{% with species.photo as photo %}
 				{% if photo %}
 				{{ photo.thumb_75_pull_left }}
 				{% endif %}
@@ -191,6 +195,7 @@
 				{% if species.nearest %}
 				<p>There's a {{ species.common_name }} at <a href="{{ species.nearest.urls.absolute }}">{{ species.nearest }}</a>, <strong>{{ species.nearest.distance_miles|floatformat }} mile{{ species.nearest.distance_miles|pluralize }}</strong> away from you!</p>
 				{% endif %}
+				{% cache 48 "wlny_homepage_species_sightings" species.pk %}
 				{% if species.sightings.count %}
 				<h4>Recently spotted at</h4>
 				<ul>
@@ -202,6 +207,7 @@
 					{% endfor %}
 				</ul>
 				{% endif %}
+				{% endcache %}
 				{% endwith %}
 				{% else %}
 				<h2>Featured animal</h2>
@@ -215,36 +221,37 @@
 				{% endif %}
 			</div>
 			<div class="column">
+				{% cache 28 "wlny_homepage_featured_spotter" %}
 				<h2>Featured spotter</h2>
-								{% if featured.profile %}
-								{% with featured.profile as profile %}
-				<img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
-				<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
-				{% if profile.passport.seen_species %}
-				<p>Has spotted
-					{% if profile.passport.favourite_species.count %}
-					{% with profile.passport.favourite_species.0 as favourite %}
-					{% for species in profile.passport.seen_species|slice:":5" %}{% ifnotequal favourite species %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endifnotequal %}{% endfor %}
+				{% if featured.profile %}
+					{% with featured.profile as profile %}
+					<img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
+					<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
+					{% if profile.passport.seen_species %}
+						<p>Has spotted
+						{% if profile.passport.favourite_species.count %}
+							{% with profile.passport.favourite_species.0 as favourite %}
+							{% for species in profile.passport.seen_species|slice:":5" %}{% ifnotequal favourite species %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endifnotequal %}{% endfor %}
 					and really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
-					{% endwith %}
-				{% else %}
-				{% for species in profile.passport.seen_species|slice:":5" %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.
-				{% endif %}
-				{% else %}
-				{% if profile.passport.favourite_species.count %}
-				{% with profile.passport.favourite_species.0 as favourite %}
+							{% endwith %}
+						{% else %}
+							{% for species in profile.passport.seen_species|slice:":5" %}<a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}.
+						{% endif %}
+					{% else %}
+						{% if profile.passport.favourite_species.count %}
+						{% with profile.passport.favourite_species.0 as favourite %}
 				Hasn't spotted anything yet, but really likes <a href='{{ favourite.urls.absolute }}'>{{ favourite.plural|lower }}</a>!
-				{% endwith %}
-				{% endif %}
+						{% endwith %}
+					{% endif %}
 				{% endif %}
 				</p>
 				{% if profile.user.created_trip_set.count %}
-				<h4>Recent trips</h4>
-				<ul>
-					{% for trip in profile.user.created_trip_set.all|slice:":2" %}
-					<li><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a> {{ trip.formatted_date }}</li>
-					{% endfor %}
-				</ul>
+					<h4>Recent trips</h4>
+					<ul>
+						{% for trip in profile.user.created_trip_set.all|slice:":2" %}
+						<li><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a> {{ trip.formatted_date }}</li>
+						{% endfor %}
+					</ul>
 				{% endif %}
 				{% if profile.visible_photos.count %}
 					<p>Why not <a href="{% url user-photos profile.user.username %}">check out their photos</a>?</p>
@@ -253,6 +260,7 @@
 				{% else %}
 				<p>There is no currently featured spotter. If you start adding your trips, you could be highlighted here!</p>
 				{% endif %}
+				{% endcache %}
 			</div>
 		</div>
 	</div>
@@ -263,6 +271,7 @@
 		<div class="contents">
 			<div class="primary">
 				<h2>Recently added trips</h2>
+				{% cache 25 "wlny_homepage_recently_added_trips" %}
 				<ul class="teaserlist">
 					{% for trip in recent_trips %}
 					<li>
@@ -273,6 +282,7 @@
 					</li>
 					{% endfor %}
 				</ul>
+				{% endcache %}
 			</div>
 			<div class="secondary">
 				<p class="intro">We're currently listing <strong>{{ num_of_places }}</strong> wildlife place{{ num_of_places|pluralize }} in <strong>{{ num_of_countries }}</strong> countr{{ num_of_countries|pluralize:"y,ies" }}!</p>
