@@ -184,6 +184,10 @@ input.active {
 	margin-top: 1.37em;
 }
 
+.highlight h2 {
+	margin-top: 0.2em;
+}
+
 /* @end */
 
 /* @group Text indicators */

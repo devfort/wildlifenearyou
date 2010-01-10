@@ -2,33 +2,36 @@
 
 {% block title %}Add a trip{% endblock %}
 
-{% block primary_content %}
+{% block content %}
 
 <h1>Add a trip</h1>
 
-<p>Where did you go?</p>
-
-<form action="." method="GET">
-	<p>
-		<input type="search" name="q" value="{{ q }}">
-		<input type="submit" value="Search">
-	</p>
-</form>
-
 {% if places %}
-<h2>Was it one of these?</h2>
-<ul>
-	{% for place in places %}
-	<li><a href="{{ place.get_absolute_url }}add-trip/">{{ place }}</a> ({{ place.country }})</li>
-	{% endfor %}
-</ul>
-<p>If not, tell us about the place you went to using the form below.</p>
+	<h2>Was it one of these?</h2>
+	<ul>
+		{% for place in places %}
+		<li><a href="{{ place.get_absolute_url }}add-trip/">{{ place }}</a> ({{ place.country }})</li>
+		{% endfor %}
+	</ul>
+	<p>If not, tell us about the place you went to using the form below.</p>
 {% else %}
-<p><strong>We haven't heard of that place, so you'll need to add it.</strong></p>
+	<p><strong>We haven't heard of that place, so you'll need to add it.</strong></p>
 {% endif %}
 
 <h2>Add a new place</h2>
 
 {% include "trips/_add_place_form.html" %}
+
+<div class="highlight">
+	<h2>Search again</h2>
+
+	<form action="." method="get">
+		<p>
+			<input type="search" name="q" value="{{ q }}">
+			<input type="submit" value="Search">
+		</p>
+	</form>
+</div>
+
 
 {% endblock %}
