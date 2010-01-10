@@ -96,7 +96,6 @@
 				</form>
 			</div>
 			{% endif %}
-			<h2>Welcome back{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h2>
 			{% if user.is_authenticated %}
 			<p class="intro">
 				Seen any more animals? Why not <a href="{% url add-trip %}">add another trip</a> or 
@@ -104,6 +103,15 @@
 				
 			{% else %}
 			<p class="intro"><strong>Wildlife Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
+			{% endif %}
+			
+			{% if blog_posts %}
+				<h2>Site news</h2>
+				<ul>
+				{% for post in blog_posts|slice:":3" %}
+					<li><a href="{{ post.get_absolute_url }}">{{ post }}</a> - {{ post.publish|date:"jS F Y" }}</li>
+				{% endfor %}
+				</ul>
 			{% endif %}
 		</div>
 	</div>

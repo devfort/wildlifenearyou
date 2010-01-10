@@ -11,6 +11,8 @@ from zoo.accounts.models import Profile
 from zoo.photos.models import Photo
 from zoo.utils import location_from_request
 
+from basic.blog.models import Post
+
 def homepage(request):
     places_with_sightings = Place.objects.filter(sighting__isnull=False)
     if places_with_sightings.count():
@@ -83,6 +85,7 @@ def homepage(request):
             is_visible = True
         ).order_by('-created_at')[:20],
         'recent_trips': Trip.objects.order_by('-created_at')[:5],
+        'blog_posts': Post.objects.published(),
 #        'recent_trips': Trip.objects.filter(
 #            start__isnull=False
 #        ).order_by('-start')[:5]
