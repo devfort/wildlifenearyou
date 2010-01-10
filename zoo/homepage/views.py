@@ -40,7 +40,7 @@ def homepage(request):
     species = Species.objects.filter(featured=True).order_by('?')
     featured['species'] = species.count() > 0 and species[0] or None
 
-    profiles = Profile.objects.filter(featured=True)
+    profiles = Profile.objects.filter(featured=True).order_by('?')
     featured['profile'] = profiles.count() > 0 and profiles[0] or None
 
     num_of_places = Place.objects.count()
