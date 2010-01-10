@@ -246,6 +246,22 @@ h1 i.scientific {
 	font-size: smaller;
 }
 
+h2.subtitle {
+	margin-top: -0.7em;
+	color: rgba(57,47,45,0.7);
+	margin-bottom: 1em;
+}
+
+h2.subtitle a {
+	margin-top: 0;
+	color: rgba(74,100,179,0.7);
+}
+
+h2.subtitle a:hover,
+h2.subtitle a:active {
+	margin-top: 0;
+	color: rgba(0,0,0,0.7);
+}
 /* @end */
 
 /* @group Link types */

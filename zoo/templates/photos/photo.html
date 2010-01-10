@@ -57,14 +57,18 @@ jQuery(function($) {
 
 {% block primary_content %}
 
-	<h1>{{ photo.title }}</h1>
-
 	{% if photo.place %}
-	<h2>Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></h2>
+		<h1>{{ photo.title }}</h1>
+	{% else %}
+		<h1>Photo by <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a></h1>
+	{% endif %}
+	
+	{% if photo.place %}
+	<h2 class="subtitle">Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></h2>
 	{% endif %}
 
 	{% if photo.trip %}
-	<h2>Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></h2>
+	<h2 class="subtitle">Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></h2>
 	{% endif %}
 
 
