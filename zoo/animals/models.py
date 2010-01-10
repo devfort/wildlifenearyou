@@ -4,6 +4,8 @@ from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
 from zoo.places.models import Place
 
+from django.core.cache import cache
+
 class SpeciesGroup(AuditedModel):
     name = models.CharField(max_length=255, blank=False, null=False,
         unique=True
@@ -87,16 +89,19 @@ class Species(AbstractSpecies):
         ).distinct()
 
     def photo(self):
-        if hasattr(self, '_cached_photo'):
-            return self._cached_photo
-        try:
-            self._cached_photo = self.visible_photos().annotate(
-                num_faves = Count('favourited')
-            ).order_by('-num_faves')[0]
-        except IndexError:
-            self._cached_photo = None
+        photo = cache.get('photo-of-species:%s' % self.pk)
+        if photo is None:
+            try:
+                photo = self.visible_photos().annotate(
+                    num_faves = Count('favourited')
+                ).order_by('-num_faves')[0]
+            except IndexError:
+                photo = 'no-photo'
+            cache.set('photo-of-species:%s' % self.pk, photo, 60 * 60 * 5)
         
-        return self._cached_photo
+        if photo == 'no-photo':
+            return None
+        return photo
 
     def random_photo(self):
         vp = self.visible_photos()
