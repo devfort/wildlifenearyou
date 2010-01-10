@@ -2,7 +2,7 @@
 
 {% load pagination_tags %}
 
-{% block title %}{{ profile.user }}'s unassigned photos{% endblock %}
+{% block title %}{{ profile.user }}'s photos with no species{% endblock %}
 
 {% block content %}
 
@@ -12,12 +12,12 @@
 {% endif %}
 
 <p>
-	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong> | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a> | <strong>photos with no species</strong> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
 </p>
 
 <div>
-		<h2>Unassigned Photos</h2>
-		<p>These photos have not yet been assigned to a trip.</p>
+		<h2>Photos with no species</h2>
+		<p>These photos do not yet have any species associated with them.</p>
 		{% with photos.all as photos %}
 		{% autopaginate photos 30 %}
 		{% paginate %}

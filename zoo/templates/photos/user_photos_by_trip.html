@@ -12,8 +12,9 @@
 {% endif %}
 
 <p>
-	<a href="{% url user-photos profile.user.username %}">all photos</a> | <strong>photos by trip</strong> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a>{% ifequal profile.user user %} | <a href="{% url flickr %}">import from Flickr</a>{% endifequal %}
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <strong>photos by trip</strong> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a> | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
 </p>
+
 
 {% if not trips %}
 <p class="notification">{% ifequal profile.user user %}You have not yet created any trips. <a href="{% url add-trip %}">Create one now?</a>

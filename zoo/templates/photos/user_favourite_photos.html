@@ -11,6 +11,10 @@
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
+<p>
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a> | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <strong>favourite photos</strong>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
+</p>
+
 <div>
 	{% if not faves %}
 		<p>{{ profile.user.username }} has not yet picked any favourite photos.</p>

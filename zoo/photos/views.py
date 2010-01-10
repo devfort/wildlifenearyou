@@ -366,6 +366,19 @@ def user_photos_unassigned(request, username):
         )
     })
 
+def user_photos_nospecies(request, username):
+    user = get_object_or_404(User, username = username)
+    return render(request, 'photos/user_photos_nospecies.html', {
+        'profile': user.get_profile(),
+        'photos': filter_visible_photos(
+            photos = Photo.objects.filter(
+                created_by = user,
+                sightings__isnull = True
+            ).order_by('created_at'),
+            user = request.user
+        )
+    })
+
 @login_required
 def user_photos_bulk_assign(request, user):
     assert user == request.user
