@@ -12,6 +12,8 @@ def on_save(sender, **kwargs):
         description = u"%s %s was created" % (sender._meta.object_name, obj)
         type = 'created'
     else:
+        if model_type not in settings.ACTIVITY_MODELS_UPDATED:
+            return
         description = u"%s %s was updated" % (sender._meta.object_name, obj)
         type = 'updated'
     try:
