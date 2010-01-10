@@ -366,8 +366,6 @@ a.action:active span,
 
 p.url {
 	margin: 0;
-	text-transform: uppercase;
-	white-space: nowrap;
 }
 p.tel {
 	margin-top: 0;

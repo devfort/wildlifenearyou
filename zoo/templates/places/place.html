@@ -7,25 +7,6 @@
 <script type="text/javascript" src="/static/js/gallery.js"></script>
 <script type="text/javascript" src="/static/js/jquery.dimensions.js"></script>
 <script type="text/javascript" src="/static/js/i-saw-and-a.js"></script>
-<script type="text/javascript">
-jQuery(function($) {
-	$('#locationmap').hide();
-	// Create the map link
-	var a = $('<span> (<a href="http://maps.google.com/?ll=' + 
-	  '{{ place.latitude }},{{ place.longitude }}&amp;z=13" ' + 
-	  'id="maplink">map</a>)</span>'
-	).insertAfter($('#countrylink')).find('a');
-	a.toggle(function() {
-		$('#locationmap').slideDown(500);
-		a.text('hide map');
-		return false;
-	}, function() {
-		$('#locationmap').slideUp(500);
-		a.text('map');
-		return false;
-	});
-});
-</script>
 {% endblock %}
 
 {% block content_title %}
@@ -35,26 +16,24 @@ jQuery(function($) {
 {% block primary_content %}
 
 <h2>General information</h2>
+<div class="compact">
+	<p class="address">{% if place.address %}Address: {{ place.address }},{% endif %}
+		<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
+		<a href="{{ place.country.urls.absolute }}" id="countrylink"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
+		{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
+	</p>
 
-<p class="address">{% if place.address %}Address: {{ place.address }},{% endif %}
-	<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
-	<a href="{{ place.country.urls.absolute }}" id="countrylink"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
-	{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
-</p>
+	{% if place.phone %}
+	<p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
+	{% endif %}
 
-{% if place.phone %}
-<p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
-{% endif %}
-
-{% if place.url %}
-<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
-{% endif %}
-
+	{% if place.url %}
+	<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
+	{% endif %}
+</div>
 {% if place.description %}
 <p class="intro">{{ place.description }}</p>
 {% endif %}
-
-<div id="locationmap" style="overflow: hidden"><img src="http://maps.google.com/staticmap?center={{ place.latitude }},{{ place.longitude }}&amp;zoom=13&amp;size=512x256&amp;markers={{ place.latitude }},{{ place.longitude }},red&amp;key={{ GOOGLE_MAPS_API_KEY }}&amp;sensor=false"></div>
 
 {% if species_list %}
 <h2>Animals you might see</h2>
@@ -84,6 +63,17 @@ jQuery(function($) {
     -->
 </div>
 
+{% with place.place_facilities.all as facilities %}
+	{% if facilities %}
+	<h2>Facilities</h2>
+	<ul class="facilities">
+		{% for facility in facilities %}
+		<li><img alt="{{ facility.facility.default_desc }}" src="{{ facility.facility.icon.url }}">{{ facility.desc }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+{% endwith %}
+
 {% if opening_times %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
 {% for date_ranges in opening_times %}
@@ -91,7 +81,7 @@ jQuery(function($) {
 
 	{% for section_title, days in date_ranges.sections.items %}
 		 {% if section_title %}
-		 <h4>{{ section_title }}</h4>
+		 	<h4>{{ section_title }}</h4>
 		 {% endif %}
 
 	<ul class="opening-list">
@@ -120,17 +110,6 @@ jQuery(function($) {
 {{ place.price_notes|linebreaks }}
 {% endif %}
 
-{% with place.place_facilities.all as facilities %}
-	{% if facilities %}
-	<h2>Facilities</h2>
-	<ul class="facilities">
-		{% for facility in facilities %}
-		<li><img alt="{{ facility.facility.default_desc }}" src="{{ facility.facility.icon.url }}">{{ facility.desc }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-{% endwith %}
-
 {% with place.direction.all as directions %}
 	{% if directions %}
 	<h2>Directions</h2>
@@ -140,6 +119,8 @@ jQuery(function($) {
 	{% endfor %}
 	{% endif %}
 {% endwith %}
+
+<div id="locationmap" style="overflow: hidden"><img src="http://maps.google.com/staticmap?center={{ place.latitude }},{{ place.longitude }}&amp;zoom=13&amp;size=512x256&amp;markers={{ place.latitude }},{{ place.longitude }},red&amp;key={{ GOOGLE_MAPS_API_KEY }}&amp;sensor=false"></div>
 
 {% if place.most_recent_trips %}
 <h2>Recent trips here</h2>
