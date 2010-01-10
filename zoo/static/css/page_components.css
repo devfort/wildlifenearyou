@@ -991,4 +991,44 @@ ul.teaserlist h3 span {
 
 /* @end */
 
+/* @group Moderation */
 
+.moderation li {
+	background-image: none;
+	list-style-type: none;
+	margin: 0 0 3em 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.moderation li p {
+	margin: 0 0 0.4em 0;
+}
+
+.moderation h3 {
+	font-size: 1.1em;
+	margin-bottom: 0.5em;
+}
+
+.moderation blockquote {
+	font-style: normal;
+	color: #8A8A8A;
+}
+
+.moderation form {
+	float: left;
+	margin-right: 1em;
+	margin-top: 1em;
+}
+
+.moderation dl {
+	margin: 0.8em 0 0 1.385em;
+}
+
+.moderation dt,
+.moderation dd {
+	margin-bottom: 0.4em;
+	color: #8A8A8A;
+}
+
+/* @end */

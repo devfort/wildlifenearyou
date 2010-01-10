@@ -4,110 +4,112 @@
 
 {% block content %}
 
-<h1>Moderation overview</h1>
+	<h1>Moderation overview</h1>
 
-<dl>
- <dt>Number of pending change groups</dt>
- <dd>{{ change_request_groups|length }}</dd>
+	<dl class="highlight">
+		<dt>Number of pending change groups</dt>
+		<dd>{{ change_request_groups|length }}</dd>
 
- <dt>Total number of change requests<dt>
- <dd>{{ total_pending_change_requests }}</dd>
-</dl>
+		<dt>Total number of change requests<dt>
+		<dd>{{ total_pending_change_requests }}</dd>
+	</dl>
 
-{% if change_request_groups %}
- <h2>Queue</h2>
+	{% if change_request_groups %}
 
- {{ form.errors.changerequest }}
+		{{ form.errors.changerequest }}
 
- {% if form.non_field_errors %}
-  <p>The moderation request you just attempted to apply now conflicts with the current data - you will either have to force this change or delete the change altogether.</p>
- {% endif %}
-
- {% for crg in change_request_groups %}
-  {% with crg.get_pending_changerequests as pending_changes %}
-
-  <h3 title="Requested {{ crg.created_at|timesince }} ago">{{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by }}</a></h3>
-
-   <ul>
-   {% for cr in pending_changes %}
-   {% with cr.get_real as crs %}
-	<li>
-	 {% switch cr.subclass %}
-	  {% case "ChangeAttributeRequest" %}
-	   Change the &ldquo;{{ crs.get_attribute_display }}&rdquo; attribute
-		on the <em>{{ crs.content_object }}</em> {{ crs.content_type }}
-		from &ldquo;<em>{{ crs.get_old_value_display }}</em>&rdquo; &rarr; &ldquo;<em>{{ crs.get_new_value_display }}</em>&rdquo;
-
-		{% if crs.conflicts %}
-		 <strong>(change conflicts; current value is <em>{{ crs.get_current_value_display }}</em>)</strong>
+		{% if form.non_field_errors %}
+			<p class="notification">The moderation request you just attempted to apply now conflicts with the current data - you will either have to force this change or delete the change altogether.</p>
 		{% endif %}
 
-	   {% if crs.conflicts %}
-		 {% include "changerequests/form_force.html" %}
-	   {% else %}
-		 {% include "changerequests/form_apply.html" %}
-	   {% endif %}
+		{% for crg in change_request_groups %}
+			{% with crg.get_pending_changerequests as pending_changes %}
 
-	   {% include "changerequests/form_delete.html" %}
-	  {% endcase %}
+				<h2 title="Requested {{ crg.created_at|timesince }} ago">{{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by }}</a></h2>
 
-	  {% case "DeleteObjectRequest" %}
-	   Delete
-	  
-	   {% if crs.content_object %}
-		the <em>{{ crs.content_object }}</em>
-	   {% else %}
-		an <em>already deleted</em>
-	   {% endif %}
-	   
-	   {{ crs.content_type }}.
+				<ul class="moderation">
+					{% for cr in pending_changes %}
+						{% with cr.get_real as crs %}
+							<li>
+								{% switch cr.subclass %}
+			
+									{% case "ChangeAttributeRequest" %}
+										<h3>Change the <strong>&ldquo;{{ crs.get_attribute_display }}&rdquo;</strong> attribute on the <strong>{{ crs.content_object }}</strong> {{ crs.content_type }} from</h3> 
+								<blockquote><p>&ldquo;{{ crs.get_old_value_display }}&rdquo;</p></blockquote>
+								<h3>to</h3>
+								<blockquote><p>&ldquo;{{ crs.get_new_value_display }}&rdquo;</p></blockquote>
 
-	   {% if crs.conflicts %}
-		<strong>(conflicting change: object already deleted)</strong>
-	   {% else %}
-		 {% include "changerequests/form_apply.html" %}
-	   {% endif %}
+										{% if crs.conflicts %}
+											<p><strong>(change conflicts; current value is <em>{{ crs.get_current_value_display }}</em>)</strong></p>
+										{% endif %}
 
-	   {% include "changerequests/form_delete.html" %}
-	  {% endcase %}
+										{% if crs.conflicts %}
+											{% include "changerequests/form_force.html" %}
+										{% else %}
+											{% include "changerequests/form_apply.html" %}
+										{% endif %}
 
-	  {% case "CreateObjectRequest" %}
-		Create a {% if crs.parent %}nested {% endif %}{{ crs.content_type }} object {% if crs.children %}and their children below{% endif %} with the following properties:
+										{% include "changerequests/form_delete.html" %}
+									{% endcase %}
 
-	  <dl>
-	  {% for key, value in crs.get_attributes_display.items %}
-		<dt>{{ key }}</dt>
-		{% if value.get_absolute_url %}
-		  <dl><a href="{{ value.get_absolute_url }}">{{ value }}</a></dl>
-		{% else %}
-		  <dl>{{ value }}</dl>
-		{% endif %}
-	  {% endfor %}
-	  </dl>
+									{% case "DeleteObjectRequest" %}
+										<h3>Delete
 
-	   {% if not crs.parent %}
-		 {% include "changerequests/form_apply.html" %}
-		 {% include "changerequests/form_delete.html" %}
-	   {% endif %}
-	  {% endcase %}
+										{% if crs.content_object %}
+											the <em>{{ crs.content_object }}</em>
+										{% else %}
+											an <em>already deleted</em>
+										{% endif %}<h3>
 
-	  {% defaultcase %}
-	   <strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass: {{ cr.subclass }}
-	  {% enddefaultcase %}
+										{{ crs.content_type }}.
 
-	 {% endswitch %}
+										{% if crs.conflicts %}
+											<p><strong>(conflicting change: object already deleted)</strong></p>
+										{% else %}
+											{% include "changerequests/form_apply.html" %}
+										{% endif %}
 
-	</li>
+										{% include "changerequests/form_delete.html" %}
+									{% endcase %}
 
-   {% endwith %}
-   {% endfor %}
-   </ul>
+									{% case "CreateObjectRequest" %}
+										<h3>Create a {% if crs.parent %}nested {% endif %}{{ crs.content_type }} object {% if crs.children %}and their children below{% endif %} with the following properties:</h3>
 
-   </li>
-  {% endwith %}
- {% endfor %}
-{% else %}
- <p>Nothing to moderate.</p>
-{% endif %}
+										<dl>
+											{% for key, value in crs.get_attributes_display.items %}
+												<dt>{{ key }}</dt>
+												{% if value.get_absolute_url %}
+													<dd><a href="{{ value.get_absolute_url }}">{{ value }}</a></dd>
+												{% else %}
+													<dd>{{ value }}</dd>
+												{% endif %}
+											{% endfor %}
+										</dl>
+
+										{% if not crs.parent %}
+											{% include "changerequests/form_apply.html" %}
+											{% include "changerequests/form_delete.html" %}
+										{% endif %}
+									{% endcase %}
+
+									{% defaultcase %}
+										<strong>FIXME:</strong> Unknown/unhandled ChangeRequest subclass: {{ cr.subclass }}
+									{% enddefaultcase %}
+
+								{% endswitch %}
+
+							</li>
+
+						{% endwith %}
+					{% endfor %}
+				</ul>
+
+			</li>
+		{% endwith %}
+	{% endfor %}
+	
+	{% else %}
+	 <p class="notification">Nothing to moderate.</p>
+	{% endif %}
 
 {% endblock %}
