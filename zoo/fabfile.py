@@ -12,6 +12,7 @@ def staging():
     "Select staging.wildlifenearyou.com"
     env.hosts = ['wildlifenearyou.com']
     env.user_at_host = 'simon@wildlifenearyou.com'
+    env.db_name = 'zoo_alpha'
     env.deploy_dir = '/srv/django-apps/staging.wildlifenearyou.com'
 
 def live():
@@ -37,7 +38,7 @@ def mirror_db():
         '/tmp/%(db_name)s-%(now)s.sql' % env, 
         '/tmp/%(db_name)s-%(now)s.sql' % env
     )
-    local('mysql -u root zoo_alpha_dev < /tmp/%(db_name)s-%(now)s.sql' % env)
+    local('mysql -u root wildlifenearyou < /tmp/%(db_name)s-%(now)s.sql' % env)
 
 def svn_export():
     "Export latest code"
