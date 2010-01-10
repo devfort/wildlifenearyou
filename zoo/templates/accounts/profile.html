@@ -123,21 +123,21 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 	{% if profile.user.favourite_species.all %}
 	<h2 id="favourite-animals">Favourite animals</h2>
 	<ol class="animal-list">
-				{% for favourite in profile.user.favourite_species.all %}
-				<li>
-					<div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-					<p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
-					<p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
-					{% ifequal user profile.user %}
-					<form method="post" action="/favourites/species/remove/{{ favourite.species.pk }}/">
-						<p>
-							<input type="hidden" name="next" value="{{ request.path }}">
-							<input class="link" type="submit" value="Remove">
-						</p>
-					</form>
-					{% endifequal %}
-				</li>
-			{% endfor %}
+		{% for favourite in profile.user.favourite_species.all %}
+			<li>
+				<div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+				<p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
+				<p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
+				{% ifequal user profile.user %}
+				<form method="post" action="/favourites/species/remove/{{ favourite.species.pk }}/">
+					<p>
+						<input type="hidden" name="next" value="{{ request.path }}">
+						<input class="link submit" type="submit" value="Remove">
+					</p>
+				</form>
+				{% endifequal %}
+			</li>
+		{% endfor %}
 	</ol>
 	{% ifequal profile.user user %}
 	<p>To add more to this list, <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites.</p>

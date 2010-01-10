@@ -118,6 +118,10 @@ div.animal-list {
 	color: black;
 }
 
+.animal-list input.submit {
+	float: right;
+}
+
 /* @end */
 
 /* @group Trip list */
