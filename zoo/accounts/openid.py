@@ -27,6 +27,7 @@ class RegistrationConsumer(RegistrationConsumer):
     account_recovery_url = '/account/recover/'
     confirm_email_template = 'emails/validation.txt'
     confirm_email_from = 'info@wildlifenearyou.com'
+    sign_next_param = False
     
     RegistrationForm = CustomRegistrationForm
     
