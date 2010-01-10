@@ -14,11 +14,6 @@ from zoo.utils import location_from_request
 from basic.blog.models import Post
 
 def homepage(request):
-    places_with_sightings = Place.objects.filter(sighting__isnull=False)
-    if places_with_sightings.count():
-        random_zoo = places_with_sightings.order_by('?')[0]
-    else:
-        random_zoo = None
 
     reg_form = RegistrationForm()
 
@@ -73,7 +68,6 @@ def homepage(request):
         default_search = 'SEARCH CURRENTLY DISABLED'
     
     return render(request, 'homepage.html', {
-        'random_zoo': random_zoo,
         'featured': featured,
         'num_of_places': num_of_places,
         'num_of_countries': num_of_countries,
