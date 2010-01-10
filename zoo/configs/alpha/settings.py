@@ -8,6 +8,8 @@ TEMPLATE_DEBUG = DEBUG
 DATABASE_NAME = 'zoo_alpha'
 DATABASE_USER = 'zoo_alpha'
 
+CACHE_BACKEND = "memcached://127.0.0.1:11211/?timeout=900000"
+
 # Xapian settings
 SEARCH_ENABLED = True
 XAPIAN_BASE_URL = 'http://localhost:9876/search/'
