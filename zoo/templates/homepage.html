@@ -160,7 +160,7 @@
 				{{ place.photo.thumb_75_pull_left }}
 				{% endif %}
 				<h3><a class="fn org url" href="{{ place.get_absolute_url }}">{{ place.known_as }}</a></h3>
-				<p>In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a>, visited by <strong>{{ place.num_visitors }}</strong> spotter{{ place.num_visitors|pluralize }}.</p>
+				<p>In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a>, visited by <strong>{{ place.num_visitors }}</strong>&nbsp;spotter{{ place.num_visitors|pluralize }}.</p>
 				<!--<p class="address">
 					<span class="street-address">Regents Park</span><br>
 					<span class="locality">London</span><br>
@@ -207,7 +207,7 @@
 				<h2>Featured animal</h2>
 				<p>No currently featured animal. If you mark an animal as your favourite, it might be shown here!</p>
 				{% endif %}
-				<h3>Popular animals</h3>
+				<h4>Popular animals</h4>
 				{% if featured.species %}
 				<p>Why not check out some other <a href='{% url popular %}'>popular or rare animals</a>?</p>
 				{% else %}

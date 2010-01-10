@@ -71,10 +71,18 @@ div.place-list {
 /* @group Animal list */
 
 .animal-list {
+	margin-top: 0.8em;
 	margin-left: 0;
 	margin-right: 0;
 	padding: 0;
 	list-style: none;
+}
+
+.animal-list blockquote {
+	font-style: normal;
+	padding-left: 91px;
+	margin: 0;
+	color: #8C8C8C;
 }
 
 .animal-list li,
@@ -338,6 +346,9 @@ div.spotter-list {
 
 /* @group Comment form */
 
+.comment {
+	margin-top: 1.5em;
+}
 .comment .textarea-container {
 	padding-top: 1em;
 	padding-bottom: 1em;

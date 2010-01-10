@@ -254,8 +254,10 @@
 #home .featured h4 {
 	clear: both;
 	text-transform: uppercase;
-	margin-top: 0;
+	margin-top: 0.8571em;
 }
+
+
 
 /* @end */
 

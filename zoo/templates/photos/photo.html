@@ -57,94 +57,101 @@ jQuery(function($) {
 
 {% block primary_content %}
 
-<h1>{{ photo.title }}</h1>
+	<h1>{{ photo.title }}</h1>
 
-{% if photo.place %}
-<p>Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></p>
-{% endif %}
+	{% if photo.place %}
+	<h2>Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></h2>
+	{% endif %}
 
-{% if photo.trip %}
-<p>Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></p>
-{% endif %}
+	{% if photo.trip %}
+	<h2>Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></h2>
+	{% endif %}
 
 
-{% load thumbnail %}
+	{% load thumbnail %}
 
-{% if photo.photo %}
-<img src="{% thumbnail photo.photo 600x600 %}" style="max-width: 100%">
-{% else %}
-<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg" style="max-width: 100%">
-{% endif %}
+	{% if photo.photo %}
+	<img src="{% thumbnail photo.photo 600x600 %}" style="max-width: 100%">
+	{% else %}
+	<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg" style="max-width: 100%">
+	{% endif %}
 
-<div class="comments"><p class="trip-by">
-<img src="{% url profile-image-resized photo.created_by.username %}" alt="" height="30" width="30">
-By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>, added {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a>)</p></div>
+	<div class="comments"><p class="trip-by">
+	<img src="{% url profile-image-resized photo.created_by.username %}" alt="" height="30" width="30">
+	By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>, added {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a>)</p></div>
 
-{% with photo.sightings.all as sightings %}
-{% if sightings %}
-<h2>Species in this photo</h2>
-<ul class="animal-list">
-	{% for sighting in sightings %}
-		<li>
-		{% if sighting.species %}
-		{% with sighting.species as species %}
-				<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-				<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
-				<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
-		{% endwith %}
-		{% else %}
-				<div class="thumbnail"></div>
-				<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
-		{% endif %}
-		{% if sighting.note %}
-		{{ sighting.note|linebreaks }}
-		{% endif %}
-		</li>
-	{% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+	{% with photo as object %}
+		{% include "comments/_comments.html" %}
+	{% endwith %}
+
+
+
 
 {% endblock %}
 
 {% block secondary_content %}
 
-{% if request.user.is_authenticated %}
-	{% if favourited %}
-	<form method="post" action="/favourites/photo/remove/{{ photo.pk }}/">
-	<p>One of <a href="{% url user-photos-favourites user.username %}">your favourite photos</a></p>
-	<p>
-		<input type="hidden" name="next" value="{{ request_path }}">
-		<input class="link" type="submit" value="Remove from favourites">
-	</p>
-	</form>
-	{% else %}
-	<form method="post" action="/favourites/photo/add/{{ photo.pk }}/">
-	<p>
-		<input type="hidden" name="next" value="{{ request_path }}">
-		<input class="link" type="submit" value="Favourite this photo">
-	</p>
-	</form>
+	{% if request.user.is_authenticated %}
+		{% if favourited %}
+		<form method="post" action="/favourites/photo/remove/{{ photo.pk }}/">
+		<p>One of <a href="{% url user-photos-favourites user.username %}">your favourite photos</a></p>
+		<p>
+			<input type="hidden" name="next" value="{{ request_path }}">
+			<input class="link" type="submit" value="Remove from favourites">
+		</p>
+		</form>
+		{% else %}
+		<form method="post" action="/favourites/photo/add/{{ photo.pk }}/">
+		<p>
+			<input type="hidden" name="next" value="{{ request_path }}">
+			<input class="link" type="submit" value="Favourite this photo">
+		</p>
+		</form>
+		{% endif %}
 	{% endif %}
-{% endif %}
 
-{% ifequal photo.created_by request.user %}
-<h3>Add a species to this photo</h3>
-{% if photo.trip %}
-<form action="{% url photo-add-species photo.created_by.username photo.id %}" method="get">
-	<p>
-		<input type="text" name="species" id="add_species">
-		<input type="hidden" name="guid" value="">
-		<input type="submit" value="Add">
-	</p>
-</form>
-{% else %}
-<p>You need to <a href="{% url photo-edit photo.created_by.username photo.id %}#id_trip">assign this photo to a trip</a> before you can add species to it.</p>
-{% endif %}
-<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
-{% endifequal %}
+	{% ifequal photo.created_by request.user %}
+		<h3>Add a species to this photo</h3>
+		{% if photo.trip %}
+		<form action="{% url photo-add-species photo.created_by.username photo.id %}" method="get">
+			<p>
+				<input type="text" name="species" id="add_species">
+				<input type="hidden" name="guid" value="">
+				<input type="submit" value="Add">
+			</p>
+		</form>
+		{% else %}
+		<p>You need to <a href="{% url photo-edit photo.created_by.username photo.id %}#id_trip">assign this photo to a trip</a> before you can add species to it.</p>
+		{% endif %}
+	{% endifequal %}
+	
+	{% with photo.sightings.all as sightings %}
+		{% if sightings %}
+			<h3>Species in this photo</h3>
+			<ul class="animal-list">
+				{% for sighting in sightings %}
+					<li>
+					{% if sighting.species %}
+					{% with sighting.species as species %}
+							<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+							<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+							<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
+					{% endwith %}
+					{% else %}
+							<div class="thumbnail"></div>
+							<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+					{% endif %}
+					{% if sighting.note %}
+					<blockquote>{{ sighting.note|linebreaks }}</blockquote>
+					{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
 
-{% with photo as object %}
-	{% include "comments/_comments.html" %}
-{% endwith %}
+	{% ifequal photo.created_by request.user %}
+		<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
+	{% endifequal %}
+
 {% endblock %}
