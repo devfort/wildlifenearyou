@@ -1,6 +1,6 @@
 {% extends base %}
 
-{% block fulltitle %}Wildlife Near You{% endblock %}
+{% block fulltitle %}WildlifeNearYou{% endblock %}
 
 {% block extra_head %}
 <script type="text/javascript" src="/static/js/jquery-autocomplete/jquery.autocomplete.js"></script>
@@ -56,7 +56,7 @@
 						<input type="password" name="password" id="id_password">
 					</div>
 					<p>Or <a onclick="$('#register-box').hide(); $('#openid-box').show(); $('#login-box').hide(); return false;" href="#openid-box">use <strong class="openid">OpenID</strong></a></p>
-					<p class="meta">By registering with Wildlife Near You, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
+					<p class="meta">By registering with WildlifeNearYou, you are agreeing to <a href="/legal/">our terms and conditions of use</a>.</p>
 					<div><input type="submit" class="submit" value="&raquo; Go for it"></div>
 				</form>
 			</div>
@@ -102,7 +102,7 @@
 				<a href="{% url flickr %}">import some photos</a> from Flickr.<!-- or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun! --></p>
 				
 			{% else %}
-			<p class="intro"><strong>Wildlife Near You</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
+			<p class="intro"><strong>WildlifeNearYou</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
 			{% endif %}
 			
 			{% if blog_posts %}

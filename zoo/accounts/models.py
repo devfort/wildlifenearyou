@@ -148,7 +148,7 @@ class Profile(models.Model):
 
     def send_invitation_email(self, to_name, to_email, ref=None):
         """Send an email inviting a friend to check out WildlifeNearYou. If ref set, highlights a particular page."""
-        self.send_email('Check out Wildlife Near You!',
+        self.send_email('Check out WildlifeNearYou!',
                         'emails/invite.txt',
                         {'user': self.user,
                          'to_name': to_name,
