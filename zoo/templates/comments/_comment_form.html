@@ -1,8 +1,8 @@
 {% load comments i18n %}
-<form action="{% comment_form_target %}" method="post">
+<form action="{% comment_form_target %}" method="post" class="comment">
 	<div class="container textarea-container{% if form.comment.errors %} error{% endif %}">
 		{{ form.comment.errors }}
-		<label for="id_comment">Add Your Comment</label>
+		<label for="id_comment">Add your comment</label>
 		{{ form.comment }}
 
 	</div>
@@ -16,6 +16,8 @@
 		{{ form.timestamp }}
 		{{ form.security_hash }}
 		<input type="hidden" name="next" value="{{ comment_next }}#comments">
-		<input type="submit" value="Save">
+		<img src="{% url profile-image-resized user.username %}" alt="">
+		<a href="{% url accounts-profile user.username %}">{{ user.username }}</a>
+		<input type="submit" value="Post comment" class="submit">
 	</div>
 </form>

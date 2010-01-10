@@ -302,7 +302,8 @@ div.spotter-list {
 	margin-bottom: 1.375em;
 }
 
-.comments blockquote {
+.comments blockquote,
+.comment .textarea-container {
 	margin: 0;
 	padding: 0.5em 1em 0.5em 1em;
 	background-color: #f4f9e2;
@@ -314,7 +315,8 @@ div.spotter-list {
 .comments p { 
 	margin: 0 0 0.3em 0;
 }
-.comments .posted-by {
+.comments .posted-by,
+.comment .button-container {
 	background-image: url('/static/img/bg/art_talkbubble_comment_point.png');
 	background-repeat: no-repeat;
 	background-position: 20px 0;
@@ -334,7 +336,42 @@ div.spotter-list {
 	font-weight: bold;
 }
 
-/* @end */
+/* @group Comment form */
+
+.comment .textarea-container {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.comment .textarea-container textarea {
+	display: block;
+	margin:  0 auto;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	height: 6em;
+}
+
+.comment .textarea-container label {
+	padding-bottom: 0.8em;
+}
+.comment .button-container {
+	font-weight: bold;
+}
+
+.comment .button-container .submit {
+	float: right;
+	margin-top: 10px;
+}
+
+.comment img {
+	position: relative;
+	top: 10px;
+}
+
+/* @end Comment form */
+
+/* @end Comments */
 
 /* @group Tripbook entries */
 

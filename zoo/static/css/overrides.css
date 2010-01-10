@@ -301,3 +301,16 @@ form.place .contact .container {
 }
 
 /* @end */
+
+/* @group Blog */
+
+.blog h1 {
+	margin-bottom: 0;
+}
+
+.blog .date {
+	text-transform: uppercase;
+	color: #BFBFBF;
+}
+
+/* @end */
