@@ -25,6 +25,10 @@ def restart():
     require('hosts', provided_by = [dev, staging, live])
     sudo('/etc/init.d/apache2 restart')
 
+def restart_nginx():
+    require('hosts', provided_by = [dev, staging, live])
+    sudo('/etc/init.d/nginx restart')
+
 def mirror_db():
     "Mirror database to local machine"
     env.now = datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
