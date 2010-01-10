@@ -24,7 +24,7 @@ def set_current_user(user):
 set_current_user(None)
 
 def onanymodel_presave(sender, **kwargs):
-    current_user = stash.current_user
+    current_user = getattr(stash, 'current_user', None)
     if current_user is None or not current_user.is_authenticated():
         # this will throw an exception if there's no sedf user AND THIS IS A
         # GOOD THING
