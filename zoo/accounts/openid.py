@@ -25,7 +25,9 @@ class RegistrationConsumer(RegistrationConsumer):
     trust_root = '/account/'
     urlname_pattern = 'accounts-%s'
     account_recovery_url = '/account/recover/'
-
+    confirm_email_template = 'emails/validation.txt'
+    confirm_email_from = 'info@wildlifenearyou.com'
+    
     RegistrationForm = CustomRegistrationForm
     
     def show_i_have_logged_you_in(self, request):
