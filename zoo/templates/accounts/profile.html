@@ -3,7 +3,7 @@
 {% load favourites_extras %}
 {% load zoocommon %}
 
-{% block title %}{{ profile.user|title }}{% endblock %}
+{% block title %}{{ profile.user }}{% endblock %}
 
 {% block extra_head %}
 <script type="text/javascript" src="/static/js/gallery.js"></script>
@@ -11,7 +11,7 @@
 
 {% block primary_content %}
 
-<h1>{{ profile.user|title }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+<h1>{{ profile.user }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
 {% if profile.badges.all %}
 <ul class="badges">{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}

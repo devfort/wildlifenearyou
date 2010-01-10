@@ -26,7 +26,7 @@
  {% for crg in change_request_groups %}
   {% with crg.get_pending_changerequests as pending_changes %}
 
-  <h3 title="Requested {{ crg.created_at|timesince }} ago">{{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by|title }}</a></h3>
+  <h3 title="Requested {{ crg.created_at|timesince }} ago">{{ pending_changes|length }} change{{ pending_changes|pluralize }} requested by <a href="{% url accounts-profile crg.created_by %}">{{ crg.created_by }}</a></h3>
 
    <ul>
    {% for cr in pending_changes %}

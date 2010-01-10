@@ -6,9 +6,9 @@
 
 {% block content %}
 {% load trip_sightings %}
-<h1>{% ifequal profile.user user %}My{% else %}{{ profile.user|title }}&rsquo;s{% endifequal %} Trip Book</h1>
+<h1>{% ifequal profile.user user %}My{% else %}{{ profile.user }}&rsquo;s{% endifequal %} trips</h1>
 
-<p>Why not check out <a href="{{ profile.urls.absolute }}">{{ profile.user|title }}'s full profile</a>?</p>
+<p>Why not check out <a href="{{ profile.urls.absolute }}">{{ profile.user }}'s full profile</a>?</p>
 
 <div id="my_trips">
 {% if tripbook %}

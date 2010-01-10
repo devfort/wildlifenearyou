@@ -19,7 +19,7 @@
 <p class="posted-by">
 <img src="{% url profile-image-resized comment.user.username %}" alt="">
 <a href="{% url accounts-profile comment.user.username %}">
-{{ comment.user_name|title }}</a><span class="meta"> at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
+{{ comment.user_name }}</a><span class="meta"> at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
 </li>
 {% endfor %}
 </ol>

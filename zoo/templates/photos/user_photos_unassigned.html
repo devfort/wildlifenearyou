@@ -2,11 +2,11 @@
 
 {% load pagination_tags %}
 
-{% block title %}{{ profile.user|title }}'s photos{% endblock %}
+{% block title %}{{ profile.user }}'s unassigned photos{% endblock %}
 
 {% block content %}
 
-<h1><a href="{{ profile.urls.absolute }}">{{ profile.user|title }}</a>{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+<h1><a href="{{ profile.urls.absolute }}">{{ profile.user }}</a>{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
 {% if profile.badges.all %}
 <ul>{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}

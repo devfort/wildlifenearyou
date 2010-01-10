@@ -78,7 +78,7 @@ jQuery(function($) {
 
 <div class="comments"><p class="trip-by">
 <img src="{% url profile-image-resized photo.created_by.username %}" alt="" height="30" width="30">
-By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by|title }}</a>, added {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a>)</p></div>
+By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>, added {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a>)</p></div>
 
 {% with photo.sightings.all as sightings %}
 {% if sightings %}
