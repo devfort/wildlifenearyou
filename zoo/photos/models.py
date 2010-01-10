@@ -101,9 +101,10 @@ class Photo(models.Model):
     def thumb_75(self, extra_class=''):
         title = escape(self.detailed_title())
         return mark_safe(
-            '<a href="%s" title="%s">%s</a>' % (
+            '<a href="%s" title="%s"%s>%s</a>' % (
                 self.get_absolute_url(),
                 title,
+                extra_class and ' class="%s"' % extra_class or '',
                 self.thumb_75_img(),
             )
         )
