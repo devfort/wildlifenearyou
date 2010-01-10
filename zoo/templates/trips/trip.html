@@ -110,13 +110,13 @@
 				{% ifequal visible_photo_count 1 %}{# Only one photo #}
 					<div class="gallery">
 					{% for photo in visible_photos.all %}
-						<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_100_url }}"></a>
+						<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_240_url }}"></a>
 					{% endfor %}
 					</div>
 				{% else %}{# More than one photo #}
 				{% with visible_photos.all|first as chosen %}
 				<div class="gallery">
-						<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
+						<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_240_url }}"></a>
 						<div class="slideshow">
 							<ul id="thumbnails">
 									{% for photo in visible_photos|slice:":30" %}
