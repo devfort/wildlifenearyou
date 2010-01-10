@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
 from zoo.places.models import Place
@@ -87,7 +88,9 @@ class Species(AbstractSpecies):
 
     def photo(self):
         if self.visible_photos().count() >= 1:
-            return self.random_photo()
+            return self.visible_photos().annotate(
+                num_faves = Count('favourited')
+            ).order_by('-num_faves')[0]
         else:
             # Here is where to return a picture of some trees
             # (it would perhaps be nice to have a variety of different photos available)
