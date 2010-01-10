@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django import forms
+from django.db.models import Count
 
 from zoo.accounts.models import Profile
 from zoo.animals.models import Species
@@ -156,10 +157,16 @@ def profile_default(request):
     return Redirect(reverse('accounts-profile', args=(request.user,)))
 
 def profile(request, username):
-    user = get_object_or_404(User, username = username)
+    profile = get_object_or_404(
+        Profile.objects.select_related('user'), user__username = username
+    )
+    created_trips = profile.user.created_trip_set.annotate(
+        num_sightings = Count('sightings')
+    ).select_related('place')[:5]
     return render(request, 'accounts/profile.html', {
-        'profile': user.get_profile(),
-        'photos': filter_visible_photos(user.photos, request.user),
+        'profile': profile,
+        'photos': filter_visible_photos(profile.user.photos, request.user),
+        'created_trips': created_trips,
     })
 
 @login_required

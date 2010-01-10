@@ -54,40 +54,38 @@
 			</div>
 		</form>
 		{% endifequal %}
-	{% if profile.user.created_trip_set.all %}
-	<ol class="trip-list">
-	{% for trip in profile.user.created_trip_set.all|slice:":5" %}
-				<li>
-						<div class="thumbnail">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-						<p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
-						<p class="meta">({{ trip.sightings.count }} sighting{{ trip.sightings.count|pluralize }})</p>
-				</li>
-	{% endfor %}
-	</ol>
-	<p>See <a href="{% url tripbook profile.user %}">all {% ifequal profile.user user %}your{% else %}their{% endifequal %} trips</a>.</p>
+	{% if created_trips %}
+		<ol class="trip-list">
+		{% for trip in created_trips %}
+			<li>
+				<div class="thumbnail">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+				<p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
+				<p class="meta">({{ trip.num_sightings }} sighting{{ trip.num_sightings|pluralize }})</p>
+			</li>
+		{% endfor %}
+		</ol>
+		<p>See <a href="{% url tripbook profile.user %}">all {% ifequal profile.user user %}your{% else %}their{% endifequal %} trips</a>.</p>
 
-	{% else %}
-	<p>
-		{% ifequal profile.user user %}You{% else %}They{% endifequal %} haven&rsquo;t been anywhere yet.
-	</p>
+		{% else %}
+		<p>
+			{% ifequal profile.user user %}You{% else %}They{% endifequal %} haven&rsquo;t been anywhere yet.
+		</p>
 	{% endif %}
 </div>
 
 <div>
 	<h2>Animals spotted</h2>
-	<p>
 	{% ifequal profile.user user %}
-	Add {% if profile.user.created_trip_set.count %}more{% else %}some{% endif %} trips to tell us what you've seen.
+	<p>Add trips to tell us what you've seen.</p>
 	{% endifequal %}
 	{% if profile.passport.seen_species %}
-		</p>
 	<ol class='animal-list'>
 	{% for species in profile.passport.seen_species %}
-				<li>
-						<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-						<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
-						<p><i class="scientific">{{ species.latin_name }}</i></p>
-				</li>
+		<li>
+			<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+			<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
+			<p><i class="scientific">{{ species.latin_name }}</i></p>
+		</li>
 	{% endfor %}
 	</ol>
 	{% comment %}
@@ -156,13 +154,13 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 				{% ifequal visible_photo_count 1 %}{# Only one photo #}
 					<div class="gallery">
 					{% for photo in photos.all %}
-						<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_100_url }}"></a>
+						<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_240_url }}"></a>
 					{% endfor %}
 					</div>
 				{% else %}{# More than one photo #}
 				{% with photos.all|first as chosen %}
 				<div class="gallery">
-						<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_100_url }}"></a>
+						<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_240_url }}"></a>
 						<div class="slideshow">
 							<ul id="thumbnails">
 									{% for photo in photos.all|slice:":30" %}

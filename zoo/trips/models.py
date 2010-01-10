@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from django.contrib.auth.models import User
 
 import datetime
@@ -129,21 +130,13 @@ class Trip(AuditedModel):
         return date
         
     def title(self, include_date=True):
-        name = self.name or 'A trip'
-            
-        p = Place.objects.filter(sighting__trip=self).distinct()
-        if p.count() > 1:
-            place = ' to multiple places'
-        elif p.count() == 1:
-            place = u' to %s' % p[0].known_as
-        else:
-            # This will only happen against broken old databases
-            place = u' to place unknown'
+        name = self.name or u'A trip '
+        place = u' to %s' % self.place.known_as
         
         if include_date:
             date = self.formatted_date()
         else:
-            date = ''
+            date = u''
         
         # Multiple conditions allowed here
         return u'%s%s%s' % (name, place, date)
@@ -190,7 +183,12 @@ class Trip(AuditedModel):
     
     @property
     def photo(self):
-        return self.random_photo()
+        try:
+            return self.visible_photos.annotate(
+                num_faves = Count('favourited')
+            ).order_by('-num_faves')[0]
+        except IndexError:
+            return None
     
     def random_photo(self):
         vp = self.visible_photos()

@@ -15,14 +15,20 @@ EMAIL_PORT = 1025
 
 SECRET_KEY = '6p-br^04irwt=+&4dag12(-7_!p4&t=u+h1+#$xrvr0n6=+o^d'
 
-#CACHE_BACKEND = 'db://django_cache'
+CACHE_BACKEND = "memcached://127.0.0.1:11211/?timeout=900000"
 
 try:
     import debug_toolbar
-    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-    INSTALLED_APPS.append('debug_toolbar')
+    if 'debug_toolbar.middleware.DebugToolbarMiddleware' not in \
+        MIDDLEWARE_CLASSES:
+        MIDDLEWARE_CLASSES.append(
+            'debug_toolbar.middleware.DebugToolbarMiddleware'
+        )
+        INSTALLED_APPS.append('debug_toolbar')
 except ImportError:
     pass
+
+#MIDDLEWARE_CLASSES.append('debug_footer.DebugFooter')
 
 EMAIL_FROM = 'zoo@example.com'
 
