@@ -87,14 +87,16 @@ class Species(AbstractSpecies):
         ).distinct()
 
     def photo(self):
-        if self.visible_photos().count() >= 1:
-            return self.visible_photos().annotate(
+        if hasattr(self, '_cached_photo'):
+            return self._cached_photo
+        try:
+            self._cached_photo = self.visible_photos().annotate(
                 num_faves = Count('favourited')
             ).order_by('-num_faves')[0]
-        else:
-            # Here is where to return a picture of some trees
-            # (it would perhaps be nice to have a variety of different photos available)
-            return None
+        except IndexError:
+            self._cached_photo = None
+        
+        return self._cached_photo
 
     def random_photo(self):
         vp = self.visible_photos()
