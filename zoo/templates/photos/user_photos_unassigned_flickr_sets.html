@@ -1,0 +1,35 @@
+{% extends base %}
+
+{% load pagination_tags %}
+
+{% block title %}{{ profile.user }}'s Flickr sets with unassigned photos{% endblock %}
+
+{% block content %}
+
+<h1><a href="{{ profile.urls.absolute }}">{{ profile.user }}</a>{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+{% if profile.badges.all %}
+<ul>{{ profile.badges.all|unordered_list }}</ul>
+{% endif %}
+
+<p>
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong> | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
+</p>
+
+<div>
+	<h2>Flickr sets with unassigned photos</h2>
+	{% if sets %}
+	<p>These Flickr sets contain photos that have not yet been assigned to a trip.</p>
+	<ul>
+	{% for set in sets %}
+		<li>
+			{{ set.photos.all.0.thumb_75_pull_left }}
+			<p><a href="{{ set.flickr_id }}/"><strong>{{ set.title }}</strong></a></p><p>{% if set.description %}{{ set.description|safe }}{% endif %} ({{ set.num_unassigned }} unassigned photo{{ set.num_unassigned|pluralize }})</p>
+		</li>
+	{% endfor %}
+	</ul>
+	{% else %}
+	<p>You do not have any unassigned photos that are associated with Flickr sets. Why not <a href="{% url flickr-sets %}">import a Flickr set</a>?</p>
+	{% endif %}
+</div>
+
+{% endblock %}

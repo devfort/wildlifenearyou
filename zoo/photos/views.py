@@ -15,6 +15,7 @@ from zoo.trips.models import Trip, Sighting
 from zoo.places.models import Place
 from zoo.animals.forms import SpeciesField
 from zoo.animals.models import Species
+from zoo.flickr.models import FlickrSet
 
 import datetime
 
@@ -366,6 +367,27 @@ def user_photos_unassigned(request, username):
         )
     })
 
+@login_required
+def user_photos_unassigned_flickr_sets(request, username):
+    user = get_object_or_404(User, username = username)
+    assert user == request.user
+    # Need FlickrSets containing photos that have not yet been assigned a trip
+    sets = FlickrSet.objects.filter(photos__trip__isnull = True).distinct()
+    for set in sets:
+        set.num_unassigned = set.photos.filter(trip__isnull = True).count()
+    
+    return render(request, 'photos/user_photos_unassigned_flickr_sets.html', {
+        'profile': user.get_profile(),
+        'sets': sets,
+    })
+
+def user_photos_unassigned_by_flickr_set(request, username, set_id):
+    flickr_set = get_object_or_404(FlickrSet,
+        user__username = username,
+        flickr_id = set_id
+    )
+    return user_photos_bulk_assign(request, flickr_set.user, flickr_set)
+
 def user_photos_nospecies(request, username):
     user = get_object_or_404(User, username = username)
     return render(request, 'photos/user_photos_nospecies.html', {
@@ -380,11 +402,14 @@ def user_photos_nospecies(request, username):
     })
 
 @login_required
-def user_photos_bulk_assign(request, user):
+def user_photos_bulk_assign(request, user, flickr_set=None):
     assert user == request.user
-    photos = Photo.objects.filter(
-        created_by = user, trip__isnull=True
-    ).order_by('created_at').distinct()
+    if flickr_set:
+        photos = flickr_set.photos.filter(trip__isnull = True)
+    else:
+        photos = Photo.objects.filter(
+            created_by = user, trip__isnull=True
+        ).order_by('created_at').distinct()
     
     they_forgot_to_select_some_photos = False
     they_forgot_to_select_a_trip = False
@@ -402,7 +427,9 @@ def user_photos_bulk_assign(request, user):
             photos = Photo.objects.filter(id__in = photo_ids).filter(
                 created_by = request.user
             )
-            trip = get_object_or_404(Trip, pk=trip_id, created_by=request.user)
+            trip = get_object_or_404(
+                Trip, pk=trip_id, created_by=request.user
+            )
             # Assign the photos to that trip
             for p in photos:
                 p.trip = trip
@@ -415,6 +442,7 @@ def user_photos_bulk_assign(request, user):
     return render(request, 'photos/user_photos_bulk_assign.html', {
         'profile': user.get_profile(),
         'photos': photos,
+        'flickr_set': flickr_set,
         'trip_count': Trip.objects.filter(created_by=user).count(),
         'they_forgot_to_select_some_photos': they_forgot_to_select_some_photos,
         'they_forgot_to_select_a_trip': they_forgot_to_select_a_trip,

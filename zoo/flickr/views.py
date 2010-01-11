@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from zoo.shortcuts import render
 from zoo.photos.models import Photo
 from zoo.trips.models import Trip
+from models import FlickrSet
 from client import Flickr
 
 import datetime
@@ -124,11 +125,17 @@ def single_set(request, set_id):
     photos = client.photosets_getPhotos(
         photoset_id = set_id, media = 'photos'
     )['photoset']['photo']
-    set_title = client.photosets_getInfo(
+    set_info = client.photosets_getInfo(
         photoset_id = set_id
-    )['photoset']['title']
+    )['photoset']
+    set_details = {
+        'set_title': set_info['title'],
+        'set_id': set_info['id'],
+        'set_description': set_info['description'],
+    }
     return photo_picker(
-        request, photos, 'Your set: %s' % set_title
+        request, photos, 'Your set: %s' % set_details['set_title'],
+        set_details = set_details
     )
 
 @login_required
@@ -147,7 +154,7 @@ def place(request, woe_id):
         request, photos, 'Your photos in %s' % place_info['place']['name']
     )
 
-def photo_picker(request, photos, title, extra_context = None):
+def photo_picker(request, photos, title, extra_context=None,set_details=None):
     # Enhance each photo with a signed dict for the checkbox field, so if 
     # they DO select that photo we won't have to do another API call to look 
     # up its details on Flickr
@@ -157,13 +164,16 @@ def photo_picker(request, photos, title, extra_context = None):
     ).values_list('flickr_id', flat=True))
     enable_button = False
     for photo in photos:
-        photo['signed'] = signed.dumps({
+        photo_info = {
             'id': photo['photo_id'],
             'farm': photo['farm'],
             'secret': photo['secret'],
             'server': photo['server'],
             'title': photo['title'],
-        })
+        }
+        if set_details:
+            photo_info.update(set_details)
+        photo['signed'] = signed.dumps(photo_info)
         already_imported = photo['photo_id'] in already_imported_ids
         photo['already_imported'] = already_imported
         if not already_imported:
@@ -233,6 +243,17 @@ def selected(request):
             is_visible = is_visible
         )
         added_ids.append(p.id)
+        # Should we add it to a set as well?
+        if 'set_id' in photo:
+            flickr_set, created = FlickrSet.objects.get_or_create(
+                flickr_id = photo['set_id'],
+                defaults = {
+                    'title': photo['set_title'],
+                    'description': photo['set_description'],
+                    'user': request.user,
+                }
+            )
+            flickr_set.photos.add(p)
     
     return HttpResponseRedirect(
         '/%s/photos/unassigned/' % request.user.username

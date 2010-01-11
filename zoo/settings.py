@@ -69,3 +69,8 @@ DEV_STATUS_HTML = """
 	at <a href="http://alpha.wildlifenearyou.com/">alpha.wildlifenearyou.com</a></p>
 </div>
 """
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
+

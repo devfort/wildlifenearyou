@@ -126,6 +126,7 @@ INSTALLED_APPS = [
     'django_openid',
     'pagination',
     'zoo.invitereg',
+    'zoo.flickr',
     # The next four items are dependencies for basic.blog
     'basic.blog',
     'basic.inlines',

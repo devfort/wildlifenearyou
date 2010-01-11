@@ -14,7 +14,7 @@
 </p>
 
 {% if trip_count %}
-<h2>Assign photos to trips</h2>
+<h2>Assign photos {% if flickr_set %}from Flickr set "{{ flickr_set.title }}" {% endif %}to trips</h2>
 <p>Please tell us the trip on which you took these photos, or <a href="{% url add-trip %}">add a new trip</a>.</p>
 
 {% if they_forgot_to_select_some_photos %}
