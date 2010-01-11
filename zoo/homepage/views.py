@@ -75,7 +75,7 @@ def homepage(request):
         'recent_sightings': recent_sightings,
         'recent_sightings_favourites': recent_sightings_favourites,
         'default_search': default_search,
-        'recent_photos': Photo.objects.filter(
+        'recent_photos': Photo.objects.select_related('created_by').filter(
             is_visible = True
         ).order_by('-created_at')[:20],
         'recent_trips': Trip.objects.order_by('-created_at')[:5],

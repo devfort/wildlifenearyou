@@ -270,7 +270,7 @@ class Place(AuditedModel):
         by_count = {}
         for sighting in Sighting.objects.filter(
                 place=self, species__isnull=False
-            ):
+            ).select_related('species'):
             species = sighting.species
             by_count[species] = by_count.get(species, 0) + 1
 
