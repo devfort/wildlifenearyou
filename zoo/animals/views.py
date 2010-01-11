@@ -24,14 +24,9 @@ def species(request, slug):
         t = loader.get_template('animals/%s.html' % species.type)
         c = Context({'species': species})
         return HttpResponse(t.render(c), status=species.status)
-
-    favourites = species.favourited.count()
-    hit_parade = 0
-    try:
-        hit_parade = FavouriteSpecies.hit_parade().index(species) + 1
-    except ValueError, e:
-        pass
-
+    
+    num_favourites = species.favourited.count()
+    
     # If we have the user's location, find the nearest animal of this species
     description, (latitude, longitude) = location_from_request(request)
     nearest = None
@@ -43,12 +38,13 @@ def species(request, slug):
         except IndexError:
             nearest = None
 
-    spotters = User.objects.filter(created_sighting_set__species=species).distinct()
+    spotters = User.objects.filter(
+        created_sighting_set__species = species
+    ).distinct()
     return render(request, 'animals/species.html', {
         'species': species,
         'favourited': species.is_favourited_by(request.user),
-        'hit_parade': hit_parade,
-        'favourites': favourites,
+        'num_favourites': num_favourites,
         'nearest': nearest,
         'location_description': description,
         'spotters': spotters[0:SPOTTERS_ON_SPECIES_PAGE],

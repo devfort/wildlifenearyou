@@ -86,15 +86,11 @@
 	<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
 {% endif %}
 
-{% if favourites %}
-<!-- TODO add in profile icons here of people who have favourited it -->
-<p>Favourited by <strong>{{ favourites }}</strong> {{ favourites|pluralize:"person,people" }}{% if hit_parade %}
-		&mdash; currently the <a href="{% url popular %}">{{ hit_parade|ordinal }} most favourited animal</a>{% endif %}.</p>
-{% endif %}
+<p>Favourited by <strong>{{ num_favourites }}</strong> {{ num_favourites|pluralize:"person,people" }}
 
 {% with species.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
-				<h2>Photos</h2>
+		<h2>Photos</h2>
 		{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
 			{% for photo in species.visible_photos.all %}
