@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from django.template.defaultfilters import pluralize
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -78,8 +79,11 @@ class Place(AuditedModel):
     longitude = models.FloatField(null=True)
     latitude = models.FloatField(null=True)
     
-    # We can (optionally) editorially select a photo to be featured for this place
-    chosen_photo = models.ForeignKey('photos.Photo', null=True, blank=True, related_name='place_we_feature_for')
+    # We can (optionally) editorially select a photo to feature for this place
+    chosen_photo = models.ForeignKey(
+        'photos.Photo', null=True, blank=True,
+        related_name='place_we_feature_for'
+    )
     
     # External identifiers are useful
     freebase_id = models.CharField(max_length=100, blank=True, db_index=True)
@@ -94,7 +98,9 @@ class Place(AuditedModel):
         if self.chosen_photo:
             return self.chosen_photo
         else:
-            return self.random_photo()
+            return self.visible_photos.annotate(
+                num_faves = Count('favourited')
+            ).order_by('-num_faves')[0]
     
     def popularity(self):
         """

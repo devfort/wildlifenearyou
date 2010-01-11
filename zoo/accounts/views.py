@@ -165,7 +165,9 @@ def profile(request, username):
     ).select_related('place')[:5]
     return render(request, 'accounts/profile.html', {
         'profile': profile,
-        'photos': filter_visible_photos(profile.user.photos, request.user),
+        'photos': filter_visible_photos(
+            profile.user.photos.select_related('created_by'), request.user
+        ),
         'created_trips': created_trips,
     })
 

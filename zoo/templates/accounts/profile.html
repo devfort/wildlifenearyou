@@ -83,7 +83,7 @@
 	{% for species in profile.passport.seen_species %}
 		<li>
 			<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-			<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.sightings.all.count|oncetimes }})</span></p>
+			<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.num_trips|oncetimes }})</span></p>
 			<p><i class="scientific">{{ species.latin_name }}</i></p>
 		</li>
 	{% endfor %}

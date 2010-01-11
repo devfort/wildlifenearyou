@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 import datetime
 from django.utils import dateformat
+from django.core.cache import cache
 
 from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
@@ -69,26 +70,43 @@ class Trip(AuditedModel):
     @staticmethod
     def get_passport(user):
         class Passport:
-            def __init__(self, seen, favourites):
-                self.seen_species = seen
-                self.favourite_species = favourites
-
+            def __init__(self, user, seen, favourites):
+                self._user = user
+                self._seen_species = seen
+                self._favourite_species = favourites
+            
+            @property
+            def seen_species(self):
+                key = 'passport_seen_species:%s' % self._user.pk
+                from_cache = cache.get(key)
+                if from_cache is not None:
+                    return from_cache
+                ret = list(self._seen_species)
+                cache.set(key, ret, 60 * 3)
+                return ret
+            
+            @property
+            def favourite_species(self):
+                key = 'passport_favourite_species:%s' % self._user.pk
+                from_cache = cache.get(key)
+                if from_cache is not None:
+                    return from_cache
+                ret = list(self._favourite_species)
+                cache.set(key, ret, 60 * 3)
+                return ret
+        
         if not user.is_authenticated():
-            return Passport([])
-
-        by_count = {}
-        for species in Species.objects.filter(trip__created_by=user):
-            by_count[species] = by_count.get(species, 0) + 1
-
-        species_list = by_count.keys()
-
-        for species in species_list:
-            species.count = by_count[species]
-
-        species_list.sort(key=lambda s: s.count, reverse=True)
-        favourites = Species.objects.filter(favourited__user=user).order_by('?')
-
-        return Passport(species_list, favourites)
+            return Passport(user, [], [])
+        
+        species_list = Species.objects.filter(
+            trip__created_by = user
+        ).annotate(
+            num_trips = Count('trip')
+        ).order_by('-num_trips')
+        
+        favourites = Species.objects.filter(favourited__user=user)
+        
+        return Passport(user, species_list, favourites)
 
     def formatted_start_date(self):
         date = self.start

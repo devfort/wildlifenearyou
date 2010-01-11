@@ -94,7 +94,7 @@ class Species(AbstractSpecies):
             try:
                 photo = self.visible_photos().annotate(
                     num_faves = Count('favourited')
-                ).order_by('-num_faves')[0]
+                ).select_related('created_by').order_by('-num_faves')[0]
             except IndexError:
                 photo = 'no-photo'
             cache.set('photo-of-species:%s' % self.pk, photo, 60 * 60 * 5)
