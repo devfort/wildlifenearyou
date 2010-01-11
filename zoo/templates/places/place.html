@@ -184,8 +184,7 @@
 
 {% with place.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
-				<h2>Photos</h2>
-
+		<h2>Photos</h2>
 		{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
 			{% for photo in place.visible_photos.all %}
@@ -195,18 +194,24 @@
 		{% else %}{# More than one photo #}
 		{% with place.photo as chosen %}
 		<div class="gallery">
+			{% if chosen %}
+			<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_240_url }}"></a>
+			{% else %}
+				{% with place.visible_photos.all.0 as chosen %}
 				<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_240_url }}"></a>
-				<div class="slideshow">
-					<ul id="thumbnails">
-							{% for photo in place.visible_photos.all %}
-							{% ifnotequal chosen photo %}
-								<li>{{ photo.thumb_75 }}</li>
-								{% endifnotequal %}
-							{% endfor %}
-					</ul><!-- /#thumbnails -->
-				</div><!-- /.slideshow -->
-			</div>
-			{% endwith %}
+				{% endwith %}
+			{% endif %}
+			<div class="slideshow">
+				<ul id="thumbnails">
+					{% for photo in place.visible_photos.all %}
+					{% ifnotequal chosen photo %}
+						<li>{{ photo.thumb_75 }}</li>
+						{% endifnotequal %}
+					{% endfor %}
+				</ul><!-- /#thumbnails -->
+			</div><!-- /.slideshow -->
+		</div>
+		{% endwith %}
 		{% endifequal %}
 	{% endif %}
 {% endwith %}
