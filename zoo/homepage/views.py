@@ -78,9 +78,29 @@ def homepage(request):
         'recent_photos': Photo.objects.select_related('created_by').filter(
             is_visible = True
         ).order_by('-created_at')[:20],
-        'recent_trips': Trip.objects.order_by('-created_at')[:5],
+        'recent_trips': recent_trips_for_homepage(5),
         'blog_posts': Post.objects.published(),
 #        'recent_trips': Trip.objects.filter(
 #            start__isnull=False
 #        ).order_by('-start')[:5]
     })
+
+def recent_trips_for_homepage(count = 5):
+    # Return recent trips, but only a maximum of one per user (unless all 
+    # 20 of the most recent trips are by the same person)
+    seen_user_ids = set()
+    trip_ids = []
+    skipped_trip_ids = []
+    for trip_id, user_id in Trip.objects.order_by('-created_at').values_list(
+            'pk', 'created_by'
+        )[:count * 4]:
+        if user_id in seen_user_ids:
+            skipped_trip_ids.append(trip_id)
+        else:
+            seen_user_ids.add(user_id)
+            trip_ids.append(trip_id)
+    # Backfill with skipped trips, if required
+    trip_ids = trip_ids[:count]
+    for i in range(len(trip_ids) - count):
+        trip_ids.append(skipped_trip_ids[i])
+    return Trip.objects.filter(pk__in = trip_ids)
