@@ -15,6 +15,45 @@ SIZES = {
 def _key(username, size):
     return 'profile_image:/faces/%s/%s.png' % (size, username)
 
+def generate_faces_for_user(user):
+    key, keydir = user.get_profile().get_face_key_and_keydir()
+    
+    parts = [
+        s.part 
+        for s in user.selectedfaceparts.all().select_related('part')
+    ]
+    
+    face_dir = os.path.join(settings.MEDIA_ROOT, 'faces', keydir)
+    
+    if not os.path.exists(face_dir):
+        os.makedirs(face_dir)
+    
+    if os.path.exists(os.path.join(face_dir, '%s-large.png' % key)):
+        return key
+    
+    if key == 'default':
+        im = Image.open(os.path.join(
+            settings.OUR_ROOT, 'static/img/default_face.png'
+        ))
+    else:
+        im = Image.open(os.path.join(
+            settings.OUR_ROOT, 'static/img/blank-face.png'
+        ))
+    
+    for part in parts:
+        im2 = Image.open(part.image.path)
+        paste_transparent(im, None, im2)
+    
+    for size, (width, height) in SIZES.items():
+        im_to_save = im.copy()
+        if width and height:
+            im_to_save.thumbnail((width, height), Image.ANTIALIAS)
+        fp = open(os.path.join(face_dir, '%s-%s.png' % (key, size)), 'wb')
+        im_to_save.save(fp, format = 'png')
+        fp.close()
+    
+    return key
+
 def clear_cached_images(username):
     for size in SIZES:
         key = _key(username, size)

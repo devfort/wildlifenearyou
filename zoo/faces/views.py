@@ -113,6 +113,7 @@ def update(request):
                 )
             # Clear the cache
             generate.clear_cached_images(user.username)
+            generate.generate_faces_for_user(user)
             msg = 'Updated!'
             if flash:
                 return XmlResponse('<result status="ok" />')

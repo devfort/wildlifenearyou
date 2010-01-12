@@ -136,7 +136,7 @@
 	<li{% if not trip.description %} class="no-description"{% endif %}>
 	{% if trip.description %}<blockquote><p>{{ trip.description|truncatewords:100 }}</p></blockquote>{% endif %}
 	<p class="posted-by">
-	<img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
+	<img src="{{ trip.created_by.get_profile.face_small }}" alt="" height="30" width="30">
 <a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> on <a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
 </li>
 {% endfor %}

@@ -1,7 +1,7 @@
 <p>Current:</p>
 
 <p>{{ msg }}</p>
-<img src="/faces/large/{{ user.username }}.png">
+<img src="{{ user.get_profile.face_large }}">
 <form action="." method="POST">
 {{ form.as_p }}
 <input type="submit">

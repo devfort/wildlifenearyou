@@ -90,9 +90,7 @@ class Profile(models.Model):
     def avatar_img(self):
         return mark_safe(
             '<img src="%s" alt="%s\'s Avatar" width="175" height="175">' % (
-                reverse('profile-image', args=(
-                    self.user.username.lower(),
-                )),
+                self.face_large(),
                 self.user.username
             )
         )
@@ -110,7 +108,39 @@ class Profile(models.Model):
 
     def __unicode__(self):
         return u'Profile for %s' % (self.user,)
-
+    
+    def face(self, size):
+        key, keydir = self.get_face_key_and_keydir()
+        return '/static/uploaded/faces/%s/%s-%s.png' % (
+            keydir, key, size
+        )
+    
+    def face_small(self):
+        return self.face('small')
+    
+    def face_medium(self):
+        return self.face('medium')
+    
+    def face_large(self):
+        return self.face('large')
+    
+    def get_face_key_and_keydir(self):
+        parts = [
+            s.part 
+            for s in self.user.selectedfaceparts.all().select_related('part')
+        ]
+        if parts:
+            key = '-'.join([str(part.pk) for part in parts])
+            # e.g. '623-485-548-566-590-600-583'
+        else:
+            key = 'default'
+        if '-' in key:
+            keydir = '-'.join(key.split('-')[:2]) # e.g. '623-485'
+        else:
+            keydir = 'default'
+        
+        return key, keydir
+    
     def visible_photos(self):
         return self.user.photos.filter(is_visible=True)
 

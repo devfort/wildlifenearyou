@@ -10,25 +10,25 @@
 
 <div class="comments tripbook">
 		<p class="trip-by">
-		<img src="{% url profile-image-resized trip.created_by.username %}" alt="" height="30" width="30">
+		<img src="{{ trip.created_by.get_profile.face_small }}" alt="" height="30" width="30">
 		<a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> went to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a><span class="meta">{{ trip.formatted_date }}</span> - <a href="{{ trip.get_absolute_url }}">more on this trip</a></p>
 </div>
 
 <br>
 
 <div>
-		{% with visible_photos as photos %}
-		{% autopaginate photos 30 %}
-		{% paginate %}
-		<ul class="photo-display">
-				{% for photo in photos.all %}
-						<li>
-								<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-						</li>
-				{% endfor %}
-		</ul>
-		{% paginate %}
-		{% endwith %}
+	{% with visible_photos as photos %}
+	{% autopaginate photos 30 %}
+	{% paginate %}
+	<ul class="photo-display">
+		{% for photo in photos.all %}
+			<li>
+				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+	{% paginate %}
+	{% endwith %}
 </div>
 
 {% endblock %}

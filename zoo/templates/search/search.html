@@ -87,7 +87,7 @@ We couldn&rsquo;t find any results for &ldquo;{{ q }}&rdquo;, so we thought you 
 	<ol class="spotter-list">
 			{% for profile in users_results %}
 			<li>
-					<div class="thumbnail person"><img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt=""></div>
+					<div class="thumbnail person"><img src="{{ profile.face_medium }}" width="75" height="75" alt=""></div>
 					<p><a class="spotter-name" href="{{ profile.urls.absolute }}">{{ profile.user }}</a></p>
 					<p>{{ profile.user.get_full_name }}</p>
 			</li>

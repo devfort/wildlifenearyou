@@ -38,7 +38,7 @@
 				<li id="c{{ comment.id }}">
 					<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
 					<p class="posted-by">
-						<img src="{% url profile-image-resized comment.user.username %}" alt="">
+						<img src="{{ comment.user.get_profile.face_small }}" alt="">
 						<a href="{% url accounts-profile comment.user.username %}">
 							{{ comment.user_name|title }}
 						</a>

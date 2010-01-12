@@ -221,7 +221,7 @@
 				<h2>Featured spotter</h2>
 				{% if featured.profile %}
 					{% with featured.profile as profile %}
-					<img src="/faces/medium/{{ profile.user.username }}.png" width="75" height="75" alt="" class="pull-left">
+					<img src="{{ profile.face_medium }}" width="75" height="75" alt="" class="pull-left">
 					<h3><a href="{{ profile.urls.absolute }}">{{ profile.user.username }}</a></h3>
 					{% if profile.passport.seen_species %}
 						<p>Has spotted
@@ -271,7 +271,7 @@
 				<ul class="teaserlist">
 					{% for trip in recent_trips %}
 					<li>
-						<img src="/faces/large/{{ trip.created_by }}.png" width="75" height="75" alt="{{ trip.created_by }}" class="image">
+						<img src="{{ trip.created_by.get_profile.face_medium }}" width="75" height="75" alt="{{ trip.created_by }}" class="image">
 						<h3><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span>
 						</h3>
 					<p><strong><a href="{% url accounts-profile trip.created_by %}">{{ trip.created_by }}</a></strong> visited <a href="{{ trip.place.get_absolute_url }}">{{ trip.place }}</a>{% if trip.species.length %} and saw {% for species in trip.species.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ species.get_absolute_url }}">{{ species.plural|lower }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% endif %}.{% endif %}</p>
