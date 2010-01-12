@@ -65,12 +65,12 @@
 				<p>Not yet a member? <a href="{% url accounts-register %}" class="action" onclick="$('#register-box').show(); $('#openid-box').hide(); $('#login-box').hide(); return false;">&raquo; <span>register</span></a></p>
 				<form action="/account/login/" method="post">
 					<div class="container text-container">
-						<label for="id_username">username</label>
-						<input id="id_username" type="text" name="username" maxlength="30">
+						<label for="id_username2">username</label>
+						<input id="id_username2" type="text" name="username" maxlength="30">
 					</div>
 					<div class="container text-container">
-						<label for="id_password">password</label>
-						<input type="password" name="password" id="id_password">
+						<label for="id_password2">password</label>
+						<input type="password" name="password" id="id_password2">
 						<p class="meta"><a href="/account/recover/">I've forgotten my password!</a></p>
 					</div>
 					<p>Or <a onclick="$('#register-box').hide(); $('#openid-box').show(); $('#login-box').hide(); return false;" href="#openid-box">use <strong class="openid">OpenID</strong></a></p>
@@ -102,7 +102,9 @@
 				<a href="{% url flickr %}">import some photos</a> from Flickr.<!-- or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun! --></p>
 				
 			{% else %}
-			<p class="intro"><strong>WildlifeNearYou</strong> is a site for you to share your passion for animals. Search for a place you've been, add in which animals you spotted, and add any photos you have of them!</p>
+			<p class="intro"><strong>Find and share places to see wildlife</strong></p>
+			<p class="intro">WildlifeNearYou is a site for sharing your passion for wildlife. <a href="#look-for" onclick="$('#q').focus(); return true;">Search</a> for animals or places near you, or <a href="#register-box" onclick="$('#openid-box').hide(); $('#login-box').hide(); $('#register-box').show(); $('#id_username').focus(); return true;">register</a> to add your own trips and photos.</p>
+			<p><a href="/about/faq/">FAQ</a> | <a href="/about/">About this site</a> | <a href="http://twitter.com/WildlifeNearYou">Follow us on Twitter</a></p>
 			{% endif %}
 			
 			{% cache 30 "wlny_homepage_blog_posts" %}
@@ -119,7 +121,7 @@
 	</div>
 </div>
 
-<div class="receptacle look-for">
+<div class="receptacle look-for" id="look-for">
 	<div class="wrapper">
 		<div class="contents">
 			<form action="/search/" method="get">
@@ -164,12 +166,6 @@
 				{% endif %}
 				<h3><a class="fn org url" href="{{ place.get_absolute_url }}">{{ place.known_as }}</a></h3>
 				<p>In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a>, visited by <strong>{{ place.num_visitors }}</strong>&nbsp;spotter{{ place.num_visitors|pluralize }}.</p>
-				<!--<p class="address">
-					<span class="street-address">Regents Park</span><br>
-					<span class="locality">London</span><br>
-					<span class="postal-code">NW1 4RY</span>, <abbr class="country-name" title="United Kingdom">GB</abbr>
-				</p>-->
-<!--				<p class="description">ZSL London Zoo is the world's oldest scientific zoo. It was opened in London on April 27, 1828, and was originally intended to be used as a collection for scientific study. </p> -->
 				{% if place.species %}
 				<h4>Animals spotted here</h4>
 				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
