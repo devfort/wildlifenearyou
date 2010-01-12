@@ -7,6 +7,7 @@ By Richard Rutter, clearleft.com
 body {
 	font-size: 100%;
 }
-.contents {
+.contents,
+.receptacle {
 	zoom: 1;
 }
