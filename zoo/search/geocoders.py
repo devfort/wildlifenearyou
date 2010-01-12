@@ -1,6 +1,7 @@
 from xml.etree import ElementTree as ET
-import urllib, simplejson
+import urllib
 from django.conf import settings
+from django.utils import simplejson
 
 def google_geocode(q):
     json = simplejson.load(urllib.urlopen(
