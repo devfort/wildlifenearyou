@@ -57,7 +57,7 @@ jQuery(function($) {
 
 {% block primary_content %}
 
-	{% if photo.place %}
+	{% if photo.title %}
 		<h1>{{ photo.title }}</h1>
 	{% else %}
 		<h1>Photo by <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a></h1>
