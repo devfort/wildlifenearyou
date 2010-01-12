@@ -5,6 +5,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 DATABASE_ENGINE = 'mysql'
+DATABASE_HOST = '127.0.0.1'
 DATABASE_NAME = 'sedf'
 DATABASE_USER = 'sedf'
 
@@ -27,6 +28,8 @@ try:
         INSTALLED_APPS.append('debug_toolbar')
 except ImportError:
     pass
+
+MIDDLEWARE_CLASSES.append('debug.profile_middleware.ProfileMiddleware')
 
 #MIDDLEWARE_CLASSES.append('debug_footer.DebugFooter')
 
