@@ -1,0 +1,5 @@
+/* IE 6 and below fixes - thanks, http://www.twinhelix.com/css/iepngfix/ */
+img.avatar,
+div.thumbnail {
+	behavior: url(/static/css/iepngfix.htc);
+}

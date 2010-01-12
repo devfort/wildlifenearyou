@@ -16,7 +16,7 @@
 		{{ form.timestamp }}
 		{{ form.security_hash }}
 		<input type="hidden" name="next" value="{{ comment_next }}#comments">
-		<img src="{{ user.get_profile.face_small }}" alt="">
+		<img src="{{ user.get_profile.face_small }}" alt="" width="30" height="30" class="avatar">
 		<a href="{% url accounts-profile user.username %}">{{ user.username }}</a>
 		<input type="submit" value="Post comment" class="submit">
 	</div>

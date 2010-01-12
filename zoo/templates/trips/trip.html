@@ -22,7 +22,7 @@
 	{% else %}
 	<p class="trip-by">
 	{% endif %}
-	<img src="{{ trip.created_by.get_profile.face_small }}" alt="" height="30" width="30">
+	<img src="{{ trip.created_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
 	<a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> went to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
 </div>
 

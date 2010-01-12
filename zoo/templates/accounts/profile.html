@@ -193,7 +193,7 @@ If you <a href="/set-location/">tell us your location</a>, we can find animals n
 				{% for comment in profile.user.comment_comments.all %}
 					<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
 					<p class="posted-by">
-					<img src="{{ profile.face_small }}" alt="" height="30" width="30">
+					<img src="{{ profile.face_small }}" alt="" height="30" width="30" class="avatar">
 						on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a><span class="meta">at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
 				{% endfor %}
 				</ul>

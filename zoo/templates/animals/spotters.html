@@ -13,7 +13,7 @@
 <ul class="spotter-list">
 {% for spotter in spotters %}
 		<li>
-				<img src="{{ spotter.get_profile.face_medium }}" width="75" height="75" alt="" class="pull-left">
+				<img src="{{ spotter.get_profile.face_medium }}" width="75" height="75" alt="" class="pull-left avatar">
 				<p><a class="spotter-name" href="{{ spotter.get_profile.urls.absolute }}">{{ spotter }}</a></p>
 {% comment %}				<p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>{% endcomment %}
 		</li>

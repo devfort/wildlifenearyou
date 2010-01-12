@@ -89,7 +89,7 @@ class Profile(models.Model):
 
     def avatar_img(self):
         return mark_safe(
-            '<img src="%s" alt="%s\'s Avatar" width="175" height="175">' % (
+            '<img src="%s" class="avatar" alt="%s\'s Avatar" width="175" height="175">' % (
                 self.face_large(),
                 self.user.username
             )
