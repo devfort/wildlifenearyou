@@ -31,7 +31,7 @@ except ImportError:
 
 MIDDLEWARE_CLASSES.append('debug.profile_middleware.ProfileMiddleware')
 
-#MIDDLEWARE_CLASSES.append('debug_footer.DebugFooter')
+# MIDDLEWARE_CLASSES.append('debug.debug_footer.DebugFooter')
 
 EMAIL_FROM = 'zoo@example.com'
 

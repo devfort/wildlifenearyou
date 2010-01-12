@@ -77,27 +77,34 @@ class Photo(models.Model):
     def __unicode__(self):
         return self.title or unicode(self.photo)
     
-    def thumb_75_img(self, extra_class=''):
+    def thumb_75_img(self, extra_class='', include_title=False):
         if extra_class:
             extra_class = 'class="%s" ' % extra_class
         return mark_safe(
-            '<img src="%s" alt="%s" width="75" height="75">' % (
+            '<img src="%s" alt="%s" width="75" height="75"%s>' % (
                 self.thumb_75_url(),
                 extra_class,
+                include_title and (' title="%s"' % escape(self.title)) or ''
             )
         )
     
-    def thumb_75(self, extra_class=''):
+    def thumb_75(self, extra_class='', include_title=False):
         return mark_safe(
-            '<a href="%s"%s>%s</a>' % (
+            '<a href="%s"%s%s>%s</a>' % (
                 self.get_absolute_url(),
                 extra_class and ' class="%s"' % extra_class or '',
+                include_title and (' title="%s"' % escape(self.title)) or '',
                 self.thumb_75_img(),
             )
         )
 
-    def thumb_75_pull_left(self):
-        return self.thumb_75(extra_class = 'pull-left')
+    def thumb_75_pull_left(self, include_title=False):
+        return self.thumb_75(
+            extra_class = 'pull-left', include_title=include_title
+        )
+    
+    def thumb_75_with_title(self):
+        return self.thumb_75(include_title = True)
     
     def thumb_240_url(self):
         if self.flickr_id:
