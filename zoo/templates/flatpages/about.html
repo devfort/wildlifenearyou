@@ -4,57 +4,55 @@
 
 {% block content %}
 
-<h1>About this site</h1>
+<h1>About WildlifeNearYou</h1>
 
-<p class="intro">Hello there! So you&rsquo;re interested in who we are and how this site came to
-be. I hope you&rsquo;re sitting comfortably, and we&rsquo;ll tell you&hellip;</p>
+<p class="intro">Hello there! So you&rsquo;re interested in who we are and how this site came to be. I hope you&rsquo;re sitting comfortably, and we&rsquo;ll tell you&hellip;</p>
 
-<p>WildlifeNearYou was born out of a passion by its creators for zoos, nature
-reserves, and the wonder and awe at the vast amount of amazing creatures there
-are that inhabit our beloved planet. Why zoos? Well, zoos are an accessible,
-amazing opportunity to learn about a wide range of fascinating creatures and a
-chance to raise awareness about why we should all care about their future.</p>
+<p>WildlifeNearYou was born out of a passion for zoos, nature
+reserves, and wonder and awe at the vast amount of amazing creatures that inhabit our beloved planet. Zoos and other wildlife places offer an accessible, amazing opportunity to learn about a wide range of fascinating creatures and a chance to raise awareness about why we should all care about their future.</p>
 
 <p>We imagined a future where there was a place on the internet that contained
-all the information in one place about the zoos, and allowed us to easily
-search and find our nearest zoo that housed monkeys, owls or narwhals. These
+all the information in one place about these places, and allowed us to easily
+find our nearest zoo that housed monkeys, owls or narwhals. These
 are our favourite creatures, we love them a lot. We then dreamed that the site
 would be community driven so that we could share our trips to the zoo and
-hopefully have a good read of other people&rsquo;s ventures too, plus many more
-wonderous zoo related things.</p>
+hopefully have a good read of other people&rsquo;s ventures too.</p>
 
-<p>We conceived and turned this dream into reality in just one week whilst
-staying at Fort Clonque on Alderney, with the following incredibly amazingly
-talented good friends who all made this site possible:</p>
+<p>We conceived and turned this dream into reality in just one week<sup><a href="#footnote" id="reverse-footnote" style="text-decoration: none">*</a></sup> as part of <a href="http://devfort.com/">/dev/fort</a> on Fort Clonque on Alderney, with the following team of incredibly
+talented good friends:</p>
 
 <ul id="team_avatars">
-<li><img src="/static/img/team/avatar_james.png" alt=""> James Aylett</li>
-<li><img src="/static/img/team/avatar_richard.png" alt=""> Richard Boulton</li>
-<li><img src="/static/img/team/avatar_natalie.png" alt=""> Natalie Downe</li>
-<li><img src="/static/img/team/avatar_matt.png" alt=""> Matt Harris</li>
-<li><img src="/static/img/team/avatar_chris.png" alt=""> Chris Lamb</li>
-<li><img src="/static/img/team/avatar_cindy.png" alt=""> Cindy Li</li>
-<li><img src="/static/img/team/avatar_niqui.png" alt=""> Niqui Merret</li>
-<li><img src="/static/img/team/avatar_mazz.png" alt=""> Mazz Mosley</li>
-<li><img src="/static/img/team/avatar_ben.png" alt=""> Ben Phillips</li>
-<li><img src="/static/img/team/avatar_aaron.png" alt=""> Aaron Sokoloski</li>
-<li><img src="/static/img/team/avatar_matthew.png" alt=""> Matthew Somerville</li>
-<li><img src="/static/img/team/avatar_simon.png" alt=""> Simon Willison</li>
+	<li><img src="/static/img/team/avatar_james.png" alt=""> James Aylett</li>
+	<li><img src="/static/img/team/avatar_richard.png" alt=""> Richard Boulton</li>
+	<li><img src="/static/img/team/avatar_natalie.png" alt=""> Natalie Downe</li>
+	<li><img src="/static/img/team/avatar_matt.png" alt=""> Matt Harris</li>
+	<li><img src="/static/img/team/avatar_chris.png" alt=""> Chris Lamb</li>
+	<li><img src="/static/img/team/avatar_cindy.png" alt=""> Cindy Li</li>
+	<li><img src="/static/img/team/avatar_niqui.png" alt=""> Niqui Merret</li>
+	<li><img src="/static/img/team/avatar_mazz.png" alt=""> Mazz Mosley</li>
+	<li><img src="/static/img/team/avatar_ben.png" alt=""> Ben Phillips</li>
+	<li><img src="/static/img/team/avatar_aaron.png" alt=""> Aaron Sokoloski</li>
+	<li><img src="/static/img/team/avatar_matthew.png" alt=""> Matthew Somerville</li>
+	<li><img src="/static/img/team/avatar_simon.png" alt=""> Simon Willison</li>
 </ul>
 
-<p>We really hope you have as much fun using it as we did building it, and that
-it inspires you to take a fantastic trip to a zoo; just don&rsquo;t forget to drop by
-and tell us all about it &ndash; we&rsquo;d love to hear it.</p>
+<p>We really hope you have as much fun using it as we did building it, and that it inspires you to take a fantastic trip to a zoo; just don&rsquo;t forget to drop by and tell us all about it &ndash; we&rsquo;d love to hear it!</p>
 
 <h2>Technical colophon</h2>
 
-<p>Country data and location lookups come from <a href="http://www.geonames.org/">GeoNames</a>, while the maps themselves are powered by the <a href="http://code.google.com/apis/maps/">Google Maps API</a>. Country flags and icons are by <a href="http://famfamfam.com/lab/icons/">Mark James</a>.</p>
+<p>Our species list comes from <a href="http://www.freebase.com/">Freebase</a>. Maps and geocoding are powered by the <a href="http://code.google.com/apis/maps/">Google Maps API</a>. Country flags and icons are by <a href="http://famfamfam.com/lab/icons/">Mark James</a>.</p>
 
-<p>The site uses <a href="http://code.google.com/p/sorl-thumbnail/">sorl-thumbnail</a> by Mikko Hellsing and Chris Beaven for thumbnailing. Search is powered by <a href="http://xapian.org/">Xapian</a>, using a client-server system written by Richard Boulton (one of the WildlifeNearYou team members) that was the precursor to <a href='http://code.google.com/p/flaxcode/wiki/FlaxSearchServiceIndex'>the Flax Search Service</a>.</p>
+<p>Photos are imported from <a href="http://www.flickr.com">Flickr</a> using the <a href="http://flickrapi.sf.net/">FlickrAPI</a> Python library.</p>
 
-<p>Deployment is <a href="http://code.google.com/p/modwsgi/">mod_wsgi</a> running on <a href="http://httpd.apache.org/">Apache 2</a> behind an <a href="http://nginx.net/">nginx</a> proxy. <!-- The site is hosted on a <a href="http://www.linode.com/">Linode.com</a> virtual machine. --></p>
+<p>Search is powered by <a href="http://xapian.org/">Xapian</a>, using a client-server system written by Richard Boulton (one of the WildlifeNearYou team members) that was the precursor to <a href='http://code.google.com/p/flaxcode/wiki/FlaxSearchServiceIndex'>the Flax Search Service</a>. Our <a href="http://openid.net/">OpenID</a> implementation uses the <a href="http://openidenabled.com/python-openid/">python-openid</a> and <a href="http://github.com/simonw/django-openid">django-openid</a> libraries.</p>
+
+<p>Deployment uses <a href="http://code.google.com/p/modwsgi/">mod_wsgi</a> running on <a href="http://httpd.apache.org/">Apache 2</a> behind an <a href="http://nginx.net/">nginx</a> proxy. The site is hosted on a <a href="http://www.linode.com/">Linode.com</a> virtual machine, and is deployed using the wonderful combination of <a href="http://pip.openplans.org/">pip</a>, <a href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>, <a href="http://samba.anu.edu.au/rsync/">rsync</a> and <a href="http://fabfile.org/">Fabric</a>.</p>
+
+<p>WildlifeNearYou is written in <a href="http://www.python.org/">Python</a> using the <a href="http://www.djangoproject.com/">Django Web Framework</a>.
 
 <p><a href="http://www.djangoproject.com/"><img src="http://media.djangoproject.com/img/badges/djangojoint107x25.gif" border="0" alt="A Django joint." title="A Django joint."></a></p>
+
+<p><small id="footnote"><sup><a style="text-decoration: none" href="#reverse-footnote">*</a></sup> And 14 months of "just a few more tweaks, honest!" when we got home...</small></p>
 
 {% endblock %}
 
