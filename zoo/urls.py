@@ -185,7 +185,7 @@ urlpatterns = patterns('',
     url(r'^feedback/$', 'zoo.feedback.views.submit', name='feedback'),
     
     # Django built-in admin
-    (r'^admin/(.*)', admin.site.root),
+    (r'^admin2/(.*)', admin.site.root),
     
     # Databrowse
     (r'^databrowse/(.*)', databrowse.site.root),
