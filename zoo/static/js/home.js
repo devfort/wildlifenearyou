@@ -1,6 +1,30 @@
 jQuery(function($) {
 	
+	/* 'search' and 'register' links in intro copy
+	function scrollWin(){
+	$('html, body').animate({
+	scrollTop: $("#scrollToHere").offset().top
+	}, 2000);
+	}
+	
 	/* Example links type in the search box, then submit */
+	$('p.intro a[href="#look-for"]').click(function() {
+		$('#q').focus();
+		$('html, body').animate({
+			scrollTop: $("#look-for").offset().top
+		}, 500);
+		return false;
+	});
+	$('p.intro a[href="#register-box"]').click(function() {
+		$('#openid-box').hide();
+		$('#login-box').hide();
+		$('#register-box').show();
+		$('#id_username').focus();
+		$('html, body').animate({
+			scrollTop: $("#register-box").offset().top - 5
+		}, 500);
+		return false;
+	});
 	
 	var input = $('#q');
 	var searchSubmit = input.parents('form:first').find(':submit');
