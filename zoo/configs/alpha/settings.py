@@ -39,11 +39,12 @@ FLICKR_API_KEY = '9b42140530b4e1d535adc4b5992bd879'
 FLICKR_API_SECRET = '19db0ec3fb0c4e69'
 
 # Dev status bar HTML
-DEV_STATUS_HTML = """
-<div class="dev-status alpha">
- <p>This is still an <strong>alpha</strong> site - please don't link to or Twitter this yet, we're fixing up some loose ends</p>
-</div>
-"""
+DEV_STATUS_HTML = ''
+#DEV_STATUS_HTML = """
+#<div class="dev-status alpha">
+# <p>This is still an <strong>alpha</strong> site - please don't link to or Twitter this yet, we're fixing up some loose ends</p>
+#</div>
+#"""
 
 GOOGLE_ANALYTICS_CODE = """
 <script type="text/javascript">
