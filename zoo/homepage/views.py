@@ -9,9 +9,12 @@ from zoo.animals.models import Species
 from zoo.trips.models import Sighting, Trip
 from zoo.accounts.models import Profile
 from zoo.photos.models import Photo
+from zoo.favourites.models import FavouritePhoto
 from zoo.utils import location_from_request
 
 from basic.blog.models import Post
+
+import itertools
 
 def homepage(request):
 
@@ -75,15 +78,35 @@ def homepage(request):
         'recent_sightings': recent_sightings,
         'recent_sightings_favourites': recent_sightings_favourites,
         'default_search': default_search,
-        'recent_photos': Photo.objects.select_related('created_by').filter(
-            is_visible = True
-        ).order_by('-created_at')[:20],
+        'recent_photos': recent_photos_for_homepage(),
         'recent_trips': recent_trips_for_homepage(5),
         'blog_posts': Post.objects.published(),
 #        'recent_trips': Trip.objects.filter(
 #            start__isnull=False
 #        ).order_by('-start')[:5]
     })
+
+def recent_photos_for_homepage():
+    faves = FavouritePhoto.objects.order_by(
+        '-when_added'
+    ).select_related('photo').filter(photo__is_visible=True)[:10]
+    pks = [f.photo_id for f in faves]
+    recents = Photo.objects.select_related('created_by').filter(
+        is_visible = True
+    ).exclude(pk__in = pks).order_by('-created_at')[:10]
+    
+    seen_user_ids = set()
+    photos = []
+    skipped_photos = []
+    
+    iter_faves = itertools.cycle(faves)
+    iter_recents = itertools.cycle(recents)
+    
+    while len(photos) < 20:
+        photos.append(iter_recents.next())
+        photos.append(iter_faves.next().photo)
+    
+    return photos
 
 def recent_trips_for_homepage(count = 5):
     # Return recent trips, but only a maximum of one per user (unless all 
@@ -103,4 +126,4 @@ def recent_trips_for_homepage(count = 5):
     trip_ids = trip_ids[:count]
     for i in range(len(trip_ids) - count):
         trip_ids.append(skipped_trip_ids[i])
-    return Trip.objects.filter(pk__in = trip_ids)
+    return Trip.objects.filter(pk__in = trip_ids).order_by('-created_at')
