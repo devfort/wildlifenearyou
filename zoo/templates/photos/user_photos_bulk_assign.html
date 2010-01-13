@@ -33,6 +33,7 @@
 	<li>
 		<label for="selectphoto_{{ photo.id }}">{{ photo.thumb_75_img }}
 		<span class="import"><input id="selectphoto_{{ photo.id }}" type="checkbox" name="selected_photos" value="{{ photo.id }}"> add</span></label>
+		<p class="view"><a href="http://www.flickr.com/photo.gne?id={{ photo.flickr_id }}">View</a></p>
 	</li>
 {% endfor %}
 </ul>

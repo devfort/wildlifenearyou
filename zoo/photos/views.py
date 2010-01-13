@@ -372,7 +372,10 @@ def user_photos_unassigned_flickr_sets(request, username):
     user = get_object_or_404(User, username = username)
     assert user == request.user
     # Need FlickrSets containing photos that have not yet been assigned a trip
-    sets = FlickrSet.objects.filter(photos__trip__isnull = True).distinct()
+    sets = FlickrSet.objects.filter(
+        user = request.user,
+        photos__trip__isnull = True
+    ).distinct()
     for set in sets:
         set.num_unassigned = set.photos.filter(trip__isnull = True).count()
     
