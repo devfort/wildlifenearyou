@@ -201,12 +201,20 @@ class Trip(AuditedModel):
     
     @property
     def photo(self):
-        try:
-            return self.visible_photos.annotate(
-                num_faves = Count('favourited')
-            ).order_by('-num_faves')[0]
-        except IndexError:
+        photo = cache.get('photo-of-trip:%s' % self.pk)
+        if photo is None:
+            try:
+                photo = self.visible_photos().annotate(
+                    num_faves = Count('favourited')
+                ).order_by('-num_faves')[0]
+            except IndexError:
+                photo = 'no-photo'
+            cache.set('photo-of-trip:%s' % self.pk, photo, 60 * 60 * 5)
+        
+        if photo == 'no-photo':
             return None
+        
+        return photo
     
     def random_photo(self):
         vp = self.visible_photos()

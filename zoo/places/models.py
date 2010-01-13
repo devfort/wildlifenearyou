@@ -4,6 +4,7 @@ from django.template.defaultfilters import pluralize
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 
 from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
@@ -91,16 +92,23 @@ class Place(AuditedModel):
     
     @property
     def photo(self):
-        """
-        Either return the chosen photo, or a visible one at random if none are chosen.
-        Can return None if there are no photos of this place at all.
-        """
-        if self.chosen_photo:
-            return self.chosen_photo
-        else:
-            return self.visible_photos.annotate(
-                num_faves = Count('favourited')
-            ).order_by('-num_faves')[0]
+        photo = cache.get('photo-of-place:%s' % self.pk)
+        if photo is None:
+            if self.chosen_photo:
+                photo = self.chosen_photo
+            else:
+                try:
+                    photo = self.visible_photos().annotate(
+                        num_faves = Count('favourited')
+                    ).order_by('-num_faves')[0]
+                except IndexError:
+                    photo = 'no-photo'
+            cache.set('photo-of-place:%s' % self.pk, photo, 60 * 60 * 5)
+        
+        if photo == 'no-photo':
+            return None
+        
+        return photo
     
     def popularity(self):
         """
