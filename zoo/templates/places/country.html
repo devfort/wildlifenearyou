@@ -1,20 +1,20 @@
 {% extends base %}
 
-{% block title %}{{ country.name }} Places{% endblock %}
+{% block title %}Places to see wildlife in {{ country.name }}{% endblock %}
 
 {% block content %}
 
-<h1>{{ country.name }} Places</h1>
+<h1>Places to see wildlife in {{ country.name }}</h1>
 {% if places %}
-	<ul class='place-list'>
+<ul class="place-list">
 	{% for place in places %}
 	<li>
 	{% include "places/_place.html" %}
 	</li>
 	{% endfor %}
-	</ul>
+</ul>
 {% else %}
-	<p>No places are in this country yet.</p>
+	<p>No one has added any places yet.</p>
 {% endif %}
 
 {% endblock %}
