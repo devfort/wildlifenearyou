@@ -29,6 +29,8 @@ class RegistrationConsumer(RegistrationConsumer):
     confirm_email_from = 'info@wildlifenearyou.com'
     sign_next_param = False
     
+    reserved_usernames = settings.RESERVED_USERNAMES
+    
     RegistrationForm = CustomRegistrationForm
     
     def show_i_have_logged_you_in(self, request):

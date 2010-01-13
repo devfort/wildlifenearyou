@@ -171,7 +171,7 @@ RESERVED_USERNAMES = set(
     companies active rss img company books shop sales animals species 
     plants narwhals plant animal wildlife latin dictionary fish zoos zoo 
     aquarium aquariums park parks safari arboretum arboretums autocomplete 
-    popular invite debug
+    popular invite debug account
     """.strip().split()
 )
 
