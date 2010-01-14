@@ -336,19 +336,35 @@ div.spotter-list {
 	background-image: url('/static/img/bg/art_talkbubble_comment_point.png');
 	background-repeat: no-repeat;
 	background-position: 20px 0;
-	line-height: 1.4;
+	position: relative;	
+	line-height:1.1em;
+	padding-bottom:10px;
+	padding-left:91px;
+	padding-top:13px;
 }
-.comments img {
-	position: relative;
-	top: 10px;
+.comments .posted-by {
+	line-height:1em;
+	padding-bottom:0;
+	padding-top:8px;
+}
+.comments .posted-by img,
+.comment .button-container img,
+.suggestion-list .interaction-by img,
+.add-species .interaction-by img {
+	position: absolute;
+	left:52px;
+	top:8px;
 }
 .comments .posted-by span.meta {
 	font-size: 0.8em;
 	display: block;
-	padding-left: 35px;
 }
 
-.comments .posted-by a {
+.comments .posted-by a,
+.comments .posted-by a,
+.comment .button-container a,
+.suggestion-list .interaction-by a,
+.add-species .interaction-by a {
 	font-weight: bold;
 }
 
@@ -397,23 +413,29 @@ div.spotter-list {
 .add-species form {
 	overflow: hidden;
 	background-color: #e2f1f9;
-	padding-top: 15px;
+}
+.add-species #suggest_species {
+	width: 100%;
+	padding: 0.1em 0;
 }
 .add-species form {
 	padding-bottom: 0;
 	padding-top: 0;
 }
+.add-species form label {
+	line-height: 1em;
+}
+.add-species form label em.help {
+	display: inline;
+	font-weight: normal;
+	margin-left: 1em;
+	font-size: 0.6em;
+	float: right;
+}
 .suggestion-list p.interaction-by,
 .add-species p.interaction-by {
 	margin-top: 0;
-	padding-top: 3px;
 	background-image: url('/static/img/bg/art_talkbubble_logbook_point.png');
-}
-
-.suggestion-list p.interaction-by img,
-.add-species p.interaction-by img {
-	position: relative;
-	top: 6px;
 }
 
 /* @end Sugested species */
@@ -1069,6 +1091,43 @@ ul.teaserlist h3 span {
 
 /* @end */
 
-.compact p {
-	margin: 0 0 0.2em 0 ;
+/* @group Main photo */
+
+.main-photo {
+	border:  2px solid #EBF5FC;
+	background-color: white;
+	padding: 7px;
+	display: block;
+	margin: 0 auto;
+	max-width: 95%;
+	margin-bottom: 1em;
 }
+
+/* @group Credit */
+
+.credit {
+	padding-left: 90px;
+	position: relative;
+	padding-bottom: 1em;
+	padding-top: 0.1em;
+}
+
+.credit img {
+	position: absolute;
+	top: 0;
+	left: 5px;
+}
+
+.credit .meta {
+	margin: 0;
+	padding: 0;
+	display: block;
+	font-style: normal;
+}
+
+
+/* @end */
+
+/* @end */
+
+

@@ -74,15 +74,16 @@
 	{% load thumbnail %}
 
 	{% if photo.photo %}
-		<img src="{% thumbnail photo.photo 600x600 %}" style="max-width: 100%">
+		<img src="{% thumbnail photo.photo 600x600 %}"class="main-photo">
 	{% else %}
-		<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg" style="max-width: 100%">
+		<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg" class="main-photo">
 	{% endif %}
 
-	<div class="comments">
-		<p class="trip-by">
-			<img src="{{ photo.created_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
-			By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>, added {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a>)
+	<div class="intro credit">
+		<p>
+			<img src="{{ photo.created_by.get_profile.face_medium }}" alt="" class="avatar">
+			Taken by <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>
+			<em class="meta">Photo added on {{ photo.created_at|date:"jS F Y"}}, <a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}.</a></em>
 		</p>
 	</div>
 
@@ -220,14 +221,14 @@
 							<input type="hidden" name="guid" value="">
 						</p>
 						<p>
-							<label for="suggest_species_because">because&hellip;</label>
+							<label for="suggest_species_because">because&hellip; <em class="help">(optional)</em></label>
 							<textarea name="note" id="suggest_species_because"></textarea>
 						</p>
-						<p><input type="submit" value="Save"></p>
+						<p><input type="submit" value="Add suggestion"></p>
 					</form>
 					<p class="interaction-by">
 						<img src="{{ request.user.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
-						<a href="{% url accounts-profile request.user.username %}">{{ request.user.username }}</a> thinks this is a &hellip;</p>
+						<a href="{% url accounts-profile request.user.username %}">{{ request.user.username }}</a></p>
 				</div>
 			{% endif %}
 		
