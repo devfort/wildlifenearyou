@@ -21,7 +21,7 @@
 	{% else %}
 		<h2>Photos</h2>	
 		{% with photos.all as photos %}
-		{% autopaginate photos 30 %}
+		{% autopaginate photos 32 %}
 		{% paginate %}
 		<ul class="photo-display">
 				{% for photo in photos.all %}

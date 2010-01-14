@@ -18,7 +18,7 @@
 
 <div>
 	{% with visible_photos as photos %}
-	{% autopaginate photos 30 %}
+	{% autopaginate photos 32 %}
 	{% paginate %}
 	<ul class="photo-display">
 		{% for photo in photos.all %}

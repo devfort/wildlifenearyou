@@ -19,7 +19,7 @@
 		<h2>Photos with no species</h2>
 		<p>These photos do not yet have any species associated with them.</p>
 		{% with photos.all as photos %}
-		{% autopaginate photos 30 %}
+		{% autopaginate photos 32 %}
 		{% paginate %}
 		<ul class="photo-display">
 				{% for photo in photos.all %}
