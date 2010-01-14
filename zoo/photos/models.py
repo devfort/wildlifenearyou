@@ -226,3 +226,7 @@ class SuggestedSpecies(models.Model):
             self.suggested_by, self.photo, self.denorm_suggestion_for,
             (self.species_inexact or self.species)
         )
+    
+    def get_absolute_url(self):
+        return self.photo.get_absolute_url()
+

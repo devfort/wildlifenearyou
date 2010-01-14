@@ -145,10 +145,13 @@ ACTIVITY_MODELS = (
     'places.Place',
     'trips.Trip',
     'auth.User',
+    'photos.SuggestedSpecies',
+    'comments.Comment',
 )
 ACTIVITY_MODELS_UPDATED = (
     'photos.Photo',
-    'trips.Trip'
+    'trips.Trip',
+    'photos.SuggestedSpecies'
 )
 
 DMIGRATIONS_DIR = os.path.join(OUR_ROOT, 'migrations')

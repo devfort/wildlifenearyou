@@ -169,6 +169,9 @@ def profile(request, username):
             profile.user.photos.select_related('created_by'), request.user
         ),
         'created_trips': created_trips,
+        'num_suggestions': profile.user.suggestions_for.filter(
+            status = 'new'
+        ).count(),
     })
 
 @login_required

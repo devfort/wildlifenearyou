@@ -366,7 +366,7 @@ def suggestions(request, username):
         'suggestions': SuggestedSpecies.objects.filter(
             denorm_suggestion_for = request.user,
             status = 'new'
-        ).select_related('photo', 'species').order_by('-suggested_at'),
+        ).select_related('photo').order_by('-suggested_at'),
         'username': username,
     })
 

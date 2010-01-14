@@ -16,6 +16,12 @@
 <ul class="badges">{{ profile.badges.all|unordered_list }}</ul>
 {% endif %}
 
+{% if num_suggestions %}
+<div style="border: 1px solid red; padding: 1em">
+	There are {{ num_suggestions }} suggested species for your photos <a href="{% url user-photos-suggestions profile.user.username %}">awaiting your review</a>
+</div>
+{% endif %}
+
 <p>
 		<img src="/static/img/engagementbadge/{{ profile.points_image }}.png" class="pull-left">
 		{% ifequal profile.user user %}You have{% else %}{{ profile.user }} has{% endifequal %}
