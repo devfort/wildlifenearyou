@@ -127,6 +127,7 @@ INSTALLED_APPS = [
     'pagination',
     'zoo.invitereg',
     'zoo.flickr',
+    'zoo.rspb',
     # The next four items are dependencies for basic.blog
     'basic.blog',
     'basic.inlines',
