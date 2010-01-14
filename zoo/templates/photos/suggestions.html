@@ -1,0 +1,29 @@
+{% extends base %}
+
+{% block title %}Suggested species for your photos{% endblock %}
+
+{% block content %}
+
+<h1>Suggested species for your photos</h1>
+
+{% if suggestions %}
+<ul>
+	{% for suggestion in suggestions %}
+	<li style="clear: both; overflow: hidden">
+		<a href="{{ suggestion.photo.get_absolute_url }}"><img style="float: left; margin-right: 1em; margin-bottom: 1em" src="{{ suggestion.photo.thumb_240_url }}"></a>
+		<p class="interaction-by">
+			<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
+			<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong>
+		</p>
+		<form action="">
+			<p>
+				<input type="submit" value="Approve">
+				<input type="submit" value="Reject">
+			</p>
+		</form>
+	</li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

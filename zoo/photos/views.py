@@ -9,7 +9,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.utils import simplejson
 
-from models import Photo
+from models import Photo, SuggestedSpecies
 from zoo.shortcuts import render
 from zoo.trips.models import Trip, Sighting
 from zoo.places.models import Place
@@ -356,6 +356,17 @@ def remove_species(request, username, photo_id, sighting_id):
         'photo': photo,
         'sighting': sighting,
         'request_path': request.path,
+    })
+
+@login_required
+def suggestions(request, username):
+    if username != request.user.username:
+        return HttpResponseForbidden()
+    return render(request, 'photos/suggestions.html', {
+        'suggestions': SuggestedSpecies.objects.filter(
+            denorm_suggestion_for = request.user,
+            status = 'new'
+        ).select_related('photo', 'species').order_by('-suggested_at')
     })
 
 class PhotoEditForm(forms.ModelForm):
