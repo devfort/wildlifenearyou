@@ -34,6 +34,8 @@ class Photo(models.Model):
     flickr_secret = models.CharField(max_length=32, blank=True)
     flickr_server = models.CharField(max_length=16, blank=True)
     
+    has_no_species = models.NullBooleanField(null = True, default = False)
+    
     # Moderation flags
     is_visible = models.BooleanField(default=True)
     moderated_by = models.ForeignKey(

@@ -191,6 +191,22 @@ def set_species(request, username, photo_id):
         photo.sightings.add(sighting)
     return HttpResponseRedirect(photo.get_absolute_url())
 
+@login_required
+def set_has_no_species(request, username, photo_id):
+    from zoo.trips.models import Sighting
+    if username != request.user.username:
+        return HttpResponseForbidden()
+    photo = get_object_or_404(
+        Photo, created_by__username=username, pk=photo_id
+    )
+    if 'set_has_no_species' in request.POST:
+        photo.has_no_species = True
+        photo.save()
+    if 'unset_has_no_species' in request.POST:
+        photo.has_no_species = False
+        photo.save()
+    return HttpResponseRedirect(photo.get_absolute_url())
+
 from trips.add_trip import species_for_freebase_details
 from trips import add_trip_utils
 

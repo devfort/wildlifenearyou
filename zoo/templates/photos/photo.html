@@ -113,7 +113,6 @@
 			</form>
 		{% endif %}
 	{% endif %}
-
 	
 	{% with photo.sightings.all as sightings %}
 		{% if sightings %}
@@ -208,6 +207,15 @@
 
 	{% ifequal photo.created_by request.user %}
 		<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
+		
+		<form action="{% url photo-set-has-no-species photo.created_by.username photo.id %}" method="post">
+			{% if photo.has_no_species %}
+			<p><input name="unset_has_no_species" type="submit" value="Actually there are species in this photo after all"></p>
+			{% else %}
+			<p><input name="set_has_no_species" type="submit" value="There are no species in this photo"></p>
+			{% endif %}
+		</form>
+		
 	{% endifequal %}
 
 {% endblock %}
