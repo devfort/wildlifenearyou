@@ -232,6 +232,7 @@ def selected(request):
     # )
     is_visible = True
     added_ids = []
+    set_id = None
     for photo in photos_to_add:
         if Photo.objects.filter(flickr_id = photo['id']).count():
             continue
@@ -258,7 +259,16 @@ def selected(request):
                 }
             )
             flickr_set.photos.add(p)
+            set_id = photo['set_id']
     
-    return HttpResponseRedirect(
-        '/%s/photos/unassigned/' % request.user.username
-    )
+    url = '/%s/photos/unassigned/' % request.user.username
+    if set_id:
+        url = '/%s/photos/unassigned/by-flickr-set/%s/' % (
+            request.user.username,
+            set_id
+        )
+    
+    if added_ids:
+        url += '?ids=' + (','.join(map(str, added_ids)))
+    
+    return HttpResponseRedirect(url)
