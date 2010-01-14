@@ -376,6 +376,7 @@ div.spotter-list {
 .comment .textarea-container {
 	padding-top: 1em;
 	padding-bottom: 1em;
+	overflow: hidden;
 }
 
 .comment .textarea-container textarea {
@@ -388,31 +389,42 @@ div.spotter-list {
 }
 
 .comment .textarea-container label {
-	padding-bottom: 0.8em;
-}
-.comment .button-container {
-	font-weight: bold;
+	padding-bottom: 0.5em;
+	margin-bottom: 0;
 }
 
-.comment .button-container .submit {
+.comment .submit {
 	float: right;
 	margin-top: 10px;
-}
-
-.comment img {
-	position: relative;
-	top: 10px;
+	margin-right: 2px;
 }
 
 /* @end Comment form */
 
 
 /* @group Sugested species */
+.suggestion-list {
+	margin-top: 1.4em;
+}
+.suggestion-list li {
+	margin-bottom: 1em;
+}
+.species blockquote,
+.species blockquote p, {
+	color: #9AA4A9;
+}
 
 .suggestion-list .species,
 .add-species form {
 	overflow: hidden;
 	background-color: #e2f1f9;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.suggestion-list .species .thumbnail {
+	background-color: white;
+	padding: 1px;
 }
 .add-species #suggest_species {
 	width: 100%;
@@ -424,6 +436,7 @@ div.spotter-list {
 }
 .add-species form label {
 	line-height: 1em;
+	margin-bottom: 0.5em;
 }
 .add-species form label em.help {
 	display: inline;

@@ -213,23 +213,26 @@
 			{% endif %}
 	
 			{% if not request.user.is_anonymous %}
-				<div class="add-species">
-					<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
-						<p>
-							<label for="suggest_species">I think this is a&hellip;</label>
-							<input type="text" name="species" id="suggest_species">
-							<input type="hidden" name="guid" value="">
-						</p>
-						<p>
-							<label for="suggest_species_because">because&hellip; <em class="help">(optional)</em></label>
-							<textarea name="note" id="suggest_species_because"></textarea>
-						</p>
-						<p><input type="submit" value="Add suggestion"></p>
-					</form>
-					<p class="interaction-by">
-						<img src="{{ request.user.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
-						<a href="{% url accounts-profile request.user.username %}">{{ request.user.username }}</a></p>
-				</div>
+			
+				{% ifnotequal photo.created_by request.user %}
+					<div class="add-species">
+						<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
+							<p>
+								<label for="suggest_species">I think this is a&hellip;</label>
+								<input type="text" name="species" id="suggest_species">
+								<input type="hidden" name="guid" value="">
+							</p>
+							<p>
+								<label for="suggest_species_because">because&hellip; <em class="help">(optional)</em></label>
+								<textarea name="note" id="suggest_species_because"></textarea>
+							</p>
+							<p><input type="submit" value="Add suggestion"></p>
+						</form>
+						<p class="interaction-by">
+							<img src="{{ request.user.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
+							<a href="{% url accounts-profile request.user.username %}">{{ request.user.username }}</a></p>
+					</div>
+				{% endifnotequal %}
 			{% endif %}
 		
 		{% endif %}

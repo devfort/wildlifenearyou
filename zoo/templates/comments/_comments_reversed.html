@@ -1,26 +1,29 @@
 {% load comments %}
 
 {% if user and not user.is_anonymous %}
-{% get_comment_form for object as form %}
-{% with request.path as comment_next %}
-{% include "comments/_comment_form.html" %}
-{% endwith %}
+	{% get_comment_form for object as form %}
+	{% with request.path as comment_next %}
+		{% include "comments/_comment_form.html" %}
+	{% endwith %}
 {% else %}
-<p>You need to <a href="/account/login/?next={{ request.path }}">log in</a> to post comments.</p>
+	<p class="notification">You need to <a href="/account/login/?next={{ request.path }}">log in</a> to post comments.</p>
 {% endif %}
+
 
 {% get_comment_list for object as comment_list %}
 
 {% if comment_list %}
-<ol class="comments">
-{% for comment in comment_list reversed %}
-<li id="c{{ comment.id }}">
-<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
-<p class="posted-by">
-<img src="{{ comment.user.get_profile.face_small }}" alt="" width="30" height="30" class="avatar">
-<a href="{% url accounts-profile comment.user.username %}">
-{{ comment.user_name }}</a><span class="meta"> at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
-</li>
-{% endfor %}
-</ol>
+	<ol class="comments">
+		{% for comment in comment_list reversed %}
+			<li id="c{{ comment.id }}">
+				<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
+				<p class="posted-by">
+					<img src="{{ comment.user.get_profile.face_small }}" alt="" width="30" height="30" class="avatar">
+					<a href="{% url accounts-profile comment.user.username %}">{{ comment.user_name }}</a><span class="meta"> at {{ comment.submit_date|date:"jS F Y H:i" }}</span>
+				</p>
+			</li>
+		{% endfor %}
+	</ol>
+	
 {% endif %}
+
