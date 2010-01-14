@@ -183,6 +183,8 @@
 			{% if suggestions %}
 				<ul class="animal-list suggestion-list">
 					{% for suggestion in suggestions %}
+						<!--<li class="rejected">-->
+						<!--<li class="approved">-->
 						<li>
 							<div class="species">
 								{% if suggestion.species %}
@@ -206,7 +208,8 @@
 								<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
 								<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong>
 							</p>
-		
+							
+							<p class="approval-stamp" title="this species suggestion was approved by the author of the photo">approved&nbsp;<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar"></p>
 						</li>
 					{% endfor %}
 				</ul>	

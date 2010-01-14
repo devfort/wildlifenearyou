@@ -408,6 +408,27 @@ div.spotter-list {
 }
 .suggestion-list li {
 	margin-bottom: 1em;
+	position: relative;
+}
+.suggestion-list .rejected {
+	opacity: 0.7;
+}
+.suggestion-list .approval-stamp {
+	position: absolute;
+	top: -9px;
+	right:3px;
+	font-size: 0.6em;
+	cursor: help;
+	padding:0;
+	line-height: 1em;
+}
+
+.suggestion-list .approval-stamp img {
+	width: 19px;
+	height: 19px;
+	position: relative;
+	top: 5px;
+	margin-left: 2px;
 }
 .species blockquote,
 .species blockquote p, {
@@ -422,10 +443,7 @@ div.spotter-list {
 	padding-bottom: 1em;
 }
 
-.suggestion-list .species .thumbnail {
-	background-color: white;
-	padding: 1px;
-}
+
 .add-species #suggest_species {
 	width: 100%;
 	padding: 0.1em 0;
