@@ -191,6 +191,15 @@ class SuggestedSpecies(models.Model):
     ), default = 'new', db_index = True)
     status_changed_at = models.DateTimeField(null = True, blank = True)
     
+    def is_new(self):
+        return self.status == 'new'
+    
+    def is_approved(self):
+        return self.status == 'approved'
+    
+    def is_rejected(self):
+        return self.status == 'rejected'
+    
     def approve(self):
         sightings = self.photo.sightings.all()
         defaults = {'place': self.photo.trip.place, 'note': ''}
