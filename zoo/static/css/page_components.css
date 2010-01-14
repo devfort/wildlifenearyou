@@ -410,6 +410,10 @@ div.spotter-list {
 	font-weight: bold;
 }
 
+p.trip-by {
+	margin-bottom: 2em;
+}
+
 /* @end */
 
 /* @group Profile badges */
