@@ -58,8 +58,8 @@ class Photo(models.Model):
     # One thing we will NOT do is allow photos to be directly related to
     # species. If you want to upload a photo of a Zebra, it has to go against
     # a sighting... which means it has to be associated with a place as well.
-    # This   discourage people from uploading random stock photos (a bit)
-
+    # This discourage people from uploading random stock photos (a bit)
+    
     # Photos can optionally relate to a trip and/or a place
     trip = models.ForeignKey(Trip, null=True, blank=True,
         related_name='photos'
@@ -71,12 +71,12 @@ class Photo(models.Model):
         center sign that's a PLACE thing, not a SIGHTING thing.
         """
     )
-
+    
     # Photos can belong to 0+ sightings
     sightings = models.ManyToManyField(
         'trips.Sighting', null=True, blank=True, related_name='photos'
     )
-
+    
     def __unicode__(self):
         return self.title or unicode(self.photo)
     

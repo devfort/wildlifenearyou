@@ -322,9 +322,12 @@ def suggest_species(request, username, photo_id):
     species_q = request.REQUEST.get('species', '')
     results = []
     if species_q:
-        results = add_trip_utils.search(
-            species_q, limit=10, place=photo.trip.place
-        )[:5]
+        kwargs = {
+            'limit': 10,
+        }
+        if photo.trip:
+            kwargs['place'] = photo.trip.place
+        results = add_trip_utils.search(species_q, **kwargs)[:5]
 
     return render(request, 'photos/suggest_species.html', {
         'photo': photo,
@@ -569,7 +572,9 @@ def moderate(request):
 
 def filter_visible_photos(photos, user):
     "photos is a QuerySet of photos, user is the user who wants to view them"
-    return photos.filter(
-        Q(is_visible = True) | Q(created_by = user)
-    ).distinct()
-
+    if not user.is_anonymous:
+        return photos.filter(
+            Q(is_visible = True) | Q(created_by = user)
+        ).distinct()
+    else:
+        return photos.filter(is_visible = True)
