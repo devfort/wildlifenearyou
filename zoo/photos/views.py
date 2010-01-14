@@ -265,6 +265,14 @@ def suggest_species(request, username, photo_id):
     note = request.POST.get('note', '').strip()
     
     guid = request.POST.get('guid', None)
+    
+    if not guid:
+        # Do we have an add_species_%s style guid?
+        for key in request.POST:
+            if key.startswith('add_selected_'):
+                guid = key.replace('add_selected_', '').split('.')[0]
+                break
+    
     if guid:
         # Create species page for that animal
         selected_details = add_trip_utils.bulk_lookup(
@@ -283,7 +291,7 @@ def suggest_species(request, username, photo_id):
             return HttpResponseRedirect(photo.get_absolute_url())
 
     add_unknown_text = request.POST.get('add_unknown_text', '').strip()
-    if add_unknown_text:
+    if 'add_unknown.x' in request.POST and add_unknown_text:
         photo.suggestions.create(
             species_inexact = add_unknown_text,
             suggested_by = request.user,
