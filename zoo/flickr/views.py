@@ -11,6 +11,7 @@ from models import FlickrSet
 from client import Flickr
 
 import datetime
+from dateutil import parser
 
 from django_openid import signed
 
@@ -44,7 +45,8 @@ def index(request):
     token_info = client.auth_checkToken()
     user_id = token_info['auth']['user']['nsid']
     result = client.photos_search(
-        user_id = 'me', per_page = 24, page = page
+        user_id = 'me', per_page = 24, page = page,
+        extras = 'date_taken'
     )
     photos = result['photos']['photo']
     num_pages = result['photos']['pages']
@@ -96,7 +98,7 @@ def group(request, group_nsid):
     group_info = client.groups_getInfo(group_id = group_nsid)
     user_id = token_info['auth']['user']['nsid']
     photos = client.groups_pools_getPhotos(
-        group_id = group_nsid, user_id = user_id
+        group_id = group_nsid, user_id = user_id, extras = 'date_taken'
     )['photos']['photo']
     return photo_picker(
         request, photos, 'Your photos in %s' % group_info['group']['name']
@@ -123,7 +125,7 @@ def single_set(request, set_id):
     token_info = client.auth_checkToken()
     user_id = token_info['auth']['user']['nsid']
     photos = client.photosets_getPhotos(
-        photoset_id = set_id, media = 'photos'
+        photoset_id = set_id, media = 'photos', extras = 'date_taken'
     )['photoset']['photo']
     set_info = client.photosets_getInfo(
         photoset_id = set_id
@@ -148,7 +150,7 @@ def place(request, woe_id):
     user_id = token_info['auth']['user']['nsid']
     place_info = client.places_getInfo(woe_id = woe_id)
     photos = client.photos_search(
-        woe_id = woe_id, user_id = user_id
+        woe_id = woe_id, user_id = user_id, extras = 'date_taken'
     )['photos']['photo']
     return photo_picker(
         request, photos, 'Your photos in %s' % place_info['place']['name']
@@ -170,6 +172,7 @@ def photo_picker(request, photos, title, extra_context=None,set_details=None):
             'secret': photo['secret'],
             'server': photo['server'],
             'title': photo['title'],
+            'taken_at': photo['datetaken'],
         }
         if set_details:
             photo_info.update(set_details)
@@ -240,7 +243,8 @@ def selected(request):
             flickr_id = photo['id'],
             flickr_secret = photo['secret'],
             flickr_server = photo['server'],
-            is_visible = is_visible
+            is_visible = is_visible,
+            taken_at = parser.parse(photo['taken_at']),
         )
         added_ids.append(p.id)
         # Should we add it to a set as well?

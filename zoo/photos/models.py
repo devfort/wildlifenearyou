@@ -18,6 +18,7 @@ class Photo(models.Model):
     created_by = models.ForeignKey(User, related_name='photos')
     created_at =  models.DateTimeField()
     title = models.CharField(max_length=255, blank=True)
+    taken_at = models.DateTimeField(blank = True, null = True)
     photo = ImageWithThumbnailsField(
         blank=True, # This will be blank for flickr photos
         upload_to='photos',
