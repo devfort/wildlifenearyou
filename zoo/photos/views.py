@@ -391,7 +391,7 @@ def photo(request, username, photo_id):
 
 def all(request):
     return render(request, 'photos/all.html', {
-        'photos': Photo.objects.all().order_by('-created_at'),
+        'photos': Photo.objects.all().order_by('created_at'),
     })
 
 def user_photos(request, username):

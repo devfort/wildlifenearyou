@@ -2,6 +2,8 @@
 
 {% block title %}All photos{% endblock %}
 
+{% load pagination_tags %}
+
 {% block extra_head %}
 <style type="text/css">
 div.all-photos {
@@ -17,12 +19,18 @@ div.all-photos img {
 {% endblock %}
 
 {% block content %}
-<h1>All photos</h1>
-
-<div class="all-photos">
-{% for photo in photos %}
-<a href="{{ photo.urls.absolute }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{{ photo.thumb_100_url }}"></a>
-{% endfor %}
+<div>
+	<h2>All photos on WildlifeNearYou</h2>	
+	{% autopaginate photos 32 %}
+	{% paginate %}
+	<ul class="photo-display">
+		{% for photo in photos.all %}
+			<li>
+				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+	{% paginate %}
 </div>
 
 {% endblock %}
