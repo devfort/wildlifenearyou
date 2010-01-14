@@ -414,6 +414,9 @@ def user_photos_bulk_assign(request, user, flickr_set=None):
             created_by = user, trip__isnull=True
         ).order_by('created_at').distinct()
     
+    if 'ids' in request.GET:
+        photos = photos.filter(pk__in = request.GET.get('ids', '').split(','))
+    
     they_forgot_to_select_some_photos = False
     they_forgot_to_select_a_trip = False
     
