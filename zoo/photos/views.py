@@ -256,6 +256,58 @@ def add_species(request, username, photo_id):
     })
 
 @login_required
+def suggest_species(request, username, photo_id):
+    from zoo.trips.models import Sighting
+    photo = get_object_or_404(
+        Photo, created_by__username=username, pk=photo_id
+    )
+    
+    request.POST.get('note', '').strip()
+    
+    guid = request.POST.get('guid', None)
+    if guid:
+        # Create species page for that animal
+        selected_details = add_trip_utils.bulk_lookup(
+            [guid.replace('#', '/guid/')]
+        )
+        if len(selected_details) == 1:
+            # Now save the selected and unknown sightings
+            species = species_for_freebase_details(selected_details[0])
+            photo.suggested_species.add(
+                species = species,
+                suggested_by = request.user,
+                denorm_suggestion_for = photo.created_by,
+                note = note,
+            )
+            return HttpResponseRedirect(photo.get_absolute_url())
+
+    add_unknown_text = request.POST.get('add_unknown_text', '').strip()
+    if add_unknown_text:
+        photo.suggested_species.add(
+            species_inexact = add_unknown_text,
+            suggested_by = request.user,
+            denorm_suggestion_for = photo.created_by,
+            note = note,
+        )
+        return HttpResponseRedirect(photo.get_absolute_url())
+
+    # If we get here, we need to show search results for the 'species' string
+    # normally this means the user doesn't have JavaScript enabled
+    species_q = request.REQUEST.get('species', '')
+    results = []
+    if species_q:
+        results = add_trip_utils.search(
+            species_q, limit=10, place=photo.trip.place
+        )[:5]
+
+    return render(request, 'photos/suggest_species.html', {
+        'photo': photo,
+        'species_q': species_q,
+        'note': note,
+        'results': results,
+    })
+
+@login_required
 def remove_species(request, username, photo_id, sighting_id):
     from zoo.trips.models import Sighting
     photo = get_object_or_404(

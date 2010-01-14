@@ -21,7 +21,7 @@ var seen_on_trip = {{ seen_on_trip|safe }};
 var seen_at_this_place = {{ seen_at_this_place|safe }};
 
 jQuery(function($) {
-	$('input#add_species').suggest({
+	$('input#add_species,input#suggest_species').suggest({
 		type: '/biology/organism_classification',
 		flyout: false,
 		soft: true,
@@ -31,8 +31,6 @@ jQuery(function($) {
 			.find(':hidden').val(data.guid)
 		.end();//.submit();
 	}).parents('form:first').attr('method', 'post');
-	
-	
 	
 	$.suggest.suggest.prototype.response = function(data) {
 		// TODO: re-order data.result array to put trip species first
@@ -150,6 +148,20 @@ jQuery(function($) {
 			</ul>
 		{% endif %}
 	{% endwith %}
+	
+	{% if not request.user.is_anonymous %}
+	<h3>Suggested species</h3>
+	
+	<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
+		<p>
+			<input type="text" name="species" id="suggest_species">
+			<input type="hidden" name="guid" value="">
+		</p>
+		<p><textarea name="note"></textarea></p>
+		<p><input type="submit" value="Suggest species"></p>
+	</form>
+	{% endif %}
+	
 
 	{% ifequal photo.created_by request.user %}
 		<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
