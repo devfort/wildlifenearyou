@@ -262,7 +262,7 @@ def suggest_species(request, username, photo_id):
         Photo, created_by__username=username, pk=photo_id
     )
     
-    request.POST.get('note', '').strip()
+    note = request.POST.get('note', '').strip()
     
     guid = request.POST.get('guid', None)
     if guid:
@@ -273,9 +273,10 @@ def suggest_species(request, username, photo_id):
         if len(selected_details) == 1:
             # Now save the selected and unknown sightings
             species = species_for_freebase_details(selected_details[0])
-            photo.suggested_species.add(
+            photo.suggestions.create(
                 species = species,
                 suggested_by = request.user,
+                suggested_at = datetime.datetime.now(),
                 denorm_suggestion_for = photo.created_by,
                 note = note,
             )
@@ -283,9 +284,10 @@ def suggest_species(request, username, photo_id):
 
     add_unknown_text = request.POST.get('add_unknown_text', '').strip()
     if add_unknown_text:
-        photo.suggested_species.add(
+        photo.suggestions.create(
             species_inexact = add_unknown_text,
             suggested_by = request.user,
+            suggested_at = datetime.datetime.now(),
             denorm_suggestion_for = photo.created_by,
             note = note,
         )

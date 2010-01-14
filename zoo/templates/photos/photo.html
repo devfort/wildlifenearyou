@@ -152,6 +152,16 @@ jQuery(function($) {
 	{% if not request.user.is_anonymous %}
 	<h3>Suggested species</h3>
 	
+	{% with photo.suggestions.all as suggestions %}
+	{% if suggestions %}
+	{% for suggestion in suggestions %}
+		<p class="trip-by">
+			<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
+	<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species }}</a>{% endif %}</strong></p>
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
+	
 	<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
 		<p>
 			<input type="text" name="species" id="suggest_species">

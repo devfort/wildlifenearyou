@@ -167,3 +167,28 @@ class Photo(models.Model):
     def urls(self, name):
         if name == 'absolute':
             return self.get_absolute_url()
+
+class SuggestedSpecies(models.Model):
+    photo = models.ForeignKey(Photo, related_name = 'suggestions')
+    species = models.ForeignKey(Species,
+        related_name = 'suggestions', null = True, blank = True
+    )
+    species_inexact = models.CharField(max_length = 100, blank = True)
+    suggested_by = models.ForeignKey(User, related_name = 'suggestions')
+    suggested_at = models.DateTimeField()
+    denorm_suggestion_for = models.ForeignKey(User,
+        related_name = 'suggestions_for'
+    )
+    note = models.TextField(blank = True)
+    status = models.CharField(max_length = 20, choices = (
+        ('new', 'New'),
+        ('approved', 'approved'),
+        ('rejected', 'rejected'),
+    ), default = 'new', db_index = True)
+    status_changed_at = models.DateTimeField(null = True, blank = True)
+    
+    def __unicode__(self):
+        return u'%s suggested photo %s by user %s contains a %s' % (
+            self.suggested_by, self.photo, self.denorm_suggestion_for,
+            (self.species_inexact or self.species)
+        )
