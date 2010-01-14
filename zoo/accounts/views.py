@@ -163,15 +163,20 @@ def profile(request, username):
     created_trips = profile.user.created_trip_set.annotate(
         num_sightings = Count('sightings')
     ).select_related('place')[:5]
+    
+    num_suggestions = 0
+    if request.user.username == username:
+        num_suggestions = profile.user.suggestions_for.filter(
+            status = 'new'
+        ).count()
+    
     return render(request, 'accounts/profile.html', {
         'profile': profile,
         'photos': filter_visible_photos(
             profile.user.photos.select_related('created_by'), request.user
         ),
         'created_trips': created_trips,
-        'num_suggestions': profile.user.suggestions_for.filter(
-            status = 'new'
-        ).count(),
+        'num_suggestions': num_suggestions
     })
 
 @login_required
