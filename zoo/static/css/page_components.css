@@ -413,23 +413,59 @@ div.spotter-list {
 .suggestion-list .rejected {
 	opacity: 0.7;
 }
-.suggestion-list .approval-stamp {
+
+/* @group Approval actions and stamp */
+
+.suggestion-list .approval-stamp,
+.suggestion-list .approval-actions {
 	position: absolute;
-	top: -9px;
+	top: 2px;
 	right:3px;
 	font-size: 0.6em;
 	cursor: help;
 	padding:0;
 	line-height: 1em;
+	padding-right: 21px;
+}
+.suggestion-list .approval-actions {
+	padding-right: 0;
+	cursor: default;
 }
 
-.suggestion-list .approval-stamp img {
+.suggestion-list .approval-stamp img,
+.suggestion-list .approval-actions img {
 	width: 19px;
 	height: 19px;
-	position: relative;
-	top: 5px;
-	margin-left: 2px;
+	position: absolute;
+	top: -5px;
+	right: 0;
 }
+.suggestion-list .approval-actions a {
+	margin-left: 0.3em;
+	margin-right: 0.3em;
+	text-decoration: none;
+	padding: 0.05em 0.5em 0.2em 0.5em;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.suggestion-list .approval-actions a:hover,
+.suggestion-list .approval-actions a:focus {
+	background-color: black;
+}
+
+.suggestion-list a.approve {
+	background-color: #5D8E35;
+	color: white;
+}
+
+.suggestion-list a.reject {
+	background-color: #B65E31;
+	color: white;
+}
+
+/* @end */
 .species blockquote,
 .species blockquote p, {
 	color: #9AA4A9;
