@@ -116,42 +116,59 @@
 	
 	{% with photo.sightings.all as sightings %}
 		{% if sightings %}
-			<h2>Species in this photo</h2>
-			<ul class="animal-list">
-				{% for sighting in sightings %}
-					<li>
-					{% if sighting.species %}
-						{% with sighting.species as species %}
-							<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-							<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
-							<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
-						{% endwith %}
+			{% if not photo.has_no_species %}
+				<h2>Species in this photo</h2>
+				<ul class="animal-list">
+					{% for sighting in sightings %}
+						<li>
+						{% if sighting.species %}
+							{% with sighting.species as species %}
+								<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+								<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+								<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
+							{% endwith %}
 						
-					{% else %}
-						<div class="thumbnail"></div>
-						<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
-					{% endif %}
+						{% else %}
+							<div class="thumbnail"></div>
+							<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+						{% endif %}
 					
-					{% if sighting.note %}
-						<blockquote>{{ sighting.note|linebreaks }}</blockquote>
-					{% endif %}
+						{% if sighting.note %}
+							<blockquote>{{ sighting.note|linebreaks }}</blockquote>
+						{% endif %}
 					
-					</li>
-				{% endfor %}
-			</ul>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
 		{% endif %}
 	{% endwith %}
 	
 	{% ifequal photo.created_by request.user %}
-		<h3>Add a species to this photo</h3>
+	
+		{% if not photo.has_no_species %}<h3>Add a species to this photo</h3>{% endif %}
+		
 		{% if photo.trip %}
-			<form action="{% url photo-add-species photo.created_by.username photo.id %}" method="get">
-				<p>
-					<input type="text" name="species" id="add_species">
-					<input type="hidden" name="guid" value="">
-					<input type="submit" value="Add">
-				</p>
+		
+			{% if not photo.has_no_species %}
+				<form action="{% url photo-add-species photo.created_by.username 	photo.id %}" method="get">
+					<p>
+						<input type="text" name="species" id="add_species">
+						<input type="hidden" name="guid" value="">
+						<input type="submit" value="Add">
+					</p>
+				</form>
+			
+			{% endif %}
+			
+			<form action="{% url photo-set-has-no-species photo.created_by.username photo.id %}" method="post">
+				{% if photo.has_no_species %}
+				<p><input name="unset_has_no_species" type="submit" value="Add species to this photo"></p>
+				{% else %}
+				<p><input name="set_has_no_species" type="submit" value="This is not a photo of an animal"></p>
+				{% endif %}
 			</form>
+			
 		{% else %}
 			<p>You need to <a href="{% url photo-edit photo.created_by.username photo.id %}#id_trip">assign this photo to a trip</a> before you can add species to it.</p>
 		{% endif %}
@@ -159,63 +176,66 @@
 	
 	
 	{% with photo.suggestions.all as suggestions %}
-		<h2>Suggested species</h2>
+		{% if not photo.has_no_species %}
+			<h2>Suggested species</h2>
 		
-		{% if suggestions %}
-			<ul class="animal-list suggestion-list">
-				{% for suggestion in suggestions %}
-					<li>
-						<div class="species">
-							{% if suggestion.species %}
-								{% with suggestion.species as species %}
-									<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-									<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
-									<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
-								{% endwith %}
+			{% if suggestions %}
+				<ul class="animal-list suggestion-list">
+					{% for suggestion in suggestions %}
+						<li>
+							<div class="species">
+								{% if suggestion.species %}
+									{% with suggestion.species as species %}
+										<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+										<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+										<p><i class="scientific">{{ species.latin_name }}</i></p>
+									{% endwith %}
 						
-							{% else %}
-								<div class="thumbnail"></div>
-								<p><span class="animal-name">{{ suggestion.species_inexact }}</span></p>
-							{% endif %}
+								{% else %}
+									<div class="thumbnail"></div>
+									<p><span class="animal-name">{{ suggestion.species_inexact }}</span></p>
+								{% endif %}
 						
-							{% if suggestion.note %}
-								<blockquote>{{ suggestion.note|linebreaks }}</blockquote>
-							{% endif %}
-						</div>
+								{% if suggestion.note %}
+									<blockquote>{{ suggestion.note|linebreaks }}</blockquote>
+								{% endif %}
+							</div>
 						
-						<p class="interaction-by">
-							<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
-							<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong></p>
+							<p class="interaction-by">
+								<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
+								<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong>
+							</p>
 		
-					</li>
-				{% endfor %}
-			</ul>	
-		{% endif %}
+						</li>
+					{% endfor %}
+				</ul>	
+			{% endif %}
 	
-		{% if not request.user.is_anonymous %}
-		<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
-			<p>
-				<input type="text" name="species" id="suggest_species">
-				<input type="hidden" name="guid" value="">
-			</p>
-			<p><textarea name="note"></textarea></p>
-			<p><input type="submit" value="Suggest species"></p>
-		</form>
+			{% if not request.user.is_anonymous %}
+				<div class="add-species">
+					<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
+						<p>
+							<label for="suggest_species">I think this is a&hellip;</label>
+							<input type="text" name="species" id="suggest_species">
+							<input type="hidden" name="guid" value="">
+						</p>
+						<p>
+							<label for="suggest_species_because">because&hellip;</label>
+							<textarea name="note" id="suggest_species_because"></textarea>
+						</p>
+						<p><input type="submit" value="Save"></p>
+					</form>
+					<p class="interaction-by">
+						<img src="{{ request.user.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
+						<a href="{% url accounts-profile request.user.username %}">{{ request.user.username }}</a> thinks this is a &hellip;</p>
+				</div>
+			{% endif %}
+		
 		{% endif %}
-	
 	{% endwith %}
 
 	{% ifequal photo.created_by request.user %}
 		<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
-		
-		<form action="{% url photo-set-has-no-species photo.created_by.username photo.id %}" method="post">
-			{% if photo.has_no_species %}
-			<p><input name="unset_has_no_species" type="submit" value="Actually there are species in this photo after all"></p>
-			{% else %}
-			<p><input name="set_has_no_species" type="submit" value="There are no species in this photo"></p>
-			{% endif %}
-		</form>
-		
 	{% endifequal %}
 
 {% endblock %}

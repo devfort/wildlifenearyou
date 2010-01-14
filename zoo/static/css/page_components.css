@@ -316,7 +316,8 @@ div.spotter-list {
 
 .comments blockquote,
 .comment .textarea-container,
-.suggestion-list .species {
+.suggestion-list .species,
+.add-species form {
 	margin: 0;
 	padding: 0.5em 1em 0.5em 1em;
 	background-color: #f4f9e2;
@@ -330,7 +331,8 @@ div.spotter-list {
 }
 .comments .posted-by,
 .comment .button-container,
-.suggestion-list .interaction-by {
+.suggestion-list .interaction-by,
+.add-species .interaction-by {
 	background-image: url('/static/img/bg/art_talkbubble_comment_point.png');
 	background-repeat: no-repeat;
 	background-position: 20px 0;
@@ -390,21 +392,30 @@ div.spotter-list {
 
 
 /* @group Sugested species */
-.suggestion-list .species {
+
+.suggestion-list .species,
+.add-species form {
 	overflow: hidden;
 	background-color: #e2f1f9;
-	
+	padding-top: 15px;
 }
-.suggestion-list p.interaction-by {
+.add-species form {
+	padding-bottom: 0;
+	padding-top: 0;
+}
+.suggestion-list p.interaction-by,
+.add-species p.interaction-by {
 	margin-top: 0;
-	padding-top: 5px;
+	padding-top: 3px;
 	background-image: url('/static/img/bg/art_talkbubble_logbook_point.png');
 }
 
-.suggestion-list p.interaction-by img {
+.suggestion-list p.interaction-by img,
+.add-species p.interaction-by img {
 	position: relative;
-	top: 8px;
+	top: 6px;
 }
+
 /* @end Sugested species */
 
 /* @end Comments */
