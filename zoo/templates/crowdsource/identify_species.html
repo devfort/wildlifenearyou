@@ -1,0 +1,28 @@
+{% extends base %}
+
+{% block title %}Help identify species in photos{% endblock %}
+
+{% load pagination_tags %}
+
+{% block content %}
+<div>
+	<h2>Help identify these animals!</h2>
+	
+	<p>These photos are all missing their species information. Great at spotting animals? Earn animal points by suggesting the species in each photo - you'll earn points for every suggestion you make that is approved by the owner of the photo.</p>
+	
+	{% load cache %}
+	{% cache 60 help-identify-species page %}
+	{% autopaginate photos 32 %}
+	{% paginate %}
+	<ul class="photo-display">
+		{% for photo in photos.all %}
+			<li>
+				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+	{% paginate %}
+	{% endcache %}
+</div>
+
+{% endblock %}
