@@ -10,6 +10,7 @@ SIZES = {
     'large': (None, None),
     'small': (30, 30),
     'medium': (75, 75),
+    'tiny': (19, 19),
 }
 
 def _key(username, size):
@@ -28,7 +29,7 @@ def generate_faces_for_user(user):
     if not os.path.exists(face_dir):
         os.makedirs(face_dir)
     
-    if os.path.exists(os.path.join(face_dir, '%s-large.png' % key)):
+    if os.path.exists(os.path.join(face_dir, '%s-tiny.png' % key)):
         return key
     
     if key == 'default':

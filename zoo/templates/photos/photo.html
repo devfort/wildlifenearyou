@@ -209,10 +209,10 @@
 							
 							{% ifnotequal photo.created_by request.user %}
 								{% if suggestion.is_approved %}
-									<p class="approval-stamp" title="this species suggestion was approved by the author of the photo">approved&nbsp;<img src="{{ photo.created_by.get_profile.face_small }}" alt="" class="avatar"></p>
+									<p class="approval-stamp" title="this species suggestion was approved by the author of the photo">approved&nbsp;<img src="{{ photo.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
 								{% endif %}
 								{% if suggestion.is_rejected %}
-									<p class="approval-stamp" title="this species suggestion was rejected by the author of the photo">rejected&nbsp;<img src="{{ photo.created_by.get_profile.face_small }}" alt="" class="avatar"></p>
+									<p class="approval-stamp" title="this species suggestion was rejected by the author of the photo">rejected&nbsp;<img src="{{ photo.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
 								{% endif %}
 							{% endifnotequal %}
 							{% ifequal photo.created_by request.user %}

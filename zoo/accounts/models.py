@@ -115,6 +115,9 @@ class Profile(models.Model):
             keydir, key, size
         )
     
+    def face_tiny(self):
+        return self.face('tiny')
+    
     def face_small(self):
         return self.face('small')
     
