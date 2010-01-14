@@ -3,84 +3,88 @@
 {% block title %}{{ photo.title|default:"A photo" }} by {{ photo.created_by }}{% endblock %}
 
 {% block extra_head %}
-{% ifequal photo.created_by request.user %}
-<script type="text/javascript" src="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.js"></script>
-<link type="text/css" rel="stylesheet" href="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.css">
-<style type="text/css">
-.fbs-pane {
-	width: 275px;
-}
-</style>
-<script type="text/javascript">
-var suggest_base = {
-	response: $.suggest.suggest.prototype.response,
-	create_item: $.suggest.suggest.prototype.create_item
-}
+	{% ifequal photo.created_by request.user %}
+		<script type="text/javascript" src="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.css">
+		<style type="text/css">
+			.fbs-pane {
+				width: 275px;
+			}
+		</style>
+		<script type="text/javascript">
+			var suggest_base = {
+				response: $.suggest.suggest.prototype.response,
+				create_item: $.suggest.suggest.prototype.create_item
+			}
 
-var seen_on_trip = {{ seen_on_trip|safe }};
-var seen_at_this_place = {{ seen_at_this_place|safe }};
+			var seen_on_trip = {{ seen_on_trip|safe }};
+			var seen_at_this_place = {{ seen_at_this_place|safe }};
 
-jQuery(function($) {
-	$('input#add_species,input#suggest_species').suggest({
-		type: '/biology/organism_classification',
-		flyout: false,
-		soft: true,
-		align: 'left'
-	}).bind('fb-select', function(e, data) {
-		$(this).parents('form:first')
-			.find(':hidden').val(data.guid)
-		.end();//.submit();
-	}).parents('form:first').attr('method', 'post');
+			jQuery(function($) {
+				$('input#add_species,input#suggest_species').suggest({
+					type: '/biology/organism_classification',
+					flyout: false,
+					soft: true,
+					align: 'left'
+				}).bind('fb-select', function(e, data) {
+					$(this).parents('form:first')
+						.find(':hidden').val(data.guid)
+					.end();//.submit();
+				}).parents('form:first').attr('method', 'post');
 	
-	$.suggest.suggest.prototype.response = function(data) {
-		// TODO: re-order data.result array to put trip species first
-		suggest_base.response.apply(this, [data]);
-	}
-	$.suggest.suggest.prototype.create_item = function(data, response_data) {
-		var li = suggest_base.create_item.apply(this, [data, response_data]);
-		var s = '';
-		if (seen_at_this_place[data.guid]) {
-			s = 'Previously spotted here';
-		}
-		if (seen_on_trip[data.guid]) {
-			s = 'Seen on your trip';
-		}
-		li.find('.fbs-item-type').text(s);
-		return li;
-	}
-});
-</script>
-{% endifequal %}
+				$.suggest.suggest.prototype.response = function(data) {
+					// TODO: re-order data.result array to put trip species first
+					suggest_base.response.apply(this, [data]);
+				}
+				$.suggest.suggest.prototype.create_item = function(data, response_data) {
+					var li = suggest_base.create_item.apply(this, [data, response_data]);
+					var s = '';
+					if (seen_at_this_place[data.guid]) {
+						s = 'Previously spotted here';
+					}
+					if (seen_on_trip[data.guid]) {
+						s = 'Seen on your trip';
+					}
+					li.find('.fbs-item-type').text(s);
+					return li;
+				}
+			});
+		</script>
+	{% endifequal %}
 {% endblock %}
 
-{% block primary_content %}
-
+{% block content_title %}
 	{% if photo.title %}
 		<h1>{{ photo.title }}</h1>
 	{% else %}
 		<h1>Photo by <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a></h1>
 	{% endif %}
+{% endblock %}
+
+{% block primary_content %}
 	
 	{% if photo.place %}
-	<h2 class="subtitle">Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></h2>
+		<h2 class="subtitle">Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></h2>
 	{% endif %}
 
 	{% if photo.trip %}
-	<h2 class="subtitle">Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></h2>
+		<h2 class="subtitle">Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></h2>
 	{% endif %}
-
 
 	{% load thumbnail %}
 
 	{% if photo.photo %}
-	<img src="{% thumbnail photo.photo 600x600 %}" style="max-width: 100%">
+		<img src="{% thumbnail photo.photo 600x600 %}" style="max-width: 100%">
 	{% else %}
-	<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg" style="max-width: 100%">
+		<img src="http://static.flickr.com/{{ photo.flickr_server }}/{{ photo.flickr_id }}_{{ photo.flickr_secret }}.jpg" style="max-width: 100%">
 	{% endif %}
 
-	<div class="comments"><p class="trip-by">
-	<img src="{{ photo.created_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
-	By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>, added {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a>)</p></div>
+	<div class="comments">
+		<p class="trip-by">
+			<img src="{{ photo.created_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
+			By <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>, added {{ photo.created_at|date:"jS F Y"}} (<a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a>)
+		</p>
+	</div>
 
 	{% with photo as object %}
 		{% include "comments/_comments.html" %}
@@ -91,87 +95,116 @@ jQuery(function($) {
 {% block secondary_content %}
 
 	{% if request.user.is_authenticated %}
+		<h2>Favourite photo</h2>
 		{% if favourited %}
-		<form method="post" action="/favourites/photo/remove/{{ photo.pk }}/">
-		<p>One of <a href="{% url user-photos-favourites user.username %}">your favourite photos</a></p>
-		<p>
-			<input type="hidden" name="next" value="{{ request_path }}">
-			<input class="link" type="submit" value="Remove from favourites">
-		</p>
-		</form>
+			<form method="post" action="/favourites/photo/remove/{{ photo.pk }}/">
+			<p>
+				<input type="hidden" name="next" value="{{ request_path }}">
+				<input class="link" type="submit" value="Remove from favourites">
+			</p>
+			</form>
+			<p>One of <a href="{% url user-photos-favourites user.username %}">your favourite photos</a></p>
 		{% else %}
-		<form method="post" action="/favourites/photo/add/{{ photo.pk }}/">
-		<p>
-			<input type="hidden" name="next" value="{{ request_path }}">
-			<input class="link" type="submit" value="Favourite this photo">
-		</p>
-		</form>
+			<form method="post" action="/favourites/photo/add/{{ photo.pk }}/">
+			<p>
+				<input type="hidden" name="next" value="{{ request_path }}">
+				<input class="link" type="submit" value="Add to favourites">
+			</p>
+			</form>
 		{% endif %}
 	{% endif %}
 
-	{% ifequal photo.created_by request.user %}
-		<h3>Add a species to this photo</h3>
-		{% if photo.trip %}
-		<form action="{% url photo-add-species photo.created_by.username photo.id %}" method="get">
-			<p>
-				<input type="text" name="species" id="add_species">
-				<input type="hidden" name="guid" value="">
-				<input type="submit" value="Add">
-			</p>
-		</form>
-		{% else %}
-		<p>You need to <a href="{% url photo-edit photo.created_by.username photo.id %}#id_trip">assign this photo to a trip</a> before you can add species to it.</p>
-		{% endif %}
-	{% endifequal %}
 	
 	{% with photo.sightings.all as sightings %}
 		{% if sightings %}
-			<h3>Species in this photo</h3>
+			<h2>Species in this photo</h2>
 			<ul class="animal-list">
 				{% for sighting in sightings %}
 					<li>
 					{% if sighting.species %}
-					{% with sighting.species as species %}
+						{% with sighting.species as species %}
 							<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
 							<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
 							<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
-					{% endwith %}
+						{% endwith %}
+						
 					{% else %}
-							<div class="thumbnail"></div>
-							<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+						<div class="thumbnail"></div>
+						<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
 					{% endif %}
+					
 					{% if sighting.note %}
-					<blockquote>{{ sighting.note|linebreaks }}</blockquote>
+						<blockquote>{{ sighting.note|linebreaks }}</blockquote>
 					{% endif %}
+					
 					</li>
 				{% endfor %}
 			</ul>
 		{% endif %}
 	{% endwith %}
 	
-	{% if not request.user.is_anonymous %}
-	<h3>Suggested species</h3>
+	{% ifequal photo.created_by request.user %}
+		<h3>Add a species to this photo</h3>
+		{% if photo.trip %}
+			<form action="{% url photo-add-species photo.created_by.username photo.id %}" method="get">
+				<p>
+					<input type="text" name="species" id="add_species">
+					<input type="hidden" name="guid" value="">
+					<input type="submit" value="Add">
+				</p>
+			</form>
+		{% else %}
+			<p>You need to <a href="{% url photo-edit photo.created_by.username photo.id %}#id_trip">assign this photo to a trip</a> before you can add species to it.</p>
+		{% endif %}
+	{% endifequal %}
+	
 	
 	{% with photo.suggestions.all as suggestions %}
-	{% if suggestions %}
-	{% for suggestion in suggestions %}
-		<p class="trip-by">
-			<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
-	<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species }}</a>{% endif %}</strong></p>
-	{% endfor %}
-	{% endif %}
+		<h2>Suggested species</h2>
+		
+		{% if suggestions %}
+			<ul class="animal-list suggestion-list">
+				{% for suggestion in suggestions %}
+					<li>
+						<div class="species">
+							{% if suggestion.species %}
+								{% with suggestion.species as species %}
+									<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+									<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+									<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
+								{% endwith %}
+						
+							{% else %}
+								<div class="thumbnail"></div>
+								<p><span class="animal-name">{{ suggestion.species_inexact }}</span></p>
+							{% endif %}
+						
+							{% if suggestion.note %}
+								<blockquote>{{ suggestion.note|linebreaks }}</blockquote>
+							{% endif %}
+						</div>
+						
+						<p class="interaction-by">
+							<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
+							<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong></p>
+		
+					</li>
+				{% endfor %}
+			</ul>	
+		{% endif %}
+	
+		{% if not request.user.is_anonymous %}
+		<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
+			<p>
+				<input type="text" name="species" id="suggest_species">
+				<input type="hidden" name="guid" value="">
+			</p>
+			<p><textarea name="note"></textarea></p>
+			<p><input type="submit" value="Suggest species"></p>
+		</form>
+		{% endif %}
+	
 	{% endwith %}
-	
-	<form action="{% url photo-suggest-species photo.created_by.username photo.id %}" method="post">
-		<p>
-			<input type="text" name="species" id="suggest_species">
-			<input type="hidden" name="guid" value="">
-		</p>
-		<p><textarea name="note"></textarea></p>
-		<p><input type="submit" value="Suggest species"></p>
-	</form>
-	{% endif %}
-	
 
 	{% ifequal photo.created_by request.user %}
 		<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>

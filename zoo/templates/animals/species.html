@@ -64,12 +64,12 @@
 
 {% block secondary_content %}
 
-<h2>Favourite</h2>
+<h2>Favourite species</h2>
 
 {% if request.user.is_authenticated %}
 	{% if favourited %}
 	<form method="post" action="/favourites/species/remove/{{ species.pk }}/">
-	<p>This is one of <a href="{{ user.get_profile.urls.absolute }}#favourite-animals">your favourite animals</a>! 
+	<p>
 		<input type="hidden" name="next" value="{{ request_path }}">
 		<input class="link" type="submit" value="Remove from favourites">
 	</p>
@@ -86,7 +86,12 @@
 	<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
 {% endif %}
 
-<p>Favourited by <strong>{{ num_favourites }}</strong> {{ num_favourites|pluralize:"person,people" }}
+{% if num_favourites %}
+	<p>Favourited by <strong>{{ num_favourites }}&nbsp;{{ num_favourites|pluralize:"person,people" }}</strong>{% if request.user.is_authenticated %}{% if favourited %} including you. See your <a href="{{ user.get_profile.urls.absolute }}#favourite-animals">your favourite species</a>.{% endif %}{% endif %}</p>
+{% endif %}
+
+
+
 
 {% with species.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
