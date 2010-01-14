@@ -1,0 +1,28 @@
+{% extends base %}
+
+{% load pagination_tags %}
+
+{% block title %}All photos of {{ place.known_as }}{% endblock %}
+
+{% block content %}
+
+<h1>All photos of <a href="{{ place.get_absolute_url }}">{{ place.known_as }}</a></h1>
+
+<div>
+	{% if not photos %}
+		<p>There are no photos of this place yet.</p>
+	{% else %}
+		{% autopaginate photos 32 %}
+		{% paginate %}
+		<ul class="photo-display">
+			{% for photo in photos %}
+			<li>
+				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		{% paginate %}
+	{% endif %}
+</div>
+
+{% endblock %}

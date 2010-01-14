@@ -210,6 +210,7 @@
 					{% endfor %}
 				</ul><!-- /#thumbnails -->
 			</div><!-- /.slideshow -->
+			<p><a href="{% url place-photos place.country.country_code place.slug %}">All photos of this place</a></p>
 		</div>
 		{% endwith %}
 		{% endifequal %}
