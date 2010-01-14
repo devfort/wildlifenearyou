@@ -3,7 +3,7 @@
 {% block title %}{{ photo.title|default:"A photo" }} by {{ photo.created_by }}{% endblock %}
 
 {% block extra_head %}
-	{% ifequal photo.created_by request.user %}
+	{% if not request.user.is_anonymous %}
 		<script type="text/javascript" src="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.js"></script>
 		<link type="text/css" rel="stylesheet" href="http://freebaselibs.com/static/suggest/1.0.1/suggest.min.css">
 		<style type="text/css">
@@ -50,7 +50,7 @@
 				}
 			});
 		</script>
-	{% endifequal %}
+	{% endif %}
 {% endblock %}
 
 {% block content_title %}
@@ -83,7 +83,7 @@
 		<p>
 			<img src="{{ photo.created_by.get_profile.face_medium }}" alt="" class="avatar">
 			Taken by <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a>
-			<em class="meta">Photo added on {{ photo.created_at|date:"jS F Y"}}, <a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}.</a></em>
+			<em class="meta">Photo added on {{ photo.created_at|date:"jS F Y"}}, <a href="{{ photo.original_url }}">view {% if photo.flickr_id %} on Flickr{% else %}original{% endif %}</a></em>
 		</p>
 	</div>
 

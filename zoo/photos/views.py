@@ -366,8 +366,29 @@ def suggestions(request, username):
         'suggestions': SuggestedSpecies.objects.filter(
             denorm_suggestion_for = request.user,
             status = 'new'
-        ).select_related('photo', 'species').order_by('-suggested_at')
+        ).select_related('photo', 'species').order_by('-suggested_at'),
+        'username': username,
     })
+
+@login_required
+def process_suggestion(request, username, suggestion_id):
+    if username != request.user.username:
+        return HttpResponseForbidden()
+    suggestion = get_object_or_404(SuggestedSpecies,
+        denorm_suggestion_for__username = username,
+        pk = suggestion_id
+    )
+    if 'approve' in request.POST:
+        suggestion.approve()
+    elif 'reject' in request.POST:
+        suggestion.reject()
+    
+    next = request.POST.get('next', '')
+    
+    if next and next.startswith('/'):
+        return HttpResponseRedirect(next)
+    else:
+        return HttpResponseRedirect('/%s/photos/suggestions/' % username)
 
 class PhotoEditForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):

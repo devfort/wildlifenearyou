@@ -20,7 +20,7 @@ from zoo.animals.models import Species
 from zoo.common.models import AuditedModel
 from zoo.favourites.models import FavouriteSpecies
 from zoo.faces.models import SelectedFacePart
-from zoo.photos.models import Photo
+from zoo.photos.models import Photo, SuggestedSpecies
 
 HASH_ORIGIN_DATE = datetime.date(2000, 1, 1)
 
@@ -307,6 +307,8 @@ def profilecalc_postsave(sender, **kwargs):
         user = instance.user
     elif sender==SelectedFacePart:
         user = instance.user
+    elif sender==SuggestedSpecies:
+        user = instance.suggested_by
     if user:
         try:
             profile = user.get_profile()

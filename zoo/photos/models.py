@@ -10,6 +10,8 @@ from zoo.utils import attrproperty
 from zoo.places.models import Place
 from zoo.animals.models import Species
 
+import datetime
+
 class VisiblePhotoManager(models.Manager):
     def get_query_set(self):
         return self.filter(is_visible = True)
@@ -188,6 +190,27 @@ class SuggestedSpecies(models.Model):
         ('rejected', 'rejected'),
     ), default = 'new', db_index = True)
     status_changed_at = models.DateTimeField(null = True, blank = True)
+    
+    def approve(self):
+        sightings = self.photo.sightings.all()
+        defaults = {'place': self.photo.trip.place, 'note': ''}
+        if self.species:
+            sighting, created = self.photo.trip.sightings.get_or_create(
+                species = self.species, defaults = defaults
+            )
+        else:
+            sighting, created = photo.trip.sightings.get_or_create(
+                species_inexact = self.species_inexact, defaults = defaults
+            )
+        self.photo.sightings.add(sighting)
+        self.status_changed_at = datetime.datetime.now()
+        self.status = 'approved'
+        self.save()
+    
+    def reject(self):
+        self.status_changed_at = datetime.datetime.now()
+        self.status = 'rejected'
+        self.save()
     
     def __unicode__(self):
         return u'%s suggested photo %s by user %s contains a %s' % (

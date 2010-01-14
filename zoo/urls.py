@@ -303,7 +303,10 @@ urlpatterns += patterns('',
     url(r'^(?P<username>\w+)/photos/suggestions/$',
         'zoo.photos.views.suggestions',
         name='user-photos-suggestions'),
-    
+    url(r'^(?P<username>\w+)/photos/suggestions/(?P<suggestion_id>\d+)/$',
+        'zoo.photos.views.process_suggestion',
+        name='user-photos-process-suggestion'),
+
     url(r'^(?P<username>\w+)/photos/(?P<photo_id>\d+)/$',
         'zoo.photos.views.photo',
         name='photo'),

@@ -15,15 +15,18 @@
 			<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
 			<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong>
 		</p>
-		<form action="">
+		{% if suggestion.note %}<p>"{{ suggestion.note }}"</p>{% endif %}
+		<form method="post" action="{% url user-photos-process-suggestion username suggestion.pk %}">
 			<p>
-				<input type="submit" value="Approve">
-				<input type="submit" value="Reject">
+				<input name="approve" type="submit" value="Approve">
+				<input name="reject" type="submit" value="Reject">
 			</p>
 		</form>
 	</li>
 	{% endfor %}
 </ul>
+{% else %}
+<p>There are no outstanding suggestions for your photos.</p>
 {% endif %}
 
 {% endblock %}
