@@ -99,7 +99,7 @@
 			{% if user.is_authenticated %}
 			<p class="intro">
 				Seen any more animals? Why not <a href="{% url add-trip %}">add another trip</a> or 
-				<a href="{% url flickr %}">import some photos</a> from Flickr.<!-- or <a href="{% url invite-friends %}">invite some friends</a> to join in the fun! --></p>
+				<a href="{% url flickr %}">import some photos</a> from Flickr. Or you could help people <a href="{% url help-identify-species %}">identify the animals</a> in their photos!</p>
 				
 			{% else %}
 			<p class="intro"><strong>Find and share places to see wildlife</strong></p>
