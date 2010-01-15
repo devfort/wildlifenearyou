@@ -347,6 +347,10 @@ div.spotter-list {
 	padding-bottom:0;
 	padding-top:8px;
 }
+
+.secondary .comments .posted-by {
+	padding-top: 16px;
+}
 .comments .posted-by img,
 .comment .button-container img,
 .suggestion-list .interaction-by img,
