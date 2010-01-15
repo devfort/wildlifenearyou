@@ -172,10 +172,7 @@
 	width: 60%;
 	display: inline;
 }
-.primary h2:first-child,
-.primary h3:first-child {
-	margin-top: 0;
-}
+
 
 .primary h2 {
 	clear: left;
@@ -186,10 +183,7 @@
 	width: 34%;
 	display: inline;
 }
-.secondary h2:first-child,
-.secondary h3:first-child {
-	margin-top: 0;
-}
+
 
 /* @end */
 

@@ -9,201 +9,206 @@
 	<script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}
 
+
+{% block content_title %}
+	<h1>{{ profile.user }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
+{% endblock %}
+
 {% block primary_content %}
 
-<h1>{{ profile.user }}{% if profile.user.get_full_name %} ({{ profile.user.get_full_name }}){% endif %}</h1>
-{% if profile.badges.all %}
-<ul class="badges">{{ profile.badges.all|unordered_list }}</ul>
-{% endif %}
+	{% if num_suggestions %}
+		<p class="notification">
+			There {{ num_suggestions|pluralize:"is,are" }} <strong>{{ num_suggestions }} suggested species</strong> for your photos <a href="{% url user-photos-suggestions profile.user.username %}">awaiting your review</a>
+		</p>
+	{% endif %}
 
-{% if num_suggestions %}
-<div class="notification">
-	There {{ num_suggestions|pluralize:"is,are" }} <strong>{{ num_suggestions }} suggested species</strong> for your photos <a href="{% url user-photos-suggestions profile.user.username %}">awaiting your review</a>
-</div>
-{% endif %}
 
-<p>
+	
+	{% if profile.biography %}
+		<div class="intro">{{ profile.biography|linebreaks}}</div>
+	{% else %}
+		{% ifequal profile.user user %}
+			<p class="intro">You don&rsquo;t seem to have filled in your biography yet, so why not <a href='{% url accounts-profile-edit profile.user %}'>do that now</a> and tell us a bit about yourself?</p>
+		{% else %}
+		{% endifequal %}
+	{% endif %}
+
+	{% if profile.url %}
+	<p class="url"><a href="{{ profile.url }}">{% ifequal profile.user user %}Your website{% else %}Visit their website{% endifequal %}</a></p>
+	{% endif %}
+	
+	{% if profile.badges.all %}
+		<ul class="badges">{{ profile.badges.all|unordered_list }}</ul>
+	{% endif %}
+
+
+	<p style="overflow: hidden; margin-top: 2em">
 		<img src="/static/img/engagementbadge/{{ profile.points_image }}.png" class="pull-left">
 		{% ifequal profile.user user %}You have{% else %}{{ profile.user }} has{% endifequal %}
 		<strong>{{ profile.percentage_complete }}</strong> animal points, making
 		{% ifequal profile.user user %}you{% else %}them{% endifequal %} a <strong>{{ profile.points_animal }}</strong>.
-		{% ifequal profile.user user %}
+		<span class="meta">{% ifequal profile.user user %}
 		To increase this, try adding more photos, commenting on places or animals and generally getting more stuck into the site.{% else %}
 		Animal points are way of telling how active people are on the site, and are linked to things like recording trips, importing photos, and making comments.
-		{% endifequal %}
-</p>
+		{% endifequal %}</span>
+	</p>
 
-<div>
-{% if profile.url %}
-<p class="url"><a href="{{ profile.url }}">{% ifequal profile.user user %}Your website{% else %}Visit their website{% endifequal %}</a></p>
-{% endif %}
 
-{% if profile.biography %}
-<h2>{% ifequal profile.user user %}Your{% else %}Their{% endifequal %} Biography</h2>
-{{ profile.biography|linebreaks}}
-{% else %}
-{% ifequal profile.user user %}
-<p>You don&rsquo;t seem to have filled in your biography yet, so why not <a href='{% url accounts-profile-edit profile.user %}'>do that now</a> and tell us a bit about yourself?</p>
-{% else %}
-{% endifequal %}
-{% endif %}
-</div>
-
-<div>
-	<h2>Recent trips</h2>
+	<div>
 		{% ifequal profile.user user %}
-		<form action="/add-trip/" method="GET">
-			<div class="container">
-				<label for="search-place">Add a trip to...</label>
-				<input type="search" name="q" id="search-place">
-				<input type="submit" value="Go" class="submit">
-			</div>
-		</form>
+			<form action="/add-trip/" method="get" class="highlight" style="margin-top: 1em; padding-bottom: 0.5em">
+				<div class="container">
+					<label for="search-place">Add a trip to&hellip;</label>
+					<input type="search" name="q" id="search-place">
+					<input type="submit" value="Go" class="submit">
+				</div>
+			</form>
 		{% endifequal %}
-	{% if created_trips %}
-		<ol class="trip-list">
-		{% for trip in created_trips %}
-			<li>
-				<div class="thumbnail">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-				<p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
-				<p class="meta">({{ trip.num_sightings }} sighting{{ trip.num_sightings|pluralize }})</p>
-			</li>
-		{% endfor %}
-		</ol>
-		<p>See <a href="{% url tripbook profile.user %}">all {% ifequal profile.user user %}your{% else %}their{% endifequal %} trips</a>.</p>
+			
+		{% if created_trips %}
+			<h2>Recent trips</h2>
+			<ol class="trip-list">
+				{% for trip in created_trips %}
+					<li>
+						<div class="thumbnail">{% with trip.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+						<p><a class="trip-name" href="{% url trip-view profile.user, trip.id %}">{{ trip.title }}</a></p>
+						<p class="meta">({{ trip.num_sightings }} sighting{{ trip.num_sightings|pluralize }})</p>
+					</li>
+				{% endfor %}
+			</ol>
+			<p>See <a href="{% url tripbook profile.user %}">all {% ifequal profile.user user %}your{% else %}their{% endifequal %} trips</a>.</p>
 
 		{% else %}
-		<p>
-			{% ifequal profile.user user %}You{% else %}They{% endifequal %} haven&rsquo;t been anywhere yet.
-		</p>
-	{% endif %}
-</div>
+			<p>{% ifequal profile.user user %}You{% else %}They{% endifequal %} haven&rsquo;t been anywhere yet.</p>
+		{% endif %}
+	</div>
 
-<div>
-	<h2>Animals spotted</h2>
-	{% ifequal profile.user user %}
-	<p>Add trips to tell us what you've seen.</p>
-	{% endifequal %}
-	{% if profile.passport.seen_species %}
-	<ol class='animal-list'>
-	{% for species in profile.passport.seen_species %}
-		<li>
-			<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-			<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.num_trips|oncetimes }})</span></p>
-			<p><i class="scientific">{{ species.latin_name }}</i></p>
-		</li>
-	{% endfor %}
-	</ol>
-	{% comment %}
-	{% ifequal profile.user user %}
-	<p>If you've told us that an animal lives at a place &mdash; say because you've checked their website or read a news story about it &mdash; but haven't actually been there, it won&rsquo;t appear here.</p>
-	{% endifequal %}
-	{% endcomment %}
-	<p>
-	{% else %}
-		{% ifequal profile.user user %}You {% else %}They {% endifequal %}haven&rsquo;t spotted any animals yet.
-	</p>
-	{% endif %}
-</div>
+	<div>
+		<h2>Animals spotted</h2>
+		
+		{% ifequal profile.user user %}
+			<p>Add trips to tell us what you've seen.</p>
+		{% endifequal %}
+		
+		{% if profile.passport.seen_species %}
+			<ol class="animal-list">
+				{% for species in profile.passport.seen_species %}
+					<li>
+						<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+						<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a> <span class="meta">(spotted {{ species.num_trips|oncetimes }})</span></p>
+						<p><i class="scientific">{{ species.latin_name }}</i></p>
+					</li>
+				{% endfor %}
+			</ol>
+			{% comment %}
+				{% ifequal profile.user user %}
+					<p>If you&8217;ve told us that an animal lives at a place &mdash; say because you&8217;ve checked their website or read a news story about it &mdash; but haven't actually been there, it won&rsquo;t appear here.</p>
+				{% endifequal %}
+			{% endcomment %}
+			
+		{% else %}
+			<p>{% ifequal profile.user user %}You {% else %}They {% endifequal %}haven&rsquo;t spotted any animals yet.</p>
+		{% endif %}
+	</div>
 
 {% endblock %}
 
 {% block secondary_content %}
 
-<div><p class="avatar-container">{{ profile.avatar_img }}</p></div>
+	<div><p class="avatar-container">{{ profile.avatar_img }}</p></div>
 
-{% ifequal profile.user user %}
-<p class="highlight">
-<a class="edit" href="{% url accounts-profile-edit profile.user %}">Edit your profile and avatar</a>.
-{% if profile.location %}
-We think you are currently in <strong>{{ profile.location }}</strong>; if this is wrong, you can <a href="/set-location/">change your location</a>.
-{% else %}
-If you <a href="/set-location/">tell us your location</a>, we can find animals near you.
-{% endif %}
-</p>
-{% endifequal %}
-
-<div>
-	{% if profile.user.favourite_species.all %}
-	<h2 id="favourite-animals">Favourite animals</h2>
-	<ol class="animal-list">
-		{% for favourite in profile.user.favourite_species.all %}
-			<li>
-				<div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-				<p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
-				<p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
-				{% ifequal user profile.user %}
-				<form method="post" action="/favourites/species/remove/{{ favourite.species.pk }}/">
-					<p>
-						<input type="hidden" name="next" value="{{ request.path }}">
-						<input class="link submit" type="submit" value="Remove">
-					</p>
-				</form>
-				{% endifequal %}
-			</li>
-		{% endfor %}
-	</ol>
 	{% ifequal profile.user user %}
-	<p>To add more to this list, <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites.</p>
-	{% endifequal %}
+	<p class="highlight">
+	<a class="edit" href="{% url accounts-profile-edit profile.user %}">Edit your profile and avatar</a>.
+	{% if profile.location %}
+	We think you are currently in <strong>{{ profile.location }}</strong>; if this is wrong, you can <a href="/set-location/">change your location</a>.
 	{% else %}
-	{% ifequal profile.user user %}
-	<p>You don&rsquo;t have any favourite animals yet. Why don't you <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites?</p>
-	{% endifequal %}
+	If you <a href="/set-location/">tell us your location</a>, we can find animals near you.
 	{% endif %}
-</div>
+	</p>
+	{% endifequal %}
 
-<div>
-		{% with photos.count as visible_photo_count %}
-			{% if visible_photo_count %}
-				<h2>Photos</h2>
-				{% ifequal visible_photo_count 1 %}{# Only one photo #}
+	<div>
+		{% if profile.user.favourite_species.all %}
+		<h2 id="favourite-animals">Favourite animals</h2>
+		<ol class="animal-list">
+			{% for favourite in profile.user.favourite_species.all %}
+				<li>
+					<div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+					<p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
+					<p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
+					{% ifequal user profile.user %}
+					<form method="post" action="/favourites/species/remove/{{ favourite.species.pk }}/">
+						<p>
+							<input type="hidden" name="next" value="{{ request.path }}">
+							<input class="link submit" type="submit" value="Remove">
+						</p>
+					</form>
+					{% endifequal %}
+				</li>
+			{% endfor %}
+		</ol>
+		{% ifequal profile.user user %}
+		<p>To add more to this list, <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites.</p>
+		{% endifequal %}
+		{% else %}
+		{% ifequal profile.user user %}
+		<p>You don&rsquo;t have any favourite animals yet. Why don't you <a href="{% url search %}" title="Look for something">find some animals you like</a>, and mark them as favourites?</p>
+		{% endifequal %}
+		{% endif %}
+	</div>
+
+	<div>
+			{% with photos.count as visible_photo_count %}
+				{% if visible_photo_count %}
+					<h2>Photos</h2>
+					{% ifequal visible_photo_count 1 %}{# Only one photo #}
+						<div class="gallery">
+						{% for photo in photos.all %}
+							<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_240_url }}"></a>
+						{% endfor %}
+						</div>
+					{% else %}{# More than one photo #}
+					{% with photos.all|first as chosen %}
 					<div class="gallery">
-					{% for photo in photos.all %}
-						<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_240_url }}"></a>
-					{% endfor %}
-					</div>
-				{% else %}{# More than one photo #}
-				{% with photos.all|first as chosen %}
-				<div class="gallery">
-						<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_240_url }}"></a>
-						<div class="slideshow">
-							<ul id="thumbnails">
-									{% for photo in photos.all|slice:":30" %}
-									{% ifnotequal chosen photo %}
-										<li>{{ photo.thumb_75 }}</li>
-										{% endifnotequal %}
-									{% endfor %}
-							</ul><!-- /#thumbnails -->
-						</div><!-- /.slideshow -->
-							<p><a href="{% url user-photos profile.user.username %}">All {% ifequal user profile.user %}your{% else %}their {% endifequal %} photos</a></p>
-							{% if profile.user.favourite_photos.count %}
-							<p><a href="{% url user-photos-favourites profile.user.username %}">{% ifequal user profile.user %}Your{% else %}Their {% endifequal %} favourite photos</a></p>
-							{% endif %}
-					</div>
-					{% endwith %}
-				{% endifequal %}
-			{% else %}
-					{% ifequal profile.user user %}
-							<h2>Your photos</h2>
-						{% endifequal %}
-			{% endif %}
-		{% endwith %}
-		<!-- {% ifequal profile.user user %}<p class="add"><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}-->
-</div>
+							<a href="{% url photo chosen.created_by.username,chosen.id %}"><img src="{{ chosen.thumb_240_url }}"></a>
+							<div class="slideshow">
+								<ul id="thumbnails">
+										{% for photo in photos.all|slice:":30" %}
+										{% ifnotequal chosen photo %}
+											<li>{{ photo.thumb_75 }}</li>
+											{% endifnotequal %}
+										{% endfor %}
+								</ul><!-- /#thumbnails -->
+							</div><!-- /.slideshow -->
+								<p><a href="{% url user-photos profile.user.username %}">All {% ifequal user profile.user %}your{% else %}their {% endifequal %} photos</a></p>
+								{% if profile.user.favourite_photos.count %}
+								<p><a href="{% url user-photos-favourites profile.user.username %}">{% ifequal user profile.user %}Your{% else %}Their {% endifequal %} favourite photos</a></p>
+								{% endif %}
+						</div>
+						{% endwith %}
+					{% endifequal %}
+				{% else %}
+						{% ifequal profile.user user %}
+								<h2>Your photos</h2>
+							{% endifequal %}
+				{% endif %}
+			{% endwith %}
+			<!-- {% ifequal profile.user user %}<p class="add"><a href="{% url upload-photos %}">Upload a photo!</a></p>{% endifequal %}-->
+	</div>
 
-{% if profile.user.comment_comments.all %}
-		<div>
-				<h2>Comments</h2>
-				<ul class="comments">
-				{% for comment in profile.user.comment_comments.all %}
-					<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
-					<p class="posted-by">
-					<img src="{{ profile.face_small }}" alt="" height="30" width="30" class="avatar">
-						on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a><span class="meta">at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
-				{% endfor %}
-				</ul>
-		</div>
-{% endif %}
+	{% if profile.user.comment_comments.all %}
+			<div>
+					<h2>Comments {% ifequal profile.user user %}you{% else %}they{% endifequal %} wrote</h2>
+					<ul class="comments">
+					{% for comment in profile.user.comment_comments.all %}
+						<blockquote><p>{{ comment.comment|linebreaks }}</p></blockquote>
+						<p class="posted-by">
+						<img src="{{ profile.face_small }}" alt="" height="30" width="30" class="avatar">
+							on <a href="{{ comment.content_object.urls.absolute }}#c{{ comment.id }}">{{ comment.content_object }}</a><span class="meta">at {{ comment.submit_date|date:"jS F Y H:i" }}</span></p>
+					{% endfor %}
+					</ul>
+			</div>
+	{% endif %}
 
 {% endblock %}

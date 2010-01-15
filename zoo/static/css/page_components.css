@@ -349,7 +349,7 @@ div.spotter-list {
 }
 
 .secondary .comments .posted-by {
-	padding-top: 16px;
+	padding-bottom: 16px;
 }
 .comments .posted-by img,
 .comment .button-container img,
@@ -903,7 +903,6 @@ div#ajax-feedback-form {
 	padding: 0 25px;
 	overflow: hidden;
 	position: relative;
-	background-color: #fff;
 }
 .hasJS .gallery .minimal {
 	padding-left: 0;
