@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}SHOW INNODB STATUS{% endblock %}
+
+{% block content %}
+<h1>SHOW INNODB STATUS</h1>
+
+<p>
+{% for line in interesting_lines %}
+{% if forloop.first %}	<strong>{{ line }}</strong><br>{% else %}{{ line }}<br>{% endif %}
+{% endfor %}
+</p>
+
+<pre>{{ info }}</pre>
+
+{% endblock %}

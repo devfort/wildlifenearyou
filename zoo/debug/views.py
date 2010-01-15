@@ -1,5 +1,9 @@
 from django.core import urlresolvers
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.db import connection
+from zoo.shortcuts import render
 
 intro_text = """Named URL patterns for the {% url %} tag
 ========================================
@@ -25,3 +29,21 @@ def get_named_patterns():
         if isinstance(key, basestring)
     ])
     return patterns
+
+@login_required
+def show_innodb_status(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+    
+    c = connection.cursor()
+    c.execute('show engine innodb status')
+    info = c.fetchone()[-1]
+    row_operations = info.split('ROW OPERATIONS')[1]
+    lines = row_operations.split('\n')
+    interesting_lines = lines[2:-4]
+    interesting_lines.reverse()
+    
+    return render(request, 'debug/show_innodb_status.html', {
+        'info': info,
+        'interesting_lines': interesting_lines,
+    })
