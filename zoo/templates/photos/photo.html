@@ -96,8 +96,8 @@
 {% block secondary_content %}
 
 	{% if request.user.is_authenticated %}
-		<h2>Favourite photo</h2>
 		{% if favourited %}
+			<h2>You like this photo!</h2>
 			<form method="post" action="/favourites/photo/remove/{{ photo.pk }}/">
 			<p>
 				<input type="hidden" name="next" value="{{ request_path }}">
@@ -106,6 +106,7 @@
 			</form>
 			<p>One of <a href="{% url user-photos-favourites user.username %}">your favourite photos</a></p>
 		{% else %}
+			<h2>Like this photo?</h2>
 			<form method="post" action="/favourites/photo/add/{{ photo.pk }}/">
 			<p>
 				<input type="hidden" name="next" value="{{ request_path }}">
