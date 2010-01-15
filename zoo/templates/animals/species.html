@@ -68,7 +68,7 @@
 
 {% if request.user.is_authenticated %}
 	{% if favourited %}
-	<h2>You like this animal!</h2>
+	<h2>You like this species!</h2>
 	<form method="post" action="/favourites/species/remove/{{ species.pk }}/">
 	<p>
 		<input type="hidden" name="next" value="{{ request_path }}">
