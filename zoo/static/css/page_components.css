@@ -440,7 +440,7 @@ div.spotter-list {
 	top: -5px;
 	right: 0;
 }
-.suggestion-list .approval-actions a {
+.suggestion-list .approval-actions input {
 	margin-left: 0.3em;
 	margin-right: 0.3em;
 	text-decoration: none;
@@ -448,22 +448,33 @@ div.spotter-list {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+	border:  none;
+	background-image: none;
 }
 
-.suggestion-list .approval-actions a:hover,
-.suggestion-list .approval-actions a:focus {
+.suggestion-list input.approve,
+.approval-list input.approve {
+	background-color: #5D8E35;
+	color: white;
+	background-image: none;
+	border:  none;
+}
+
+.suggestion-list input.reject,
+.approval-list input.reject {
+	background-color: #B65E31;
+	color: white;
+	background-image: none;
+	border:  none;
+}
+
+.suggestion-list .approval-actions input:hover,
+.suggestion-list .approval-actions input:focus,
+.approval-list input:hover,
+.approval-list input:focus {
 	background-color: black;
 }
 
-.suggestion-list a.approve {
-	background-color: #5D8E35;
-	color: white;
-}
-
-.suggestion-list a.reject {
-	background-color: #B65E31;
-	color: white;
-}
 
 /* @end */
 .species blockquote,
@@ -506,6 +517,42 @@ div.spotter-list {
 }
 
 /* @end Sugested species */
+
+/* @group Approval list */
+
+.approval-list,
+.approval-list li {
+	list-style: none;
+	background-image: none;
+	margin: 0;
+	padding: 0;
+}
+
+.approval-list li {
+	padding-left: 280px;
+	overflow: hidden;
+	margin-bottom: 30px;
+	clear: both;
+}
+.approval-list .suggestion {
+	overflow: hidden;
+}
+.approval-list .suggestion-detail {
+	margin-top: 25px;
+	margin-bottom: 40px;
+	overflow: hidden;
+}
+.approval-list .avatar {
+	float: left;
+	margin-right: 15px;
+}
+.approval-list .main-photo {
+	float: left;
+	margin: 1em 1em 0 1em;
+	margin: 0 20px 0 -280px;
+}
+
+/* @end */
 
 /* @end Comments */
 

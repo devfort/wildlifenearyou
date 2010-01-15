@@ -6,27 +6,28 @@
 
 <h1>Suggested species for your photos</h1>
 
-{% if suggestions %}
-<ul>
-	{% for suggestion in suggestions %}
-	<li style="clear: both; overflow: hidden">
-		<a href="{{ suggestion.photo.get_absolute_url }}"><img style="float: left; margin-right: 1em; margin-bottom: 1em" src="{{ suggestion.photo.thumb_240_url }}"></a>
-		<p class="interaction-by">
-			<img src="{{ suggestion.suggested_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
-			<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong>
-		</p>
-		{% if suggestion.note %}<p>"{{ suggestion.note }}"</p>{% endif %}
-		<form method="post" action="{% url user-photos-process-suggestion username suggestion.pk %}">
-			<p>
-				<input name="approve" type="submit" value="Approve">
-				<input name="reject" type="submit" value="Reject">
-			</p>
-		</form>
-	</li>
-	{% endfor %}
-</ul>
+{% if suggestions %}   
+	<ul class="approval-list">
+		{% for suggestion in suggestions %}
+			<li>
+				<a href="{{ suggestion.photo.get_absolute_url }}"><img class="main-photo" src="{{ suggestion.photo.thumb_240_url }}"></a>
+				<div class="suggestion">
+					<img src="{{ suggestion.suggested_by.get_profile.face_medium }}" alt="" class="avatar">
+					<p class="suggestion-detail intro"><a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong></p>
+				
+					{% if suggestion.note %}<p>"{{ suggestion.note }}"</p>{% endif %}
+				</div>
+				<form method="post" action="{% url user-photos-process-suggestion username suggestion.pk %}">
+					<p>
+						<input name="approve" class="approve" type="submit" value="Yes, I agree">
+						<input name="reject" class="reject" type="submit" value="No, its not">
+					</p>
+				</form>
+			</li>   
+		{% endfor %}
+	</ul> 
 {% else %}
-<p>There are no outstanding suggestions for your photos.</p>
+	<p class="notification">There are no outstanding suggestions for your photos.</p>
 {% endif %}
 
 {% endblock %}

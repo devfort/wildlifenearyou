@@ -208,7 +208,7 @@ class SuggestedSpecies(models.Model):
                 species = self.species, defaults = defaults
             )
         else:
-            sighting, created = photo.trip.sightings.get_or_create(
+            sighting, created = self.photo.trip.sightings.get_or_create(
                 species_inexact = self.species_inexact, defaults = defaults
             )
         self.photo.sightings.add(sighting)

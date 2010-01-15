@@ -208,17 +208,23 @@
 								<a href="{% url accounts-profile suggestion.suggested_by.username %}">{{ suggestion.suggested_by }}</a> thinks this is a <strong>{% if suggestion.species_inexact %}{{ suggestion.species_inexact }}{% else %}<a href="{{ suggestion.species.get_absolute_url }}">{{ suggestion.species.common_name }}</a>{% endif %}</strong>
 							</p>
 							
-							{% ifnotequal photo.created_by request.user %}
-								{% if suggestion.is_approved %}
-									<p class="approval-stamp" title="this species suggestion was approved by the author of the photo">approved&nbsp;<img src="{{ photo.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
-								{% endif %}
-								{% if suggestion.is_rejected %}
-									<p class="approval-stamp" title="this species suggestion was rejected by the author of the photo">rejected&nbsp;<img src="{{ photo.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
-								{% endif %}
-							{% endifnotequal %}
-							{% ifequal photo.created_by request.user %}
-								<p class="approval-actions"><a href="#approveurl" class="approve">approve</a>&nbsp;<a href="#rejecturl" class="reject">reject</a></p>
-							{% endifequal %}
+							{% if suggestion.is_approved %}
+								<p class="approval-stamp" title="this species suggestion was approved by the author of the photo">approved&nbsp;<img src="{{ photo.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
+							{% endif %}
+							{% if suggestion.is_rejected %}
+								<p class="approval-stamp" title="this species suggestion was rejected by the author of the photo">rejected&nbsp;<img src="{{ photo.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
+							{% endif %}
+							{% if suggestion.is_new %}
+								{% ifequal photo.created_by request.user %}
+									<form method="post" action="{% url user-photos-process-suggestion photo.created_by.username suggestion.pk %}" class="approval-actions">
+										<p>
+											<input type="hidden" name="next" value="{{ request.path }}">
+											<input class="approve" name="approve" type="submit" value="approve">
+											<input class="reject" name="reject" type="submit" value="reject">
+										</p>
+									</form>
+								{% endifequal %}
+							{% endif %}
 						</li>
 					{% endfor %}
 				</ul>	
