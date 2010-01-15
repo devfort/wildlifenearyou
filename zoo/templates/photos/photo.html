@@ -118,7 +118,7 @@
 	
 	{% with photo.sightings.all as sightings %}
 		{% if sightings %}
-			{% if not photo.has_no_species %}
+			{% if photo.trip and not photo.has_no_species %}
 				<h2>Species in this photo</h2>
 				<ul class="animal-list">
 					{% for sighting in sightings %}
@@ -178,7 +178,7 @@
 	
 	
 	{% with photo.suggestions.all as suggestions %}
-		{% if not photo.has_no_species %}
+		{% if photo.trip and not photo.has_no_species %}
 			<h2>Suggested species</h2>
 		
 			{% if suggestions %}
