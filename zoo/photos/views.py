@@ -422,6 +422,7 @@ def photo(request, username, photo_id):
         'favourited': photo.is_favourited_by(request.user),
         'seen_at_this_place': simplejson.dumps(seen_at_this_place),
         'seen_on_trip': simplejson.dumps(seen_on_trip),
+        'current_user_is_not_page_owner': request.user != photo.created_by,
     })
 
 def all(request):

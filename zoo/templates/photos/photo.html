@@ -179,7 +179,10 @@
 	
 	{% with photo.suggestions.all as suggestions %}
 		{% if photo.trip and not photo.has_no_species %}
+			
+			{% if suggestions or current_user_is_not_page_owner %}
 			<h2>Suggested species</h2>
+			{% endif %}
 		
 			{% if suggestions %}
 				<ul class="animal-list suggestion-list">
