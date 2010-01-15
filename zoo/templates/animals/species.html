@@ -15,8 +15,6 @@
 
 {% block primary_content %}
 
-
-
 {% if nearest %}
 	<p class="intro">Your nearest <strong>{{ species.common_name }}</strong> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, <strong>{{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away</strong> from {{ location_description }} <span class="meta">(not where you are? <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">Set your location</a>)</span></p>
 {% else %}
@@ -34,6 +32,16 @@
 {% if species.description %}
 <p class="intro">{{ species.description }}</p>
 {% endif %}
+
+{% with species.rspb_pages.all as rspb %}
+{% if rspb %}
+{% for page in rspb %}
+<h2>RSPB Bird Guide</h2>
+<a href="http://www.rspb.org.uk/"><img src="/static/img/rspb_50.png" style="float: left; padding-top: 4px"></a>
+<p style="margin-left: 62px">"{{ page.teaser }}" - <a href="{{ page.url }}">read more</a></p>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
 {% if species.seen_at %}
 <h2>See them here</h2>
@@ -91,9 +99,6 @@
 {% if num_favourites %}
 	<p>Favourited by <strong>{{ num_favourites }}&nbsp;{{ num_favourites|pluralize:"person,people" }}</strong>{% if request.user.is_authenticated %}{% if favourited %} including you. See your <a href="{{ user.get_profile.urls.absolute }}#favourite-animals">favourite species</a>.{% endif %}{% endif %}</p>
 {% endif %}
-
-
-
 
 {% with species.visible_photos.count as visible_photo_count %}
 	{% if visible_photo_count %}
