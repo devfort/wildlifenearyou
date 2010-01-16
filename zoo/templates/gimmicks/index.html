@@ -40,7 +40,10 @@
 			{% else %}
 				<h1>Find {{ gimmick.plural }} near you</h1>
 			{% endif %}
+			
 			<div id="logo" class="{{ gimmick.singlular }}"><a href="/"><img src="/static/img/x-near-you/{{ gimmick.singlular }}.png" alt="" ></a></div>
+			
+			<!--<div id="logo" class="general"><a href="/"><img src="/static/img/x-near-you/general.png" alt="" ></a></div>-->
 			
 			{% if results %}
 				{% with results.0 as result %}
