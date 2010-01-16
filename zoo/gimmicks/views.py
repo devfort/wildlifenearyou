@@ -60,6 +60,8 @@ def gimmick_results(request, gimmick, name, lat, lon):
     for place in results:
         place['place'] = places[place['pk']]
         place['species'] = species[place['animals_species_id']]
+        photo = place['place'].photo_of(place['species'])
+        place['photo'] = photo or place['species'].photo()
     
     return render('gimmicks/index.html', {
         'gimmick': gimmick,

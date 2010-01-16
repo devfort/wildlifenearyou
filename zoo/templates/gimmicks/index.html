@@ -1,7 +1,5 @@
-<html>
+<html>{% load humanize %}
 <head><title>{{ gimmick }} - Find {{ gimmick.plural|title }} Near You</title>
-	
-
 </head>
 <body>
 
@@ -17,7 +15,19 @@
 {% if results %}
 	<ol>
 	{% for result in results %}
-		<li>{{ result }}</li>
+		<li>
+			{% if result.photo %}
+			<img src="{{ result.photo.thumb_75_url }}">
+			{% endif %}
+			{{ result.place }}
+			
+			{{ result.species.common_name }}
+			{% if result.species.latin_name %}
+				<i>{{ result.species.latin_name }}</i>
+			{% endif %}
+			
+			{{ result.distance.miles|floatformat:"1"|intcomma }} miles away
+		</li>
 	{% endfor %}
 	</ol>
 {% endif %}
