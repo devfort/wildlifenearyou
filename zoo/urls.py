@@ -187,6 +187,9 @@ urlpatterns = patterns('',
     # Django built-in admin
     (r'^admin2/(.*)', admin.site.root),
     
+    # Gimmicks
+    (r'^gimmicks/(.*)/$', 'gimmicks.views.gimmick'),
+    
     # Status / debugging tools
     (r'^status/innodb/$', 'debug.views.show_innodb_status'),
     

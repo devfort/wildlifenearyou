@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     'zoo.invitereg',
     'zoo.flickr',
     'zoo.rspb',
+    'zoo.gimmicks',
     # The next four items are dependencies for basic.blog
     'basic.blog',
     'basic.inlines',
@@ -176,6 +177,7 @@ RESERVED_USERNAMES = set(
     plants narwhals plant animal wildlife latin dictionary fish zoos zoo 
     aquarium aquariums park parks safari arboretum arboretums autocomplete 
     popular invite debug account stats trusts twitter dopplr 404 500
+    gimmicks gimmick
     """.strip().split()
 )
 

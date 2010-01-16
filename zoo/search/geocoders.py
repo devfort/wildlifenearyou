@@ -3,15 +3,18 @@ import urllib
 from django.conf import settings
 from django.utils import simplejson
 
-def google_geocode(q):
+def google_geocode(q, country_code = None):
+    args = {
+        'q': q,
+        'output': 'json',
+        'oe': 'utf8',
+        'sensor': 'false',
+        'key': settings.GOOGLE_GEOCODE_API_KEY,
+    }
+    if country_code:
+        args['gl'] = country_code
     json = simplejson.load(urllib.urlopen(
-        'http://maps.google.com/maps/geo?' + urllib.urlencode({
-            'q': q,
-            'output': 'json',
-            'oe': 'utf8',
-            'sensor': 'false',
-            'key': settings.GOOGLE_GEOCODE_API_KEY,
-        })
+        'http://maps.google.com/maps/geo?' + urllib.urlencode(args)
     ))
     try:
         lon, lat = json['Placemark'][0]['Point']['coordinates'][:2]
