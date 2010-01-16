@@ -6,6 +6,8 @@ from animals.models import Species
 from zoo.search.geocoders import google_geocode
 import geopy, geopy.distance
 
+import datetime
+
 def gimmick(request, domain):
     gimmick = get_object_or_404(Gimmick, domain = domain)
     
@@ -61,8 +63,13 @@ def gimmick_results(request, gimmick, name, lat, lon):
     for place in results:
         place['place'] = places[place['pk']]
         place['species'] = species[place['animals_species_id']]
-        photo = place['place'].photo_of(place['species'])
-        place['photo'] = photo or place['species'].photo()
+        info = place['place'].species_info(place['species'])
+        place.update(info)
+        if not place['photo']:
+            place['photo'] = place['species'].photo()
+        place['timesince'] = humanize_timesince(
+            place['most_recent_trip'].start or place['most_recent_at']
+        )
     
     return render('gimmicks/index.html', {
         'gimmick': gimmick,
@@ -70,3 +77,41 @@ def gimmick_results(request, gimmick, name, lat, lon):
         'name': name,
         'request_path': request.path,
     })
+
+def humanize_timesince(start_time):
+    """
+    From http://www.joeyb.org/blog/2009/10/08/
+        custom-django-template-filter-for-humanized-timesince
+    
+    Using this instead of Django's timesince filter since timesince includes
+    hours and seconds, which looks a bit weird.
+    """
+    if isinstance(start_time, datetime.date):
+        start_time = datetime.datetime(
+            start_time.year, start_time.month, start_time.day
+        )
+    
+    delta = datetime.datetime.now() - start_time
+
+    plural = lambda x: 's' if x != 1 else ''
+
+    num_years = delta.days / 365
+    if (num_years > 0):
+        return "%d year%s" % (num_years, plural(num_years))
+
+    num_weeks = delta.days / 7
+    if (num_weeks > 0):
+        return "%d week%s" % (num_weeks, plural(num_weeks))
+
+    if (delta.days > 0):
+        return "%d day%s" % (delta.days, plural(delta.days))
+
+    num_hours = delta.seconds / 3600
+    if (num_hours > 0):
+        return "%d hour%s" % (num_hours, plural(num_hours))
+
+    num_minutes = delta.seconds / 60
+    if (num_minutes > 0):
+        return "%d minute%s" % (num_minutes, plural(num_minutes))
+
+    return "a few seconds"

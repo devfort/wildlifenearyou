@@ -14,7 +14,6 @@
 			});
 		}
 		function onPosition(position) {
-			console.log(position);
 			window.location = window.location + '?lat=' + position.coords.latitude + 
 				'&lon=' + position.coords.longitude;
 		}
@@ -53,7 +52,7 @@
 							
 						<h3>{{ result.distance.miles|floatformat:"1"|intcomma }} miles away</h3> 
 						
-						<p>Your nearest {{ gimmick.singlular }} is a <a href="#">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="#">{{ result.place }}</a>! Spotted 5 times, most recently by <a href="trippage">Adam</a> 1 week ago.</p>
+						<p>Your nearest {{ gimmick.singlular }} is a <a href="#">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="#">{{ result.place }}</a>! Spotted {{ result.num_sightings }} time{{ result.num_sightings|pluralize }}, most recently by <a href="{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p>
 						
 					</div>
 					
@@ -75,7 +74,6 @@
 	<div class="section">
 		<div class="article">
 			
-			
 			{% if results %}
 				<h2>Other nearby {{ gimmick.plural }}</h2>
 				{% for result in results|slice:"1:" %}
@@ -85,7 +83,7 @@
 							<img src="{% if not result.photo.flickr_id %}http://www.wildlifenearyou.com{% endif %}{{ result.photo.thumb_75_url }}" alt="">
 						{% endif %}
 						<h3>{{ result.species.common_name }}</h3> 
-						<p><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i> {% endif %} -->at <a href="#">{{ result.place }}</a> <strong>{{ result.distance.miles|floatformat:"1"|intcomma }} miles away</strong>. Spotted 5 times, most recently by <a href="trippage">Adam</a> 1 week ago.</p></div>
+						<p><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i> {% endif %} -->at <a href="#">{{ result.place }}</a> <strong>{{ result.distance.miles|floatformat:"1"|intcomma }} miles away</strong>. Spotted {{ result.num_sightings }} time{{ result.num_sightings|pluralize }}, most recently by <a href="{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p></div>
 				{% endfor %}
 			
 

@@ -128,6 +128,27 @@ class Place(AuditedModel):
         
         return photo
     
+    def species_info(self, species):
+        "Returns photo, num spottings and most recent trip - or None"
+        key = 'place-species-info:%s:%s' % (self.pk, species.pk)
+        info = cache.get(key)
+        if info is None:
+            photo = self.photo_of(species)
+            sightings = species.sightings.filter(
+                place = self
+            ).select_related('trip').order_by('-created_at')
+            num_sightings = sightings.count()
+            most_recent_sighting = sightings[0]
+            info = {
+                'photo': photo,
+                'num_sightings': num_sightings,
+                'most_recent_user': most_recent_sighting.created_by,
+                'most_recent_added_at': most_recent_sighting.created_at,
+                'most_recent_trip': most_recent_sighting.trip,
+            }
+            cache.set(key, info, 60 * 60 * 7)
+        return info
+    
     def popularity(self):
         """
         Currently just calculated using number of species seen at
