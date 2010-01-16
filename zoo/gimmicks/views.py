@@ -67,8 +67,16 @@ def gimmick_results(request, gimmick, name, lat, lon):
         place.update(info)
         if not place['photo']:
             place['photo'] = place['species'].photo()
+        num_sightings = place['num_sightings']
+        if num_sightings == 1:
+            num_spottings = 'once'
+        elif num_sightings == 2:
+            num_spottings = 'twice'
+        else:
+            num_spottings = '%s times' % num_sightings
+        place['num_spottings'] = num_spottings
         place['timesince'] = humanize_timesince(
-            place['most_recent_trip'].start or place['most_recent_at']
+            place['most_recent_trip'].start or place['most_recent_added_at']
         )
     
     return render('gimmicks/index.html', {
