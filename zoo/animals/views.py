@@ -53,10 +53,19 @@ def species(request, slug):
 
 def species_spotters(request, slug):
     species = get_object_or_404(Species, slug=slug)
-    spotters = User.objects.filter(created_sighting_set__species=species).distinct()
+    spotters = User.objects.filter(
+        created_sighting_set__species=species
+    ).distinct()
     return render(request, 'animals/spotters.html', {
         'species': species,
         'spotters': spotters,
+    })
+
+def species_photos(request, slug):
+    species = get_object_or_404(Species, slug=slug)
+    return render(request, 'photos/species_photos.html', {
+        'species': species,
+        'photos': species.visible_photos(),
     })
 
 def all_species(request):
