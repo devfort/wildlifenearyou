@@ -1,0 +1,26 @@
+<html>
+<head><title>{{ gimmick }} - Find {{ gimmick.plural|title }} Near You</title>
+	
+
+</head>
+<body>
+
+<h1>Find {{ gimmick.plural|title }} Near You</h1>
+
+<form action="{{ request_path }}" method="get">
+	<div>
+		<input type="text" size="30" value="{{ name }}" name="q">
+		<input type="submit" value="Go">
+	</div>
+</form>
+
+{% if results %}
+	<ol>
+	{% for result in results %}
+		<li>{{ result }}</li>
+	{% endfor %}
+	</ol>
+{% endif %}
+
+</body>
+</html>
