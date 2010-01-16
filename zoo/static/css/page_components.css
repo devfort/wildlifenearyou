@@ -1247,4 +1247,71 @@ ul.teaserlist h3 span {
 
 /* @end */
 
+/* @group Love this */
 
+.love-this p,
+p.love-this,
+.love-this h2,
+.love-this h3 {
+	margin: 0;
+	padding: 0;
+}
+.love-this p,
+p.love-this span {
+	font-size: 0.8em;
+	color: #8C786E;
+}
+.love-this button:hover p,
+p.love-this:hover span {
+	color: #534741;
+}
+p.love-this em {
+	font-size:1.5714em;
+	line-height:1;
+	color:#362F2D;
+	font-family:Georgia,"Times New Roman","Century Schoolbook L",Times,serif;
+	font-weight:normal;
+	font-style: normal;
+	display: block;
+}
+.love-this button,
+p.love-this {
+	border: 0;
+	padding: 0 0 0 37px;
+	background-color: #F9FCFE;
+	font-weight: normal;
+	cursor: pointer;
+	width: 100%;
+	text-align: left;
+	overflow: visible;
+	background-image: url(/static/img/icons/heart.png);
+	background-position: 0 -65px;
+	background-repeat: no-repeat;	
+}
+p.love-this {
+	padding: 0 0 0 40px;
+}
+.love-this button:hover,
+.love-this .remove-from button,
+p.love-this:hover {
+	background-position: 0 4px;
+}
+.love-this .remove-from button:hover {
+	background-position: 0 -65px;
+}
+.num-loves p {
+	margin: 0;
+}
+.num-loves {
+	font-size: 0.8em;
+}
+.num-loves strong span {
+	float: left;
+	font-size: 3em;
+	margin-right: 0.2em;
+	vertical-align: top;
+	font-weight: bold;
+	line-height: 0.8em;
+}
+
+/* @end */

@@ -59,9 +59,6 @@
 	{% else %}
 		<h1>Photo by <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a></h1>
 	{% endif %}
-{% endblock %}
-
-{% block primary_content %}
 	
 	{% if photo.place %}
 		<h2 class="subtitle">Taken at <a href="{{ photo.place.urls.absolute }}">{{ photo.place }}</a></h2>
@@ -70,6 +67,9 @@
 	{% if photo.trip %}
 		<h2 class="subtitle">Taken on <a href="{{ photo.trip.get_absolute_url }}">{{ photo.trip }}</a></h2>
 	{% endif %}
+{% endblock %}
+
+{% block primary_content %}
 
 	{% load thumbnail %}
 
@@ -94,27 +94,33 @@
 {% endblock %}
 
 {% block secondary_content %}
-
+	
 	{% if request.user.is_authenticated %}
 		{% if favourited %}
-			<h2>You like this photo!</h2>
-			<form method="post" action="/favourites/photo/remove/{{ photo.pk }}/">
-			<p>
-				<input type="hidden" name="next" value="{{ request_path }}">
-				<input class="link" type="submit" value="Remove from favourites">
-			</p>
+			<form method="post" class="love-this" action="/favourites/photo/remove/{{ photo.pk }}/">
+				<div class="remove-from">
+					<input type="hidden" name="next" value="{{ request_path }}">
+					<button type="submit"><h2>You love this!</h2> <p>remove from favourite photos?</p></button>
+				</div>
 			</form>
-			<p>One of <a href="{% url user-photos-favourites user.username %}">your favourite photos</a></p>
 		{% else %}
-			<h2>Like this photo?</h2>
-			<form method="post" action="/favourites/photo/add/{{ photo.pk }}/">
-			<p>
-				<input type="hidden" name="next" value="{{ request_path }}">
-				<input class="link" type="submit" value="Add to favourites">
-			</p>
+			<form method="post" class="love-this" action="/favourites/photo/add/{{ photo.pk }}/">
+				<div>
+					<input type="hidden" name="next" value="{{ request_path }}">
+					<button type="submit"><h2>Love this?</h2> <p>add to favourite photos</p></button>
+				</div>
 			</form>
 		{% endif %}
+	{% else %}
+		<p class="love-this"><em><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a></em> <span>to add this to your favourite photos</span></p>
 	{% endif %}
+
+	{% if photo.favourited.count %}
+		<div class="num-loves">
+			<p><strong><span>{{ photo.favourited.count  }}</span> {{ photo.favourited.count|pluralize:"person,people" }}</strong> {{ photo.favourited.count|pluralize:"loves,love" }} this photo{% if request.user.is_authenticated %}{% if favourited %} including you.</p><p>See&nbsp;your&nbsp;<a href="{% url user-photos-favourites user.username %}">favourite&nbsp;photos</a>.{% endif %}{% endif %}</p>
+		</div>
+	{% endif %}
+	
 	
 	{% with photo.sightings.all as sightings %}
 		{% if sightings %}

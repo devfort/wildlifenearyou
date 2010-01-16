@@ -6,132 +6,140 @@
 {% block title %}{{ species }}{% endblock %}
 
 {% block extra_head %}
-<script type="text/javascript" src="/static/js/gallery.js"></script>
+	<script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}
 
 {% block content_title %}
-<h1>{{ species.common_name }}{% if species.latin_name %} <i class="scientific">({{ species.latin_name }})</i>{% endif %}</h1>
+	<h1>{{ species.common_name }}{% if species.latin_name %} <i class="scientific">({{ species.latin_name }})</i>{% endif %}</h1>
 {% endblock %}
 
 {% block primary_content %}
 
-{% if nearest %}
-	<p class="intro">Your nearest <strong>{{ species.common_name }}</strong> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, <strong>{{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away</strong> from {{ location_description }} <span class="meta">(not where you are? <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">Set your location</a>)</span></p>
-{% else %}
-	{% if not location_description %}
-	<p>
+	{% if nearest %}
+		<p class="intro">Your nearest <strong>{{ species.common_name }}</strong> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, <strong>{{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away</strong> from {{ location_description }} <span class="meta">(not where you are? <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">Set your location</a>)</span></p>
+	{% else %}
+
+		{% if not location_description %}
+		<p class="intro">
 			{% if user.is_authenticated %}
-			<a href="/set-location/">Set your location</a>
+				<a href="/set-location/">Set your location</a>
 			{% else %}
-			<a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a>
+				<a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a>
 			{% endif %}
+		
 			 to find {{ species.article }} {{ species.common_name }} near you (or just <a href="/search/?q={{ species.common_name|iriencode }}">search for one</a>).</p>
+		{% endif %}
 	{% endif %}
-{% endif %}
 
-{% if species.description %}
-<p class="intro">{{ species.description }}</p>
-{% endif %}
+	{% if species.description %}
+		<p class="intro">{{ species.description }}</p>
+	{% endif %}
 
-{% with species.rspb_pages.all as rspb %}
-{% if rspb %}
-{% for page in rspb %}
-<h2>RSPB Bird Guide</h2>
-<a href="http://www.rspb.org.uk/"><img src="/static/img/rspb_50.png" style="float: left; padding-top: 4px"></a>
-<p style="margin-left: 62px">"{{ page.teaser }}" - <a href="{{ page.url }}">read more</a></p>
-{% endfor %}
-{% endif %}
-{% endwith %}
+	{% with species.rspb_pages.all as rspb %}
+		{% if rspb %}
+			{% for page in rspb %}
+		
+				<h2>RSPB Bird Guide</h2>
+				<a href="http://www.rspb.org.uk/"><img src="/static/img/rspb_50.png" style="float: left; padding-top: 4px"></a>
+				<p style="margin-left: 62px">"{{ page.teaser }}" - <a href="{{ page.url }}">read more</a></p>
+			
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
 
-{% if species.seen_at %}
-<h2>See them here</h2>
-<ul class="place-list">
-	{% for place in species.seen_at %}
-	<li>
-			{% include "places/_place.html" %}
-	</li>
-	{% endfor %}
-</ul>
-{% endif %}
+	{% if species.seen_at %}
+		<h2>See them here</h2>
+		<ul class="place-list">
+			{% for place in species.seen_at %}
+				<li>
+					{% include "places/_place.html" %}
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
 
-{% if spotters %}
-<h2>Spotted by</h2>
-<ul class="spotter-list">
-{% for spotter in spotters %}
-		<li>
-				<img src="{{ spotter.get_profile.face_medium }}" width="75" height="75" alt="" class="pull-left avatar">
-				<p><a class="spotter-name" href="{{ spotter.get_profile.urls.absolute }}">{{ spotter }}</a></p>
-{% comment %}				<p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>{% endcomment %}
-		</li>
-{% endfor %}
-</ul>
-{% if more_spotters %}
-<p><a href='{{ species.urls.spotters }}'>See all spotters…</a></p>
-{% endif %}
-{% endif %}
+	{% if spotters %}
+		<h2>Spotted by</h2>
+		<ul class="spotter-list">
+			{% for spotter in spotters %}
+				<li>
+					<img src="{{ spotter.get_profile.face_medium }}" width="75" height="75" alt="" class="pull-left avatar">
+					<p><a class="spotter-name" href="{{ spotter.get_profile.urls.absolute }}">{{ spotter }}</a></p>
+					{% comment %}
+						<p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>
+					{% endcomment %}
+				</li>
+			{% endfor %}
+		</ul>
+
+		{% if more_spotters %}
+			<p><a href='{{ species.urls.spotters }}'>See all spotters…</a></p>
+		{% endif %}
+	
+	{% endif %}
 
 {% endblock %}
 
 {% block secondary_content %}
 
-{% if request.user.is_authenticated %}
-	{% if favourited %}
-	<h2>You like this species!</h2>
-	<form method="post" action="/favourites/species/remove/{{ species.pk }}/">
-	<p>
-		<input type="hidden" name="next" value="{{ request_path }}">
-		<input class="link" type="submit" value="Remove from favourites">
-	</p>
-	</form>
+	{% if request.user.is_authenticated %}
+		{% if favourited %}
+			<form method="post" class="love-this" action="/favourites/species/remove/{{ species.pk }}/">
+				<div class="remove-from">
+					<input type="hidden" name="next" value="{{ request_path }}">
+					<button type="submit"><h2>You love this!</h2> <p>remove from favourite species?</p></button>
+				</div>
+			</form>
+		{% else %}
+			<form method="post" class="love-this" action="/favourites/species/add/{{ species.pk }}/">
+				<div>
+					<input type="hidden" name="next" value="{{ request_path }}">
+					<button type="submit"><h2>Love this?</h2> <p>add to favourite species</p></button>
+				</div>
+			</form>
+		{% endif %}
 	{% else %}
-	<h2>Like this animal?</h2>
-	<form method="post" action="/favourites/species/add/{{ species.pk }}/">
-	<p>
-		<input type="hidden" name="next" value="{{ request_path }}">
-		<input class="link" type="submit" value="Add to favourites">
-	</p>
-	</form>
+		<p class="love-this"><em><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a></em> <span>to add this to your favourite animals</span></p>
 	{% endif %}
-{% else %}
-	<p><a href="{% url accounts-login %}?next={{ request.path }}">Login</a> or <a href="{% url accounts-register %}">register</a> to add this animal as one of your favourites.</p>
-{% endif %}
 
-{% if num_favourites %}
-	<p>Favourited by <strong>{{ num_favourites }}&nbsp;{{ num_favourites|pluralize:"person,people" }}</strong>{% if request.user.is_authenticated %}{% if favourited %} including you. See your <a href="{{ user.get_profile.urls.absolute }}#favourite-animals">favourite species</a>.{% endif %}{% endif %}</p>
-{% endif %}
+	{% if num_favourites %}
+		<div class="num-loves">
+			<p><strong><span>{{ num_favourites }}</span> {{ num_favourites|pluralize:"person,people" }}</strong> {{ num_favourites|pluralize:"loves,love" }} this animal{% if request.user.is_authenticated %}{% if favourited %} including you.</p><p>See&nbsp;your&nbsp;<a href="{{ user.get_profile.urls.absolute }}#favourite-animals">favourite&nbsp;species</a>.{% endif %}{% endif %}</p>
+		</div>
+	{% endif %}
 
-{% with species.visible_photos.count as visible_photo_count %}
-	{% if visible_photo_count %}
-		<h2>Photos</h2>
-		{% ifequal visible_photo_count 1 %}{# Only one photo #}
+	{% with species.visible_photos.count as visible_photo_count %}
+		{% if visible_photo_count %}
+			<h2>Photos</h2>
 			<div class="gallery">
-			{% for photo in species.visible_photos.all %}
-				<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.thumb_240_url }}"></a>
-			{% endfor %}
+				{% ifequal visible_photo_count 1 %}{# Only one photo #}
+					{% for photo in species.visible_photos.all %}
+						<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.thumb_240_url }}"></a>
+					{% endfor %}
+				{% else %}
+					{# More than one photo #}
+					{% with species.photo as chosen %}
+						<a href="{{ chosen.get_absolute_url }}"><img src="{{ chosen.thumb_240_url }}"></a>
+						<div class="slideshow">
+							<ul id="thumbnails">
+								{% for photo in species.visible_photos|slice:":30" %}
+									{% ifnotequal chosen photo %}
+										<li>{{ photo.thumb_75 }}</li>
+									{% endifnotequal %}
+								{% endfor %}
+							</ul><!-- /#thumbnails -->
+						</div><!-- /.slideshow -->
+					
+						<p><a href="{% url species-photos species.slug %}">All photos of this species</a></p>
+					{% endwith %}
+				{% endifequal %}
 			</div>
-		{% else %}{# More than one photo #}
-		{% with species.photo as chosen %}
-		<div class="gallery">
-				<a href="{{ chosen.get_absolute_url }}"><img src="{{ chosen.thumb_240_url }}"></a>
-				<div class="slideshow">
-					<ul id="thumbnails">
-							{% for photo in species.visible_photos|slice:":30" %}
-							{% ifnotequal chosen photo %}
-								<li>{{ photo.thumb_75 }}</li>
-								{% endifnotequal %}
-							{% endfor %}
-					</ul><!-- /#thumbnails -->
-				</div><!-- /.slideshow -->
-				<p><a href="{% url species-photos species.slug %}">All photos of this species</a></p>
-			</div>
-			{% endwith %}
-		{% endifequal %}
-	{% endif %}
-{% endwith %}
+		{% endif %}
+	{% endwith %}
 
-<h2>Comments</h2>
-{% with species as object %}
-	{% include "comments/_comments_reversed.html" %}
-{% endwith %}
+	<h2>Comments</h2>
+	{% with species as object %}
+		{% include "comments/_comments_reversed.html" %}
+	{% endwith %}
 
 {% endblock %}
