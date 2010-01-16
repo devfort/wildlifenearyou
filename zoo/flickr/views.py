@@ -207,7 +207,8 @@ def search(request):
     user_id = token_info['auth']['user']['nsid']
     photos = client.photos_search(
         user_id = user_id,
-        text = q
+        text = q,
+        extras = 'date_taken'
     )['photos']['photo']
     return photo_picker(request, photos, 'Search for "%s"' % q)
 
