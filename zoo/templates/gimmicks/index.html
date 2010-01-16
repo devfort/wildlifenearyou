@@ -7,27 +7,32 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/x-near-you.css">
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript">
-		if (typeof(navigator.geolocation) != 'undefined' && !location.search) {
-			navigator.geolocation.watchPosition(onPosition, onError, {
-				enableHighAccuracy: true,
-				maximumAge: 600000
-			});
+	window.onload = function() {
+		var cc = google.loader.ClientLocation.address.country_code;
+		document.getElementsByName('cc')[0].value = cc;
+	}
+	
+	if (typeof(navigator.geolocation) != 'undefined' && !location.search) {
+		navigator.geolocation.watchPosition(onPosition, onError, {
+			enableHighAccuracy: true,
+			maximumAge: 600000
+		});
+	}
+	function onPosition(position) {
+		window.location = window.location + '?lat=' + position.coords.latitude + 
+			'&lon=' + position.coords.longitude;
+	}
+	function onError(error) {
+		if (error.code==0) {
+			msg = "Can't get location";
+		} else if (error.code==1) {
+			msg = "Can't get location (permission denied)";
+		} else if (error.code==2) {
+			msg = "Can't get location (unavailabe)";
+		} else if (error.code==3) {
+			msg = "Can't get location (timeout)";
 		}
-		function onPosition(position) {
-			window.location = window.location + '?lat=' + position.coords.latitude + 
-				'&lon=' + position.coords.longitude;
-		}
-		function onError(error) {
-			if (error.code==0) {
-				msg = "Can't get location";
-			} else if (error.code==1) {
-				msg = "Can't get location (permission denied)";
-			} else if (error.code==2) {
-				msg = "Can't get location (unavailabe)";
-			} else if (error.code==3) {
-				msg = "Can't get location (timeout)";
-			}
-		}
+	}
 	</script>
 </head>
 <body>
@@ -50,12 +55,12 @@
 				
 					<div class="species{% if result.photo %} has-img{% endif %}">
 						{% if result.photo %}
-							<a href="{{ result.photo.get_absolute_url }}"><img src="{% if not result.photo.flickr_id %}http://www.wildlifenearyou.com{% endif %}{{ result.photo.thumb_75_url }}" alt=""></a>
+							<a href="http://www.wildlifenearyou.com{{ result.photo.get_absolute_url }}"><img src="{% if not result.photo.flickr_id %}http://www.wildlifenearyou.com{% endif %}{{ result.photo.thumb_75_url }}" alt=""></a>
 						{% endif %}
 							
 						<h3>{{ result.distance.miles|floatformat:"1"|intcomma }} miles away</h3> 
 						
-						<p>Your nearest {{ gimmick.singlular }} is a <a href="#">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="#">{{ result.place }}</a>! Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p>
+						<p>Your nearest {{ gimmick.singlular }} is a <a href="http://www.wildlifenearyou.com{{ result.species.get_absolute_url }}">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="http://www.wildlifenearyou.com{{ result.place.get_absolute_url }}">{{ result.place }}</a>! Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="http://www.wildlifenearyou.com{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p>
 						
 					</div>
 					
@@ -65,6 +70,7 @@
 			<form action="" method="get">
 				<div>
 					<input type="text" size="30" value="{{ name }}" title="Location" class="text" name="q">
+					<input type="hidden" name="cc" value="">
 					<input type="submit" class="submit" value="Go">
 					<p class="help">e.g. <a href="/?q=Brighton">Brighton</a> or <a href="/?q=California">California</a></p>
 				</div>
@@ -83,10 +89,10 @@
 					
 					<div class="species{% if result.photo %} has-img{% endif %}">
 						{% if result.photo %}
-							<a href="{{ result.photo.get_absolute_url }}"><img src="{% if not result.photo.flickr_id %}http://www.wildlifenearyou.com{% endif %}{{ result.photo.thumb_75_url }}" alt=""></a>
+							<a href="http://www.wildlifenearyou.com{{ result.photo.get_absolute_url }}"><img src="{% if not result.photo.flickr_id %}http://www.wildlifenearyou.com{% endif %}{{ result.photo.thumb_75_url }}" alt=""></a>
 						{% endif %}
 						<h3>{{ result.species.common_name }}</h3> 
-						<p><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i> {% endif %} -->at <a href="#">{{ result.place }}</a> <strong>{{ result.distance.miles|floatformat:"1"|intcomma }} miles away</strong>. Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p></div>
+						<p><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i> {% endif %} -->at <a href="http://www.wildlifenearyou.com{{ result.place.get_absolute_url }}">{{ result.place }}</a> <strong>{{ result.distance.miles|floatformat:"1"|intcomma }} miles away</strong>. Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="http://www.wildlifenearyou.com{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p></div>
 				{% endfor %}
 			
 
