@@ -1285,7 +1285,7 @@ p.love-this {
 	text-align: left;
 	overflow: visible;
 	background-image: url(/static/img/icons/heart.png);
-	background-position: 0 -65px;
+	background-position: 0 -165px;
 	background-repeat: no-repeat;	
 }
 p.love-this {
@@ -1297,7 +1297,7 @@ p.love-this:hover {
 	background-position: 0 4px;
 }
 .love-this .remove-from button:hover {
-	background-position: 0 -65px;
+	background-position: 0 -165px;
 }
 .num-loves p {
 	margin: 0;
