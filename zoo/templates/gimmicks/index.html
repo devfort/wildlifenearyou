@@ -10,6 +10,26 @@
 	window.onload = function() {
 		var cc = google.loader.ClientLocation.address.country_code;
 		document.getElementsByName('cc')[0].value = cc;
+		{% if results %}
+		var d = document.getElementById('map');
+		d.style.display = 'block';
+		var width = d.offsetWidth;
+		if (width > 640) {
+			width = 640;
+			d.style.width = '640px';
+		}
+		var height = d.offsetHeight;
+		var img = document.createElement('img');
+		var api_key = "{{ gimmick.custom_template }}";
+		img.src = 'http://maps.google.com/maps/api/staticmap?' + 
+			'center={{ results.0.latitude|floatformat:"5" }},' +
+			'{{ results.0.longitude|floatformat:"5" }}' +
+			'&zoom=12&mobile=true&size=' + width + 'x' + height +
+			'&sensor=true&key=' + api_key + 
+			'&markers=color:green|{{ results.0.latitude|floatformat:"5"}}' + 
+			',{{ results.0.longitude|floatformat:"5"}}';
+		d.appendChild(img);
+		{% endif %}
 	}
 	
 	if (typeof(navigator.geolocation) != 'undefined' && !location.search) {
@@ -98,10 +118,10 @@
 
 			<p>&hellip;and more! see for yourself at <a href="http://wildlifenearyou.com/search/?q={{ gimmick.plural|title }}+near+{{ name }}">wildlifenearyou.com</a></p>
 			
-			<div id="map"></div>
+			<div id="map" style="display: none"></div>
 			
 		{% endif %}
-			<h2 class="wlny">See more animals nearby at <a href="http://wildlifenearyou.com"><img src="/static/img/x-near-you//wlny.png" alt="http:// wildlife near you dot com"></a></h2>
+			<h2 class="wlny">See more animals nearby at <a href="http://wildlifenearyou.com"><img src="/static/img/x-near-you/wlny.png" alt="http:// wildlife near you dot com"></a></h2>
 		</div>
 	</div>
 </div>
