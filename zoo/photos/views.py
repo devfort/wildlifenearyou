@@ -513,7 +513,7 @@ def user_photos_nospecies(request, username):
             photos = Photo.objects.filter(
                 created_by = user,
                 sightings__isnull = True
-            ).order_by('created_at'),
+            ).exclude(has_no_species = True).order_by('created_at'),
             user = request.user
         )
     })
