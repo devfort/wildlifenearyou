@@ -41,7 +41,7 @@ function onError(error) {
 	{% for result in results %}
 		<li>
 			{% if result.photo %}
-			<img src="{{ result.photo.thumb_75_url }}">
+			<img src="{% if not result.photo.flickr_id %}http://www.wildlifenearyou.com{% endif %}{{ result.photo.thumb_75_url }}">
 			{% endif %}
 			{{ result.place }}
 			
