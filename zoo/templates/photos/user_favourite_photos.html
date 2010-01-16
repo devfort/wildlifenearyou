@@ -20,7 +20,7 @@
 		<p>{{ profile.user.username }} has not yet picked any favourite photos.</p>
 	{% else %}
 		<h2>Favourite photos</h2>	
-		{% autopaginate faves 30 %}
+		{% autopaginate faves 32 %}
 		{% paginate %}
 		<ul class="photo-display">
 				{% for fave in faves %}
