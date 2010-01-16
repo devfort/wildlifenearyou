@@ -61,6 +61,16 @@ def species_spotters(request, slug):
         'spotters': spotters,
     })
 
+def species_fans(request, slug):
+    species = get_object_or_404(Species, slug=slug)
+    return render(request, 'animals/fans.html', {
+        'species': species,
+        'fans': User.objects.filter(
+            favourite_species__species = species
+        ),
+    })
+
+
 def species_photos(request, slug):
     species = get_object_or_404(Species, slug=slug)
     return render(request, 'photos/species_photos.html', {

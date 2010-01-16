@@ -425,6 +425,17 @@ def photo(request, username, photo_id):
         'current_user_is_not_page_owner': request.user != photo.created_by,
     })
 
+def photo_fans(request, username, photo_id):
+    photo = get_object_or_404(
+        Photo, created_by__username=username, pk=photo_id
+    )
+    return render(request, 'photos/fans.html', {
+        'photo': photo,
+        'fans': User.objects.filter(
+            favourite_photos__photo = photo
+        )
+    })
+
 def all(request):
     return render(request, 'photos/all.html', {
         'photos': Photo.objects.all().order_by('created_at'),

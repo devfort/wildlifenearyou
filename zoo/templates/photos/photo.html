@@ -117,7 +117,7 @@
 
 	{% if photo.favourited.count %}
 		<div class="num-loves">
-			<p><strong><span>{{ photo.favourited.count  }}</span> {{ photo.favourited.count|pluralize:"person,people" }}</strong> {{ photo.favourited.count|pluralize:"loves,love" }} this photo{% if request.user.is_authenticated %}{% if favourited %} including you.</p><p>See&nbsp;your&nbsp;<a href="{% url user-photos-favourites user.username %}">favourite&nbsp;photos</a>.{% endif %}{% endif %}</p>
+			<p><strong><span>{{ photo.favourited.count  }}</span> <a href="{% url photo-fans photo.created_by.username photo.pk %}">{{ photo.favourited.count|pluralize:"person,people" }}</a></strong> {{ photo.favourited.count|pluralize:"loves,love" }} this photo{% if request.user.is_authenticated %}{% if favourited %} including you.</p><p>See&nbsp;your&nbsp;<a href="{% url user-photos-favourites user.username %}">favourite&nbsp;photos</a>.{% endif %}{% endif %}</p>
 		</div>
 	{% endif %}
 	

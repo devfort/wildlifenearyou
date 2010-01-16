@@ -1,0 +1,24 @@
+{% extends base %}
+
+{% load humanize %}
+
+{% block title %}Fans of {{ species.common_name }} ({{ species.latin_name }}){% endblock %}
+
+{% block content %}
+
+<h1>Fans of <a href="{{ species.get_absolute_url }}">{{ species.common_name }}</a> <i class="scientific">({{ species.latin_name }})</i></h1>
+
+{% if fans %}
+<ul class="spotter-list">
+{% for user in fans %}
+	<li>
+		<img src="{{ user.get_profile.face_medium }}" width="75" height="75" alt="" class="pull-left avatar">
+		<p><a class="spotter-name" href="{{ user.get_profile.urls.absolute }}">{{ user }}</a></p>
+	</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No one has favourited {{ species.common_name }} yet.</p>
+{% endif %}
+
+{% endblock %}

@@ -104,7 +104,7 @@
 
 	{% if num_favourites %}
 		<div class="num-loves">
-			<p><strong><span>{{ num_favourites }}</span> {{ num_favourites|pluralize:"person,people" }}</strong> {{ num_favourites|pluralize:"loves,love" }} this animal{% if request.user.is_authenticated %}{% if favourited %} including you.</p><p>See&nbsp;your&nbsp;<a href="{{ user.get_profile.urls.absolute }}#favourite-animals">favourite&nbsp;species</a>.{% endif %}{% endif %}</p>
+			<p><strong><span>{{ num_favourites }}</span> <a href="{% url species-fans species.slug %}">{{ num_favourites|pluralize:"person,people" }}</a></strong> {{ num_favourites|pluralize:"loves,love" }} this animal{% if request.user.is_authenticated %}{% if favourited %} including you.</p><p>See&nbsp;your&nbsp;<a href="{{ user.get_profile.urls.absolute }}#favourite-animals">favourite&nbsp;species</a>.{% endif %}{% endif %}</p>
 		</div>
 	{% endif %}
 
