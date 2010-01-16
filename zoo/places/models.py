@@ -110,6 +110,24 @@ class Place(AuditedModel):
         
         return photo
     
+    def photo_of(self, species):
+        key = 'photo-of-place-species:%s:%s' % (self.pk, species.pk)
+        photo = cache.get(key)
+        if photo is None:
+            try:
+                photo = self.visible_photos().filter(
+                    sightings__species = species
+                ).annotate(
+                    num_faves = Count('favourited')
+                ).order_by('-num_faves')[0]
+            except IndexError:
+                photo = 'no-photo'
+            cache.set(key, photo, 60 * 60 * 5 + 5)
+        if photo == 'no-photo':
+            return None
+        
+        return photo
+    
     def popularity(self):
         """
         Currently just calculated using number of species seen at
