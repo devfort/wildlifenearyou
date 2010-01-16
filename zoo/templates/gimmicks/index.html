@@ -1,5 +1,29 @@
 <html>{% load humanize %}
 <head><title>{{ gimmick }} - Find {{ gimmick.plural|title }} Near You</title>
+<script type="text/javascript">
+if (typeof(navigator.geolocation) != 'undefined' && !location.search) {
+	navigator.geolocation.watchPosition(onPosition, onError, {
+		enableHighAccuracy: true,
+		maximumAge: 600000
+	});
+}
+function onPosition(position) {
+	console.log(position);
+	window.location = window.location + '?lat=' + position.coords.latitude + 
+		'&lon=' + position.coords.longitude;
+}
+function onError(error) {
+	if (error.code==0) {
+		msg = "Can't get location";
+	} else if (error.code==1) {
+		msg = "Can't get location (permission denied)";
+	} else if (error.code==2) {
+		msg = "Can't get location (unavailabe)";
+	} else if (error.code==3) {
+		msg = "Can't get location (timeout)";
+	}
+}
+</script>
 </head>
 <body>
 

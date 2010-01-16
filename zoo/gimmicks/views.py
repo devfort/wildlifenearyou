@@ -20,7 +20,8 @@ def gimmick(request, domain):
         name, (lat, lon) = google_geocode(q, country_code = country_code)
         return gimmick_results(request, gimmick, name, lat, lon)
     elif (lat and lon):
-        return gimmick_results(request, gimmick, '', lat, lon)
+        name, (ignore1, ignore2) = google_geocode('%s,%s' % (lat, lon))
+        return gimmick_results(request, gimmick, name, lat, lon)
     else:
         return render('gimmicks/index.html', {
             'gimmick': gimmick,
