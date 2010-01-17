@@ -6,6 +6,9 @@ from zoo.places.models import Place
 
 from django.core.cache import cache
 
+import urllib, re
+from django.utils import simplejson
+
 class SpeciesGroup(AuditedModel):
     name = models.CharField(max_length=255, blank=False, null=False,
         unique=True
@@ -123,7 +126,38 @@ class Species(AbstractSpecies):
         num_of_sightings = float(self.sightings.all().count())
 
         return 1 - (1 / (num_of_sightings + 1))
-
+    
+    def wikipedia_page(self):
+        ids = list(self.external_identifiers.filter(
+            namespace = '/wikipedia/en'
+        ).order_by('order')[:1])
+        r = re.compile('\$\d{4}')
+        if ids:
+            key = ids[0].key
+            # Deal with weird $0027 -style escaping scheme
+            key = r.sub(lambda m: unichr(int(m.group(0)[1:], 16)), key)
+            encoded_key = urllib.urlencode({'q': key}).replace('q=', '')
+            url = 'http://en.wikipedia.org/wiki/%s' % encoded_key
+            title = key.replace('_', ' ')
+            return url, title
+        else:
+            return None, None
+    
+    def update_external_identifiers(self):
+        url = "http://ids.freebaseapps.com/get_ids?id=%s" % self.freebase_id
+        json = simplejson.load(urllib.urlopen(url))
+        for i, link in enumerate(json['ids']):
+            self.external_identifiers.get_or_create(
+                source = link['source'],
+                namespace = link['namespace'],
+                key = link['key'],
+                defaults = {
+                    'uri': link['uri'],
+                    'order': i,
+                }
+            )
+        return json['ids']
+    
     class Meta:
         verbose_name_plural = 'species'
 

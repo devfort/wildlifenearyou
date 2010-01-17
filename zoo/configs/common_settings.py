@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     'zoo.flickr',
     'zoo.rspb',
     'zoo.gimmicks',
+    'zoo.linkeddata',
     # The next four items are dependencies for basic.blog
     'basic.blog',
     'basic.inlines',
