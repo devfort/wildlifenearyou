@@ -1059,6 +1059,7 @@ ul.teaserlist h3 span {
 	overflow: hidden;
 	/* For people with really, really wide screens: */
 	background-image: url(/static/img/bg/sneaky.jpg);
+	background-color: #8BAA66;
 	background-position: top left;
 	background-repeat: repeat-x;
 	border-top: 2px solid white;
@@ -1069,6 +1070,7 @@ ul.teaserlist h3 span {
 	margin: 0;
 	padding: 0;
 	float: left;
+	background-image: none;
 }
 
 .photostrip img {
