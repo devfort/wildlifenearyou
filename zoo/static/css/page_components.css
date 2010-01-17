@@ -1059,7 +1059,7 @@ ul.teaserlist h3 span {
 	overflow: hidden;
 	/* For people with really, really wide screens: */
 	background-image: url(/static/img/bg/sneaky.jpg);
-	background-color: #8BAA66;
+	background-color: white;
 	background-position: top left;
 	background-repeat: repeat-x;
 	border-top: 2px solid white;
