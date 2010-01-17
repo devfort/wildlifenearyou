@@ -8,8 +8,10 @@
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	<script type="text/javascript">
 	window.onload = function() {
-		var cc = google.loader.ClientLocation.address.country_code;
-		document.getElementsByName('cc')[0].value = cc;
+		if (google.loader.ClientLocation) {
+			var cc = google.loader.ClientLocation.address.country_code;
+			document.getElementsByName('cc')[0].value = cc;
+		}
 		{% if results %}
 		var d = document.getElementById('map');
 		document.getElementById('outermap').style.display = 'block';
@@ -82,9 +84,9 @@
 							<a href="http://www.wildlifenearyou.com{{ result.photo.get_absolute_url }}"><img src="{% if not result.photo.flickr_id %}http://www.wildlifenearyou.com{% endif %}{{ result.photo.thumb_75_url }}" alt=""></a>
 						{% endif %}
 							
-						<h3>{{ result.distance.miles|floatformat:"1"|intcomma }} miles away</h3> 
+						<h3>{{ result.distance.miles|floatformat:"1"|intcomma }}&nbsp;miles away</h3> 
 						
-						<p>Your nearest {{ gimmick.singlular }} is a <a href="http://www.wildlifenearyou.com{{ result.species.get_absolute_url }}">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="http://www.wildlifenearyou.com{{ result.place.get_absolute_url }}">{{ result.place }}</a>! Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="http://www.wildlifenearyou.com{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p>
+						<p>Your nearest {{ gimmick.singlular }} is {{ result.a_or_an }} <a href="http://www.wildlifenearyou.com{{ result.species.get_absolute_url }}">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="http://www.wildlifenearyou.com{{ result.place.get_absolute_url }}">{{ result.place }}</a>! Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="http://www.wildlifenearyou.com{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p>
 						
 					</div>
 					
@@ -126,7 +128,10 @@
 			<p>&hellip;and more! see for yourself at <a href="http://wildlifenearyou.com/search/?q={{ gimmick.plural|title }}+near+{{ name }}">wildlifenearyou.com</a></p>
 			
 		{% endif %}
+		
+		{% if results %}
 			<h2 class="wlny">See more animals nearby at <a href="http://www.wildlifenearyou.com"><img src="/static/img/x-near-you/wlny.png" alt="Wildlife Near You dot com"></a></h2>
+		{% endif %}
 		</div>
 	</div>
 </div>

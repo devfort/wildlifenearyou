@@ -6,6 +6,8 @@ from animals.models import Species
 from zoo.search.geocoders import google_geocode
 import geopy, geopy.distance
 
+from django.utils.safestring import mark_safe
+
 import datetime
 
 def gimmick(request, domain):
@@ -52,15 +54,25 @@ def gimmick_results(request, gimmick, name, lat, lon):
     
     all_possible_places.sort(key = lambda p: p['distance'].km)
     
-    results = all_possible_places[:5]
+    results = []
+    seen_place_ids = set()
     
     # Now load the actual ORM objects
-    place_pks = set([p['pk'] for p in results])
+    place_pks = set([p['pk'] for p in all_possible_places])
     places = Place.objects.in_bulk(list(place_pks))
-    species_pks = set([p['animals_species_id'] for p in results])
+    species_pks = set([p['animals_species_id'] for p in all_possible_places])
     species = Species.objects.in_bulk(list(species_pks))
     
-    for place in results:
+    for place in all_possible_places:
+        if place['pk'] in seen_place_ids:
+            continue
+        
+        if len(results) >= 5:
+            break
+        
+        seen_place_ids.add(place['pk'])
+        results.append(place)
+        
         place['place'] = places[place['pk']]
         place['species'] = species[place['animals_species_id']]
         info = place['place'].species_info(place['species'])
@@ -77,6 +89,18 @@ def gimmick_results(request, gimmick, name, lat, lon):
         place['num_spottings'] = num_spottings
         place['timesince'] = humanize_timesince(
             place['most_recent_trip'].start or place['most_recent_added_at']
+        )
+        if place['species'].common_name[0].lower() in 'aeiou':
+            place['a_or_an'] = 'an'
+        else:
+            place['a_or_an'] = 'a'
+        
+        # Add &nbsp;s to ensure no wrapping in wrong place
+        place['num_spottings'] = mark_safe(
+            place['num_spottings'].replace(' ', '&nbsp;')
+        )
+        place['timesince'] = mark_safe(
+            place['timesince'].replace(' ', '&nbsp;')
         )
     
     return render('gimmicks/index.html', {
