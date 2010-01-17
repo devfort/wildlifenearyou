@@ -96,6 +96,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'zoo.common.context_processors.standard',
 )
 
+NEARBY_ORG_UK_API_KEY = '43384da437a8cf'
+# www.nearby.org.uk/api/convert.php?p=SY057898&in=gr-osgb36&want=ll-wgs84&key=
+
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
