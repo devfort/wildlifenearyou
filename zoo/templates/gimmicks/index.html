@@ -12,7 +12,7 @@
 		document.getElementsByName('cc')[0].value = cc;
 		{% if results %}
 		var d = document.getElementById('map');
-		d.style.display = 'block';
+		document.getElementById('outermap').style.display = 'block';
 		var width = d.offsetWidth;
 		if (width > 640) {
 			width = 640;
@@ -21,13 +21,15 @@
 		var height = d.offsetHeight;
 		var img = document.createElement('img');
 		var api_key = "{{ gimmick.custom_template }}";
-		img.src = 'http://maps.google.com/maps/api/staticmap?' + 
-			'center={{ results.0.latitude|floatformat:"5" }},' +
-			'{{ results.0.longitude|floatformat:"5" }}' +
-			'&zoom=12&mobile=true&size=' + width + 'x' + height +
+		img.src = 'http://maps.google.com/maps/api/staticmap' + 
+			'?mobile=true&size=' + width + 'x' + height +
 			'&sensor=true&key=' + api_key + 
-			'&markers=color:green|{{ results.0.latitude|floatformat:"5"}}' + 
-			',{{ results.0.longitude|floatformat:"5"}}';
+			{% for result in results %}
+			'&markers=color:green|{{ result.latitude|floatformat:"5"}}' + 
+			',{{ result.longitude|floatformat:"5"}}' + 
+			{% endfor %}
+			'&markers=color:blue|{{ latitude|floatformat:"5"}}' + 
+			',{{ longitude|floatformat:"5"}}';
 		d.appendChild(img);
 		{% endif %}
 	}
@@ -107,6 +109,9 @@
 			
 			{% if results %}
 				<h2>Other nearby {{ gimmick.plural }}</h2>
+				
+				<div id="outermap" style="display: none"><div id="map"></div></div>
+				
 				{% for result in results|slice:"1:" %}
 					
 					<div class="species{% if result.photo %} has-img{% endif %}">
@@ -119,8 +124,6 @@
 			
 
 			<p>&hellip;and more! see for yourself at <a href="http://wildlifenearyou.com/search/?q={{ gimmick.plural|title }}+near+{{ name }}">wildlifenearyou.com</a></p>
-			
-			<div id="map" style="display: none"></div>
 			
 		{% endif %}
 			<h2 class="wlny">See more animals nearby at <a href="http://www.wildlifenearyou.com"><img src="/static/img/x-near-you/wlny.png" alt="Wildlife Near You dot com"></a></h2>

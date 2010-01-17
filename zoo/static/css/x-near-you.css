@@ -184,14 +184,19 @@ div.header div.species {
 	margin-top: 0;
 }
 
-
-
 #map {
 	width: 100%;
 	height: 10em;
-	background-color: white;
+	display: block;
+	margin: 0 auto;
+}
+#outermap {
+	border: 2px solid #AECA8B;
 	margin-bottom: 2em;
 	margin-top: 2em;
+	background-color: white;
+	padding: 5px;
+	overflow: hidden;
 }
 
 /* @end */

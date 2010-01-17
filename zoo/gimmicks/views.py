@@ -52,7 +52,7 @@ def gimmick_results(request, gimmick, name, lat, lon):
     
     all_possible_places.sort(key = lambda p: p['distance'].km)
     
-    results = all_possible_places[:3]
+    results = all_possible_places[:5]
     
     # Now load the actual ORM objects
     place_pks = set([p['pk'] for p in results])
@@ -84,6 +84,8 @@ def gimmick_results(request, gimmick, name, lat, lon):
         'results': results,
         'name': name,
         'request_path': request.path,
+        'latitude': lat,
+        'longitude': lon,
     })
 
 def humanize_timesince(start_time):
