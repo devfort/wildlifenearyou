@@ -89,7 +89,7 @@ class Species(AbstractSpecies):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
             sightings__species = self, is_visible = True,
-        ).distinct()
+        ).select_related('created_by').distinct()
 
     def photo(self):
         photo = cache.get('photo-of-species:%s' % self.pk)
