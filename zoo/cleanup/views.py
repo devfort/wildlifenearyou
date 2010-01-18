@@ -14,8 +14,8 @@ def cleanup_places(request):
     if request.POST:
         for key in request.POST.keys():
             if key.endswith('lat'):
-                lat = request.POST[key]
-                lon = request.POST[key.replace('lat', 'lon')]
+                lat = float(request.POST[key])
+                lon = float(request.POST[key.replace('lat', 'lon')])
                 pk = key.split('_')[1]
                 place = Place.objects.get(pk = pk)
                 place.latitude = lat
@@ -37,4 +37,5 @@ def cleanup_places(request):
         'places': [p.place for p in places[:10]],
         'done': done,
         'reverse': reverse,
+        'total_places': PlaceNeedsCleanup.objects.count(),
     })

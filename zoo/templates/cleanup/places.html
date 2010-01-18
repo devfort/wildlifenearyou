@@ -122,7 +122,16 @@ jQuery(function($) {
 {% endblock %}
 
 {% block content %}
-<h1>Clean up places</h1>
+<h1>Clean up places ({{ total_places }} to go...)</h1>
+
+{% if done %}
+Saved...
+<ul>
+	{% for d in done %}
+	<li><a href="{{ d.get_absolute_url }}">{{ d }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}
 
 <form action="{% url cleanup-places %}" method="post">
 
