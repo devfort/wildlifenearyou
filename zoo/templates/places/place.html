@@ -120,7 +120,7 @@
 	{% endif %}
 {% endwith %}
 
-<div id="locationmap" style="overflow: hidden; margin-top: 1em"><img src="http://maps.google.com/staticmap?center={{ place.latitude }},{{ place.longitude }}&amp;zoom=13&amp;size=512x256&amp;markers={{ place.latitude }},{{ place.longitude }},red&amp;key={{ GOOGLE_MAPS_API_KEY }}&amp;sensor=false"></div>
+<div id="locationmap" style="overflow: hidden; margin-top: 1em"><img src="http://maps.google.com/staticmap?center={{ place.latitude }},{{ place.longitude }}&amp;zoom=13&amp;size=540x256&amp;markers={{ place.latitude }},{{ place.longitude }},red&amp;key={{ GOOGLE_MAPS_API_KEY }}&amp;sensor=false"></div>
 
 {% if place.most_recent_trips %}
 <h2>Recent trips here</h2>
