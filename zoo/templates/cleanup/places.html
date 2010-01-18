@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Clean up places{% endblock %}
+
+{% block extra_head %}
+<style type="text/css">
+.place-map {
+	float: right;
+	width: 50%;
+	margin-left: 1em;
+	border: 1px solid black;
+	height: 400px;
+}
+div.place-row {
+	clear: both;
+	margin-top: 2em;
+	overflow: hidden;
+}
+div.place-row h2 {
+	border-top: 1px solid black;
+	padding-top: 5px;
+}
+</style>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
+<script type="text/javascript">
+
+var accuracyToZoomLevel = [
+	1,  // 0 - Unknown location
+	5,  // 1 - Country
+	6,  // 2 - Region (state, province, prefecture, etc.)
+	8,  // 3 - Sub-region (county, municipality, etc.)
+	11, // 4 - Town (city, village)
+	13, // 5 - Post code (zip code)
+	15, // 6 - Street
+	16, // 7 - Intersection
+	17 // 8 - Address
+];
+
+jQuery(function($) {
+	// Disable the enter key to prevent accidental submission
+	$('form').bind('keypress', function(e) {
+		if (e.keyCode == 13) {
+			alert('ha, disabled');
+			return false;
+		}
+	});
+	
+	var geocoder = new GClientGeocoder();
+	
+	$('.place-map').each(function() {
+		var div = $(this);
+		var lat = div.parents('div:first').find('input[name$=lat]');
+		var lon = div.parents('div:first').find('input[name$=lon]');
+		
+		var gmap = new GMap2(div[0]);
+		
+		var crosshair = $('<div />').css({
+			'position': 'absolute',
+			'top': '192px',
+			'height': '19px',
+			'width': '19px',
+			'left': '50%',
+			'margin-left': '-8px',
+			'display': 'block',
+			'background': 'url(/static/img/icons/crosshair.gif)',
+			'background-position': 'center center',
+			'background-repeat': 'no-repeat'
+		}).appendTo(div);
+		GEvent.addDomListener(crosshair[0], 'dblclick', function() {
+			gmap.zoomIn();
+		});
+		
+		gmap.addControl(new GSmallMapControl());
+		gmap.addControl(new GMapTypeControl());
+		gmap.setMapType(G_NORMAL_MAP);
+		gmap.setCenter(new GLatLng(lat.val(), lon.val()), 12);
+		GEvent.addListener(gmap, 'move', function() {
+			var center = gmap.getCenter();
+			lat.val(center.lat());
+			lon.val(center.lng());
+		});
+		
+		var place_search = div.find('.place-search');
+		var place_search_go = div.find('.place-search-go');
+		place_search_go.click(function() {
+			geocoder.getLocations(place_search.val(), function(result) {
+				if (result.Status.code != 200) {
+					return;
+				}
+				console.log(result);
+				var placemark = result.Placemark[0]; // Only use first result
+				var accuracy = placemark.AddressDetails.Accuracy;
+				var zoomLevel = accuracyToZoomLevel[accuracy] || 1;
+				var lon = placemark.Point.coordinates[0];
+				var lat = placemark.Point.coordinates[1];
+				gmap.setCenter(new GLatLng(lat, lon), zoomLevel);
+			});
+		});
+	});
+	
+	$('#id_country').change(function() {
+		var country = this.options[$(this).val()].text;
+		if (country) {
+			geocoder.getLocations(country, function(result) {
+				if (result.Status.code != 200) {
+					return;
+				}
+				var placemark = result.Placemark[0]; // Only use first result
+				var accuracy = placemark.AddressDetails.Accuracy;
+				var zoomLevel = accuracyToZoomLevel[accuracy] || 1;
+				var lon = placemark.Point.coordinates[0];
+				var lat = placemark.Point.coordinates[1];
+				gmap.setCenter(new GLatLng(lat, lon), zoomLevel);
+			});
+		}
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Clean up places</h1>
+
+<form action="{% url cleanup-places %}" method="post">
+
+{% for place in places %}
+<div class="place-row">
+<h2><a href="{{ place.get_absolute_url }}">{{ place }}</a></h2>
+
+<div class="place-map"></div>
+
+<p>Latitude: <input type="text" name="place_{{ place.pk }}_lat" value="{{ place.latitude }}"></p>
+<p>Longitude: <input type="text" name="place_{{ place.pk }}_lon" value="{{ place.longitude }}"></p>
+
+<p>Search on map: <input type="text" class="place-search" name="place_search_on_map"> <span class="place-search-go" style="background-color: black; color: white; padding: 4px; cursor: pointer">Search</span></p>
+
+<div class="compact">
+	<p class="address">{% if place.address %}Address: {{ place.address }},{% endif %}
+		<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
+		<a href="{{ place.country.urls.absolute }}" id="countrylink"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
+		{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
+	</p>
+
+	{% if place.phone %}
+	<p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
+	{% endif %}
+
+	{% if place.url %}
+	<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
+	{% endif %}
+</div>
+{% if place.description %}
+<p class="intro">{{ place.description }}</p>
+{% endif %}
+
+</div>
+{% endfor %}
+
+<p><input type="submit" value="Save all changes"></p>
+</form>
+
+{% endblock %}

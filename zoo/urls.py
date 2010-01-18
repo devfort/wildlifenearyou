@@ -227,6 +227,11 @@ urlpatterns = patterns('',
         name='help'),
     url(r'^help/identify-species/$', 'zoo.crowdsource.views.identify_species',
         name='help-identify-species'),
+    url(r'^help/bestpic/$', 'zoo.bestpic.views.bestpic',
+        name='bestpic'),
+    
+    url(r'^cleanup/places/$', 'zoo.cleanup.views.cleanup_places',
+        name='cleanup-places'),
     
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/$', 
         'zoo.places.views.place',
