@@ -92,7 +92,7 @@ TEMPLATE_DIRS = (
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
-    'django.core.context_processors.auth',
+    'zoo.common.context_processors.auth_with_no_messages',
     'zoo.common.context_processors.standard',
 )
 
