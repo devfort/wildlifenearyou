@@ -265,8 +265,9 @@ div.spotter-list {
 .specieslist {
 	list-style-type: none;
 	margin-left: 0;
-	padding: 0;
+	padding: 1em 0.3em 1em 0.3em;
 	line-height: 1.4em;
+	text-align: center;
 }
 .specieslist li {
 	display: inline;
@@ -282,24 +283,55 @@ div.spotter-list {
 .specieslist li a:active {
 	text-decoration: none;
 	vertical-align: middle;
-	background-position: left center;
-	background-image: url(/static/img/icons/bullet_green.gif);
-	background-repeat: no-repeat;
-	padding-left: 19px;
+	margin: 0.5em;
+	padding: 0.1em 0.4em;
+	white-space: nowrap;
+	background-color: white;
+	-moz-box-shadow: 2px 2px 5px #8DC8E8;
+	-webkit-box-shadow: 1px 1px 3px #8DC8E8;
+	box-shadow: 1px 1px 3px #8DC8E8;
+	display: inline-block;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.5s ease-in;
+	transition: all 0.5s ease-in;
 }
+
 .cloud-quad-0 {
 	font-size: 1em;
+	-moz-transform: rotate(-2deg);
+	-webkit-transform: rotate(-2deg);
+	transform: rotate(-2deg);
 }
+
 .cloud-quad-1 {
 	font-size: 1.2857em;
+	-moz-transform: rotate(2deg);
+	-webkit-transform: rotate(2deg);
+	transform: rotate(2deg);
 }
 .cloud-quad-2 {
 	font-size: 1.7143em;
+	-moz-transform: rotate(4deg);
+	-webkit-transform: rotate(4deg);
+	transform: rotate(4deg);
 }
 .cloud-quad-3 {
 	font-size: 2.1429em;
+	-moz-transform: rotate(6deg);
+	-webkit-transform: rotate(6deg);
+	transform: rotate(6deg);
 }
 
+.specieslist li a:hover,
+.specieslist li a:focus,
+.specieslist li a:active {
+	-moz-box-shadow: 1px 1px 3px #70A3C2;
+	-webkit-box-shadow: 1px 1px 3px #70A3C2;
+	box-shadow: 1px 1px 3px #70A3C2;
+	-moz-transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+}
 /* @end */
 
 /* @group Comments */
