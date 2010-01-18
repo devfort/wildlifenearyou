@@ -23,9 +23,18 @@ def cleanup_places(request):
                 place.save()
                 PlaceNeedsCleanup.objects.filter(place = place).delete()
                 done.append(place)
+    
+    places = PlaceNeedsCleanup.objects.select_related(
+        'place'
+    )
+    reverse = ('reverse' in request.REQUEST)
+    if reverse:
+        places = places.order_by('-pk')
+    else:
+        places = places.order_by('pk')
+        
     return render(request, 'cleanup/places.html', {
-        'places': [p.place for p in PlaceNeedsCleanup.objects.select_related(
-            'place'
-        )[:10]],
-        'done': done
+        'places': [p.place for p in places[:10]],
+        'done': done,
+        'reverse': reverse,
     })

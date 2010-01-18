@@ -80,10 +80,13 @@ jQuery(function($) {
 			lon.val(center.lng());
 		});
 		
-		var place_search = div.find('.place-search');
-		var place_search_go = div.find('.place-search-go');
+		var place_search = div.parents('div:first').find('.place-search');
+		var place_search_go = div.parents('div:first').find(
+			'.place-search-go'
+		);
 		place_search_go.click(function() {
-			geocoder.getLocations(place_search.val(), function(result) {
+			var q = place_search.val();
+			geocoder.getLocations(q, function(result) {
 				if (result.Status.code != 200) {
 					return;
 				}
@@ -155,6 +158,10 @@ jQuery(function($) {
 
 </div>
 {% endfor %}
+
+{% if reverse %}
+<input type="hidden" name="reverse" value="1">
+{% endif %}
 
 <p><input type="submit" value="Save all changes"></p>
 </form>
