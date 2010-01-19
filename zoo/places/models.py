@@ -136,7 +136,7 @@ class Place(AuditedModel):
             photo = self.photo_of(species)
             sightings = species.sightings.filter(
                 place = self
-            ).select_related('trip').order_by('-created_at')
+            ).select_related('trip', 'created_by').order_by('-created_at')
             num_sightings = sightings.count()
             most_recent_sighting = sightings[0]
             info = {

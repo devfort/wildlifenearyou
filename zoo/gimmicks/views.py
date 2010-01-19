@@ -3,12 +3,25 @@ from models import Gimmick
 from places.models import Place
 from animals.models import Species
 
-from zoo.search.geocoders import google_geocode
+from zoo.search.geocoders import google_geocode as google_geocode_original
 import geopy, geopy.distance
 
 from django.utils.safestring import mark_safe
+from django.core.cache import cache
 
 import datetime
+
+def google_geocode(q, country_code = None, is_latlon=False):
+    key = 'google-geocode:%s:%s' % (q, country_code)
+    cached = cache.get(key)
+    if cached is not None:
+        return cached
+    cached = google_geocode_original(q, country_code)
+    timeout = 24 * 60 * 60
+    if is_latlon:
+        timeout = 5 * 60
+    cache.set(key, cached, timeout)
+    return cached
 
 def gimmick(request, domain):
     gimmick = get_object_or_404(Gimmick, domain = domain)
@@ -24,7 +37,9 @@ def gimmick(request, domain):
         name, (lat, lon) = google_geocode(q, country_code = country_code)
         return gimmick_results(request, gimmick, name, lat, lon)
     elif (lat and lon):
-        name, (ignore1, ignore2) = google_geocode('%s,%s' % (lat, lon))
+        name, (ignore1, ignore2) = google_geocode(
+            '%s,%s' % (lat, lon), is_latlon=True
+        )
         return gimmick_results(request, gimmick, name, lat, lon)
     else:
         return render('gimmicks/index.html', {
@@ -59,7 +74,9 @@ def gimmick_results(request, gimmick, name, lat, lon):
     
     # Now load the actual ORM objects
     place_pks = set([p['pk'] for p in all_possible_places])
-    places = Place.objects.in_bulk(list(place_pks))
+    places = Place.objects.select_related(
+        'country'
+    ).in_bulk(list(place_pks))
     species_pks = set([p['animals_species_id'] for p in all_possible_places])
     species = Species.objects.in_bulk(list(species_pks))
     
