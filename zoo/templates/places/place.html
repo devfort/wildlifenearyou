@@ -7,6 +7,36 @@
 <script type="text/javascript" src="/static/js/gallery.js"></script>
 <script type="text/javascript" src="/static/js/jquery.dimensions.js"></script>
 <script type="text/javascript" src="/static/js/i-saw-and-a.js"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(function($) {
+	var div = $('#locationmap');
+	div.css({
+		width: '100%',
+		height: '256px'
+	});
+	div.find('img').remove();
+	var gmap = new GMap2(div[0]);
+	var lat = {{ place.latitude }};
+	var lon = {{ place.longitude }};
+	gmap.addControl(new GSmallMapControl());
+	gmap.addControl(new GMapTypeControl());
+	gmap.setMapType(G_NORMAL_MAP);
+	var point = new GLatLng(lat, lon);
+	gmap.setCenter(point, 12);
+	
+	var greenIcon = new GIcon(G_DEFAULT_ICON);
+	greenIcon.image ="http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+	greenIcon.iconSize = new GSize(32, 32);
+	greenIcon.shadowSize = new GSize(56, 32);
+	greenIcon.iconAnchor = new GPoint(16, 32);
+	greenIcon.infoWindowAnchor = new GPoint(16, 0);
+	
+	gmap.addOverlay(new GMarker(point, {
+		icon: greenIcon
+	}));
+});
+</script>
 {% endblock %}
 
 {% block content_title %}
