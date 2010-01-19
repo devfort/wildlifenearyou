@@ -7,7 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/x-near-you.css">
 	<script type="text/javascript" src="http://www.google.com/jsapi?key={{ gimmick.custom_template }}"></script>
 	<script type="text/javascript">
-	window.onload = function() {
+	google.setOnLoadCallback(function() {
 		if (google.loader.ClientLocation) {
 			var cc = google.loader.ClientLocation.address.country_code;
 			document.getElementsByName('cc')[0].value = cc;
@@ -34,7 +34,7 @@
 			',{{ longitude|floatformat:"5"}}';
 		d.appendChild(img);
 		{% endif %}
-	}
+	});
 	
 	if (typeof(navigator.geolocation) != 'undefined' && !location.search) {
 		navigator.geolocation.watchPosition(onPosition, onError, {
@@ -86,7 +86,7 @@
 							
 						<h3>{{ result.distance.miles|floatformat:"1"|intcomma }}&nbsp;miles away</h3> 
 						
-						<p>Your nearest {{ gimmick.singlular }} is {{ result.a_or_an }} <a href="http://www.wildlifenearyou.com{{ result.species.get_absolute_url }}">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="http://www.wildlifenearyou.com{{ result.place.get_absolute_url }}">{{ result.place }}</a>! Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="http://www.wildlifenearyou.com{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p>
+						<p>We think your nearest {{ gimmick.singlular }} is {{ result.a_or_an }} <a href="http://www.wildlifenearyou.com{{ result.species.get_absolute_url }}">{{ result.species.common_name }}</a><!-- {% if result.species.latin_name %}<i>{{ result.species.latin_name }}</i>{% endif %} --> at <a href="http://www.wildlifenearyou.com{{ result.place.get_absolute_url }}">{{ result.place }}</a>! Spotted {% ifnotequal result.num_sightings 1 %}{{ result.num_spottings }}, most recently{% endifnotequal %} by <a href="http://www.wildlifenearyou.com{{ result.most_recent_trip.get_absolute_url }}">{{ result.most_recent_user }}</a> {{ result.timesince }} ago.</p>
 						
 					</div>
 					
@@ -98,7 +98,7 @@
 					<input type="text" size="30" value="{{ name }}" title="Location" class="text" name="q">
 					<input type="hidden" name="cc" value="">
 					<input type="submit" class="submit" value="Go">
-					<p class="help">e.g. <a href="/?q=Brighton">Brighton</a> or <a href="/?q=California">California</a></p>
+					<p class="help">e.g. <a href="/?q=Brighton">Brighton</a> or <a href="/?q=San+Francisco">San Francisco</a></p>
 				</div>
 			</form>
 		</div>
@@ -111,8 +111,8 @@
 			
 			{% if results %}
 				<h2>Other nearby {{ gimmick.plural }}</h2>
-				
 				<div id="outermap" style="display: none"><div id="map"></div></div>
+				<p style="font-size: 0.8em">Know a nearer {{ gimmick.singlular }}? Why not add it to <a href="http://www.wildlifenearyou.com/">WildlifeNearYou.com</a>?</p>
 				
 				{% for result in results|slice:"1:" %}
 					
