@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Find {{ gimmick.plural }} near you!</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/x-near-you.css">
-	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="http://www.google.com/jsapi?key={{ gimmick.custom_template }}"></script>
 	<script type="text/javascript">
 	window.onload = function() {
 		if (google.loader.ClientLocation) {
