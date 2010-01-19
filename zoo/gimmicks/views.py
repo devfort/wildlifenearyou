@@ -9,10 +9,10 @@ import geopy, geopy.distance
 from django.utils.safestring import mark_safe
 from django.core.cache import cache
 
-import datetime
+import datetime, md5
 
 def google_geocode(q, country_code = None, is_latlon=False):
-    key = 'google-geocode:%s:%s' % (q, country_code)
+    key = md5.new('google-geocode:%s:%s' % (q, country_code)).hexdigest()
     cached = cache.get(key)
     if cached is not None:
         return cached
