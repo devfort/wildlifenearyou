@@ -38,10 +38,8 @@
 	{% with species.rspb_pages.all as rspb %}
 		{% if rspb %}
 			{% for page in rspb %}
-		
-				<h2>RSPB Bird Guide</h2>
 				<a href="http://www.rspb.org.uk/"><img src="/static/img/rspb_50.png" style="float: left; padding-top: 4px"></a>
-				<p style="margin-left: 62px">"{{ page.teaser }}" - <a href="{{ page.url }}">read more</a></p>
+				<p style="margin-left: 62px">"{{ page.teaser }}" - <a href="{{ page.url }}">read&nbsp;more&hellip;</a></p>
 			
 			{% endfor %}
 		{% endif %}
@@ -51,9 +49,8 @@
 	{% with species.wikipedia_abstracts.all as wp %}
 		{% if wp %}
 			{% for abstract in wp %}
-				<h2>Wikipedia</h2>
 				<a href="http://en.wikipedia.org/"><img src="/static/img/wikipedia_50.png" style="float: left; padding-top: 4px"></a>
-				<p style="margin-left: 62px">"{{ abstract.abstract|truncatewords:30 }}" {% with species.wikipedia_page as wpage %}{% if wpage %}- <a href="{{ wpage.0 }}" title="{{ wpage.1 }}">more</a>{% endif %}{% endwith %}</p>
+				<p style="margin-left: 62px">"{{ abstract.abstract|truncatewords:30 }}" {% with species.wikipedia_page as wpage %}{% if wpage %}- <a href="{{ wpage.0 }}" title="{{ wpage.1 }}">read&nbsp;more&hellip;</a>{% endif %}{% endwith %}</p>
 			{% endfor %}
 		{% endif %}
 	{% endwith %}
@@ -74,7 +71,7 @@
 		<ul class="spotter-list">
 			{% for spotter in spotters %}
 				<li>
-					<img src="{{ spotter.get_profile.face_medium }}" width="75" height="75" alt="" class="pull-left avatar">
+					<img src="{{ spotter.get_profile.face_small }}" width="30" height="30" alt="" class="pull-left avatar">
 					<p><a class="spotter-name" href="{{ spotter.get_profile.urls.absolute }}">{{ spotter }}</a></p>
 					{% comment %}
 						<p class="meta">({{ trip.species.count }} sighting{{ trip.species.count|pluralize }})</p>
