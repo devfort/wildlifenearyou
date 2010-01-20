@@ -55,7 +55,8 @@ def process_submission(request):
     
     # Record a win!
     context = utils.record_win(species_pk, winner, loser)
-    print "Species %s: Win for %s v.s. %s" % (species_pk, winner, loser)
+    if not request.user.is_anonymous():
+        utils.record_contribution_from(request.user.username)
     
     photos = Photo.objects.in_bulk([winner, loser])
     

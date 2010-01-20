@@ -2,7 +2,7 @@ from django.db import models
 from animals.models import Species
 from photos.models import Photo
 from redis_db import r
-import random, uuid
+import random, uuid, datetime
 
 SPECIES_SET = 'species-with-multiple-photos'
 SEEN_KEY = 'bestpics-photo-times-seen:%s'
@@ -91,6 +91,11 @@ def record_win(species, winner, loser):
         'loser_times_won': loser_times_won,
         'loser_score': loser_score * 100,
     }
+
+def record_contribution_from(username):
+    r.zincr('bestpic-contributors', username, 1)
+    date = datetime.date.today().strftime('%Y-%m-%d')
+    r.zincr('bestpic-contributors:%s' % date, username, 1)
 
 def top_10_for_species(species):
     species_key = BESTPICS_KEY % species.pk
