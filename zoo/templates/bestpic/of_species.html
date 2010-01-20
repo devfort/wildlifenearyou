@@ -1,0 +1,21 @@
+{% extends base %}
+
+{% block title %}Top 10 photos of {{ species }}{% endblock %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block content_title %}
+	<h1>Top 10 <a href="{{ species.get_absolute_url }}">{{ species.common_name }}</a> photos</h1>
+{% endblock %}
+
+{% block primary_content %}
+
+{% for photo in top_10 %}
+<div>
+	<p>{{ photo.thumb_75_img }}</p>
+	<p>Score: {{ photo.bestpic_score|floatformat:"2" }}% (from {{ photo.bestpic_matches }} matches)</p>
+</div>
+{% endfor %}
+
+{% endblock %}

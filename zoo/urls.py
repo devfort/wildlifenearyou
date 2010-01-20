@@ -238,6 +238,8 @@ urlpatterns = patterns('',
         name='help-identify-species'),
     url(r'^help/bestpic/$', 'zoo.bestpic.views.bestpic',
         name='bestpic'),
+    url(r'^help/bestpic/(\d+)/$', 'zoo.bestpic.views.bestpic_of_species',
+        name='bestpic-of-species'),
     
     url(r'^cleanup/places/$', 'zoo.cleanup.views.cleanup_places',
         name='cleanup-places'),

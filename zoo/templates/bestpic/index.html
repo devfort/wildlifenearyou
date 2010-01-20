@@ -36,8 +36,13 @@
 {% block secondary_content %}
 	
 	{% if last_species %}
-	For {{ last_species }}, you picked
-	{{ last_winner.thumb_75_img }}
+	<p>You just rated photos of {{ last_species }} - <a href="{{ last_species.pk }}/">see top 10</a></p>
+	Your pick:
+	<p><a href="{{ last_winner.get_absolute_url }}">{{ last_winner.thumb_75_img }}</a></p>
+	<p>Total score: {{ winner_score|floatformat:"2" }}% - {{ winner_times_won }} win{{ winner_times_won|pluralize }} out of {{ winner_times_seen }} match{{ winner_times_seen|pluralize:',es' }}</p>
+	<p><a href="{{ last_loser.get_absolute_url }}">{{ last_loser.thumb_75_img }}</a></p>
+	<p>Total score: {{ loser_score|floatformat:"2" }}% - {{ loser_times_won }} win{{ loser_times_won|pluralize }} out of {{ loser_times_seen }} match{{ loser_times_seen|pluralize:',es' }}</p>
+	
 	{% endif %}
 
 {% endblock %}
