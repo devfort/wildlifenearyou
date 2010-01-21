@@ -7,6 +7,9 @@ import os
 
 from django.contrib import admin
 admin.autodiscover()
+# Disable dependency check, since it's hard coded to look for the 'auth'
+# context processor and we've replaced that with our own.
+admin.site.check_dependencies = lambda *args: True
 
 from django.contrib import databrowse
 from django.contrib.auth.models import User
