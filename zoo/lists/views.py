@@ -18,7 +18,7 @@ def view_list(request, slug):
     top_spotters = User.objects.filter(
         created_sighting_set__species__list = l
     ).annotate(
-        num_spotted = Count('created_sighting_set__species')
+        num_spotted = Count('created_sighting_set__species', distinct = True)
     ).order_by('-num_spotted')[:5]
     species = l.species.all().order_by('common_name')
     if not request.user.is_anonymous():
