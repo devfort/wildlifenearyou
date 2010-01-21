@@ -1,0 +1,44 @@
+{% extends base %}
+
+{% block title %}{{ list }}{% endblock %}
+
+{% block extra_head %}
+{% endblock %}
+
+{% block content_title %}
+	<h1>{{ list }}</h1>
+{% endblock %}
+
+{% block primary_content %}
+
+<p class="intro">{% if list.description %}{{ list.description }}. {% endif %}{% if list.source_url %}[ <a href="{{ list.source_url }}">Source</a> ]{% endif %}
+</p>
+
+<ol class="animal-list">
+	{% for s in species %}
+		<li>
+			<div class="thumbnail">{% with s.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+			<p><a class="animal-name" href="{{ s.urls.absolute }}">{{ s.common_name }}</a> {% if s.seen_by_you %}<span class="meta">(seen by you)</span>{% endif %}</p>
+			<p><i class="scientific">{{ s.latin_name }}</i></p>
+		</li>
+	{% endfor %}
+</ol>
+
+{% endblock %}
+
+{% block secondary_content %}
+
+{% if top_spotters %}
+<h2>Top spotters for this list</h2>
+<ul class="spotter-list">
+	{% for spotter in top_spotters %}
+		<li>
+			<img src="{{ spotter.get_profile.face_small }}" width="30" height="30" alt="" class="pull-left avatar">
+			<p><a class="spotter-name" href="{{ spotter.get_profile.urls.absolute }}">{{ spotter }}</a></p>
+			<p class="meta">({{ spotter.num_spotted }} spotted)</p>
+		</li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

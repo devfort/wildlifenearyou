@@ -240,7 +240,14 @@ urlpatterns = patterns('',
         name='bestpic'),
     url(r'^help/bestpic/(\d+)/$', 'zoo.bestpic.views.bestpic_of_species',
         name='bestpic-of-species'),
-    
+
+    url(r'^lists/$', 'zoo.lists.views.index',
+        name='lists'),
+    url(r'^lists/(.*)/edit/$', 'zoo.lists.views.edit',
+        name='list-edit'),
+    url(r'^lists/(.*)/$', 'zoo.lists.views.view_list',
+        name='list'),
+
     url(r'^cleanup/places/$', 'zoo.cleanup.views.cleanup_places',
         name='cleanup-places'),
     
