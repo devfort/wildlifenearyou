@@ -16,11 +16,11 @@
 {% block primary_content %}
 
 	{% if nearest %}
-		<p class="intro">Your nearest <strong>{{ species.common_name }}</strong> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, <strong>{{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away</strong> from {{ location_description }} <span class="meta">(not where you are? <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">Set your location</a>)</span></p>
+		<p class="intro initial">Your nearest <strong>{{ species.common_name }}</strong> is at <a href="{{ nearest.get_absolute_url }}">{{ nearest }}</a>, <strong>{{ nearest.distance_miles|floatformat:0 }} mile{{ nearest.distance_miles|pluralize }} away</strong> from {{ location_description }} <span class="meta">(not where you are? <a href="/set-location/" title="Change your location, currently &quot;{{ location_description }}&quot;">Set your location</a>)</span></p>
 	{% else %}
 
 		{% if not location_description %}
-		<p class="intro">
+		<p class="intro initial">
 			{% if user.is_authenticated %}
 				<a href="/set-location/">Set your location</a>
 			{% else %}
@@ -28,7 +28,12 @@
 			{% endif %}
 		
 			 to find {{ species.article }} {{ species.common_name }} near you (or just <a href="/search/?q={{ species.common_name|iriencode }}">search for one</a>).</p>
+		
+		{% else %}
+		
+		<p class="intro initial">We would love to tell you where your nearest <strong>{{ species.common_name }}</strong> is, but this feature is temporarily unavailable, sorry.</p>
 		{% endif %}
+		
 	{% endif %}
 
 	{% if species.description %}

@@ -45,7 +45,7 @@ jQuery(function($) {
 
 {% block primary_content %}
 
-<h2>General information</h2>
+<h2 class="initial">General information</h2>
 <div class="compact">
 	<p class="address">{% if place.address %}Address: {{ place.address }},{% endif %}
 		<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
@@ -193,7 +193,7 @@ jQuery(function($) {
 {% block secondary_content %}
 
 {% if rating.on %}
-<h2>Average rating</h2>
+<h2 class="initial">Average rating</h2>
 <p class="rating" title="{{ rating.on|length }} out of 5 stars">
 {% for i in rating.on %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
