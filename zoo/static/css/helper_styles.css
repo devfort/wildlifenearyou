@@ -324,6 +324,16 @@ a.url:active,
 	background-repeat: no-repeat;
 }
 
+#home a.url:link,
+#home a.url:visited,
+#home a.url:hover,
+#home a.url:focus,
+#home a.url:active, 
+#home .url {
+	background: none;
+	padding-left: 0;
+}
+
 a.phone:link,
 a.phone:visited,
 a.phone:hover,
