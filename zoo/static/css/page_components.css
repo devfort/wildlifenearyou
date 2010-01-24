@@ -1506,3 +1506,30 @@ div.photo-listing {
 }
 
 /* @end */
+
+/* @group Dev status bar */
+
+.dev-status {
+	width: 100%;
+	text-align: center;
+	padding: 0.3em 0;
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+	color: white;
+}
+.dev-status p {
+	margin: 0;
+}
+.dev-status a {
+	color: white;
+}
+.dev-status.alpha {
+	background-color: red;
+}
+.dev-status.testing {
+	background-color: green;
+}
+.dev-status.localhost {
+	background-color: blue;
+}
+/* @end */

@@ -1,0 +1,123 @@
+/* @group Improve type */
+
+body {
+	font-family: Georgia, "Times New Roman, serif";
+	font-size: 12pt;
+	line-height: 20pt;
+}
+/* @end */
+
+/* @group Remove the page furnature */
+
+.header ul,
+.header form  {
+	display: none;
+}
+/* @end */
+
+/* @group remove the background colours */
+
+.header,
+body,
+.footer {
+	background: none;
+	border: none;
+}
+
+/* @end */
+
+/* @group Linearise content */
+
+.primary,
+.secondary,
+.column {
+	float: none;
+	width: 100%;
+	overflow: visible;
+}
+.wrapper,
+.main,
+.contents {
+	overflow: visible;
+	width: 100%;
+	max-width: auto;
+	padding: 0;
+}
+
+/* @end */
+
+/* @group Go wild on links */
+
+/*a:link:after,
+a:visited:after,
+a:hover:after,
+a:active:after {
+	content: " <" attr(href) "> ";
+	color: #8D7E95; 
+	font-style: italic;
+	font-weight: normal;
+	border: none;
+}
+a[href^="/"]:after {
+	content: " <http://www.example.com"attr(href)"> ";
+}
+a[href^="mailto"]:after {
+	content: "";
+}*/
+
+/* @end */
+
+/* @group Jazz up the headers */
+
+h1 {
+	border-bottom: 5px double black;
+	font-size: 3em;
+	line-height: 1;
+	text-align: center;
+	padding: 0 0 0.7em 0;
+	font-variant: small-caps;
+	font-weight: thinner;
+}
+h2 {
+	border-bottom: 1px solid #999999;
+	padding: 0 0 0.1em;
+	font-size: 1.3em;
+}
+h3 {
+	font-size: 1.1em;
+	margin: 1em 0 0.2em 0;
+	text-decoration: none;
+	color: #999999;
+}
+p {
+	margin: 0.5em 0 1em 0;
+}
+
+/* @end */
+
+/* @group Extra components */
+
+/* @end */
+
+
+/* @group Control classes */
+
+.noprint {
+	display:none;
+}
+.printonly {
+	display:block;
+}
+
+/* @end */
+
+/* @group URL of page */
+
+.print-footer {
+	display: block;
+	border-top: 1px solid black;
+	margin: 2em 0 0 0;
+	padding: 0.5em 0 0 0;
+}
+
+/* @end */
