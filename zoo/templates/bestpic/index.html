@@ -11,17 +11,17 @@
 	<form action="{{ request_path }}" method="post" class="bestpic">
 		<div class="photo1">
 			{% if photo1.photo %}
-				<input type="image" src="{% thumbnail photo1.photo 600x600 %}" name="winner" value="{{ photo1.pk}}">
+				<input type="image" src="{% thumbnail photo1.photo 500x500 %}" name="winner" value="{{ photo1.pk}}" style="margin-left: -{{ photo1.half_width_max_500 }}px; margin-top: -{{ photo1.half_height_max_500 }}px">
 			{% else %}
-				<input type="image" src="http://static.flickr.com/{{ photo1.flickr_server }}/{{ photo1.flickr_id }}_{{ photo1.flickr_secret }}.jpg" name="winner" value="{{ photo1.pk}}">
+				<input type="image" src="http://static.flickr.com/{{ photo1.flickr_server }}/{{ photo1.flickr_id }}_{{ photo1.flickr_secret }}.jpg" name="winner" value="{{ photo1.pk}}" style="margin-left: -{{ photo1.half_width_max_500 }}px; margin-top: -{{ photo1.half_height_max_500 }}px">
 			{% endif %}
 		</div>
 		<em>OR</em>
 		<div class="photo2">
 			{% if photo2.photo %}
-				<input type="image" src="{% thumbnail photo2.photo 600x600 %}" name="winner" value="{{ photo2.pk}}">
+				<input type="image" src="{% thumbnail photo2.photo 500x500 %}" name="winner" value="{{ photo2.pk}}" style="margin-left: -{{ photo2.half_width_max_500 }}px; margin-top: -{{ photo2.half_height_max_500 }}px">
 			{% else %}
-				<input type="image" src="http://static.flickr.com/{{ photo2.flickr_server }}/{{ photo2.flickr_id }}_{{ photo2.flickr_secret }}.jpg" name="winner" value="{{ photo2.pk}}">
+				<input type="image" src="http://static.flickr.com/{{ photo2.flickr_server }}/{{ photo2.flickr_id }}_{{ photo2.flickr_secret }}.jpg" name="winner" value="{{ photo2.pk}}" style="margin-left: -{{ photo2.half_width_max_500 }}px; margin-top: -{{ photo2.half_height_max_500 }}px">
 			{% endif %}
 		</div>
 		<div>

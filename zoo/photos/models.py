@@ -86,6 +86,12 @@ class Photo(models.Model):
     def __unicode__(self):
         return self.title or unicode(self.photo)
     
+    def half_width_max_500(self):
+        return int(self.width_max_500 / 2.0)
+    
+    def half_height_max_500(self):
+        return int(self.height_max_500 / 2.0)
+    
     def thumb_75_img(self, extra_class='', include_title=False):
         if extra_class:
             extra_class = 'class="%s" ' % extra_class

@@ -1498,16 +1498,11 @@ div.photo-listing {
 }
 .bestpic .photo1 input,
 .bestpic .photo2 input {
-	margin: 0 auto;
 	display: block;
 	color: black;
-
-	
-	/*position: absolute;
+	position: absolute;
 	left: 50%;
-	top: 50%;*/
+	top: 50%;
 }
 
 /* @end */
-
-
