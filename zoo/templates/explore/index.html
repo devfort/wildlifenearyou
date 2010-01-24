@@ -1,4 +1,4 @@
-{% extends base %}
+{% extends base %}{% load cache %}
 
 {% block title %}Explore{% endblock %}
 
@@ -21,7 +21,7 @@
 		<h2>Recently uploaded photos</h2>
 		
 	{% else %}
-		<h2 class="intial">Recently uploaded photos</h2>
+		<h2 class="initial">Recently uploaded photos</h2>
 	{% endif %}
 	
 	
@@ -30,6 +30,18 @@
 			<li>
 				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
 			</li>
+		{% endfor %}
+	</ul>
+
+	<h2>Recently added trips</h2>
+	<ul class="teaserlist">
+		{% for trip in recent_trips %}
+		<li>
+			<img src="{{ trip.created_by.get_profile.face_medium }}" width="75" height="75" alt="{{ trip.created_by }}" class="image avatar">
+			<h3><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span>
+			</h3>
+		<p><strong><a href="{% url accounts-profile trip.created_by %}">{{ trip.created_by }}</a></strong> visited <a href="{{ trip.place.get_absolute_url }}">{{ trip.place }}</a>{% if trip.species.length %} and saw {% for species in trip.species.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ species.get_absolute_url }}">{{ species.plural|lower }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% endif %}.{% endif %}</p>
+		</li>
 		{% endfor %}
 	</ul>
 

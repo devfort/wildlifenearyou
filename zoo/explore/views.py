@@ -1,11 +1,13 @@
 from zoo.shortcuts import render
 from zoo.photos.models import Photo
+from zoo.trips.models import Trip
 
 def index(request):
     context = {
         'photos': Photo.objects.filter(
             is_visible = True
-        ).select_related('created_by').order_by('-created_at')[:16]
+        ).select_related('created_by').order_by('-created_at')[:16],
+        'recent_trips': Trip.objects.order_by('-created_at')[:10],
     }
     if not request.user.is_anonymous():
         context['is_logged_in'] = True
