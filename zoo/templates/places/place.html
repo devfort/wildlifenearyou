@@ -47,18 +47,18 @@ jQuery(function($) {
 
 <h2 class="initial">General information</h2>
 <div class="compact">
-	<p class="address">{% if place.address %}Address: {{ place.address }},{% endif %}
+	<p class="address">{% if place.address %}<strong>Address:</strong> {{ place.address }},{% endif %}
 		<a href="{{ place.country.urls.absolute }}">{{ place.country }}</a>
 		<a href="{{ place.country.urls.absolute }}" id="countrylink"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
-		{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
+		{% if place.gridref %}<strong>Grid Reference:</strong> {{place.gridref}}{% endif %}
 	</p>
 
 	{% if place.phone %}
-	<p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
+	<p class="tel"><strong>Phone:</strong> <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
 	{% endif %}
 
 	{% if place.url %}
-	<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
+	<p class="url"><strong>Website:</strong> <a href="{{ place.url }}">{{ place.url }}</a></p>
 	{% endif %}
 </div>
 {% if place.description %}
@@ -151,6 +151,7 @@ jQuery(function($) {
 {% endwith %}
 
 <div id="locationmap" style="overflow: hidden; margin-top: 1em"><img src="http://maps.google.com/staticmap?center={{ place.latitude }},{{ place.longitude }}&amp;zoom=13&amp;size=540x256&amp;markers={{ place.latitude }},{{ place.longitude }},red&amp;key={{ GOOGLE_MAPS_API_KEY }}&amp;sensor=false"></div>
+<p><a href="http://maps.google.com/?ie=UTF8&amp;ll={{ place.latitude }},{{ place.longitude }}" class="address">view map</a></p>
 
 {% if place.most_recent_trips %}
 <h2>Recent trips here</h2>
@@ -194,6 +195,7 @@ jQuery(function($) {
 
 {% if rating.on %}
 <h2 class="initial">Average rating</h2>
+<p class="meta">Based on ratings of {{ rating.trips }} trip{{ rating.trips|pluralize }} by {{ rating.spotters }} spotter{{ rating.spotters|pluralize}}.</p>
 <p class="rating" title="{{ rating.on|length }} out of 5 stars">
 {% for i in rating.on %}
 <img src="/static/img/icons/starselect_single.gif" alt="">
@@ -202,7 +204,6 @@ jQuery(function($) {
 <img src="/static/img/icons/starselect_off.png" alt="">
 {% endfor %}
 </p>
-<p>Based on ratings of {{ rating.trips }} trip{{ rating.trips|pluralize }} by {{ rating.spotters }} spotter{{ rating.spotters|pluralize}}.</p>
 {% endif %}
 
 <p class="add">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>

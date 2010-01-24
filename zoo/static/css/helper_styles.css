@@ -294,6 +294,54 @@ a.edit:active,
 	background-repeat: no-repeat;
 }
 
+a.email:link,
+a.email:visited,
+a.email:hover,
+a.email:focus,
+a.email:active, 
+.email,
+a.address:link,
+a.address:visited,
+a.address:hover,
+a.address:focus,
+a.address:active, 
+.address  {
+	padding-left: 23px;
+	background-image: url(/static/img/icons/email.png);
+	background-position: left 0.15em;
+	background-repeat: no-repeat;
+}
+
+a.url:link,
+a.url:visited,
+a.url:hover,
+a.url:focus,
+a.url:active, 
+.url {
+	padding-left: 23px;
+	background-image: url(/static/img/icons/world.png);
+	background-position: left 0.08em;
+	background-repeat: no-repeat;
+}
+
+a.phone:link,
+a.phone:visited,
+a.phone:hover,
+a.phone:focus,
+a.phone:active, 
+.phone,
+a.tel:link,
+a.tel:visited,
+a.tel:hover,
+a.tel:focus,
+a.tel:active, 
+.tel {
+	padding-left: 23px;
+	background-image: url(/static/img/icons/telephone.png);
+	background-position: left 0.08em;
+	background-repeat: no-repeat;
+}
+
 a.remove:link,
 a.remove:visited,
 a.remove:hover,
@@ -302,7 +350,7 @@ a.remove:active,
 .remove {
 	padding-left: 20px;
 	background-image: url(/static/img/icons/remove.png);
-	background-position: left 0.15em;
+	background-position: left top;
 	background-repeat: no-repeat;
 }
 
@@ -374,7 +422,8 @@ p.tel {
 /* @end */
 
 .compact p {
-	margin: 0 0 0.2em 0 ;
+	padding-bottom:0.3em;
+	margin: 0;
 }
 
 .initial {

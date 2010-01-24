@@ -893,6 +893,14 @@ ul.best {
 	left: 0;
 }
 
+p.rating-meta {
+	margin: 0;
+}
+
+p.rating {
+	margin-top: 0;
+}
+
 /* @end */
 
 /* @group Ajax */
@@ -1351,6 +1359,7 @@ p.love-this:hover {
 
 /* @end */
 
+/* @group Photo listing */
 
 .photo-listing li {
 	margin: 0;
@@ -1380,3 +1389,5 @@ p.love-this:hover {
 .photo-listing p.meta {
 	color:  #9FA1A3;
 }
+
+/* @end */
