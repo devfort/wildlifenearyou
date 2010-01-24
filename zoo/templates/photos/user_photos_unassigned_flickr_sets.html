@@ -12,9 +12,10 @@
 {% endif %}
 
 <p>
-	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong> | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <a href="{% url user-photos-unassigned profile.user.username %}">unassigned photos</a> (<strong>by Flickr set</strong>) | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
 </p>
 
+<div>
 <h2>Flickr sets with unassigned photos</h2>
 {% if sets %}
 <p>These Flickr sets contain photos that have not yet been assigned to a trip.</p>
@@ -29,7 +30,7 @@
 {% endfor %}
 </ul>
 {% else %}
-<p class="notification">You do not have any unassigned photos that are associated with Flickr sets. Why not <a href="{% url flickr-sets %}">import a Flickr set</a>?</p>
+<p class="notification">There are no photos from Flickr sets that have not yet been assigned to a trip.{% ifequal profile.user user %} Why not <a href="{% url flickr-sets %}">import a Flickr set</a>?{% endifequal %}</p>
 {% endif %}
-	
+
 {% endblock %}

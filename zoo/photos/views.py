@@ -492,10 +492,8 @@ def user_photos_unassigned(request, username):
         )
     })
 
-@login_required
 def user_photos_unassigned_flickr_sets(request, username):
     user = get_object_or_404(User, username = username)
-    assert user == request.user
     # Need FlickrSets containing photos that have not yet been assigned a trip
     sets = FlickrSet.objects.filter(
         user = request.user,

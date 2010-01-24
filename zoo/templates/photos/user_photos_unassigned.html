@@ -12,7 +12,7 @@
 {% endif %}
 
 <p>
-	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong> | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
+	<a href="{% url user-photos profile.user.username %}">all photos</a> | <a href="{% url user-photos-by-trip profile.user.username %}">photos by trip</a> | <strong>unassigned photos</strong> (<a href="{% url user-photos-unassigned-flickr-sets profile.user.username %}">by Flickr set</a>) | <a href="{% url user-photos-nospecies profile.user.username %}">photos with no species</a> | <a href="{% url user-photos-favourites profile.user.username %}">favourite photos</a>{% ifequal profile.user user %} | <strong><a href="{% url flickr %}">import from Flickr</a></strong>{% endifequal %}
 </p>
 
 <div>
