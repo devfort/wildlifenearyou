@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     'dmigrations', # from zoo.ext
     'zoo.accounts',
     'zoo.animals',
+    'zoo.bestpic',
     'zoo.places',
     'zoo.changerequests',
     'zoo.homepage',

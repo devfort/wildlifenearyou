@@ -34,7 +34,13 @@ def random_photos_for_species(species, num=2):
             r.sadd(key, id)
             r.expire(key, 10 * 60)
     
-    return Photo.objects.filter(pk__in = random.sample(photo_ids, num))
+    photos = list(
+        Photo.objects.select_related('created_by').filter(
+            pk__in = random.sample(photo_ids, num)
+        )
+    )
+    random.shuffle(photos)
+    return photos
 
 def update_redis_set():
     r.delete(SPECIES_SET + '-temp')
