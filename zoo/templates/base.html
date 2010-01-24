@@ -37,7 +37,7 @@
 			</p>
 			<ul>
 				{% comment %} This has to all be on one line. {% endcomment %}
-				{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">{{ user.username }}</a></li><li><a href="{% url user-photos user %}">Photos</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?suppress-register=true&amp;next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
+				{% if user.is_authenticated %}<li><a href="{% url accounts-profile user %}">{{ user.username }}</a></li>{% ifequal user.username "Trisha" %}<li><a href="{% url explore %}">Explore</a></li>{% endifequal %}<li><a href="{% url user-photos user %}">Photos</a></li><li><a href="{% url accounts-logout %}">Logout</a></li>{% else %}<li><a href="{% url accounts-register %}">Register</a></li><li><a href="{% url accounts-login %}?suppress-register=true&amp;next={{ request.get_full_path|urlencode }}">Login</a></li>{% endif %}<li><a href="{% url feedback %}?from-page={{ request.get_full_path|urlencode }}" id="feedback-link">Feedback</a></li>
 			</ul>
 			{% block search_form %}
 			<form action="/search/" method="get" accept-charset="utf-8">
