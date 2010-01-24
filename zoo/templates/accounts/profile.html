@@ -25,7 +25,7 @@
 
 	
 	{% if profile.biography %}
-		<div class="intro">{{ profile.biography|linebreaks}}</div>
+		<div class="intro initial">{{ profile.biography|linebreaks}}</div>
 	{% else %}
 		{% ifequal profile.user user %}
 			<p class="intro">You don&rsquo;t seem to have filled in your biography yet, so why not <a href='{% url accounts-profile-edit profile.user %}'>do that now</a> and tell us a bit about yourself?</p>

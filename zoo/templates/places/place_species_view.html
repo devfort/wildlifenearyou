@@ -9,10 +9,11 @@
 {% block content_title %}
 <h1>{{ species.plural }} at {{ place.known_as }}</h1>
 
-<p>There may well be <a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a> elsewhere, and other things to spot at <a href='{{ place.urls.absolute }}'>{{ place.known_as }}</a>. Why not have a look?</p>
 {% endblock %}
 
 {% block primary_content %}
+
+<p class="intro">There may well be <a href="{{ species.urls.absolute }}">{{ species.plural|lower }}</a> elsewhere, and other things to spot at <a href="{{ place.urls.absolute }}">{{ place.known_as }}</a>. Why not have a look?</p>
 
 <h2>Comments</h2>
 {% with place_species as object %}
@@ -35,13 +36,13 @@
 
 {% block secondary_content %}
 
-{% with place_species.visible_photos.count as visible_photo_count %}
-	{% if visible_photo_count %}
+	{% with place_species.visible_photos.count as visible_photo_count %}
+		{% if visible_photo_count %}
 			<h2>Photos</h2>
 
-				<p>Of the <a href='{{ species.urls.absolute }}'>{{ species.plural|lower }}</a> at <a href='{{ place.urls.absolute }}'>{{ place.known_as }}</a>.</p>
+				<p>Of the <a href="{{ species.urls.absolute }}">{{ species.plural|lower }}</a> at <a href="{{ place.urls.absolute }}">{{ place.known_as }}</a>.</p>
 
-		{% ifequal visible_photo_count 1 %}{# Only one photo #}
+				{% ifequal visible_photo_count 1 %}{# Only one photo #}
 			<div class="gallery">
 			{% for photo in place_species.visible_photos.all %}
 				<a href="{% url photo photo.created_by.username,photo.id %}"><img src="{{ photo.thumb_240_url }}"></a>

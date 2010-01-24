@@ -2,22 +2,45 @@
 
 {% block title %}Recent events{% endblock %}
 
-{% block content %}
-<h1>Recent events</h1>
-<ol>
-	{% for event in events %}
-		<li>{{ event.created|date:"jS F Y H:i:s" }}: 
-		{% if event.url %}
-			<a href="{{ event.url }}">{{ event }}</a>
-		{% else %}
-			{{ event }}
-		{% endif %}
-		{% if event.user %} (by <a href="{{ event.user.get_profile.get_absolute_url }}">{{ event.user }}</a>)
-		{% endif %}
-		</li>
-	{% endfor %}
-</ol>
+{% block content_title %}
+	<h1>Recent events</h1>
+{% endblock %}
 
-<p><a href="/feeds/recent/">RSS feed for this page</a></p>
+{% block primary_content %}
+
+	<p class="initial"><a href="/feeds/recent/" class="rss">RSS feed for this page</a></p>
+
+	<ol class="activity">
+		{% for event in events %}
+			<li>
+				{% if event.user %}
+					<a href="{{ event.user.get_profile.get_absolute_url }}" class="pull-left"><img src="{{ event.user.get_profile.face_medium }}" alt="" class="avatar"></a>
+				{% else %}
+					<img src="/static/img/wny_logo.gif" width="75" alt="" class="wlny pull-left">
+				{% endif %}
+				
+				{% if event.url %}
+					<h3><a href="{{ event.url }}">{{ event }}</a></h3>
+				{% else %}
+					<h3>{{ event }}</h3>
+				{% endif %}
+				
+				{% if event.user %}
+					<p class="meta">{{ event.created|date:"jS F Y H:i:s" }} by <a href="{{ event.user.get_profile.get_absolute_url }}">{{ event.user }}</a></p>
+				{% else %}
+					<p class="meta">{{ event.created|date:"jS F Y H:i:s" }}</p>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ol>
+
+	<p><a href="/feeds/recent/" class="rss">RSS feed for this page</a></p>
+
+{% endblock %}
+
+
+{% block secondary_content %}
+
+<h2 class="initial">Recently active users</h2>
 
 {% endblock %}

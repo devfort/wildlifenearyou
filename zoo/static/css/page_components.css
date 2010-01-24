@@ -1391,3 +1391,48 @@ p.love-this:hover {
 }
 
 /* @end */
+
+
+.activity,
+.activity li {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	clear: both;
+	overflow: hidden;
+}
+.activity {
+	margin-top: 2em;
+}
+.activity li {
+	padding: 0 0 10px 70px;
+}
+
+.activity h3 {
+	font-family: Calibri,"Helvetica Neue",sans-serif;
+	margin: 0;
+}
+
+.activity .pull-left {
+	margin: -5px 5px 0 -70px;
+	width: 60px;
+}
+
+.activity .pull-left img {
+	width: 60px;
+}
+
+.activity .wlny {
+	margin: 0.3em 5px 0 -70px;
+	width: 50px;
+}
+
+.activity p {
+	margin: 0;
+}
+.activity p.meta {
+	color:  #9FA1A3;
+	margin-top: 0.7em;
+}
+
+

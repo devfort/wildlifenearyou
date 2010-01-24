@@ -354,6 +354,18 @@ a.remove:active,
 	background-repeat: no-repeat;
 }
 
+a.rss:link,
+a.rss:visited,
+a.rss:hover,
+a.rss:focus,
+a.rss:active, 
+.rss {
+	padding-left: 23px;
+	background-image: url(/static/img/icons/feed-icon-16x16.gif);
+	background-position: left 0.2em;
+	background-repeat: no-repeat;
+}
+
 a.action:link,
 a.action:visited,
 a.action:hover,
@@ -427,5 +439,9 @@ p.tel {
 }
 
 .initial {
+	margin-top: 0;
+}
+
+.initial p:first-child {
 	margin-top: 0;
 }
