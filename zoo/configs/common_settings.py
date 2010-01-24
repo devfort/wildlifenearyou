@@ -148,7 +148,7 @@ ACTIVITY_MODELS = (
     'animals.Species',
     'changerequests.ChangeRequestGroup',
     'favourites.FavouriteSpecies',
-    'feedback.Feedback',
+#    'feedback.Feedback',
     'photos.Photo',
     'places.Place',
     'trips.Trip',
