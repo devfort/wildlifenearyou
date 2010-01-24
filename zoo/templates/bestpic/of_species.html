@@ -6,16 +6,34 @@
 {% endblock %}
 
 {% block content_title %}
-	<h1>Top 10 <a href="{{ species.get_absolute_url }}">{{ species.common_name }}</a> photos</h1>
+	<h1>Best <a href="{{ species.get_absolute_url }}">{{ species.common_name }}</a> photos</h1>
 {% endblock %}
 
 {% block primary_content %}
 
-{% for photo in top_10 %}
-<div>
-	<p>{{ photo.thumb_75_img }}</p>
-	<p>Score: {{ photo.bestpic_score|floatformat:"2" }}% (from {{ photo.bestpic_matches }} matches)</p>
-</div>
-{% endfor %}
+	<p class="initial intro">These are the best {{ species.common_name }} photos chosen by WildLifeNearYou spotters with our <a href="{% url bestpic %}">very fancy photo chooser!</a></p>
 
+	<ul class="photo-listing">
+		{% for photo in top_10 %}
+			<li>
+				<a href="{{ photo.get_absolute_url }}" class="pull-left">{{ photo.thumb_75_img }}</a>
+	
+				{% if photo.title %}
+					<h3><a href="{{ photo.get_absolute_url }}">{{ photo.title }}</a></h3>
+				{% else %}
+					<h3><a href="{{ photo.get_absolute_url }}">Photo by {{ photo.created_by }}</a></h3>
+				{% endif %}
+	
+				<p>Taken by <a href="{% url accounts-profile photo.created_by.username %}">{{ photo.created_by }}</a> <img src="{{ photo.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
+	
+				<p><strong>Score:</strong> {{ photo.bestpic_score|floatformat:"2" }}% <span class="meta">&mdash; from {{ photo.bestpic_matches }} matches</span></p>
+			</li>
+		{% endfor %}
+	</ul>
+	
+{% endblock %}
+
+{% block secondary_content %}
+	<!-- <h2 class="initial">Top spotters</h2> -->
+	
 {% endblock %}
