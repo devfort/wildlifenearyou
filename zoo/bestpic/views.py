@@ -1,10 +1,11 @@
 from zoo.shortcuts import render
 from django.shortcuts import get_object_or_404
 import utils
-import time
+import time, datetime
 from django_openid import signed
 from zoo.photos.models import Photo
 from zoo.animals.models import Species
+from redis_db import r
 
 def bestpic(request):
     species = utils.random_species_with_multiple_photos()
@@ -58,9 +59,30 @@ def process_submission(request):
     if not request.user.is_anonymous():
         utils.record_contribution_from(request.user.username)
     
-    photos = Photo.objects.in_bulk([winner, loser])
+    photos = Photo.objects.select_related(
+        'created_by'
+    ).in_bulk([winner, loser])
     
     last_species = Species.objects.get(pk = species_pk)
+    
+    description = '''
+        %s: <a href="%s">%s</a>: <a href="%s"><img src="%s"></a> beat 
+        <a href="%s"><img src="%s"></a>
+        ''' % (
+            str(datetime.datetime.now()),
+            last_species.get_absolute_url(),
+            last_species.common_name,
+            photos[winner].get_absolute_url(),
+            photos[winner].thumb_75_url(),
+            photos[loser].get_absolute_url(),
+            photos[loser].thumb_75_url(),
+        )
+    if not request.user.is_anonymous():
+        description += ' (rated by <a href="%s">%s</a>)' % (
+            request.user.username, request.user.username
+        )
+    r.push('bestpic-activity', description, head=True)
+    r.ltrim('bestpic-activity', 0, 200)
     
     context.update({
         'last_species': last_species,
@@ -69,6 +91,12 @@ def process_submission(request):
         'show_link_to_best': utils.species_has_top_10(last_species),
     })
     return context
+
+def activity(request):
+    "Shows recent activity on this feature"
+    return render(request, 'bestpic/activity.html', {
+        'activity': r.lrange('bestpic-activity', 0, 200),
+    })
 
 def bestpic_of_species(request, slug):
     species = get_object_or_404(Species, slug = slug)

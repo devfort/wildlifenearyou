@@ -244,6 +244,8 @@ urlpatterns = patterns('',
         name='help-identify-species'),
     url(r'^best/$', 'zoo.bestpic.views.bestpic',
         name='bestpic'),
+    url(r'^best/activity/$', 'zoo.bestpic.views.activity',
+        name='bestpic-activity'),
     
     url(r'^lists/$', 'zoo.lists.views.index',
         name='lists'),
