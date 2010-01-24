@@ -50,7 +50,9 @@
 			
 		</div>
 		
-		<p class="intro">See the best <a href="{{ last_species.pk }}/">{{ last_species.common_name }} photos</a>!</p>
+		{% if show_link_to_best %}
+			<p class="intro">See the best <a href="{% url bestpic-of-species last_species.slug %}">{{ last_species.common_name }} photos</a>!</p>
+		{% endif %}
 		
 	{% endif %}
 

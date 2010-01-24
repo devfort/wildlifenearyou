@@ -7,11 +7,12 @@
 
 {% block content_title %}
 	<h1>Best <a href="{{ species.get_absolute_url }}">{{ species.common_name }}</a> photos</h1>
+
+	<p class="initial intro">These are the best {{ species.common_name }} photos, as chosen by our <a href="{% url bestpic %}">fancy photo chooser!</a></p>
+
 {% endblock %}
 
 {% block primary_content %}
-
-	<p class="initial intro">These are the best {{ species.common_name }} photos chosen by WildLifeNearYou spotters with our <a href="{% url bestpic %}">very fancy photo chooser!</a></p>
 
 	<ul class="photo-listing">
 		{% for photo in top_10 %}

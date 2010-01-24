@@ -184,7 +184,7 @@ RESERVED_USERNAMES = set(
     aquarium aquariums park parks safari arboretum arboretums autocomplete 
     popular invite debug account stats trusts twitter dopplr 404 500
     gimmicks gimmick cleanup bestpic bestpics photography lists list category
-    categories tag pick vote votes picks game games avatar avatars
+    categories tag pick vote votes picks game games avatar avatars best
     """.strip().split()
 )
 

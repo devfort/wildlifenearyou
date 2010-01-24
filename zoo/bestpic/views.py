@@ -60,15 +60,18 @@ def process_submission(request):
     
     photos = Photo.objects.in_bulk([winner, loser])
     
+    last_species = Species.objects.get(pk = species_pk)
+    
     context.update({
-        'last_species': Species.objects.get(pk = species_pk),
+        'last_species': last_species,
         'last_winner': photos[winner],
-        'last_loser': photos[loser]
+        'last_loser': photos[loser],
+        'show_link_to_best': utils.species_has_top_10(last_species),
     })
     return context
 
-def bestpic_of_species(request, pk):
-    species = get_object_or_404(Species, pk = pk)
+def bestpic_of_species(request, slug):
+    species = get_object_or_404(Species, slug = slug)
     return render(request, 'bestpic/of_species.html', {
         'species': species,
         'top_10': utils.top_10_for_species(species),

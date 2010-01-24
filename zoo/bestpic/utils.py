@@ -117,3 +117,7 @@ def top_10_for_species(species):
         photo.bestpic_matches = matches
         results.append(photo)
     return results
+
+def species_has_top_10(species):
+    species_key = BESTPICS_KEY % species.pk
+    return r.zcard(species_key)
