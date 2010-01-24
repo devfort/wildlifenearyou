@@ -238,6 +238,9 @@ urlpatterns = patterns('',
     url(r'^api/(\w{3,})/trip/(\d+)/$', 'zoo.api.views.trip',
         name='api-trip'),
     
+    url(r'^explore/$', 'zoo.explore.views.index',
+        name='explore'),
+    
     url(r'^help/$', 'zoo.crowdsource.views.index',
         name='help'),
     url(r'^help/identify-species/$', 'zoo.crowdsource.views.identify_species',

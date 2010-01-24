@@ -1,0 +1,20 @@
+{% extends base %}
+
+{% block title %}Explore{% endblock %}
+
+{% block content %}
+<div>
+	<h2>Explore WildlifeNearYou</h2>
+	
+	<p>Here are the most recent photos on the site</p>
+	
+	<ul class="photo-display">
+		{% for photo in photos %}
+			<li>
+				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+</div>
+
+{% endblock %}

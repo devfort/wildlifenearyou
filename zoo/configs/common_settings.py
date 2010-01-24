@@ -186,6 +186,7 @@ RESERVED_USERNAMES = set(
     popular invite debug account stats trusts twitter dopplr 404 500
     gimmicks gimmick cleanup bestpic bestpics photography lists list category
     categories tag pick vote votes picks game games avatar avatars best
+    explore better find pick choose chose winner winners loser losers lose win
     """.strip().split()
 )
 
