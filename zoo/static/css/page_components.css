@@ -1412,8 +1412,7 @@ div.photo-listing {
 	clear: both;
 	overflow: hidden;
 }
-.activity {
-}
+
 .activity li {
 	padding: 0 0 20px 70px;
 }
@@ -1434,7 +1433,7 @@ div.photo-listing {
 
 .activity .wlny {
 	margin: 0.3em 5px 0 -70px;
-	width: 50px;
+	width: 60px;
 }
 
 .activity p {
@@ -1561,6 +1560,8 @@ div.photo-listing {
 }
 /* @end */
 
+/* @group Awards */
+
 .awards {
 	margin-top: 0;
 }
@@ -1590,6 +1591,8 @@ div.photo-listing {
 .awards:hover em {
 	color: #534741;
 }
+
+/* @end */
 
 .awards p.award-gold {
 	background-image: url(/static/img/icons/award_gold.png);
