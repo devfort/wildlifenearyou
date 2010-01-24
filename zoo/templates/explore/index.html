@@ -2,12 +2,14 @@
 
 {% block title %}Explore{% endblock %}
 
-{% block content %}
-<div>
-	<h2>Explore WildlifeNearYou</h2>
+{% block content_title %}
+	<h1>Explore WildlifeNearYou</h1>
+{% endblock %}
+
+{% block primary_content %}
 	
 	{% if is_logged_in %}
-		<p>Here are the most recent photos of your favourite animals:</p>
+		<h2 class="initial">Recent photos of your favourite animals</h2>
 	
 		<ul class="photo-display">
 			{% for photo in photos_of_your_favourites %}
@@ -16,9 +18,12 @@
 				</li>
 			{% endfor %}
 		</ul>	
+		<h2>Recently uploaded photos</h2>
+		
+	{% else %}
+		<h2 class="intial">Recently uploaded photos</h2>
 	{% endif %}
 	
-	<p>Here are the most recent photos on the site</p>
 	
 	<ul class="photo-display">
 		{% for photo in photos %}
@@ -27,6 +32,40 @@
 			</li>
 		{% endfor %}
 	</ul>
-</div>
 
+{% endblock %}
+
+{% block secondary_content %}
+	<h2 class="initial">Things to do</h2>
+	<div class="intro">
+		<p>Play with <a href="{% url bestpic %}">picking best photos</a></p>
+		<p>Help <a href="{% url help-identify-species %}">add species to unassigned photos</a></p>
+		<p class="add"><a href="/add-trip/">Add a trip</a></p>
+		<p class="add"><a href="/flickr/">Import photos from flickr</a></p>
+		<p>Check out the <a href="{% url popular %}">popular or unusual animals</a></p>
+		<p>Look at <a href="/recent/">recent activity</a> on the site</p>
+		<p>See all the <a href="/gb/">places in the UK</a></p>
+		<p>View <a href="/animals">all the animals</a></p>
+	</div>
+	
+	{% if is_logged_in %}
+	<h2>Your favourite animals</h2>
+		<ol class="animal-list">
+			{% for favourite in user.favourite_species.all %}
+				<li>
+					<div class="thumbnail">{% with favourite.species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+					<p><a class="animal-name" href="{{ favourite.species.urls.absolute }}">{{ favourite.species.common_name }}</a></p>
+					<p><i class="scientific">{{ favourite.species.latin_name }}</i></p>
+					{% ifequal user user %}
+					<form method="post" action="/favourites/species/remove/{{ favourite.species.pk }}/">
+						<p>
+							<input type="hidden" name="next" value="{{ request.path }}">
+							<input class="link submit" type="submit" value="Remove">
+						</p>
+					</form>
+					{% endifequal %}
+				</li>
+			{% endfor %}
+		</ol>	
+	{% endif %}
 {% endblock %}

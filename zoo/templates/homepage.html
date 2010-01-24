@@ -211,9 +211,9 @@
 				{% endif %}
 				<h4>Popular animals</h4>
 				{% if featured.species %}
-				<p>Why not check out some other <a href='{% url popular %}'>popular or rare animals</a>?</p>
+				<p>Why not check out some other <a href="{% url popular %}">popular or unusual animals</a>?</p>
 				{% else %}
-				<p>Why not check out some <a href='{% url popular %}'>popular or rare animals</a>?</p>
+				<p>Why not check out some <a href="{% url popular %}">popular or unusual animals</a>?</p>
 				{% endif %}
 			</div>
 			<div class="column">
