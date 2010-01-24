@@ -1460,7 +1460,6 @@ div.photo-listing {
 	background-color: black;
 	position: relative;
 	text-align: center;
-	color: #F9FCFE;
 	-webkit-box-shadow: 7px 7px 12px #9FA1A3;
 	-moz-box-shadow: 7px 7px 12px #9FA1A3;
 	box-shadow: 7px 7px 12px #9FA1A3;
@@ -1498,7 +1497,7 @@ div.photo-listing {
 .bestpic .photo2 input {
 	margin: 0 auto;
 	display: block;
-	color: #F9FCFE;
+	color: black;
 
 	
 	/*position: absolute;
