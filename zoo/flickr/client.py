@@ -104,10 +104,17 @@ class BetterFlickrAPI(flickrapi.FlickrAPI):
             return data # Probably an XMLNode, used by the auth methods
         return parse_json(data)
 
+class FlickrCache(object):
+    def get(self, key):
+        return cache.get(key)
+        
+    def set(self, key, value):
+        return cache.set(key, value, timeout = 2 * 60)
+
 def Flickr(**kwargs):
     client = BetterFlickrAPI(
         settings.FLICKR_API_KEY, settings.FLICKR_API_SECRET, format='json',
         cache=True, **kwargs
     )
-    client.cache = cache
+    client.cache = FlickrCache()
     return client
