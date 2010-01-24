@@ -44,7 +44,7 @@
 		
 		<div class="photo-listing">
 			<a href="{{ last_loser.get_absolute_url }}" class="pull-left">{{ last_loser.thumb_75_img }}</a>
-			<h3><a href="{{ last_loser.get_absolute_url }}">Looser</a></h3>
+			<h3><a href="{{ last_loser.get_absolute_url }}">Loser</a></h3>
 			<p>Taken by <a href="{% url accounts-profile last_loser.created_by.username %}">{{ last_loser.created_by }}</a> <img src="{{ last_loser.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
 			<p><strong>Score:</strong> {{ loser_score|floatformat:"2" }}% <span class="meta">&mdash; {{ loser_times_won }} win{{ loser_times_won|pluralize }} out of {{ loser_times_seen }} match{{ loser_times_seen|pluralize:',es' }}</span></p>
 			
