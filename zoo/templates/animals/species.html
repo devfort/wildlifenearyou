@@ -44,7 +44,7 @@
 		{% if rspb %}
 			{% for page in rspb %}
 				<a href="http://www.rspb.org.uk/"><img src="/static/img/rspb_50.png" style="float: left; padding-top: 4px"></a>
-				<p style="margin-left: 62px">"{{ page.teaser }}" - <a href="{{ page.url }}">read&nbsp;more&hellip;</a></p>
+				<p style="margin-left: 62px">"{{ page.teaser }}" &ndash;&nbsp;<a href="{{ page.url }}">read&nbsp;more&hellip;</a></p>
 			
 			{% endfor %}
 		{% endif %}
@@ -55,7 +55,7 @@
 		{% if wp %}
 			{% for abstract in wp %}
 				<a href="http://en.wikipedia.org/"><img src="/static/img/wikipedia_50.png" style="float: left; padding-top: 4px"></a>
-				<p style="margin-left: 62px">"{{ abstract.abstract|truncatewords:30 }}" {% with species.wikipedia_page as wpage %}{% if wpage %}- <a href="{{ wpage.0 }}" title="{{ wpage.1 }}">read&nbsp;more&hellip;</a>{% endif %}{% endwith %}</p>
+				<p style="margin-left: 62px">"{{ abstract.abstract|truncatewords:30 }}" {% with species.wikipedia_page as wpage %}{% if wpage %} &ndash;&nbsp;<a href="{{ wpage.0 }}" title="{{ wpage.1 }}">read&nbsp;more&hellip;</a>{% endif %}{% endwith %}</p>
 			{% endfor %}
 		{% endif %}
 	{% endwith %}
