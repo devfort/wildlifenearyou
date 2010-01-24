@@ -1577,6 +1577,8 @@ div.photo-listing {
 	font-size: 1.5714em;
 	font-family: Georgia,"Times New Roman","Century Schoolbook L",Times,serif;
 	line-height: 1;
+	margin-bottom: 0.2em;
+	display: block;
 }
 
 .awards em {

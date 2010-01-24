@@ -100,7 +100,7 @@
 		<div class="awards">
 			{% for award in awards %}
 				<p class="award-{{ award.icon }}"><span>Voted <a href="{% url bestpic-of-species award.species.slug %}">{{ award.description }} {{ award.species.common_name }} photo</a>!</span>
-					<em>vote for the <a href="{% url bestpic %}">best wildlife photos</a></em></p>
+					<em>help pick the <a href="{% url bestpic %}">best photos</a></em></p>
 			{% endfor %}
 		</div>
 	{% endif %}
