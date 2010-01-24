@@ -1582,8 +1582,11 @@ div.photo-listing {
 .awards em {
 	font-size: 0.8em;
 	display: block;
-	color: #534741;
 	font-style: normal;
+	color: #8C786E;
+}
+.awards:hover em {
+	color: #534741;
 }
 
 .awards p.award-gold {
