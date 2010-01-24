@@ -12,6 +12,7 @@ def staging():
     "Select staging.wildlifenearyou.com"
     env.hosts = ['wildlifenearyou.com']
     env.user_at_host = 'simon@wildlifenearyou.com'
+    env.user = 'simon'
     env.db_name = 'zoo_alpha'
     env.deploy_dir = '/srv/django-apps/staging.wildlifenearyou.com'
 

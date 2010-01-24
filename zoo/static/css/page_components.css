@@ -374,6 +374,11 @@ div.spotter-list {
 	padding-left:91px;
 	padding-top:13px;
 }
+.comments .posted-by.blank {
+	background: none;
+	padding-left: 40px;
+	padding-top: 0;
+}
 .comments .posted-by {
 	line-height:1em;
 	padding-bottom:0;
@@ -390,6 +395,10 @@ div.spotter-list {
 	position: absolute;
 	left:52px;
 	top:8px;
+}
+.comments .posted-by.blank img {
+	left: 0;
+	top: 0;
 }
 .comments .posted-by span.meta {
 	font-size: 0.8em;
@@ -608,14 +617,6 @@ div.spotter-list {
 }
 .tripbook .no-description .posted-by {
 	background-image: none;
-}
-
-.tripbook .trip-by a {
-	font-weight: bold;
-}
-
-p.trip-by {
-	margin-bottom: 2em;
 }
 
 /* @end */

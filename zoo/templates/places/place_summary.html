@@ -9,19 +9,21 @@
 <h2>General information</h2>
 
 <!-- <p class="sub-head">{{ place.legal_name }}</p> -->
-<p class="address">{% if place.address %}{{ place.address }},{% endif %}
-	<a href="{% url country place.country.country_code %}">{{ place.country }}</a>
-	<a href="{{ place.country.get_absolute_url }}" class="flag"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
-	{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
-</p>
+<div class="compact">
+	<p>{% if place.address %}{{ place.address }},{% endif %}
+		<a href="{% url country place.country.country_code %}">{{ place.country }}</a>
+		<a href="{{ place.country.get_absolute_url }}" class="flag"><img width="16" height="11" src="/static/img/flags/{{ place.country.country_code }}.gif" alt="Flag of {{ place.country }}"></a>
+		{% if place.gridref %}Grid Reference: {{place.gridref}}{% endif %}
+	</p>
 
-{% if place.phone %}
-<p class="tel">Phone: <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
-{% endif %}
+	{% if place.phone %}
+	<p><strong>Phone:</strong> <a href="tel://{{ place.phone|urlencode }}">{{ place.phone }}</a></p>
+	{% endif %}
 
-{% if place.url %}
-<p class="url"><a href="{{ place.url }}">Visit their official website</a></p>
-{% endif %}
+	{% if place.url %}
+	<p><strong>Website:</strong> <a href="{{ place.url }}">{{ place.url }}</a></p>
+	{% endif %}
+</div>
 
 {% if place.description %}
 <p class="intro">{{ place.description }}</p>
@@ -29,7 +31,7 @@
 
 <div id="locationmap" style="overflow: hidden"><img src="http://maps.google.com/staticmap?center={{ place.latitude }},{{ place.longitude }}&amp;zoom=13&amp;size=512x256&amp;markers={{ place.latitude }},{{ place.longitude }},red&amp;key={{ GOOGLE_MAPS_API_KEY }}&amp;sensor=false"></div>
 
-<p>Go back to our <a href="{{ place.urls.absolute }}">main page on {{ place.known_as }}</a>.</p>
+<p class="noprint">Go back to our <a href="{{ place.urls.absolute }}">main page on {{ place.known_as }}</a>.</p>
 
 {% if opening_times %}
 <h2>Opening times <span class="meta">(times are subject to change)</span></h2>
@@ -63,7 +65,7 @@
 {% endif %}
 
 {% if place.price_notes %}
-	<h2 class="">Prices</h2>
+	<h2>Prices</h2>
 	<p>{{ place.price_notes }}</p>
 {% endif %}
 

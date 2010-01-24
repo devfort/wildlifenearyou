@@ -17,11 +17,12 @@
 
 <div class="comments tripbook">
 	{% if trip.description %}
-	<blockquote>{{ trip.description|linebreaks }}</blockquote>
-	<p class="posted-by">
+		<blockquote>{{ trip.description|linebreaks }}</blockquote>
+		<p class="posted-by">
 	{% else %}
-	<p class="trip-by">
+		<p class="posted-by blank">
 	{% endif %}
+	
 	<img src="{{ trip.created_by.get_profile.face_small }}" alt="" height="30" width="30" class="avatar">
 	<a href="{{ trip.created_by.get_profile.urls.absolute }}">{{ trip.created_by.username }}</a> went to <a href="{{ trip.place.urls.absolute }}">{{ trip.place.known_as }}</a><span class="meta">{{ trip.formatted_date }}</span></p>
 </div>
@@ -83,18 +84,22 @@
 {% endblock %}
 
 {% block secondary_content %}
-	<h2>Trip rating</h2>
-	{% if rating.on %}
-	<p class="rating" title="{{ rating.on|length }} out of 5 stars">
-	{% for i in rating.on %}
-	<img src="/static/img/icons/starselect_single.gif" alt="">
-	{% endfor %}
-	{% for i in rating.off %}
-	<img src="/static/img/icons/starselect_off.png" alt="">
-	{% endfor %}
-	</p>
-	{% else %}
-	<p>You haven&rsquo;t rated this trip yet; don&rsquo;t worry though, you can do this by editing the trip.</p>
+		{% if rating.on %}
+			<h2 class="initial">Trip rating</h2>
+			<p class="rating" title="{{ rating.on|length }} out of 5 stars">
+				{% for i in rating.on %}
+					<img src="/static/img/icons/starselect_single.gif" alt="">
+				{% endfor %}
+				
+				{% for i in rating.off %}
+					<img src="/static/img/icons/starselect_off.png" alt="">
+				{% endfor %}
+			</p>
+		{% else %}
+		
+		{% if belongs_to_user %}
+			<p>You haven&rsquo;t rated this trip yet; don&rsquo;t worry though, you can do this by editing the trip.</p>
+		{% endif %}
 	{% endif %}
 
 		<!-- TODO: Users should see their OWN photos even if they have not 
@@ -104,7 +109,7 @@
 		-->
 		{% with visible_photos.count as visible_photo_count %}
 			{% if visible_photo_count %}
-						<h2>Photos</h2>
+					<h2{% if not rating.on %}class="initial"{% endif %}>Photos</h2>
 				{% ifequal visible_photo_count 1 %}{# Only one photo #}
 					<div class="gallery">
 					{% for photo in visible_photos.all %}
@@ -145,7 +150,7 @@
 		<p class="highlight"><a class="edit" href="{{ trip.urls.edit }}">Edit this trip</a> <a class="remove" href="delete/">Delete this trip</a></p>
 		{% endif %}
 
-<h2>Comments</h2>
+<h2 {% if not visible_photos.count and not rating.on and not belongs_to_user %}class="initial"{% endif %}>Comments</h2>
 {% with trip as object %}
 	{% include "comments/_comments.html" %}
 {% endwith %}

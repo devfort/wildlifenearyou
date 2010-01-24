@@ -206,7 +206,7 @@ jQuery(function($) {
 </p>
 {% endif %}
 
-<p class="add">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
+<p class="add {% if not rating.on %}inital{% endif %}">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
 
 <p class="suggest-changes">
 	Have we got our facts right? 
