@@ -2,47 +2,56 @@
 
 {% block title %}Which wildlife photo is better?{% endblock %}
 
-{% block extra_head %}
-{% endblock %}
+{% block extra_body %}class="fixed"{% endblock %}
 
-{% block content_title %}
+{% block content %}
 	<h1>Which <a href="{{ species.get_absolute_url }}">{{ species.common_name }}</a> photo is better?</h1>
 	{% load thumbnail %}
 
-	<form action="{{ request_path }}" method="post">
+	<form action="{{ request_path }}" method="post" class="bestpic">
+		<div class="photo1">
+			{% if photo1.photo %}
+				<input type="image" src="{% thumbnail photo1.photo 600x600 %}" name="winner" value="{{ photo1.pk}}">
+			{% else %}
+				<input type="image" src="http://static.flickr.com/{{ photo1.flickr_server }}/{{ photo1.flickr_id }}_{{ photo1.flickr_secret }}.jpg" name="winner" value="{{ photo1.pk}}">
+			{% endif %}
+		</div>
+		<em>OR</em>
+		<div class="photo2">
+			{% if photo2.photo %}
+				<input type="image" src="{% thumbnail photo2.photo 600x600 %}" name="winner" value="{{ photo2.pk}}">
+			{% else %}
+				<input type="image" src="http://static.flickr.com/{{ photo2.flickr_server }}/{{ photo2.flickr_id }}_{{ photo2.flickr_secret }}.jpg" name="winner" value="{{ photo2.pk}}">
+			{% endif %}
+		</div>
 		<div>
-		{% if photo1.photo %}
-			<input type="image" src="{% thumbnail photo1.photo 600x600 %}" name="winner" value="{{ photo1.pk}}" style="width:400px;height:400px;border:1px solid red">
-		{% else %}
-			<input type="image" src="http://static.flickr.com/{{ photo1.flickr_server }}/{{ photo1.flickr_id }}_{{ photo1.flickr_secret }}.jpg" name="winner" value="{{ photo1.pk}}" style="width:400px;height:400px;border:1px solid red">
-		{% endif %}
-	
-		OR
-	
-		{% if photo2.photo %}
-			<input type="image" src="{% thumbnail photo2.photo 600x600 %}" name="winner" value="{{ photo2.pk}}" style="width:400px;height:400px;border:1px solid red">
-		{% else %}
-			<input type="image" src="http://static.flickr.com/{{ photo2.flickr_server }}/{{ photo2.flickr_id }}_{{ photo2.flickr_secret }}.jpg" name="winner" value="{{ photo2.pk}}" style="width:400px;height:400px;border:1px solid red">
-		{% endif %}
 			<input type="hidden" name="options" value="{{ options }}">
 		</div>
 	</form>
-{% endblock %}
 
-{% block primary_content %}
-
-{% endblock %}
-
-{% block secondary_content %}
 	
 	{% if last_species %}
-	<p>You just rated photos of {{ last_species }} - <a href="{{ last_species.pk }}/">see top 10</a></p>
-	Your pick:
-	<p><a href="{{ last_winner.get_absolute_url }}">{{ last_winner.thumb_75_img }}</a></p>
-	<p>Total score: {{ winner_score|floatformat:"2" }}% - {{ winner_times_won }} win{{ winner_times_won|pluralize }} out of {{ winner_times_seen }} match{{ winner_times_seen|pluralize:',es' }}</p>
-	<p><a href="{{ last_loser.get_absolute_url }}">{{ last_loser.thumb_75_img }}</a></p>
-	<p>Total score: {{ loser_score|floatformat:"2" }}% - {{ loser_times_won }} win{{ loser_times_won|pluralize }} out of {{ loser_times_seen }} match{{ loser_times_seen|pluralize:',es' }}</p>
-	
+		<h2>You just rated <a href="{{ last_species.get_absolute_url }}">{{ last_species.common_name }}</a> photos</h2>
+		
+		<div class="photo-listing">
+			<a href="{{ last_winner.get_absolute_url }}" class="pull-left">{{ last_winner.thumb_75_img }}</a>
+			<h3><a href="{{ last_winner.get_absolute_url }}">Winner</a></h3>
+			<p>Taken by <a href="{% url accounts-profile last_winner.created_by.username %}">{{ last_winner.created_by }}</a> <img src="{{ last_winner.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
+			
+			<p><strong>Score:</strong> {{ winner_score|floatformat:"2" }}% <span class="meta">&mdash; {{ winner_times_won }} win{{ winner_times_won|pluralize }} out of {{ winner_times_seen }} match{{ winner_times_seen|pluralize:',es' }}</span></p>
+			
+		</div>
+		
+		<div class="photo-listing">
+			<a href="{{ last_loser.get_absolute_url }}" class="pull-left">{{ last_loser.thumb_75_img }}</a>
+			<h3><a href="{{ last_loser.get_absolute_url }}">Looser</a></h3>
+			<p>Taken by <a href="{% url accounts-profile last_loser.created_by.username %}">{{ last_loser.created_by }}</a> <img src="{{ last_loser.created_by.get_profile.face_tiny }}" alt="" class="avatar"></p>
+			<p><strong>Score:</strong> {{ loser_score|floatformat:"2" }}% <span class="meta">&mdash; {{ loser_times_won }} win{{ loser_times_won|pluralize }} out of {{ loser_times_seen }} match{{ loser_times_seen|pluralize:',es' }}</span></p>
+			
+		</div>
+		
+		<p class="intro">See the best <a href="{{ last_species.pk }}/">{{ last_species.common_name }} photos</a>!</p>
+		
 	{% endif %}
 
 {% endblock %}

@@ -1361,7 +1361,8 @@ p.love-this:hover {
 
 /* @group Photo listing */
 
-.photo-listing li {
+.photo-listing li,
+div.photo-listing {
 	margin: 0;
 	background: none;
 	clear:  both;
@@ -1386,12 +1387,19 @@ p.love-this:hover {
 	margin: 0.3em 0 0 0;
 }
 
-.photo-listing p.meta {
+.photo-listing .meta {
 	color:  #9FA1A3;
+}
+
+.photo-listing .avatar {
+	margin-left: 0.1em;
+	position: relative;
+	top: 4px;
 }
 
 /* @end */
 
+/* @group Activity */
 
 .activity,
 .activity li {
@@ -1433,5 +1441,71 @@ p.love-this:hover {
 	color:  #9FA1A3;
 	margin-top: 0.7em;
 }
+
+/* @end */
+
+/* @group Best pic */
+
+.bestpic {
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+	padding-bottom: 15px;
+}
+.bestpic .photo1,
+.bestpic .photo2 {
+	width: 400px;
+	height: 400px;
+	overflow: hidden;
+	background-color: black;
+	position: relative;
+	text-align: center;
+	color: #F9FCFE;
+	-webkit-box-shadow: 7px 7px 12px #9FA1A3;
+	-moz-box-shadow: 7px 7px 12px #9FA1A3;
+	box-shadow: 7px 7px 12px #9FA1A3;
+	border: 1px solid black;
+}
+
+.bestpic .photo1 {
+	float: left;
+}
+.bestpic .photo2 {
+	float: right;
+	margin-right: 15px;
+}
+.bestpic em {
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	top: 40%;
+	margin-left: -2em;
+	background: #AFD580;
+	padding: 0.3em 1em 0.4em 1em;
+	text-transform: uppercase;
+	font-style: normal;
+	font-weight: bold;
+	color: black;
+	-webkit-border-radius:0.9em;
+	-moz-border-radius:0.9em;
+	border-radius:0.9em;
+	-webkit-box-shadow: 2px 2px 6px #AFD580;
+	-moz-box-shadow: 2px 2px 6px #AFD580;
+	box-shadow: 2px 2px 6px #AFD580;
+	text-shadow: 1px 1px 2px white;
+}
+.bestpic .photo1 input,
+.bestpic .photo2 input {
+	margin: 0 auto;
+	display: block;
+	color: #F9FCFE;
+
+	
+	/*position: absolute;
+	left: 50%;
+	top: 50%;*/
+}
+
+/* @end */
 
 
