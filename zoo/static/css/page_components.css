@@ -1348,6 +1348,8 @@ p.love-this:hover {
 }
 .num-loves {
 	font-size: 0.8em;
+	overflow: hidden;
+	width: 100%;
 }
 .num-loves strong span {
 	float: left;
@@ -1558,3 +1560,40 @@ div.photo-listing {
 	background-color: blue;
 }
 /* @end */
+
+.awards {
+	margin-top: 0;
+}
+
+.awards p {
+	padding-left: 40px;
+	background-position: left 0.15em;
+	background-repeat: no-repeat;
+	padding-bottom: 20px;
+	margin: 0;
+}
+
+.awards span {
+	font-size: 1.5714em;
+	font-family: Georgia,"Times New Roman","Century Schoolbook L",Times,serif;
+	line-height: 1;
+}
+
+.awards em {
+	font-size: 0.8em;
+	display: block;
+	color: #534741;
+	font-style: normal;
+}
+
+.awards p.award-gold {
+	background-image: url(/static/img/icons/award_gold.png);
+}
+
+.awards p.award-silver {
+	background-image: url(/static/img/icons/award_silver.png);
+}
+
+.awards p.award-bronze {
+	background-image: url(/static/img/icons/award_bronze.png);
+}
