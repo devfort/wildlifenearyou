@@ -12,7 +12,7 @@ BESTPICS_KEY = 'bestpics-species:%s'
 MIN_VIEWING_REQUIREMENT = 3 # Must be rated three times to show up in scores
 
 def random_species_with_multiple_photos():
-    return Species.objects.get(slug = 'otter')
+    #return Species.objects.get(slug = 'otter')
     while True:
         pk = r.srandmember(SPECIES_SET)
         if pk is None:
