@@ -109,7 +109,7 @@
 		-->
 		{% with visible_photos.count as visible_photo_count %}
 			{% if visible_photo_count %}
-					<h2{% if not rating.on %}class="initial"{% endif %}>Photos</h2>
+					<h2{% if not rating.on %} class="initial"{% endif %}>Photos</h2>
 				{% ifequal visible_photo_count 1 %}{# Only one photo #}
 					<div class="gallery">
 					{% for photo in visible_photos.all %}
