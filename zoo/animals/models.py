@@ -114,7 +114,10 @@ class Species(AbstractSpecies):
         if photo == 'no-photo':
             return None
         return photo
-
+    
+    def top_3_photo_ids(self):
+        return r.zrange('bestpics-species:%s' % self.pk, 0, 2, desc=True)
+    
     def random_photo(self):
         vp = self.visible_photos()
         if vp.count():

@@ -87,6 +87,13 @@
 		</p>
 	</div>
 
+	{% if awards %}
+		{% for award in awards %}
+		<p class="award-{{ award.icon }}"><img src="/static/img/icons/medal_{{ award.icon }}.png"> Voted the <a href="{% url bestpic-of-species award.species.slug %}">{{ award.description }} {{ award.species.common_name }} photo</a> on the site!</p>
+		{% endfor %}
+	{% endif %}
+
+
 	{% with photo as object %}
 		{% include "comments/_comments.html" %}
 	{% endwith %}
@@ -122,35 +129,33 @@
 	{% endif %}
 	
 	
-	{% with photo.sightings.all as sightings %}
-		{% if sightings %}
-			{% if photo.trip and not photo.has_no_species %}
-				<h2>Species in this photo</h2>
-				<ul class="animal-list">
-					{% for sighting in sightings %}
-						<li>
-						{% if sighting.species %}
-							{% with sighting.species as species %}
-								<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
-								<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
-								<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
-							{% endwith %}
-						
-						{% else %}
-							<div class="thumbnail"></div>
-							<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
-						{% endif %}
+	{% if sightings %}
+		{% if photo.trip and not photo.has_no_species %}
+			<h2>Species in this photo</h2>
+			<ul class="animal-list">
+				{% for sighting in sightings %}
+					<li>
+					{% if sighting.species %}
+						{% with sighting.species as species %}
+							<div class="thumbnail">{% with species.photo as photo %}{% if photo %}{{ photo.thumb_75 }}{% endif %}{% endwith %}</div>
+							<p><a class="animal-name" href="{{ species.urls.absolute }}">{{ species.common_name }}</a></p>
+							<p><i class="scientific">{{ species.latin_name }}</i>{% ifequal photo.created_by request.user %} <a class="remove" href="remove-species/{{ sighting.pk }}/">Remove</a>{% endifequal %}</p>
+						{% endwith %}
 					
-						{% if sighting.note %}
-							<blockquote>{{ sighting.note|linebreaks }}</blockquote>
-						{% endif %}
-					
-						</li>
-					{% endfor %}
-				</ul>
-			{% endif %}
+					{% else %}
+						<div class="thumbnail"></div>
+						<p><span class="animal-name">{{ sighting.species_inexact }}</span></p>
+					{% endif %}
+				
+					{% if sighting.note %}
+						<blockquote>{{ sighting.note|linebreaks }}</blockquote>
+					{% endif %}
+				
+					</li>
+				{% endfor %}
+			</ul>
 		{% endif %}
-	{% endwith %}
+	{% endif %}
 	
 	{% ifequal photo.created_by request.user %}
 	

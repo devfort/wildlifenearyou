@@ -417,12 +417,31 @@ def photo(request, username, photo_id):
             sightings__place = photo.trip.place
         ).values_list('freebase_id', flat = True).distinct())
     
+    # What species are in this photo? Use them to calculate awards
+    awards = []
+    for species in Species.objects.filter(sightings__photos=photo).distinct():
+        top_3 = species.top_3_photo_ids()[:3]
+        for i, id in enumerate(top_3):
+            if id == photo.pk:
+                description, icon = {
+                    0: ('best', 'gold'),
+                    1: ('2nd best', 'silver'),
+                    2: ('3rd best', 'bronze'),
+                }.get(i)
+                awards.append({
+                    'description': description,
+                    'icon': icon,
+                    'species': species,
+                })
+    
     return render(request, 'photos/photo.html', {
         'photo': photo,
         'favourited': photo.is_favourited_by(request.user),
         'seen_at_this_place': simplejson.dumps(seen_at_this_place),
         'seen_on_trip': simplejson.dumps(seen_on_trip),
         'current_user_is_not_page_owner': request.user != photo.created_by,
+        'sightings': photo.sightings.all(),
+        'awards': awards,
     })
 
 def photo_fans(request, username, photo_id):
