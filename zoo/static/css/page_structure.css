@@ -121,7 +121,7 @@
 /* @group Footer */
 
 .footer {
-	border-top: solid 1em #ffffff;
+	border-top: solid 1em #F9FCFE;
 	background-color: #c6ddab;
 	background-image: url(/static/img/bg/footer_bg.jpg);
 	background-repeat: repeat-x;
