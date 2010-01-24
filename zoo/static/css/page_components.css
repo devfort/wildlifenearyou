@@ -1454,16 +1454,17 @@ div.photo-listing {
 }
 .bestpic .photo1,
 .bestpic .photo2 {
-	width: 400px;
-	height: 400px;
+	width: 332px;
+	height: 332px;
 	overflow: hidden;
 	background-color: black;
 	position: relative;
 	text-align: center;
-	-webkit-box-shadow: 7px 7px 12px #9FA1A3;
-	-moz-box-shadow: 7px 7px 12px #9FA1A3;
-	box-shadow: 7px 7px 12px #9FA1A3;
+	-webkit-box-shadow: 7px 7px 12px rgba(60, 60, 61, 0.6);
+	-moz-box-shadow: 7px 7px 12px rgba(60, 60, 61, 0.6);
+	box-shadow: 7px 7px 12px rgba(60, 60, 61, 0.6);
 	border: 1px solid black;
+	z-index: 2;
 }
 
 .bestpic .photo1 {
@@ -1488,10 +1489,11 @@ div.photo-listing {
 	-webkit-border-radius:0.9em;
 	-moz-border-radius:0.9em;
 	border-radius:0.9em;
-	-webkit-box-shadow: 2px 2px 6px #AFD580;
-	-moz-box-shadow: 2px 2px 6px #AFD580;
-	box-shadow: 2px 2px 6px #AFD580;
+	-webkit-box-shadow: 2px 2px 6px rgba(60, 60, 61, 0.9);
+	-moz-box-shadow: 2px 2px 6px rgba(60, 60, 61, 0.9);
+	box-shadow: 2px 2px 6px rgba(60, 60, 61, 0.9);
 	text-shadow: 1px 1px 2px white;
+	z-index: 5;
 }
 .bestpic .photo1 input,
 .bestpic .photo2 input {

@@ -4,13 +4,12 @@
 	max-width: 100%;
 	margin: 0 auto;
 }
+body.fixed .wrapper {
+	min-width: 726px;
+}
 .contents {
 	padding: 0 2em;
 	overflow: hidden;
-}
-body.fixed .wrapper {
-	width: 1000px;
-	max-width: 1000px;
 }
 
 /* @group Header */

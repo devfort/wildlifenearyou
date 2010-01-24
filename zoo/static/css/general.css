@@ -75,6 +75,10 @@ body {
 	-moz-opacity: 0.999999; /* Fix boldness glitch in Firefox */
 }
 
+body.fixed {
+	min-width: 747px;
+}
+
 
 body div {
 	text-align: left;
