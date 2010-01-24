@@ -36,6 +36,10 @@ class Photo(models.Model):
     flickr_secret = models.CharField(max_length=32, blank=True)
     flickr_server = models.CharField(max_length=16, blank=True)
     
+    # Sizes (for the 500 max sized regular display image)
+    width_max_500 = models.IntegerField(null = True, blank = True)
+    height_max_500 = models.IntegerField(null = True, blank = True)
+    
     has_no_species = models.NullBooleanField(null = True, default = False)
     
     # Moderation flags
