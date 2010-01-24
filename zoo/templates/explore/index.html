@@ -6,6 +6,18 @@
 <div>
 	<h2>Explore WildlifeNearYou</h2>
 	
+	{% if is_logged_in %}
+		<p>Here are the most recent photos of your favourite animals:</p>
+	
+		<ul class="photo-display">
+			{% for photo in photos_of_your_favourites %}
+				<li>
+					<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+				</li>
+			{% endfor %}
+		</ul>	
+	{% endif %}
+	
 	<p>Here are the most recent photos on the site</p>
 	
 	<ul class="photo-display">
