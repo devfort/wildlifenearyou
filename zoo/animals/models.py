@@ -5,6 +5,7 @@ from zoo.common.models import AuditedModel
 from zoo.places.models import Place
 
 from django.core.cache import cache
+from redis_db import r
 
 import urllib, re
 from django.utils import simplejson
@@ -94,12 +95,20 @@ class Species(AbstractSpecies):
     def photo(self):
         photo = cache.get('photo-of-species:%s' % self.pk)
         if photo is None:
-            try:
-                photo = self.visible_photos().annotate(
-                    num_faves = Count('favourited')
-                ).select_related('created_by').order_by('-num_faves')[0]
-            except IndexError:
-                photo = 'no-photo'
+            best = r.zrange('bestpics-species:%s' % self.pk, 0, 0, desc=True)
+            if best:
+                from zoo.photos.models import Photo
+                try:
+                    photo = Photo.objects.get(pk = best[0])
+                except Photo.DoesNotExist:
+                    photo = 'no-photo'
+            else:
+                try:
+                    photo = self.visible_photos().annotate(
+                        num_faves = Count('favourited')
+                    ).select_related('created_by').order_by('-num_faves')[0]
+                except IndexError:
+                    photo = 'no-photo'
             cache.set('photo-of-species:%s' % self.pk, photo, 60 * 60 * 5)
         
         if photo == 'no-photo':
