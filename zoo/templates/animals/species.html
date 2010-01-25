@@ -39,7 +39,7 @@
 	{% if species.description %}
 		<p class="intro">{{ species.description }}</p>
 	{% endif %}
-
+	
 	{% with species.rspb_pages.all as rspb %}
 		{% if rspb %}
 			{% for page in rspb %}
@@ -59,7 +59,13 @@
 			{% endfor %}
 		{% endif %}
 	{% endwith %}
-
+	
+	{% with species.bbc_wildlifefinder_url as bbc_url %}
+	{% if bbc_url %}
+	<p><strong>BBC Wildlife Finder</strong>: <a href="{{ bbc_url }}">{{ species.common_name }}</a></p>
+	{% endif %}
+	{% endwith %}
+	
 	{% if species.seen_at %}
 		<h2>See them here</h2>
 		<ul class="place-list">

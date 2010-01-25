@@ -155,6 +155,15 @@ class Species(AbstractSpecies):
         else:
             return None, None
     
+    def bbc_wildlifefinder_url(self):
+        ids = list(self.external_identifiers.filter(
+            namespace = '/user/pak21/bbcnathist/bbc_id'
+        ).order_by('order')[:1])
+        if ids:
+            return 'http://www.bbc.co.uk/nature/species/%s/' % ids[0].key
+        else:
+            return None
+    
     def update_external_identifiers(self):
         url = "http://ids.freebaseapps.com/get_ids?id=%s" % self.freebase_id
         json = simplejson.load(urllib.urlopen(url))
