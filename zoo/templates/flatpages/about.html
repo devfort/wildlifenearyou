@@ -40,13 +40,17 @@ talented good friends:</p>
 
 <h2>Technical colophon</h2>
 
-<p>Our species list comes from <a href="http://www.freebase.com/">Freebase</a>. Maps and geocoding are powered by the <a href="http://code.google.com/apis/maps/">Google Maps API</a>. Country flags and icons are by <a href="http://famfamfam.com/lab/icons/">Mark James</a>.</p>
+<p>Our species list comes from <a href="http://www.freebase.com/">Freebase</a>. Maps and geocoding are powered by the <a href="http://code.google.com/apis/maps/">Google Maps API</a>. Icons and country flags are by <a href="http://famfamfam.com/lab/icons/">Mark James</a>, and larger icons are provided by <a href="http://www.fatcow.com/free-icons/">FatCow Hosting</a>.</p>
+
+<p>Our <a href="http://en.wikipedia.org/">Wikipedia</a> extracts were imported using <a href="http://dbpedia.org/">DBPedia</a>, and RSPB Bird Guide extracts come from the <a href="http://www.rspb.org.uk/">RSPB</a>.</p>
 
 <p>Photos are imported from <a href="http://www.flickr.com">Flickr</a> using the <a href="http://flickrapi.sf.net/">FlickrAPI</a> Python library.</p>
 
 <p>Search is powered by <a href="http://xapian.org/">Xapian</a>, using a client-server system written by Richard Boulton (one of the WildlifeNearYou team members) that was the precursor to <a href='http://code.google.com/p/flaxcode/wiki/FlaxSearchServiceIndex'>the Flax Search Service</a>. Our <a href="http://openid.net/">OpenID</a> implementation uses the <a href="http://openidenabled.com/python-openid/">python-openid</a> and <a href="http://github.com/simonw/django-openid">django-openid</a> libraries.</p>
 
-<p>Deployment uses <a href="http://code.google.com/p/modwsgi/">mod_wsgi</a> running on <a href="http://httpd.apache.org/">Apache 2</a> behind an <a href="http://nginx.net/">nginx</a> proxy. The site is hosted on a <a href="http://www.linode.com/">Linode.com</a> virtual machine, and is deployed using the wonderful combination of <a href="http://pip.openplans.org/">pip</a>, <a href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>, <a href="http://samba.anu.edu.au/rsync/">rsync</a> and <a href="http://fabfile.org/">Fabric</a>.</p>
+<p>Our <a href="/best/">Best Photo</a> voting feature is powered by <a href="http://code.google.com/p/redis/">Redis</a>.</p>
+
+<p>Deployment uses <a href="http://code.google.com/p/modwsgi/">mod_wsgi</a> running on <a href="http://httpd.apache.org/">Apache 2</a> behind an <a href="http://nginx.net/">nginx</a> proxy. Our database is <a href="http://www.mysql.com/">MySQL</a>, and database migrations are managed by <a href="http://code.google.com/p/dmigrations/">dmigrations</a>. The site is hosted on a <a href="http://www.linode.com/">Linode virtual machine</a> and is deployed using the wonderful combination of <a href="http://pip.openplans.org/">pip</a>, <a href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>, <a href="http://samba.anu.edu.au/rsync/">rsync</a> and <a href="http://fabfile.org/">Fabric</a>.</p>
 
 <p>WildlifeNearYou is written in <a href="http://www.python.org/">Python</a> using the <a href="http://www.djangoproject.com/">Django Web Framework</a>.
 
