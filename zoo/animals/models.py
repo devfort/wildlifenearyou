@@ -160,7 +160,7 @@ class Species(AbstractSpecies):
             namespace = '/user/pak21/bbcnathist/bbc_id'
         ).order_by('order')[:1])
         if ids:
-            return 'http://www.bbc.co.uk/nature/species/%s/' % ids[0].key
+            return 'http://www.bbc.co.uk/nature/species/%s' % ids[0].key
         else:
             return None
     
