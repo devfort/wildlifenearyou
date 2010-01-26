@@ -20,7 +20,7 @@ PREFIXES = {
 URL = 'http://www.wildlifenearyou.com/'
 
 def index(request, prefix, code):
-    model = PREFIXES.get(prefix, None)
+    model = PREFIXES.get(prefix.lower(), None)
     if not model:
         raise Http404
     try:
