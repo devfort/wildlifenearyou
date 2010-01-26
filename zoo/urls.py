@@ -243,7 +243,10 @@ urlpatterns = patterns('',
     
     url(r'^shorturl/(\w)(\w+)/?$', 'zoo.shorturl.views.index',
         name='shorturl'),
-
+    url(r'^shorturl/?$', 'django.views.generic.simple.redirect_to', {
+        'url': 'http://www.wildlifenearyou.com/',
+    }),
+    
     url(r'^help/$', 'zoo.crowdsource.views.index',
         name='help'),
     url(r'^help/identify-species/$', 'zoo.crowdsource.views.identify_species',
