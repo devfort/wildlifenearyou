@@ -241,6 +241,9 @@ urlpatterns = patterns('',
     url(r'^explore/$', 'zoo.explore.views.index',
         name='explore'),
     
+    url(r'^shorturl/(\w)(\w+)/?$', 'zoo.shorturl.views.index',
+        name='shorturl'),
+
     url(r'^help/$', 'zoo.crowdsource.views.index',
         name='help'),
     url(r'^help/identify-species/$', 'zoo.crowdsource.views.identify_species',
