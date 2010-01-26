@@ -9,6 +9,7 @@ from zoo.trips.models import Trip
 from zoo.utils import attrproperty
 from zoo.places.models import Place
 from zoo.animals.models import Species
+from zoo.shorturl.utils import converter
 
 import datetime
 
@@ -144,6 +145,9 @@ class Photo(models.Model):
             return self.photo.url
         else:
             return 'http://www.flickr.com/photo.gne?id=%s' % self.flickr_id
+    
+    def short_url(self):
+        return 'http://wlny.eu/i%s' % converter.from_int(self.pk)
     
     def detailed_title(self):
         species = list(

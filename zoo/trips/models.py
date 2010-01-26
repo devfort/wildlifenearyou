@@ -10,6 +10,7 @@ from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
 from zoo.animals.models import Species
 from zoo.places.models import Place
+from zoo.shorturl.utils import converter
 
 class Trip(AuditedModel):
     start = models.DateField(null=True, blank=True)
@@ -43,7 +44,10 @@ class Trip(AuditedModel):
     
     def get_absolute_url(self):
         return self.urls.absolute
-
+    
+    def short_url(self):
+        return 'http://wlny.eu/t%s' % converter.from_int(self.pk)
+    
     @attrproperty
     @models.permalink
     def urls(self, name):

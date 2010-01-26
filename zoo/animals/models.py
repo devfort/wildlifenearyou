@@ -3,6 +3,7 @@ from django.db.models import Count
 from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
 from zoo.places.models import Place
+from zoo.shorturl.utils import converter
 
 from django.core.cache import cache
 from redis_db import r
@@ -178,6 +179,9 @@ class Species(AbstractSpecies):
                 }
             )
         return json['ids']
+    
+    def short_url(self):
+        return 'http://wlny.eu/s%s' % converter.from_int(self.pk)
     
     class Meta:
         verbose_name_plural = 'species'

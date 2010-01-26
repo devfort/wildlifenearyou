@@ -6,7 +6,7 @@ from animals.models import Species
 from photos.models import Photo
 from django.contrib.auth.models import User
 
-from utils import Base32Converter
+from utils import converter
 
 import urlparse
 
@@ -18,8 +18,6 @@ PREFIXES = {
     'u': User,
 }
 URL = 'http://www.wildlifenearyou.com/'
-
-converter = Base32Converter()
 
 def index(request, prefix, code):
     model = PREFIXES.get(prefix, None)

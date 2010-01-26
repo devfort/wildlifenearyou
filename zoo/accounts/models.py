@@ -21,6 +21,7 @@ from zoo.common.models import AuditedModel
 from zoo.favourites.models import FavouriteSpecies
 from zoo.faces.models import SelectedFacePart
 from zoo.photos.models import Photo, SuggestedSpecies
+from zoo.shorturl.utils import converter
 
 HASH_ORIGIN_DATE = datetime.date(2000, 1, 1)
 
@@ -55,7 +56,10 @@ class Profile(models.Model):
     # The other two are lat and lon
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-
+    
+    def short_url(self):
+        return 'http://wlny.eu/u%s' % converter.from_int(self.pk)
+    
     class Searchable:
         fields = [
             { # Searching for people by name.

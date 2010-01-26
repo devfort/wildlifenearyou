@@ -8,6 +8,7 @@ from django.core.cache import cache
 
 from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
+from zoo.shorturl.utils import converter
 
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -199,7 +200,10 @@ class Place(AuditedModel):
 
     def get_absolute_url(self):
         return self.urls.absolute
-
+    
+    def short_url(self):
+        return 'http://wlny.eu/p%s' % converter.from_int(self.pk)
+    
     @attrproperty
     @models.permalink
     def urls(self, name):

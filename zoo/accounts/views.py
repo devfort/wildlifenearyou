@@ -179,6 +179,12 @@ def profile(request, username):
         'num_suggestions': num_suggestions
     })
 
+def users_redirect(request, username):
+    profile = get_object_or_404(
+        Profile.objects.select_related('user'), user__username = username
+    )
+    return Redirect(profile.get_absolute_url())
+
 @login_required
 def profile_edit(request, username):
     user = get_object_or_404(User, username = username)

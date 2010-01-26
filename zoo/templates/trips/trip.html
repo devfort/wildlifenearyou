@@ -5,6 +5,8 @@
 {% block title %}{{ trip.title }}{% endblock %}
 
 {% block extra_head %}
+<link rev="canonical" type="text/html" href="{{ trip.short_url }}">
+<link rel="alternate short" type="text/html" href="{{ trip.short_url }}">
 <script type="text/javascript" src="/static/js/star-select-replace.js"></script>
 <script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}

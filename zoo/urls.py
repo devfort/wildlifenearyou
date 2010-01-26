@@ -246,6 +246,7 @@ urlpatterns = patterns('',
     url(r'^shorturl/?$', 'django.views.generic.simple.redirect_to', {
         'url': 'http://www.wildlifenearyou.com/',
     }),
+    url(r'^users/(.*)/$', 'zoo.accounts.views.users_redirect'),
     
     url(r'^help/$', 'zoo.crowdsource.views.index',
         name='help'),

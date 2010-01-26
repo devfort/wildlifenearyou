@@ -187,7 +187,7 @@ RESERVED_USERNAMES = set(
     gimmicks gimmick cleanup bestpic bestpics photography lists list category
     categories tag pick vote votes picks game games avatar avatars best
     explore better find pick choose chose winner winners loser losers lose win
-    shorturl short shorturls
+    shorturl short shorturls user users
     """.strip().split()
 )
 

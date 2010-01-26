@@ -19,3 +19,5 @@ class Base32Converter(BaseConverter):
         for key, value in self.replacements.items():
             s = s.replace(key, value)
         return super(Base32Converter, self).to_int(s)
+
+converter = Base32Converter()

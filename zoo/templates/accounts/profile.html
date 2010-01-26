@@ -6,7 +6,9 @@
 {% block title %}{{ profile.user }}{% endblock %}
 
 {% block extra_head %}
-	<script type="text/javascript" src="/static/js/gallery.js"></script>
+<link rev="canonical" type="text/html" href="{{ profile.short_url }}">
+<link rel="alternate short" type="text/html" href="{{ profile.short_url }}">
+<script type="text/javascript" src="/static/js/gallery.js"></script>
 {% endblock %}
 
 
