@@ -60,7 +60,7 @@ jQuery(function($) {
 	{% endif %}
 
 	{% if place.url %}
-	<p class="url"><strong>Website:</strong> <a href="{{ place.url }}">{{ place.url }}</a></p>
+	<p class="url"><strong>Website:</strong> {{ place.url|urlizetrunc:"40" }}</p>
 	{% endif %}
 </div>
 {% if place.description %}
