@@ -250,6 +250,15 @@ jQuery(function($) {
 	{% endif %}
 {% endwith %}
 
+{% if places_nearby %}
+	<h2>Nearby places</h2>
+	<ul>
+		{% for d in places_nearby %}
+			<li><a href="{{ d.place.get_absolute_url }}">{{ d.place }}</a> - {{ d.distance.miles|floatformat:"0" }} miles</li>
+		{% endfor %}
+	</ul>
+{% endif %}
+
 {% with place.extras.all as extras %}
 	<h2>Print these out</h2>
 	<ul>
@@ -270,5 +279,7 @@ jQuery(function($) {
 {% with place as object %}
 	{% include "comments/_comments_reversed.html" %}
 {% endwith %}
+
+<p class="meta"><strong>Short URL</strong> for this page: <a href="{{ place.short_url }}">{{ place.short_url }}</a></small></p>
 
 {% endblock %}

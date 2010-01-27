@@ -162,5 +162,7 @@
 	{% with species as object %}
 		{% include "comments/_comments_reversed.html" %}
 	{% endwith %}
+	
+	<p class="meta"><strong>Short URL</strong> for this page: <a href="{{ species.short_url }}">{{ species.short_url }}</a></small></p>
 
 {% endblock %}

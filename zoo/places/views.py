@@ -125,6 +125,9 @@ def place(request, country_code, slug):
         'been_here': Trip.objects.filter(
             place = place, created_by = request.user
         ).count(),
+        'places_nearby': place.nearby.select_related(
+            'place', 'place__country'
+        )[:3],
     })
 
 def place_summary(request, country_code, slug):

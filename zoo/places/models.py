@@ -10,6 +10,8 @@ from zoo.utils import attrproperty
 from zoo.common.models import AuditedModel
 from zoo.shorturl.utils import converter
 
+import geopy.distance
+
 class Country(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     country_code = models.CharField(max_length=2, null=False, blank=False, unique=True)
@@ -354,6 +356,21 @@ class Place(AuditedModel):
             created_sighting_set__place = self
         ).distinct().count()
 
+class DistanceBetween(models.Model):
+    origin = models.ForeignKey(Place, related_name = 'nearby')
+    place = models.ForeignKey(Place, related_name = 'nearby_rev')
+    distance_km = models.FloatField(db_index = True)
+    
+    def distance(self):
+        return geopy.distance.Distance(kilometers = self.distance_km)
+    
+    class Meta:
+        ordering = ('distance_km',)
+    
+    def __unicode__(self):
+        return u'%s is %skm away from %s' % (
+            self.place, self.distance_km, self.origin
+        )
 
 class Facility(models.Model):
     icon = models.ImageField(upload_to='facility_icons')
