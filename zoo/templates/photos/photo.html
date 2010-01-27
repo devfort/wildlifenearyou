@@ -279,6 +279,6 @@
 		<p class="highlight"><a class="edit" href="{% url photo-edit photo.created_by.username photo.id %}">Edit photo</a> <a class="remove" href="delete/">Delete photo</a></p>
 	{% endifequal %}
 	
-	<p class="meta"><strong>Short URL</strong> for this photo: <a href="{{ photo.short_url }}">{{ photo.short_url }}</a></small></p>
+	<p class="url"><strong>Short URL:</strong> <a href="{{ photo.short_url }}">{{ photo.short_url }}</a></p>
 
 {% endblock %}
