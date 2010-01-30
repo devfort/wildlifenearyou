@@ -18,7 +18,7 @@ def index(request):
             num_photos__gt = 0
         ).count(),
         'num_users_with_trips': User.objects.annotate(
-            num_trips = Count('trips')
+            num_trips = Count('created_trip_set')
         ).filter(
             num_trips__gt = 0
         ).count(),
