@@ -248,6 +248,8 @@ urlpatterns = patterns('',
     }),
     url(r'^users/(.*)/$', 'zoo.accounts.views.users_redirect'),
     
+    url(r'^stats/$', 'zoo.stats.views.index'),
+    
     url(r'^help/$', 'zoo.crowdsource.views.index',
         name='help'),
     url(r'^help/identify-species/$', 'zoo.crowdsource.views.identify_species',

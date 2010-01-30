@@ -1,0 +1,50 @@
+{% extends base %}
+
+{% block title %}Stats{% endblock %}
+
+{% block content %}
+
+<table>
+    <tr>
+        <th>Users</th><td>{{ num_users }}</td>
+    </tr>
+    <tr>
+        <th>Users with photos</th><td>{{ num_users_with_photos }}</td>
+    </tr>
+    <tr>
+        <th>Photos</th><td>{{ num_photos }}</td>
+    </tr>
+    <tr>
+        <th>Trips</th><td>{{ num_trips }}</td>
+    </tr>
+    <tr>
+        <th>Sightings</th><td>{{ num_sightings }}</td>
+    </tr>
+    <tr>
+        <th>Species</th><td>{{ num_species }}</td>
+    </tr>
+    <tr>
+        <th>Places</th><td>{{ num_places }}</td>
+    </tr>
+</table>
+
+{% if new_users_last_48_hours %}
+<h2>New users in past 48 hours</h2>
+<ul>
+{% for user in new_users_last_48_hours %}
+    <li><a href="{{ user.get_absolute_url }}">{{ user }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+
+{% if new_trips_last_48_hours %}
+<h2>New trips in past 48 hours</h2>
+<ul>
+{% for trip in new_trips_last_48_hours %}
+    <li><a href="{{ trip.get_absolute_url }}">{{ trip }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
