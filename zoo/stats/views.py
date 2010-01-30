@@ -17,6 +17,11 @@ def index(request):
         ).filter(
             num_photos__gt = 0
         ).count(),
+        'num_users_with_trips': User.objects.annotate(
+            num_trips = Count('trips')
+        ).filter(
+            num_trips__gt = 0
+        ).count(),
         'num_trips': Trip.objects.count(),
         'num_species': Species.objects.count(),
         'num_photos': Photo.objects.count(),
