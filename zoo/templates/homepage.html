@@ -272,9 +272,9 @@
 					{% for trip in recent_trips %}
 					<li>
 						<img src="{{ trip.created_by.get_profile.face_medium }}" width="75" height="75" alt="{{ trip.created_by }}" class="image avatar">
-						<h3><a href="{{ trip.urls.absolute }}">{{ trip.title_no_date }}</a><span class="meta">{{ trip.formatted_date }}</span>
+						<h3><strong><a href="{% url accounts-profile trip.created_by %}">{{ trip.created_by }}</a></strong> visited <a href="{{ trip.place.get_absolute_url }}">{{ trip.place }}</a> <span class="meta">{{ trip.formatted_date }}</span>
 						</h3>
-					<p><strong><a href="{% url accounts-profile trip.created_by %}">{{ trip.created_by }}</a></strong> visited <a href="{{ trip.place.get_absolute_url }}">{{ trip.place }}</a>{% if trip.species.length %} and saw {% for species in trip.species.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ species.get_absolute_url }}">{{ species.plural|lower }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% endif %}.{% endif %}</p>
+					<p>{% if trip.sightings %}and saw {% for sighting in trip.sightings.all|slice:":3" %}{% if forloop.last and not forloop.first and not trip.more_than_three_species %} and {% else %}{% if not forloop.first %}, {% endif %}{% endif %}<a href="{{ sighting.species.get_absolute_url }}">{{ sighting.species.plural|lower }}</a>{% endfor %}{% if trip.more_than_three_species %} and <a href="{{ trip.urls.absolute }}">more&hellip;</a>{% else %} &mdash; <a href="{{ trip.urls.absolute }}">read about their trip</a>{% endif %}, {% endif %}added {{ trip.created_at|timesince }} ago</p>
 					</li>
 					{% endfor %}
 				</ul>
