@@ -23,8 +23,19 @@ def index(request):
             num_trips__gt = 0
         ).count(),
         'num_trips': Trip.objects.count(),
+        'num_trips_with_photos': Trip.objects.filter(
+            photos__isnull = True
+        ).distinct().count(),
+        'num_trips_without_photos': Trip.objects.filter(
+            photos__isnull = False
+        ).distinct().count(),
         'num_species': Species.objects.count(),
         'num_photos': Photo.objects.count(),
+        'num_photos_in_past_48_hours': Photo.objects.filter(
+            created_at__gte = (
+                datetime.datetime.now() - datetime.timedelta(days = 2)
+            )
+        ).count(),
         'num_places': Place.objects.count(),
         'num_sightings': Sighting.objects.count(),
         'new_users_last_48_hours': User.objects.filter(
