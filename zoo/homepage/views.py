@@ -89,22 +89,42 @@ def homepage(request):
 def recent_photos_for_homepage():
     faves = FavouritePhoto.objects.order_by(
         '-when_added'
-    ).select_related('photo').filter(photo__is_visible=True)[:10]
+    ).select_related('photo').filter(photo__is_visible=True)[:20]
     pks = [f.photo_id for f in faves]
     recents = Photo.objects.select_related('created_by').filter(
         is_visible = True
-    ).exclude(pk__in = pks).order_by('-created_at')[:10]
+    ).exclude(pk__in = pks).order_by('-created_at')[:20]
     
     seen_user_ids = set()
+    seen_photo_ids = set()
     photos = []
     skipped_photos = []
     
-    iter_faves = itertools.cycle(faves)
+    iter_faves = itertools.cycle(f.photo for f in faves)
     iter_recents = itertools.cycle(recents)
     
     while len(photos) < 20:
-        photos.append(iter_recents.next())
-        photos.append(iter_faves.next().photo)
+        while True:
+            try:
+                next = iter_recents.next()
+            except StopIteration:
+                break
+            if next.pk in seen_photo_ids:
+                continue
+            photos.append(next)
+            seen_photo_ids.add(next.pk)
+            break
+        
+        while True:
+            try:
+                next = iter_faves.next()
+            except StopIteration:
+                break
+            if next.pk in seen_photo_ids:
+                continue
+            photos.append(next)
+            seen_photo_ids.add(next.pk)
+            break
     
     return photos
 
