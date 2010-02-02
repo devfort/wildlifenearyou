@@ -54,7 +54,7 @@
 <h2>New trips in past 48 hours</h2>
 <ul>
 {% for trip in new_trips_last_48_hours %}
-    <li><a href="{{ trip.get_absolute_url }}">{{ trip }}</a></li>
+    <li><a href="{{ trip.get_absolute_url }}">{{ trip }}</a> - {{ trip.created_by }}</li>
 {% endfor %}
 </ul>
 {% endif %}
