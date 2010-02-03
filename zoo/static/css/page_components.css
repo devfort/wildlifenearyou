@@ -6,7 +6,7 @@ div.see-more-animals strong.label {
 	float: left;
 	padding-top: 0.2em;
 }
-
+ 
 div.see-more-animals form {
 	margin-bottom: 0;
 }
@@ -1350,6 +1350,7 @@ p.love-this:hover {
 	font-size: 0.8em;
 	overflow: hidden;
 	width: 100%;
+	margin-bottom: 2em;
 }
 .num-loves strong span {
 	float: left;
