@@ -42,6 +42,10 @@ def update_flickr_location_for_photo(photo):
         accuracy = 15 # one above 16, which is street-level
         # TODO: use zoom level for place map, once we start saving that
     )
+    client.photos_addTags(
+        photo_id = photo.flickr_id,
+        tags = 'wlny:geotagged=1'
+    )
     photo.flickr_needs_geotagging = False
     photo.save()
 
@@ -70,6 +74,7 @@ def update_flickr_tags_for_photo(photo):
     tags_to_add = [t for t in desired_tags if t not in existing_tags]
     
     # And the machine tags...
+    tags_to_add.append('wlny:tagged=1')
     tags_to_add.append('wlny:photo=%s' % photo.pk)
     if photo.trip:
         tags_to_add.append('wlny:trip=%s' % photo.trip.pk)
@@ -77,8 +82,6 @@ def update_flickr_tags_for_photo(photo):
     
     new_tags = ' '.join(['"%s"' % t for t in tags_to_add])
     
-    #return new_tags
-        
     client.photos_addTags(photo_id = photo.flickr_id, tags = new_tags)
     photo.flickr_needs_tagging = False
     photo.save()
