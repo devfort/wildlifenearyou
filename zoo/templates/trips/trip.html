@@ -19,7 +19,7 @@
 
 <div class="comments tripbook">
 	{% if trip.description %}
-		<blockquote>{{ trip.description|linebreaks }}</blockquote>
+		<blockquote class="intro">{{ trip.description|linebreaks }}</blockquote>
 		<p class="posted-by">
 	{% else %}
 		<p class="posted-by blank">
