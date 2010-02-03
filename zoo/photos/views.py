@@ -137,7 +137,7 @@ def edit_photo(request, username, photo_id):
                     else:
                         # Create a new sighting for that species on that place
                         del kwargs['trip'] # re-using kwargs from earlier
-                        kwargs['place'] = trip.place
+                        kwargs['place'] = photo.trip.place
                         photo.sightings.create(**kwargs)
                 photo.flickr_needs_tagging = True
                 photo.flickr_needs_geotagging = True
