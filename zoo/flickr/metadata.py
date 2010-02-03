@@ -9,13 +9,17 @@ def get_photos_needing_tagging():
     ).filter(
         Q(created_by__profile__flickr_tag_common_names = True) |
         Q(created_by__profile__flickr_tag_scientific_names = True)
+    ).exclude(
+        trip = None
     )
 
 def get_photos_needing_geotagging():
     return Photo.objects.filter(
-        flickr_needs_geotagging = True
+        flickr_needs_geotagging = True,
     ).filter(
         created_by__profile__flickr_geotag = True
+    ).exclude(
+        trip = None
     )
 
 def update_flickr_location_for_photo(photo):
