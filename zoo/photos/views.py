@@ -109,6 +109,7 @@ def edit_photo(request, username, photo_id):
             
             if trip_has_changed:
                 photo.trip = form.cleaned_data['trip']
+                photo.flickr_needs_geotagging = True
             
             photo.save()
             
@@ -138,6 +139,9 @@ def edit_photo(request, username, photo_id):
                         del kwargs['trip'] # re-using kwargs from earlier
                         kwargs['place'] = trip.place
                         photo.sightings.create(**kwargs)
+                photo.flickr_needs_tagging = True
+                photo.flickr_needs_geotagging = True
+                photo.save()
             
             return HttpResponseRedirect(photo.get_absolute_url())
     else:
@@ -177,6 +181,8 @@ def set_species(request, username, photo_id):
     photo = get_object_or_404(Photo, id=photo_id, created_by=request.user)
     assert photo.trip, \
         "A photo should have a trip if you're trying to add sightings to it"
+    
+    photo_needs_tagging = False
     # The sightings should already exist on that trip, just hook up the photo
     for id in request.POST.getlist('saw'):
         #print "Processing species ID %s" % id
@@ -189,6 +195,12 @@ def set_species(request, username, photo_id):
             continue
         assert request.user == sighting.created_by
         photo.sightings.add(sighting)
+        photo_needs_tagging = True
+    
+    if photo_needs_tagging:
+        photo.flickr_needs_tagging = True
+        photo.save()
+    
     return HttpResponseRedirect(photo.get_absolute_url())
 
 @login_required
@@ -242,6 +254,8 @@ def add_species(request, username, photo_id):
                 }
             )
             photo.sightings.add(sighting)
+            photo.flickr_needs_tagging = True
+            photo.save()
             return HttpResponseRedirect(photo.get_absolute_url())
     
     add_unknown_text = request.POST.get('add_unknown_text', '').strip()
@@ -254,6 +268,8 @@ def add_species(request, username, photo_id):
             }
         )
         photo.sightings.add(sighting)
+        photo.flickr_needs_tagging = True
+        photo.save()
         return HttpResponseRedirect(photo.get_absolute_url())
     
     # If we get here, we need to show search results for the 'species' string
@@ -581,6 +597,7 @@ def user_photos_bulk_assign(request, user, flickr_set=None):
             # Assign the photos to that trip
             for p in photos:
                 p.trip = trip
+                p.flickr_needs_geotagging = True
                 p.save()
             # Force a re-index of trip
             trip.save()

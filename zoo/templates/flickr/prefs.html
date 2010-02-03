@@ -1,0 +1,31 @@
+{% extends base %}
+
+{% block title %}Flickr preferences{% endblock %}
+
+{% block content %}
+
+<h1>Flickr preferences</h1>
+
+<p class="intro"><strong>WildlifeNearYou</strong> can tag your photos on Flickr. You can opt out if you like, but you'll be missing out on a neat feature. You can change your mind later if you like &ndash; we won't mind!</p>
+
+{% if profile.flickr_prefs_set_at %}
+<h2>Current preferences</h2>
+<ul>
+	<li>We <strong>{% if not profile.flickr_tag_common_names %}won't{% else %}will{% endif %}</strong> tag your Flickr photos with the name of the species.</li>
+	<li>We <strong>{% if not profile.flickr_tag_scientific_names %}won't{% else %}will{% endif %}</strong> tag Flickr photos with the scientific name of the species.</li>
+	<li>{% if profile.flickr_geotag %}If you haven't told Flickr where you took the photo, we <strong>will</strong> update the photo's location for you.{% else %}We <strong>won't</strong> update the locations on your Flickr photos.{% endif %}</li>
+</ul>
+
+<h2>Change your preferences</h2>
+{% endif %}
+
+<form action="{{ request.path }}" method="post">
+<ul>
+	<li><label>Add species tags to my photos on Flickr <input type="checkbox" name="flickr_tag_common_names" checked="checked"></label></li>
+	<li><label>Add scientific name tags to my photos on Flickr <input type="checkbox" name="flickr_tag_scientific_names" checked="checked"></label></li>
+	<li><label>Add locations to my photos if I have not already told Flickr where I took them <input type="checkbox" name="flickr_geotag" checked="checked"></label></li>
+</ul>
+<p><input type="submit" value="Save my preferences, and start importing photos"></p>
+</form>
+
+{% endblock %}

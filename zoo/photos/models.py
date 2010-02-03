@@ -36,6 +36,8 @@ class Photo(models.Model):
     flickr_id = models.CharField(max_length=32, blank=True)
     flickr_secret = models.CharField(max_length=32, blank=True)
     flickr_server = models.CharField(max_length=16, blank=True)
+    flickr_needs_tagging = models.NullBooleanField(default = False)
+    flickr_needs_geotagging = models.NullBooleanField(default = False)
     
     # Sizes (for the 500 max sized regular display image)
     width_max_500 = models.IntegerField(null = True, blank = True)
@@ -225,7 +227,10 @@ class SuggestedSpecies(models.Model):
             sighting, created = self.photo.trip.sightings.get_or_create(
                 species_inexact = self.species_inexact, defaults = defaults
             )
-        self.photo.sightings.add(sighting)
+        photo = self.photo
+        photo.sightings.add(sighting)
+        photo.flickr_needs_tagging = True
+        photo.save()
         self.status_changed_at = datetime.datetime.now()
         self.status = 'approved'
         self.save()

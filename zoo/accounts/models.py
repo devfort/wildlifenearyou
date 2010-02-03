@@ -57,6 +57,13 @@ class Profile(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     
+    # Flickr preferences
+    flickr_token = models.CharField(max_length = 255, blank=True, null=True)
+    flickr_prefs_set_at = models.DateTimeField(blank = True, null = True)
+    flickr_tag_common_names = models.NullBooleanField(default = False)
+    flickr_tag_scientific_names = models.NullBooleanField(default = False)
+    flickr_geotag = models.NullBooleanField(default = False)
+    
     def short_url(self):
         return 'http://wlny.eu/u%s' % converter.from_int(self.pk)
     

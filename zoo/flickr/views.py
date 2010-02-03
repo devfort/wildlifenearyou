@@ -23,17 +23,23 @@ def flickr_redirect(path):
     response.set_cookie('flickr_return_to', path)
     return response
 
+@login_required
 def flickr_callback(request):
     return_to = request.COOKIES.get('flickr_return_to', '/')
     flickr_token = Flickr().get_token(request.GET.get('frob', ''))
+    profile = request.user.get_profile()
+    profile.flickr_token = flickr_token
+    profile.save()
     response = HttpResponseRedirect(return_to)
-    response.set_cookie('flickr_token', flickr_token)
     response.delete_cookie('flickr_return_to')
     return response
 
 @login_required
 def index(request):
-    flickr_token = request.COOKIES.get('flickr_token')
+    profile = request.user.get_profile()
+    if not profile.flickr_prefs_set_at:
+        return HttpResponseRedirect('/flickr/prefs/')
+    flickr_token = profile.flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     page = request.GET.get('page', '1')
@@ -64,7 +70,7 @@ def index(request):
 
 @login_required
 def places(request):
-    flickr_token = request.COOKIES.get('flickr_token')
+    flickr_token = request.user.get_profile().flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     client = Flickr(token = flickr_token)
@@ -78,7 +84,7 @@ def places(request):
 
 @login_required
 def groups(request):
-    flickr_token = request.COOKIES.get('flickr_token')
+    flickr_token = request.user.get_profile().flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     client = Flickr(token = flickr_token)
@@ -90,7 +96,7 @@ def groups(request):
 
 @login_required
 def group(request, group_nsid):
-    flickr_token = request.COOKIES.get('flickr_token')
+    flickr_token = request.user.get_profile().flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     client = Flickr(token = flickr_token)
@@ -106,7 +112,7 @@ def group(request, group_nsid):
 
 @login_required
 def sets(request):
-    flickr_token = request.COOKIES.get('flickr_token')
+    flickr_token = request.user.get_profile().flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     client = Flickr(token = flickr_token)
@@ -118,7 +124,7 @@ def sets(request):
 
 @login_required
 def single_set(request, set_id):
-    flickr_token = request.COOKIES.get('flickr_token')
+    flickr_token = request.user.get_profile().flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     client = Flickr(token = flickr_token)
@@ -142,7 +148,7 @@ def single_set(request, set_id):
 
 @login_required
 def place(request, woe_id):
-    flickr_token = request.COOKIES.get('flickr_token')
+    flickr_token = request.user.get_profile().flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     client = Flickr(token = flickr_token)
@@ -195,13 +201,31 @@ def photo_picker(request, photos, title, extra_context=None,set_details=None):
     return render(request, 'flickr/photo_picker.html', context)
 
 @login_required
+def prefs(request):
+    profile = request.user.get_profile()
+    if request.method == 'POST':
+        profile.flickr_prefs_set_at = datetime.datetime.now()
+        for pref in (
+            'flickr_tag_common_names',
+            'flickr_tag_scientific_names',
+            'flickr_geotag'
+        ):
+            setattr(profile, pref, pref in request.POST)
+        profile.save()
+        return HttpResponseRedirect('/flickr/')
+    
+    return render(request, 'flickr/prefs.html', {
+        'profile': profile,
+    })
+
+@login_required
 def search(request):
     "Search your own photos"
     q = request.GET.get('q', '')
     if not q:
         return render(request, 'flickr/search.html')
     
-    flickr_token = request.COOKIES.get('flickr_token')
+    flickr_token = request.user.get_profile().flickr_token
     if not flickr_token:
         return flickr_redirect(request.path)
     client = Flickr(token = flickr_token)
