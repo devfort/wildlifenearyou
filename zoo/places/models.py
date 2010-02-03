@@ -231,7 +231,7 @@ class Place(AuditedModel):
     def visible_photos(self):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
-            sightings__place = self,
+            trip__place = self,
             is_visible = True
         ).distinct()
 
