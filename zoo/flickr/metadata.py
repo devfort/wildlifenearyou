@@ -46,8 +46,15 @@ def update_flickr_location_for_photo(photo):
         photo_id = photo.flickr_id,
         tags = 'wlny:geotagged=1'
     )
+    photo.flickr_tags_applied.create(
+        latitude_added = photo.trip.place.latitude,
+        longitude_added = photo.trip.place.longitude,
+    )
     photo.flickr_needs_geotagging = False
     photo.save()
+
+def short(obj):
+    return obj.short_url().split('/')[-1]
 
 def update_flickr_tags_for_photo(photo):
     profile = photo.created_by.get_profile()
@@ -59,10 +66,11 @@ def update_flickr_tags_for_photo(photo):
     info = client.photos_getInfo(photo_id = photo.flickr_id)
     existing_tags = [t['raw'] for t in info['photo']['tags']['tag']]
     
+    machine_tags = ['wlny:photo=%s' % short(photo)]
     desired_tags = []
     for sighting in photo.sightings.all():
         if sighting.species:
-            desired_tags.append('wlny:species=%s' % sighting.species.pk)
+            machine_tags.append('wlny:species=%s' % short(sighting.species))
             if profile.flickr_tag_common_names:
                 desired_tags.append(sighting.species.common_name)
             if profile.flickr_tag_scientific_names and \
@@ -71,17 +79,22 @@ def update_flickr_tags_for_photo(photo):
         elif sighting.species_inexact:
             desired_tags.append(sighing.s.species_inexact)
     
-    tags_to_add = [t for t in desired_tags if t not in existing_tags]
+    regular_tags_to_add = [t for t in desired_tags if t not in existing_tags]
     
-    # And the machine tags...
-    tags_to_add.append('wlny:tagged=1')
-    tags_to_add.append('wlny:photo=%s' % photo.pk)
     if photo.trip:
-        tags_to_add.append('wlny:trip=%s' % photo.trip.pk)
-        tags_to_add.append('wlny:place=%s' % photo.trip.place.pk)
+        machine_tags.append('wlny:trip=%s' % short(photo.trip))
+        machine_tags.append('wlny:place=%s' % short(photo.trip.place))
     
-    new_tags = ' '.join(['"%s"' % t for t in tags_to_add])
+    new_tags = u' '.join([
+        u'"%s"' % t for t in (regular_tags_to_add + machine_tags)
+    ])
     
     client.photos_addTags(photo_id = photo.flickr_id, tags = new_tags)
+    
+    regular_tags_added = u' '.join([u'"%s"' % t for t in regular_tags_to_add])
+    if regular_tags_added:
+        photo.flickr_tags_applied.create(
+            tags_added = regular_tags_added
+        )
     photo.flickr_needs_tagging = False
     photo.save()
