@@ -112,7 +112,7 @@
 				<h2>Site news</h2>
 				<ul>
 				{% for post in blog_posts|slice:":3" %}
-					<li><a href="{{ post.get_absolute_url }}">{{ post }}</a> - {{ post.publish|date:"jS M Y" }}</li>
+					<li>{{ post.publish|date:"jS M" }}: <a href="{{ post.get_absolute_url }}">{{ post }}</a></li>
 				{% endfor %}
 				</ul>
 			{% endif %}
