@@ -77,7 +77,7 @@ def update_flickr_tags_for_photo(photo):
                     sighting.species.latin_name:
                 desired_tags.append(sighting.species.latin_name)
         elif sighting.species_inexact:
-            desired_tags.append(sighting.s.species_inexact)
+            desired_tags.append(sighting.species_inexact)
     
     regular_tags_to_add = [t for t in desired_tags if t not in existing_tags]
     
