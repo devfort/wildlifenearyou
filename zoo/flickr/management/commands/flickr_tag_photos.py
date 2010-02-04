@@ -17,14 +17,17 @@ class Command(BaseCommand):
         if len(args) != 0:
             raise CommandError("Command doesn't accept any arguments")
         
+        verbose = int(options['verbosity']) > 1
+        
         photos = metadata.get_photos_needing_tagging()
         count = photos.count()
         counter = 1
         for photo in photos:
             metadata.update_flickr_tags_for_photo(photo)
-            print "%s/%s\tTagged %s" % (
-                counter, count, photo.get_absolute_url()
-            )
+            if verbose:
+                print "%s/%s\tTagged %s" % (
+                    counter, count, photo.get_absolute_url()
+                )
             counter += 1
             time.sleep(0.5)
         
@@ -33,8 +36,9 @@ class Command(BaseCommand):
         counter = 1
         for photo in metadata.get_photos_needing_geotagging():
             metadata.update_flickr_location_for_photo(photo)
-            print "%s/%s\tGeotagged %s" % (
-                counter, count, photo.get_absolute_url()
-            )
+            if verbose:
+                print "%s/%s\tGeotagged %s" % (
+                    counter, count, photo.get_absolute_url()
+                )
             counter += 1
             time.sleep(0.5)
