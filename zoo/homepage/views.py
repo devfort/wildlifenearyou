@@ -80,7 +80,9 @@ def homepage(request):
         'default_search': default_search,
         'recent_photos': recent_photos_for_homepage(),
         'recent_trips': recent_trips_for_homepage(5),
-        'blog_posts': Post.objects.published(),
+        'blog_posts': Post.objects.published().only(
+            'publish', 'slug', 'title'
+        ),
 #        'recent_trips': Trip.objects.filter(
 #            start__isnull=False
 #        ).order_by('-start')[:5]
@@ -89,7 +91,9 @@ def homepage(request):
 def recent_photos_for_homepage():
     faves = FavouritePhoto.objects.order_by(
         '-when_added'
-    ).select_related('photo').filter(photo__is_visible=True)[:20]
+    ).select_related(
+        'photo', 'photo__created_by'
+    ).filter(photo__is_visible=True)[:20]
     pks = [f.photo_id for f in faves]
     recents = Photo.objects.select_related('created_by').filter(
         is_visible = True
