@@ -6,6 +6,7 @@ from trips.models import Trip, Sighting
 from photos.models import Photo
 from places.models import Place
 from animals.models import Species
+from flickr.models import FlickrTagsApplied
 
 import datetime
 
@@ -36,6 +37,28 @@ def index(request):
                 datetime.datetime.now() - datetime.timedelta(days = 2)
             )
         ).count(),
+        'num_distinct_photos_tagged': FlickrTagsApplied.objects.exclude(
+            tags_added = ''
+        ).values('photo').distinct().count(),
+        'num_distinct_photos_geotagged': FlickrTagsApplied.objects.exclude(
+            latitude_added = None
+        ).values('photo').distinct().count(),
+        'num_distinct_photos_tagged_last_48_hours': 
+            FlickrTagsApplied.objects.filter(
+                created_at__gte = (
+                    datetime.datetime.now() - datetime.timedelta(days = 2)
+                )
+            ).exclude(
+                tags_added = ''
+            ).values('photo').distinct().count(),
+        'num_distinct_photos_geotagged_last_48_hours':
+            FlickrTagsApplied.objects.filter(
+                created_at__gte = (
+                    datetime.datetime.now() - datetime.timedelta(days = 2)
+                )
+            ).exclude(
+                latitude_added = None
+            ).values('photo').distinct().count(),
         'num_places': Place.objects.count(),
         'num_sightings': Sighting.objects.count(),
         'new_users_last_48_hours': User.objects.filter(
