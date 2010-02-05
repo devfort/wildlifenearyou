@@ -32,6 +32,9 @@ def index(request):
         ).distinct().count(),
         'num_species': Species.objects.count(),
         'num_photos': Photo.objects.count(),
+        'num_photos_with_species': Photo.objects.filter(
+            sightings__isnull = False
+        ).count(),
         'num_photos_in_past_48_hours': Photo.objects.filter(
             created_at__gte = (
                 datetime.datetime.now() - datetime.timedelta(days = 2)
