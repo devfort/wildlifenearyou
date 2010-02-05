@@ -15,6 +15,7 @@ var accuracyToZoomLevel = [
 
 jQuery(window).load(function() {
 	var $ = jQuery;
+	var map_has_moved = false;
 	var mapwrapper = $('<div class="gmap" />').css('position', 'relative');
 	var mapdiv = $('<div />').css({
 		width: '100%',
@@ -42,6 +43,7 @@ jQuery(window).load(function() {
 	gmap.setMapType(G_NORMAL_MAP);
 	gmap.setCenter(new GLatLng(44.08758, -21.796875), 2);
 	GEvent.addListener(gmap, 'move', function() {
+		map_has_moved = true;
 		var center = gmap.getCenter();
 		$('#id_latitude').val(center.lat());
 		$('#id_longitude').val(center.lng());
@@ -50,9 +52,13 @@ jQuery(window).load(function() {
 		gmap.zoomIn();
 	});
 	
-	/* Zoom the map to a country when they pick one from the dropdown */
+	/* Zoom the map to a country when they pick one from the dropdown - but 
+	   only if they haven't yet moved the map... */
 	var geocoder = new GClientGeocoder();
 	$('#id_country').change(function() {
+		if (map_has_moved) {
+			return;
+		}
 		var country = this.options[$(this).val()].text;
 		if (country) {
 			geocoder.getLocations(country, function(result) {
