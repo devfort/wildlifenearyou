@@ -3,7 +3,7 @@ from django.db.models import Count
 
 from django.contrib.auth.models import User
 from trips.models import Trip, Sighting
-from photos.models import Photo
+from photos.models import Photo, SuggestedSpecies
 from places.models import Place
 from animals.models import Species
 from flickr.models import FlickrTagsApplied
@@ -59,6 +59,21 @@ def index(request):
             ).exclude(
                 latitude_added = None
             ).values('photo').distinct().count(),
+        'num_suggestions': SuggestedSpecies.objects.count(),
+        'num_suggestions_in_past_48_hours': SuggestedSpecies.objects.filter(
+            suggested_at__gte = (
+                datetime.datetime.now() - datetime.timedelta(days = 2)
+            )
+        ).count(),
+        'num_suggestions_new': SuggestedSpecies.objects.filter(
+            status = 'new'
+        ).count(),
+        'num_suggestions_rejected': SuggestedSpecies.objects.filter(
+            status = 'rejected'
+        ).count(),
+        'num_suggestions_approved': SuggestedSpecies.objects.filter(
+            status = 'approved'
+        ).count(),
         'num_places': Place.objects.count(),
         'num_sightings': Sighting.objects.count(),
         'new_users_last_48_hours': User.objects.filter(
