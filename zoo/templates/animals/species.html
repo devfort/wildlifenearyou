@@ -152,6 +152,9 @@
 						</div><!-- /.slideshow -->
 					
 						<p><a href="{% url species-photos species.slug %}">All photos of this species</a></p>
+						{% if species.has_flickr_tagged_photos %}
+						<p><a href="http://www.flickr.com/photos/tags/wlny%3Aspecies%3D{{ species.short_code }}/show/">Slideshow on Flickr</a></p>
+						{% endif %}
 					{% endwith %}
 				{% endifequal %}
 			</div>

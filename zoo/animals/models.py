@@ -180,8 +180,19 @@ class Species(AbstractSpecies):
             )
         return json['ids']
     
+    def short_code(self):
+        return 's%s' % converter.from_int(self.pk)
+    
     def short_url(self):
-        return 'http://wlny.eu/s%s' % converter.from_int(self.pk)
+        return 'http://wlny.eu/%s' % self.short_code()
+    
+    def has_flickr_tagged_photos(self):
+        from flickr.models import FlickrTagsApplied
+        return bool(
+            FlickrTagsApplied.objects.filter(
+                photo__sightings__species = self
+            ).extra(select={'a': 1}).values('a').order_by()[:1]
+        )
     
     class Meta:
         verbose_name_plural = 'species'

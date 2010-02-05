@@ -244,6 +244,9 @@ jQuery(function($) {
 				</ul><!-- /#thumbnails -->
 			</div><!-- /.slideshow -->
 			<p><a href="{% url place-photos place.country.country_code place.slug %}">All photos of this place</a></p>
+			{% if place.has_flickr_tagged_photos %}
+			<p><a href="http://www.flickr.com/photos/tags/wlny%3Aplace%3D{{ place.short_code }}/show/">Slideshow on Flickr</a></p>
+			{% endif %}
 		</div>
 		{% endwith %}
 		{% endifequal %}

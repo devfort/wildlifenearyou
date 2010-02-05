@@ -199,12 +199,23 @@ class Place(AuditedModel):
         if self.longitude is None or self.latitude is None:
             return ''
         return "%f %f" % (self.latitude, self.longitude)
-
+    
     def get_absolute_url(self):
         return self.urls.absolute
     
+    def short_code(self):
+        return u'p%s' % converter.from_int(self.pk)
+    
     def short_url(self):
-        return 'http://wlny.eu/p%s' % converter.from_int(self.pk)
+        return u'http://wlny.eu/%s' % self.short_code()
+    
+    def has_flickr_tagged_photos(self):
+        from flickr.models import FlickrTagsApplied
+        return bool(
+            FlickrTagsApplied.objects.filter(
+                photo__sightings__trip__place = self
+            ).extra(select={'a': 1}).values('a').order_by()[:1]
+        )
     
     @attrproperty
     @models.permalink

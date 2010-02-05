@@ -132,6 +132,9 @@
 							</ul><!-- /#thumbnails -->
 						</div><!-- /.slideshow -->
 						<p><a href="{% url trip-photos profile.user.username trip.id %}">All photos from this trip</a></p>
+						{% if trip.has_flickr_tagged_photos %}
+						<p><a href="http://www.flickr.com/photos/tags/wlny%3Atrip%3D{{ trip.short_code }}/show/">Slideshow on Flickr</a></p>
+						{% endif %}
 					</div>
 					{% endwith %}
 				{% endifequal %}
