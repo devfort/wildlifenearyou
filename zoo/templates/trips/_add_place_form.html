@@ -99,7 +99,28 @@ jQuery(window).load(function() {
 			{{ form.longitude }}
 		</div>
 	</div>
-    <p>The following information is optional, but we'd love to know more details:</p>
+    <p class="meta">The following information is optional, but we'd love to know more details:</p>
+	<style type="text/css">
+	div#place-categories ul, div#place-categories li {
+		list-style-type: none;
+		padding: 0;
+		background-image: none;
+	}
+	div#place-categories ul {
+		overflow: hidden;
+	}
+	div#place-categories li {
+		width: 10em;
+		float: left;
+	}
+	
+	</style>
+	<div class="container" id="place-categories">
+		<p>What kind of place is it?</p>
+		{{ form.categories.errors }}
+		{{ form.categories }}
+	</div>
+
 	<div class="contact">
 		<div class="text-container container">
 			<label for="id_{{ form.phone.html_name }}">Phone number</label>

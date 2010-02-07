@@ -625,6 +625,7 @@ def add_trip_add_place(request):
                 append += 1
             place.slug = slug
             place.save()
+            form.save_m2m() # for categories
             return Redirect(place.get_absolute_url() + 'add-trip/')
     else:
         form = AddPlaceForm()
@@ -650,11 +651,18 @@ class AddPlaceForm(forms.ModelForm):
         for key in ('address_line_1', 'address_line_2'):
             self.fields[key].widget.attrs['size'] = 30
         # Ugly workaround to set custom empty_label
-        from django.forms.models import ModelChoiceField
+        from django.forms.models import ModelChoiceField, \
+            ModelMultipleChoiceField
         self.fields['country'] = ModelChoiceField(
             self.fields['country'].queryset,
             empty_label = u'-- please choose a country --'
         )
+        
+        self.fields['categories'] = forms.ModelMultipleChoiceField(
+            self.fields['categories'].queryset,
+            widget = forms.CheckboxSelectMultiple
+        )
+        
         self.fields.keyOrder = self.Meta.fields
     
     class Meta:
@@ -662,6 +670,7 @@ class AddPlaceForm(forms.ModelForm):
         fields = (
             'known_as', 'country', 'url', 'address_line_1', 'address_line_2', 
             'town', 'state', 'zip', 'phone', 'latitude', 'longitude',
+            'categories'
         )
 
 from zoo.search import search_species
