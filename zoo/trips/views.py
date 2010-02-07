@@ -670,7 +670,7 @@ class AddPlaceForm(forms.ModelForm):
         fields = (
             'known_as', 'country', 'url', 'address_line_1', 'address_line_2', 
             'town', 'state', 'zip', 'phone', 'latitude', 'longitude',
-            'categories'
+            'categories', 'is_unlisted'
         )
 
 from zoo.search import search_species

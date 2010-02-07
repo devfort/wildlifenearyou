@@ -99,8 +99,6 @@ class Place(AuditedModel):
     
     # Unlisted places have different URLs and do not show up in public search
     is_unlisted = models.BooleanField(default = False)
-    # Temporary places e.g. Falconry Festival just inform the user
-    is_temporary = models.BooleanField(default = False)
     
     categories = models.ManyToManyField(
         PlaceCategory, related_name = 'places', null = True, blank = True
