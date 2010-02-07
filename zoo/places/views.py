@@ -209,10 +209,12 @@ def all_places(request):
 def country(request, country_code):
     country = get_object_or_404(Country, country_code=country_code)
     places = Place.objects.filter(
-        country = country
+        country = country,
+        is_unlisted = False,
     ).order_by('known_as')
     categories = PlaceCategory.objects.filter(
-        places__country = country
+        places__country = country,
+        places__is_unlisted = False,
     ).annotate(num_places = Count('places'))
     return render(request, 'places/country.html', {
         'country': country,
@@ -220,7 +222,8 @@ def country(request, country_code):
         'categories': categories,
         'uncategorised': Place.objects.filter(
             country = country,
-            categories__isnull = True
+            categories__isnull = True,
+            is_unlisted = False,
         ).count(),
     })
 
@@ -231,18 +234,23 @@ def country_by_category(request, country_code, slug):
         category_name = 'Uncategorised places'
         places = Place.objects.filter(
             country = country,
-            categories__isnull = True
+            categories__isnull = True,
+            is_unlisted = False,
         )
     else:
         category = get_object_or_404(PlaceCategory, slug = slug)
         category_name = category.plural or category.name
         places = Place.objects.filter(
             country = country,
-            categories = category
+            categories = category,
+            is_unlisted = False,
         ).order_by('known_as')
+    
     categories = PlaceCategory.objects.filter(
-        places__country = country
+        places__country = country,
+        places__is_unlisted = False,
     ).annotate(num_places = Count('places'))
+    
     return render(request, 'places/country_by_category.html', {
         'country': country,
         'places': places,
@@ -251,7 +259,8 @@ def country_by_category(request, country_code, slug):
         'category_name': category_name,
         'uncategorised': Place.objects.filter(
             country = country,
-            categories__isnull = True
+            categories__isnull = True,
+            is_unlisted = False,
         ).count(),
     })
 

@@ -663,7 +663,8 @@ class AddPlaceForm(forms.ModelForm):
         
         self.fields['categories'] = forms.ModelMultipleChoiceField(
             self.fields['categories'].queryset,
-            widget = forms.CheckboxSelectMultiple
+            widget = forms.CheckboxSelectMultiple,
+            required = False
         )
         
         self.fields.keyOrder = self.Meta.fields
