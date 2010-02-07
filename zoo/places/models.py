@@ -51,6 +51,7 @@ def _species_for_place(place):
 
 class PlaceCategory(models.Model):
     name = models.CharField(max_length = 100)
+    plural = models.CharField(max_length = 100, null = True)
     slug = models.SlugField(unique = True)
     order = models.IntegerField(blank = True, null = True)
     

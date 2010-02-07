@@ -5,11 +5,9 @@
 {% block content %}
 
 <h1>All Countries</h1>
-<p>[Intro Text Required]</p>
 <ul>
 {% for country in all_countries %}
-	<li><a href="{{ country.urls.absolute }}">{{ country.country_code|upper }}</a> {{ country.name }}
-		<img width="16" height="11" src="/static/img/flags/{{ country.country_code }}.gif" alt="Flag of {{ country }}"></a>
+	<li><img width="16" height="11" src="/static/img/flags/{{ country.country_code }}.gif" alt="Flag of {{ country }}"> <a href="{{ country.urls.absolute }}">{{ country.name }}</a> - {{ country.num_places }} place{{ country.num_places|pluralize }}
 	</li>
 {% endfor %}
 </ul>

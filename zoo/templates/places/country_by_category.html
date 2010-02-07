@@ -1,9 +1,9 @@
 {% extends base %}
 
-{% block title %}Places to see wildlife in {{ country.name }}{% endblock %}
+{% block title %}{{ category.plural|title }} in {{ country.name }}{% endblock %}
 
 {% block content_title %}
-<h1>Places to see wildlife in {{ country.name }}</h1>
+<h1>{{ category.plural|title }} in {{ country.name }}</h1>
 {% endblock %}
 
 {% block primary_content %}

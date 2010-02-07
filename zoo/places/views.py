@@ -4,9 +4,11 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
 from django.utils import dateformat
 
 from zoo.shortcuts import render
-from zoo.places.models import Place, Country, PlaceOpening, PlaceSpeciesSolelyForLinking
+from zoo.places.models import Place, Country, PlaceOpening, \
+    PlaceSpeciesSolelyForLinking, PlaceCategory
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
+from django.db.models import Count
 
 SPECIES_ON_PLACE_PAGE = 10
 
@@ -206,16 +208,40 @@ def all_places(request):
 
 def country(request, country_code):
     country = get_object_or_404(Country, country_code=country_code)
-    places = Place.objects.filter(country__country_code=country_code).order_by('known_as')
-
+    places = Place.objects.filter(
+        country = country
+    ).order_by('known_as')
+    categories = PlaceCategory.objects.filter(
+        places__country = country
+    ).annotate(num_places = Count('places'))
     return render(request, 'places/country.html', {
         'country': country,
         'places': places,
+        'categories': categories,
+    })
+
+def country_by_category(request, country_code, slug):
+    country = get_object_or_404(Country, country_code=country_code)
+    category = get_object_or_404(PlaceCategory, slug = slug)
+    places = Place.objects.filter(
+        country = country,
+        categories = category
+    ).order_by('known_as')
+    categories = PlaceCategory.objects.filter(
+        places__country = country
+    ).annotate(num_places = Count('places'))
+    return render(request, 'places/country_by_category.html', {
+        'country': country,
+        'places': places,
+        'categories': categories,
+        'category': category,
     })
 
 def all_countries(request):
     return render(request, 'places/all_countries.html', {
-        'all_countries': Country.objects.all().order_by('name'),
+        'all_countries': Country.objects.all().annotate(
+            num_places = Count('place'),
+        ).order_by('-num_places'),
     })
 
 from zoo.places.forms import PlaceUberForm

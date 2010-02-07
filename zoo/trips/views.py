@@ -21,6 +21,8 @@ from zoo.animals.forms import SpeciesField
 from zoo.search import NotFound, lookup_species, search_species
 from zoo.trips.utils import lookup_xapian_or_django_id
 
+BANNED_PLACE_SLUGS = ('by-category',)
+
 @login_required
 def tripbook_default(request):
     return Redirect(reverse('tripbook', args=(request.user,)))
@@ -620,7 +622,8 @@ def add_trip_add_place(request):
             append = 1
             first_slug = slugify(place.known_as)
             slug = first_slug
-            while Place.objects.filter(slug = slug).count():
+            while Place.objects.filter(slug = slug).count() or \
+                    slug in BANNED_PLACE_SLUGS:
                 slug = '%s-%d' % (first_slug, append)
                 append += 1
             place.slug = slug

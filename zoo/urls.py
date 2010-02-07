@@ -316,8 +316,12 @@ urlpatterns = patterns('',
         'zoo.places.views.support',
         name='place-support'),    
     
+    url(r'^(?P<country_code>\w{2})/by-category/(?P<slug>[^/]+)/$',
+        'zoo.places.views.country_by_category',
+        name='country-by-category'),
     url(r'^(?P<country_code>\w{2})/$', 'zoo.places.views.country',
         name='country'),
+    
     url(r'^countries/$', 'zoo.places.views.all_countries',
         name='countries'),
     

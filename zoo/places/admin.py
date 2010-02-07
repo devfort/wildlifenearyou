@@ -15,7 +15,10 @@ class PlaceDirectionInline(admin.TabularInline):
 excludees_place = excludees
 excludees_place.append('opening_times')
 
-admin.site.register(PlaceCategory)
+admin.site.register(PlaceCategory, 
+    list_display = ('name', 'plural', 'slug', 'order'),
+    list_editable = ('plural', 'slug', 'order'),
+)
 admin.site.register(Webcam, exclude = excludees)
 admin.site.register(Facility, exclude = excludees)
 admin.site.register(PlaceFacility, exclude = excludees)
