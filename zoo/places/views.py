@@ -218,15 +218,28 @@ def country(request, country_code):
         'country': country,
         'places': places,
         'categories': categories,
+        'uncategorised': Place.objects.filter(
+            country = country,
+            categories__isnull = True
+        ).count(),
     })
 
 def country_by_category(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
-    category = get_object_or_404(PlaceCategory, slug = slug)
-    places = Place.objects.filter(
-        country = country,
-        categories = category
-    ).order_by('known_as')
+    if slug == 'uncategorised':
+        category = None
+        category_name = 'Uncategorised places'
+        places = Place.objects.filter(
+            country = country,
+            categories__isnull = True
+        )
+    else:
+        category = get_object_or_404(PlaceCategory, slug = slug)
+        category_name = category.plural or category.name
+        places = Place.objects.filter(
+            country = country,
+            categories = category
+        ).order_by('known_as')
     categories = PlaceCategory.objects.filter(
         places__country = country
     ).annotate(num_places = Count('places'))
@@ -235,6 +248,11 @@ def country_by_category(request, country_code, slug):
         'places': places,
         'categories': categories,
         'category': category,
+        'category_name': category_name,
+        'uncategorised': Place.objects.filter(
+            country = country,
+            categories__isnull = True
+        ).count(),
     })
 
 def all_countries(request):

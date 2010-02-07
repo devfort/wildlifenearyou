@@ -24,11 +24,14 @@
 
 {% block secondary_content %}
 {% if categories %}
-<h2>By category</h2>
+<h2 class="initial">By category</h2>
 <ul>
 	{% for category in categories %}
 	<li><a href="{% url country-by-category country.country_code category.slug %}">{{ category }}</a> - {{ category.num_places }}</li>
 	{% endfor %}
+	{% if uncategorised %}
+	<li><a href="{% url country-by-category country.country_code "uncategorised" %}">Uncategorised</a> - {{ uncategorised }}</li>
+	{% endif %}
 </ul>
 {% endif %}
 
