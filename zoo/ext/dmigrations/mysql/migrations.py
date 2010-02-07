@@ -185,7 +185,9 @@ class InsertRows(Migration):
             values = ', '.join(map(escape, row))
             sql_up.append(
                 self.insert_row_sql % (
-                    table_name, ', '.join(map(str, columns)), values
+                    table_name, ', '.join(
+                        map(lambda c: '`%s`' % c, columns)
+                    ), values
                 )
             )
 
