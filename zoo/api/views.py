@@ -156,7 +156,12 @@ def species_identifiers(request):
             'common_name': s.common_name,
             'latin_name': s.latin_name,
             'slug': s.slug,
-            'external_identifiers': species_identifiers.get(s.pk) or []
+            'external_identifiers': [{
+                'source': d['source'],
+                'namespace': d['namespace'],
+                'key': d['key'],
+                'uri': d['uri'],
+            } for d in species_identifiers.get(s.pk)] or []
         })
     
     result = {
