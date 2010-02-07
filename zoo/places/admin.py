@@ -27,9 +27,15 @@ admin.site.register(Extra, exclude = excludees)
 admin.site.register(PlacePrice, exclude = excludees)
 admin.site.register(Place,
     exclude = excludees_place,
-    list_filter = ['featured', 'country'],
-    list_display = ('known_as', 'legal_name', 'town', 'country', 'latitude', 'longitude'),
-    search_fields = ['known_as', 'legal_name', 'town', 'address_line_1', 'address_line_2'],
+    list_filter = ('featured', 'is_unlisted', 'country'),
+    list_display = (
+        'known_as', 'legal_name', 'town', 'country', 'latitude', 'longitude',
+        'is_unlisted'
+    ),
+    raw_id_fields = ('chosen_photo',),
+    search_fields = (
+        'known_as', 'legal_name', 'town', 'address_line_1', 'address_line_2'
+    ),
     inlines = [PlacePriceInline,PlaceDirectionInline],
     prepopulated_fields = {'slug': ('known_as',)},
 )
