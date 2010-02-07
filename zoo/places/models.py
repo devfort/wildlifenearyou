@@ -49,6 +49,14 @@ def _species_for_place(place):
         sightings__place = place
     ).values_list('common_name', flat=True)
 
+class PlaceCategory(models.Model):
+    name = models.CharField(max_length = 100)
+    slug = models.SlugField(unique = True)
+    order = models.IntegerField(blank = True, null = True)
+    
+    def __unicode__(self):
+        return self.name
+
 class Place(AuditedModel):
     legal_name = models.CharField(max_length=500, null=False, blank=False)
     known_as = models.CharField(max_length=500, null=False, blank=False)
@@ -87,6 +95,15 @@ class Place(AuditedModel):
     chosen_photo = models.ForeignKey(
         'photos.Photo', null=True, blank=True,
         related_name='place_we_feature_for'
+    )
+    
+    # Unlisted places have different URLs and do not show up in public search
+    is_unlisted = models.BooleanField(default = False)
+    # Temporary places e.g. Falconry Festival just inform the user
+    is_temporary = models.BooleanField(default = False)
+    
+    categories = models.ManyToManyField(
+        PlaceCategory, related_name = 'places', null = True, blank = True
     )
     
     # External identifiers are useful

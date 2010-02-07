@@ -1,5 +1,5 @@
 from django.contrib import admin
-from zoo.places.models import Country, Place, \
+from zoo.places.models import Country, Place, PlaceCategory, \
     Webcam, PlaceNews, PlaceOpening, Facility, PlaceFacility, Extra, \
     PlaceDirection, TransportTypes, Currency, PlacePrice
 from zoo.common.models import exclude as excludees
@@ -15,6 +15,7 @@ class PlaceDirectionInline(admin.TabularInline):
 excludees_place = excludees
 excludees_place.append('opening_times')
 
+admin.site.register(PlaceCategory)
 admin.site.register(Webcam, exclude = excludees)
 admin.site.register(Facility, exclude = excludees)
 admin.site.register(PlaceFacility, exclude = excludees)
