@@ -1,10 +1,16 @@
 from zoo.accounts.models import Profile
 from zoo.places.models import Place
 from zoo.trips.models import Trip
+from zoo.linkeddata.models import ExternalIdentifier
+from zoo.animals.models import Species
 from django.db.models import Count
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils import simplejson
+from zoo.shorturl.utils import converter
+
+import urllib
+from collections import defaultdict
 
 trip_qs = Trip.objects.select_related('place').annotate(
     num_sightings = Count('sightings')
@@ -98,3 +104,78 @@ def api_datetime(dt):
         return dt.strftime('%Y-%m-%d %H:%M:%S')
     else:
         return ''
+
+def species_identifiers(request):
+    all = Species.objects.all().order_by('slug')
+    allowed_args = ('namespace', 'source', 'key', 'code', 'slug', 'after')
+    external_identifier_args = ('namespace', 'source', 'key')
+    provided_args = [
+        (arg, request.GET.get(arg, None))
+        for arg in allowed_args
+    ]
+    for arg, value in provided_args:
+        if value is None:
+            continue
+        if arg in external_identifier_args:
+            all = all.filter(**{
+                'external_identifiers__%s' % arg: value
+            })
+        elif arg == 'code':
+            all = all.filter(pk = converter.to_int(value[1:]))
+        elif arg == 'slug':
+            all = all.filter(slug = value)
+        elif arg == 'after': # Deal with pagination
+            all = all.filter(slug__gte = value)
+    
+    # We only serve up 50 at a time
+    all = list(all[:51])
+    next_after = None
+    if len(all) == 51:
+        next_after = all[-1].slug
+        all = all[:-1]
+    
+    # Now fetch the external identifiers in one big go
+    identifiers = ExternalIdentifier.objects.filter(**dict([
+        (k, v) for k, v in provided_args
+        if k in external_identifier_args and v is not None
+    ])).filter(
+        species__in = [s.pk for s in all]
+    ).values('species_id', 'source', 'namespace', 'key', 'uri')
+    species_identifiers = defaultdict(list)
+    for identifier in identifiers:
+        species_identifiers[identifier['species_id']].append(identifier)
+    
+    species = []
+    for s in all:
+        species.append({
+            'url': 'http://www.wildlifenearyou.com%s' % ( 
+                s.get_absolute_url()
+            ),
+            'code': s.short_code(),
+            'short_url': s.short_url(),
+            'common_name': s.common_name,
+            'latin_name': s.latin_name,
+            'slug': s.slug,
+            'external_identifiers': species_identifiers.get(s.pk) or []
+        })
+    
+    result = {
+        'ok': True,
+        'species': species,
+        'args': {}
+    }
+    
+    for arg, value in provided_args:
+        if value is not None:
+            result['args'][arg] = value
+    
+    if next_after:
+        result['next'] = 'http://www.wildlifenearyou.com%s?%s' % (
+            request.path, urllib.urlencode(dict([
+                (key, value) for key, value in provided_args if (
+                    key != 'after' and value is not None
+                )
+            ] + [('after', next_after)]))
+        )
+    
+    return api_response(request, 200, result)

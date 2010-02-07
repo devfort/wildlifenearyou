@@ -233,6 +233,8 @@ urlpatterns = patterns('',
     
     url(r'^api/(\w{2})/(.*)/$', 'zoo.api.views.place',
         name='api-place'),
+    url(r'^api/species-identifiers/$', 'zoo.api.views.species_identifiers',
+        name='api-species-identifierskeys'),
     url(r'^api/(\w{3,})/$', 'zoo.api.views.user',
         name='api-user'),
     url(r'^api/(\w{3,})/tripbook/$', 'zoo.api.views.tripbook',
