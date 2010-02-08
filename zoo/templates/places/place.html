@@ -47,6 +47,10 @@ jQuery(function($) {
 
 {% block primary_content %}
 
+{% if place.is_unlisted %}
+<p class="notification">This place is <strong>unlisted</strong> - people can still see it if they visit the page, but it isn't included in site search results, country pages or species pages.</p>
+{% endif %}
+
 <h2 class="initial">General information</h2>
 <div class="compact">
 	<p class="address">{% if place.address %}<strong>Address:</strong> {{ place.address }},{% endif %}

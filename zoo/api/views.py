@@ -161,7 +161,7 @@ def species_identifiers(request):
                 'namespace': d['namespace'],
                 'key': d['key'],
                 'uri': d['uri'],
-            } for d in species_identifiers.get(s.pk)] or []
+            } for d in species_identifiers.get(s.pk, [])]
         })
     
     result = {

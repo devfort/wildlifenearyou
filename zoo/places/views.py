@@ -8,6 +8,8 @@ from zoo.places.models import Place, Country, PlaceOpening, \
     PlaceSpeciesSolelyForLinking, PlaceCategory
 from zoo.animals.models import Species
 from zoo.trips.models import Trip, Sighting
+from zoo.shorturl.utils import converter
+
 from django.db.models import Count
 
 SPECIES_ON_PLACE_PAGE = 10
@@ -113,11 +115,21 @@ def get_times_sorted(place):
 
 def place(request, country_code, slug):
     country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-
+    
+    if slug.startswith('unlisted-'):
+        code = slug.replace('unlisted-', '')[1:]
+        pk = converter.to_int(code)
+        place = get_object_or_404(Place, pk=pk, country=country)
+        if not place.is_unlisted:
+            return HttpResponseRedirect(place.get_absolute_url())
+    else:
+        place = get_object_or_404(Place, slug=slug, country=country)
+        if place.is_unlisted:
+            return HttpResponseRedirect(place.get_absolute_url())
+    
     species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE + 1)
     times_sorted = get_times_sorted(place)
-
+    
     return render(request, 'places/place.html', {
         'place': place,
         'species_list': species_list[0:SPECIES_ON_PLACE_PAGE],

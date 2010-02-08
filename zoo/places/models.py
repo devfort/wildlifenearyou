@@ -236,6 +236,11 @@ class Place(AuditedModel):
     @attrproperty
     @models.permalink
     def urls(self, name):
+        if self.is_unlisted:
+            slug = 'unlisted-%s' % self.short_code()
+        else:
+            slug = self.slug
+        
         if name == 'absolute':
             urlname = 'place'
         elif name == 'summary':
@@ -252,9 +257,9 @@ class Place(AuditedModel):
             raise AttributeError, 'No such url "%s"' % name
         return (urlname, (), {
             'country_code': self.country.country_code.lower(),
-            'slug': self.slug,
-            })
-
+            'slug': slug,
+        })
+    
     def visible_photos(self):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
