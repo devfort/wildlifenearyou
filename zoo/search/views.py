@@ -43,7 +43,11 @@ def search_split(request, what, near):
         search_users(
             what, details=True, default_op=Query.OP_OR,
     )
-
+    
+    results = [
+        place for place in results if not place.is_unlisted
+    ]
+    
     for result in results:
         result.species_list = result.get_species()
         for species in result.species_list:
@@ -116,12 +120,16 @@ def search_single(request, q, bypass=False):
             search_known_species(q, details=True, default_op=Query.OP_OR)
         users_results, users_results_info, users_results_corrected_q = \
             search_users(q, details=True, default_op=Query.OP_OR)
-
+        
         #near_results = search_near('', q)
         # Did you mean "stuff near X" uses Yahoo! Placemaker - it's much less 
         # likely to suggest crazy stuff for animal names than Google geocoder
         suggested_location_name, (lat, lon) = placemaker_geocode(q)
-
+        
+        results = [
+            place for place in results if not place.is_unlisted
+        ]
+        
         # Annotate results with a special species list that has a flag on 
         # any species which came up in the species results as well
         for result in results:
