@@ -137,6 +137,7 @@ INSTALLED_APPS = [
     'zoo.cleanup',
     'zoo.lists',
     'zoo.api',
+    'zoo.itis',
     # The next four items are dependencies for basic.blog
     'basic.blog',
     'basic.inlines',
