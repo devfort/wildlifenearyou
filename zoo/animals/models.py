@@ -83,6 +83,7 @@ class Species(AbstractSpecies):
             "just adding an 's' on the end, provide it here e.g. Sheep"
         )
     )
+    needs_indexing = models.BooleanField(default = True)
     
     def plural(self):
         return self.plural_override or (self.common_name + 's')
@@ -196,7 +197,7 @@ class Species(AbstractSpecies):
     
     class Meta:
         verbose_name_plural = 'species'
-
+    
     class Searchable:
         fields = [
             { # Searching for species by name.

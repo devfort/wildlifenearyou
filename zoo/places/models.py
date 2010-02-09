@@ -115,7 +115,7 @@ class Place(AuditedModel):
     freebase_id = models.CharField(max_length=100, blank=True, db_index=True)
     wikipedia_url = models.CharField(max_length=255, blank=True)
     
-    #needs_indexing = models.BooleanField(default = True)
+    needs_indexing = models.BooleanField(default = True)
     
     @property
     def photo(self):

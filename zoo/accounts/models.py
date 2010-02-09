@@ -64,6 +64,8 @@ class Profile(models.Model):
     flickr_tag_scientific_names = models.NullBooleanField(default = False)
     flickr_geotag = models.NullBooleanField(default = False)
     
+    needs_indexing = models.BooleanField(default = True)
+    
     def short_url(self):
         return 'http://wlny.eu/u%s' % converter.from_int(self.pk)
     
