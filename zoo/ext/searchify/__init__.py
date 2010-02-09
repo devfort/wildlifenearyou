@@ -1,68 +1,66 @@
-# $Id$
-# FIXME this needs a name
-#
+'''
+Add an inner class Searchable to your model, with fields (list of django_fields) and cascades (list of strings which are Django fields that are relations to other Django model instances).
+Note that you can't have one search field multiple times (only the last one processed will be preserved).
 
-# Add an inner class Searchable to your model, with fields (list of django_fields) and cascades (list of strings which are Django fields that are relations to other Django model instances).
-# Note that you can't have one search field multiple times (only the last one processed will be preserved).
-#
-# django_field is either a string (name of Django model field, use all defaults), or a dictionary.
-# Within the dictionary, ``django_fields`` is either a string (again), or a callable (takes the instance, returns a list of data to index into the search field).
-# ``field_name`` is the search field name (optional, auto-generated), ``config`` is an optional dictionary of configuration options (search provider dependent; currently we use xappyc)
-# In your search field names, don't start with an underscore ('_') as that's reserved.
-#
-# We STRONGLY recommend explicitly declaring your search field names, as it makes the resultant search system more useful to users. In some cases you don't need it, but that's rare.
-#
-# Note that strictly you can have a callable as a django_field directly. In this case, it will be called with a parameter of None to generate the search field name (well, part of it - it only needs to be unique to the class). But don't do this, it's ugly.
-#
-# In normal use, you may have a single static method in your Searchable inner class, to constrain cascading in complex cases:
-#
-# reindex_on_cascade(sender, instance) -- defaults to True; ``sender`` is what we've just indexed which cascaded to this ``instance`` of the model
-#
-# If you really need, you can override most aspects of the data gathering and field generation. Generally speaking you won't have to touch this at all.
-#
-# get_configuration(model) -- ``model`` is fully constructed and registered, return a list of search field descriptors
-# get_field_input(instance, django_field) -- return an iterable, but you almost never want to do this
-# get_details(field_descriptor) -- the Searchify field descriptor, returns a tuple (django_field_list, search field name, config dictionary), you almost never want to do this either
-#   (importantly, 'field_name' in the dictionary is filled out to the explicit or auto-generated search field name)
-# get_index_data(instance) -- return a unique identifier (we use model ':' pk), and a dict of search field names mapping to lists of input data. We auto-create a field _TYPE which is the model name.
-#
-# EXAMPLE
-#
-# from django.db import models
-#
-# class Sea(models.Model):
-#   name = models.CharField(null=True, blank=True, max_length=100)
-#
-#   class Searchable:
-#     fields = [ { 'field_name': 'name', 'django_fields': ['name', lambda inst: [n.name for n in inst.narwhals], ] } ]
-#
-# class Narwhal(models.Model):
-#   name = models.CharField(null=True, blank=True, max_length=100)
-#   home = models.ForeignKey(Sea, related_name='narwhals')
-#
-#   class Searchable:
-#     fields = [ { 'field_name': 'name', 'django_fields': ['name'] } ]
-#     cascades = [ 'home' ]
-#
-# NASTY DETAILS
-#
-# When auto-generating, we use ':' to separate bits of things where possible, and '__' where we require \w only.
+django_field is either a string (name of Django model field, use all defaults), or a dictionary.
+Within the dictionary, ``django_fields`` is either a string (again), or a callable (takes the instance, returns a list of data to index into the search field).
+``field_name`` is the search field name (optional, auto-generated), ``config`` is an optional dictionary of configuration options (search provider dependent; currently we use xappyc)
+In your search field names, don't start with an underscore ('_') as that's reserved.
 
-# FIXME: make it easy to reindex a model (including 'cheap' where we don't delete everything for that model first)
-# FIXME: make it easy to reindex everything
-# FIXME: it's easy to accidentally delete the database after initialisation happens; we should provide a CLEAR DATABASE function (used by reindexing, above) which safely clears and ensures that the database has appropriate configuration at the end of things
-# FIXME: document the query() method added to managers
-# FIXME: registering and initialising so we're not bound to Djape. (Possibly even write something to tie into Lucene/Solr or similar.)
-# FIXME: other FIXMEs ;-)
+We STRONGLY recommend explicitly declaring your search field names, as it makes the resultant search system more useful to users. In some cases you don't need it, but that's rare.
 
-# FIXME: drop xapian_index
-# FIXME: check any other changes made by Simon and/or Richard
-# FIXME: document the new hooks (and move to docstring throughout)
-# FIXME: document that you have to call initialise (and figure out where additional config comes from...)
+Note that strictly you can have a callable as a django_field directly. In this case, it will be called with a parameter of None to generate the search field name (well, part of it - it only needs to be unique to the class). But don't do this, it's ugly.
 
-# TODO: make it possible to index an individual model to more than one database.
-# TODO: reverse cascades, so you can put searchable stuff into your Profile model, but have it index stuff from the User.
-# Test: the override stuff
+In normal use, you may have a single static method in your Searchable inner class, to constrain cascading in complex cases:
+
+reindex_on_cascade(sender, instance) -- defaults to True; ``sender`` is what we've just indexed which cascaded to this ``instance`` of the model
+
+If you really need, you can override most aspects of the data gathering and field generation. Generally speaking you won't have to touch this at all.
+
+get_configuration(model) -- ``model`` is fully constructed and registered, return a list of search field descriptors
+get_field_input(instance, django_field) -- return an iterable, but you almost never want to do this
+get_details(field_descriptor) -- the Searchify field descriptor, returns a tuple (django_field_list, search field name, config dictionary), you almost never want to do this either
+  (importantly, 'field_name' in the dictionary is filled out to the explicit or auto-generated search field name)
+get_index_data(instance) -- return a unique identifier (we use model ':' pk), and a dict of search field names mapping to lists of input data. We auto-create a field _TYPE which is the model name.
+
+EXAMPLE
+
+from django.db import models
+
+class Sea(models.Model):
+  name = models.CharField(null=True, blank=True, max_length=100)
+
+  class Searchable:
+    fields = [ { 'field_name': 'name', 'django_fields': ['name', lambda inst: [n.name for n in inst.narwhals], ] } ]
+
+class Narwhal(models.Model):
+  name = models.CharField(null=True, blank=True, max_length=100)
+  home = models.ForeignKey(Sea, related_name='narwhals')
+
+  class Searchable:
+    fields = [ { 'field_name': 'name', 'django_fields': ['name'] } ]
+    cascades = [ 'home' ]
+
+NASTY DETAILS
+
+When auto-generating, we use ':' to separate bits of things where possible, and '__' where we require \w only.
+
+FIXME: make it easy to reindex a model (including 'cheap' where we don't delete everything for that model first)
+FIXME: make it easy to reindex everything
+FIXME: it's easy to accidentally delete the database after initialisation happens; we should provide a CLEAR DATABASE function (used by reindexing, above) which safely clears and ensures that the database has appropriate configuration at the end of things
+FIXME: document the query() method added to managers
+FIXME: registering and initialising so we're not bound to Djape. (Possibly even write something to tie into Lucene/Solr or similar.)
+FIXME: other FIXMEs ;-)
+
+FIXME: drop xapian_index
+FIXME: check any other changes made by Simon and/or Richard
+FIXME: document the new hooks (and move to docstring throughout)
+FIXME: document that you have to call initialise (and figure out where additional config comes from...)
+
+TODO: make it possible to index an individual model to more than one database.
+TODO: reverse cascades, so you can put searchable stuff into your Profile model, but have it index stuff from the User.
+Test: the override stuff
+'''
 
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.db import models
