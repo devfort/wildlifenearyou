@@ -49,6 +49,12 @@ def _species_for_place(place):
         sightings__place = place
     ).values_list('common_name', flat=True)
 
+def _exact_species_for_place(place):
+    from zoo.animals.models import Species # Avoid circular import
+    return ['species_%s' % pk for pk in Species.objects.filter(
+        sightings__place = place,
+    ).values_list('pk', flat=True)]
+
 class PlaceCategory(models.Model):
     name = models.CharField(max_length = 100)
     plural = models.CharField(max_length = 100, null = True)
@@ -108,6 +114,8 @@ class Place(AuditedModel):
     # External identifiers are useful
     freebase_id = models.CharField(max_length=100, blank=True, db_index=True)
     wikipedia_url = models.CharField(max_length=255, blank=True)
+    
+    #needs_indexing = models.BooleanField(default = True)
     
     @property
     def photo(self):
@@ -297,7 +305,7 @@ class Place(AuditedModel):
                 'config': {
                     'freetext': {'language': 'en'},
                     'store': True,
-                } # enable stemming
+                }
             }, { # Location of the place.
                 'field_name': 'latlon',
                 'django_fields': [lambda inst: [inst.latlon()]],
@@ -311,7 +319,14 @@ class Place(AuditedModel):
                 'config': {
                     'freetext': {'language': 'en'},
                     'store': True,
-                } # enable stemming,
+                }
+            }, { # Exact species IDs you can see here
+                'field_name': 'exactspecies',
+                'django_fields': [_exact_species_for_place],
+                'config': {
+                    'freetext': {'language': 'en'},
+                    'store': True,
+                }
             },
         ]
         xapian_index = 'placeinfo'
