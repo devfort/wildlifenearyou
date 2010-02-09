@@ -32,12 +32,13 @@ def species(request, slug):
     nearest = None
     if description:
         try:
-            nearest = nearest_places_with_species(
-                species.common_name, '%f %f' % (latitude, longitude)
-            )[0]
+            nearest = [p for p in nearest_places_with_species(
+                'exactspecies:species_%s' % species.pk,
+                '%f %f' % (latitude, longitude)
+            ) if not p.is_unlisted][0]
         except IndexError:
             nearest = None
-
+    
     spotters = User.objects.filter(
         created_sighting_set__species = species
     ).distinct()
