@@ -18,13 +18,13 @@ from accounts.models import profilecalc_postsave
 ##### Save current user in a thread local and auto-populate created_by etc
 
 stash = threading.local()
-def set_current_user(user):
-    stash.current_user = user
+def set_current_user_func(user_func):
+    stash.current_user_func = user_func
 
-set_current_user(None)
+set_current_user_func(lambda: None)
 
 def onanymodel_presave(sender, **kwargs):
-    current_user = getattr(stash, 'current_user', None)
+    current_user = getattr(stash, 'current_user_func', lambda: None)()
     if current_user is None or not current_user.is_authenticated():
         # this will throw an exception if there's no sedf user AND THIS IS A
         # GOOD THING
@@ -45,7 +45,9 @@ pre_save.connect(onanymodel_presave)
 
 class AutoCreatedAndModifiedFields:
     def process_request(self, request):
-        set_current_user(request.user)
+        # This needs to be lazily evaluated or we force a session DB hit 
+        # on every single request.
+        set_current_user_func(lambda: request.user)
 
 ##### Profiles have a percentage completion which needs recalculating when certain related models change
 post_save.connect(profilecalc_postsave)
