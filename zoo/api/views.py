@@ -9,6 +9,8 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from zoo.shorturl.utils import converter
 
+MAX_METADATA = 20
+
 import urllib
 from collections import defaultdict
 
@@ -184,3 +186,43 @@ def species_identifiers(request):
         )
     
     return api_response(request, 200, result)
+
+def metadata(request, ids):
+    ids = ids.replace('/', '')
+    ids = [id.strip() for id in ids.split(',') if id.strip()]
+    
+    if len(set(ids)) > MAX_METADATA:
+        return api_response(request, 500, {
+            'ok': False,
+            'reason': 'Max %s ids allowed' % MAX_METADATA
+        })
+    
+    results = dict(zip(ids, [{'ok': False} for id in ids]))
+    
+    from shorturl.views import PREFIXES
+    to_process = {}
+    for shortcode in ids:
+        if shortcode[0] in PREFIXES:
+            try:
+                pk = converter.to_int(shortcode[1:])
+            except ValueError:
+                continue
+            to_process.setdefault(
+                PREFIXES[shortcode[0]], {}
+            )[pk] = shortcode
+    
+    for model, codes in to_process.items():
+        pks = codes.keys()
+        found = model.objects.in_bulk(pks)
+        for pk, obj in found.items():
+            results[codes[pk]] = {
+                'ok': True,
+                'shortcode': codes[pk],
+                'shorturl': 'http://wlny.eu/%s' % codes[pk],
+                'title': str(obj),
+                'url': 'http://www.wildlifenearyou.com%s' % \
+                    obj.get_absolute_url(),
+                'type': model._meta.verbose_name,
+            }
+    
+    return api_response(request, 200, {'results': results, 'ok': True})
