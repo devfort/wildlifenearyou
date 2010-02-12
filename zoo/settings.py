@@ -18,10 +18,19 @@ SECRET_KEY = '6p-br^04irwt=+&4dag12(-7_!p4&t=u+h1+#$xrvr0n6=+o^d'
 
 CACHE_BACKEND = "memcached://127.0.0.1:11211/?timeout=900000"
 
+
+devserver = False
+try:
+    import devserver
+    devserver = True
+    INSTALLED_APPS.append('devserver')
+except ImportError:
+    pass
+
 try:
     import debug_toolbar
     if 'debug_toolbar.middleware.DebugToolbarMiddleware' not in \
-        MIDDLEWARE_CLASSES:
+        MIDDLEWARE_CLASSES and not devserver:
         MIDDLEWARE_CLASSES.append(
             'debug_toolbar.middleware.DebugToolbarMiddleware'
         )
