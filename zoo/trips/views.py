@@ -2,7 +2,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect as Redirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect as Redirect, \
+    HttpResponseForbidden, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import DotExpandedDict
 from django import forms
@@ -672,12 +673,20 @@ class AddPlaceForm(forms.ModelForm):
         
         self.fields.keyOrder = self.Meta.fields
     
+    def clean_zoom_level(self):
+        zoom_level = self.cleaned_data.get('zoom_level', None)
+        if zoom_level is None:
+            raise forms.ValidationError, 'Zoom level is required'
+        if not (6 <= zoom_level <= 19):
+            raise forms.ValidationError, 'Zoom level must be between 6 and 19'
+        return zoom_level
+    
     class Meta:
         model = Place
         fields = (
             'known_as', 'country', 'url', 'address_line_1', 'address_line_2', 
             'town', 'state', 'zip', 'phone', 'latitude', 'longitude',
-            'categories', 'is_unlisted'
+            'categories', 'is_unlisted', 'zoom_level'
         )
 
 from zoo.search import search_species
@@ -731,10 +740,44 @@ def autocomplete_species(request, place_id):
     
     # Order each group by number of sightings, with most at the top
     seen_here_group.sort(key = lambda r: r['num_sightings'], reverse=True)
-    seen_elsewhere_group.sort(key = lambda r: r['num_sightings'], reverse=True)
+    seen_elsewhere_group.sort(
+        key = lambda r: r['num_sightings'], reverse=True
+    )
     return render(request, 'trips/autocomplete_species.html', {
         'seen_here': seen_here_group,
         'seen_elsewhere': seen_elsewhere_group,
         'not_seen': not_seen_group,
         'q': q,
+    })
+
+from zoo.search import search_places, SEARCH_ALL
+def ajax_nearby_places(request):
+    latitude = request.GET.get('latitude', None)
+    longitude = request.GET.get('longitude', None)
+    if latitude is None or longitude is None:
+        return HttpResponse('')
+    places, results_info, ignore = search_places(
+        SEARCH_ALL, latlon=(latitude, longitude), details=True
+    )
+    places = [p for p in places if not p.is_unlisted]
+    
+    # Calculate distance to each place
+    for place in places:
+        try:
+            place.distance = ([
+                d for d in results_info['items'] 
+                if d['id'] == 'places.Place:%s' % place.id
+            ][0]['geo_distance']['latlon'] / 1609.344)
+        except (KeyError, IndexError):
+            pass
+    
+    # Filter out places more than 50 miles away
+    places = [
+        p for p in places if p.distance <= 50
+    ]
+    if not places:
+        return HttpResponse('')
+        
+    return render(request, 'trips/ajax_nearby_places.html', {
+        'places': places[:5],
     })

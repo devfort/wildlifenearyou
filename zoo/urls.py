@@ -155,6 +155,8 @@ urlpatterns = patterns('',
     url(r'^add-trip/$', 'trips.views.add_trip_select_place', name='add-trip'),
     url(r'^add-trip/add-place/$', 'trips.views.add_trip_add_place', 
         name='add-trip-add-place'),
+    url(r'^add-trip/add-place/nearby/$', 'trips.views.ajax_nearby_places', 
+        name='add-trip-add-place-nearby-places'),
     
     (r'^faces/profile-images.xml$', faces.profile_images_xml),
     (r'^faces/profile.xml$', faces.profile_xml),

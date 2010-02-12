@@ -1,6 +1,10 @@
+<style type="text/css">
+input#id_known_as {
+	font-size: 2em;
+}
+</style>
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
 <script type="text/javascript">
-
 var accuracyToZoomLevel = [
 	1,  // 0 - Unknown location
 	5,  // 1 - Country
@@ -23,11 +27,11 @@ jQuery(window).load(function() {
 	var mapwrapper = $('<div class="gmap" />').css('position', 'relative');
 	var mapdiv = $('<div />').css({
 		width: '100%',
-		height: '300px'
+		height: '360px'
 	});
 	var crosshair = $('<div />').css({
 		'position': 'absolute',
-		'top': '142px',
+		'top': '172px',
 		'height': '19px',
 		'width': '19px',
 		'left': '50%',
@@ -42,10 +46,26 @@ jQuery(window).load(function() {
 	$('#id_country').parent().before(mapwrapper);
 	
 	window.gmap = new GMap2(mapdiv[0]);
-	gmap.addControl(new GLargeMapControl());
+	gmap.addControl(new GLargeMapControl3D());
 	gmap.addControl(new GMapTypeControl());
 	gmap.setMapType(G_NORMAL_MAP);
-	gmap.setCenter(new GLatLng(44.08758, -21.796875), 2);
+	var init_longitude = 44.08758;
+	var init_latitude = -21.796875;
+	var init_zoom = 2;
+	
+	var lat_val = $('#id_latitude').val();
+	var lon_val = $('#id_longitude').val();
+	var zoom_val = $('#id_zoom_level').val();
+	if (lat_val) {
+		init_latitude = lat_val;
+	}
+	if (lon_val) {
+		init_longitude = lon_val;
+	}
+	if (zoom_val) {
+		init_zoom = zoom_val;
+	}
+	gmap.setCenter(new GLatLng(init_latitude, init_longitude), init_zoom);
 	
 	function lookupCountry() {
 		var center = gmap.getCenter();
@@ -59,6 +79,10 @@ jQuery(window).load(function() {
 				$('#id_country').val(countryCodeLookups[place.countryCode]);
 			}
 		});
+		$('#nearby_suggestions').load(
+			'/add-trip/add-place/nearby/?latitude=' + center.lat() + 
+			'&longitude=' + center.lng()
+		);
 	}
 	
 	var lookupTimer = false;
@@ -75,6 +99,10 @@ jQuery(window).load(function() {
 	
 	GEvent.addDomListener(crosshair[0], 'dblclick', function() {
 		gmap.zoomIn();
+	});
+	
+	GEvent.addListener(gmap, 'zoomend', function(oldZoom, newZoom) {
+		$('#id_zoom_level').val(newZoom);
 	});
 	
 	/* Zoom the map to a country when they pick one from the dropdown - but 
@@ -123,6 +151,12 @@ jQuery(window).load(function() {
 			{{ form.longitude.errors }}
 			{{ form.longitude }}
 		</div>
+		<div class="required text-container container">
+			<label for="id_{{ form.zoom_level.html_name }}">{{ form.zoom_level.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+			{{ form.zoom_level.errors }}
+			{{ form.zoom_level }}
+		</div>
+		<div id="nearby_suggestions"></div>
 	</div>
 	<p class="meta">The following information is optional, but we'd love to know more details:</p>
 
