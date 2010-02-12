@@ -94,9 +94,10 @@ class Place(AuditedModel):
     is_confirmed = models.BooleanField(default=False)
     
     #mapping stuff - and Grid Ref for reserves
-    gridref = models.CharField(max_length=8, null=True, blank=True)
-    longitude = models.FloatField(null=True)
-    latitude = models.FloatField(null=True)
+    gridref = models.CharField(max_length = 8, null = True, blank = True)
+    longitude = models.FloatField(null = True)
+    latitude = models.FloatField(null = True)
+    zoom_level = models.IntegerField(null = True)
     
     # We can (optionally) editorially select a photo to feature for this place
     chosen_photo = models.ForeignKey(
