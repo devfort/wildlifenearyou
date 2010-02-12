@@ -272,20 +272,25 @@ form.place .location {
 	margin-bottom: 1em;
 	zoom: 1;
 }
-form.place .gmap {
-	clear: both;
-	margin-top: 1em;
-	margin-bottom: 1em;
-}
 form.place .contact {
 	overflow: hidden;
 	width: 100%;
-	margin-bottom: 1em;
+	margin-bottom: 2em;
 }
-form.place .location .container {
+.contact p.intro {
+	margin-bottom: 0;
+}
+.address-info p.intro {
+	margin-bottom: 0.75em;
+}
+form.place .latlon .container {
 	float: left;
 	width: 46%;
 	margin: 0;
+}
+
+form.place .latlon .even {
+	float: right;
 }
 
 form.place .location .country {
@@ -302,6 +307,44 @@ form.place .contact .container {
 	margin-bottom: 0;
 }
 
+div#place-categories ul, div#place-categories li {
+	list-style-type: none;
+	padding: 0;
+	background-image: none;
+}
+div#place-categories ul {
+	overflow: hidden;
+}
+div#place-categories li {
+	width: 10em;
+	float: left;
+}
+.location h2 {
+	margin-top: 0;
+}
+#gmap {
+	margin-bottom: 2em;
+}
+.latlon {
+	margin-bottom: 1em;
+	clear: both;
+	overflow: hidden;
+}
+form ul.errorlist,
+form ul.errorlist li {
+	margin: 0;
+	padding: 0;
+	background: none;
+	list-style-type: none;
+}
+form ul.errorlist {
+	margin-bottom: 1em;
+	background-color: #EFDBDB;
+	padding: 0.8em;
+}
+#id_known_as {
+	width: 99.5%;
+}
 /* @end */
 
 /* @group Blog */

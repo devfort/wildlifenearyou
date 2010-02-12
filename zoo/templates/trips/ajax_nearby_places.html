@@ -1,4 +1,5 @@
-<p>Are you looking for...</p><ul>
+<h2>Are you looking for...</h2>
+<ul>
 	{% for place in places %}
 	<li><a href="{{ place.get_absolute_url }}add-trip/">{{ place.known_as }}</a><!-- - {{ place.distance|floatformat:0 }} miles away--></li>
 	{% endfor %}

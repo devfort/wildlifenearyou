@@ -24,7 +24,7 @@ var countryCodeLookups = {
 jQuery(window).load(function() {
 	var $ = jQuery;
 	var map_has_moved = false;
-	var mapwrapper = $('<div class="gmap" />').css('position', 'relative');
+	var mapwrapper = $('#gmap').css('position', 'relative');
 	var mapdiv = $('<div />').css({
 		width: '100%',
 		height: '360px'
@@ -43,7 +43,6 @@ jQuery(window).load(function() {
 	});
 	mapwrapper.append(mapdiv);
 	mapwrapper.append(crosshair);
-	$('#id_country').parent().before(mapwrapper);
 	
 	window.gmap = new GMap2(mapdiv[0]);
 	gmap.addControl(new GLargeMapControl3D());
@@ -136,59 +135,53 @@ jQuery(window).load(function() {
 		{{ form.known_as }}
 	</div>
 	<div class="location">
-		<div class="required select-container container country">
-			<label for="id_{{ form.country.html_name }}">{{ form.country.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
-			{{ form.country.errors }}
-			{{ form.country }}
+		<div id="gmap"></div>
+		<div class="primary">
+			<div class="required select-container container country">
+				<label for="id_{{ form.country.html_name }}">{{ form.country.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+				{{ form.country.errors }}
+				{{ form.country }}
+			</div>
+			<div class="latlon">
+				<div class="required text-container container">
+					<label for="id_{{ form.latitude.html_name }}">{{ form.latitude.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+					{{ form.latitude.errors }}
+					{{ form.latitude }}
+				</div>
+				<div class="required text-container container even">
+					<label for="id_{{ form.longitude.html_name }}">{{ form.longitude.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+					{{ form.longitude.errors }}
+					{{ form.longitude }}
+				</div>
+			</div>
+			<div class="required text-container container">
+				<label for="id_{{ form.zoom_level.html_name }}">{{ form.zoom_level.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
+				{{ form.zoom_level.errors }}
+				{{ form.zoom_level }}
+			</div>
 		</div>
-		<div class="required text-container container">
-			<label for="id_{{ form.latitude.html_name }}">{{ form.latitude.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
-			{{ form.latitude.errors }}
-			{{ form.latitude }}
-		</div>
-		<div class="required text-container container">
-			<label for="id_{{ form.longitude.html_name }}">{{ form.longitude.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
-			{{ form.longitude.errors }}
-			{{ form.longitude }}
-		</div>
-		<div class="required text-container container">
-			<label for="id_{{ form.zoom_level.html_name }}">{{ form.zoom_level.label }} <img src="/static/img/icons/required_blue.gif" alt="Required" title="Required"></label>
-			{{ form.zoom_level.errors }}
-			{{ form.zoom_level }}
-		</div>
-		<div id="nearby_suggestions"></div>
+		<div id="nearby_suggestions" class="secondary"><!-- ajax_nearby_places.html --></div>
 	</div>
-	<p class="meta">The following information is optional, but we'd love to know more details:</p>
-
-	<div class="checkbox-container container">
-		<label for="id_{{ form.is_unlisted.html_name }}">Unlisted (e.g. my garden)</label>
-		{{ form.is_unlisted.errors }}
-		{{ form.is_unlisted }}
-		<p class="meta">Check this box for places that are not open to the public - your garden for example. Unlisted places will not be shown in site-wide search, but will still be displayed on your profile page. For privacy reasons, you should make the map location slightly inaccurate if you are adding your garden.</p>
-	</div>
-
-	<style type="text/css">
-	div#place-categories ul, div#place-categories li {
-		list-style-type: none;
-		padding: 0;
-		background-image: none;
-	}
-	div#place-categories ul {
-		overflow: hidden;
-	}
-	div#place-categories li {
-		width: 10em;
-		float: left;
-	}
 	
-	</style>
-	<div class="container" id="place-categories">
-		<p>What kind of place is it?</p>
+	<h2>The following information is optional, but we'd love to know more</h2>
+
+	<div class="checkbox-container container" id="place-categories">
+		<p class="intro">What kind of place is it?</p>
 		{{ form.categories.errors }}
 		{{ form.categories }}
 	</div>
+		
+	<div class="checkbox-container container">
+		<label for="id_{{ form.is_unlisted.html_name }}">{{ form.is_unlisted }} Unlisted<span class="meta"> (e.g. my garden)</span></label>
+		{{ form.is_unlisted.errors }}
+		
+		<p>Check this box for places that are <strong>not open to the public</strong>&mdash;your garden for example. Unlisted places will not be shown in site-wide search, but will still be displayed on your profile page. For privacy reasons, you should make the map location slightly inaccurate if you are adding your garden.</p>
+	</div>
+
+
 
 	<div class="contact">
+		<p class="intro">Contact information</p>
 		<div class="text-container container">
 			<label for="id_{{ form.phone.html_name }}">Phone number</label>
 			{{ form.phone.errors }}
@@ -200,7 +193,8 @@ jQuery(window).load(function() {
 			{{ form.url }}
 		</div>
 	</div>
-	<div class="address">
+	<div class="address-info">
+		<p class="intro">Do you know the exact address?</p>
 		<div class="text-container container">
 			<label for="id_{{ form.address_line_1.html_name }}">{{ form.address_line_1.label }}</label>
 			{{ form.address_line_1.errors }}
@@ -212,17 +206,17 @@ jQuery(window).load(function() {
 			{{ form.address_line_2 }}
 		</div>
 		<div class="text-container container">
-			<label for="id_{{ form.town.html_name }}">{{ form.town.label }}</label>
+			<label for="id_{{ form.town.html_name }}">Town or City</label>
 			{{ form.town.errors }}
 			{{ form.town }}
 		</div>
 		<div class="text-container container">
-			<label for="id_{{ form.state.html_name }}">{{ form.state.label }}</label>
+			<label for="id_{{ form.state.html_name }}">State or County</label>
 			{{ form.state.errors }}
 			{{ form.state }}
 		</div>
 		<div class="text-container container">
-			<label for="id_{{ form.zip.html_name }}">{{ form.zip.label }}</label>
+			<label for="id_{{ form.zip.html_name }}">Postal or Zip code</label>
 			{{ form.zip.errors }}
 			{{ form.zip }}
 		</div>
