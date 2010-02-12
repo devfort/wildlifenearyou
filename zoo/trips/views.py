@@ -636,6 +636,7 @@ def add_trip_add_place(request):
         form = AddPlaceForm()
     return render(request, 'trips/add_trip_add_place.html', {
         'form': form,
+        'countries': Country.objects.all(),
     })
 
 @login_required

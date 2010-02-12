@@ -13,6 +13,10 @@ var accuracyToZoomLevel = [
 	17 // 8 - Address
 ];
 
+var countryCodeLookups = {
+{% for country in countries %}	"{{ country.country_code|upper }}": {{ country.pk }}{% if not forloop.last %},{% endif %}
+{% endfor %}};
+
 jQuery(window).load(function() {
 	var $ = jQuery;
 	var map_has_moved = false;
@@ -35,19 +39,40 @@ jQuery(window).load(function() {
 	});
 	mapwrapper.append(mapdiv);
 	mapwrapper.append(crosshair);
-	$('#id_latitude').parent().before(mapwrapper);
+	$('#id_country').parent().before(mapwrapper);
+	
 	window.gmap = new GMap2(mapdiv[0]);
-	gmap.addControl(new GSmallMapControl());
+	gmap.addControl(new GLargeMapControl());
 	gmap.addControl(new GMapTypeControl());
-	//gmap.enableGoogleBar();
 	gmap.setMapType(G_NORMAL_MAP);
 	gmap.setCenter(new GLatLng(44.08758, -21.796875), 2);
+	
+	function lookupCountry() {
+		var center = gmap.getCenter();
+		var url = 'http://ws.geonames.org/findNearbyPlaceNameJSON?'
+		url += 'lat=' + center.lat() + '&lng=' + center.lng() + '&callback=?';
+		jQuery.getJSON(url, function(json) {
+			if (typeof json.geonames != 'undefined' && json.geonames.length) {
+				var place = json.geonames[0];
+				//var countryName = place.countryName;
+				//var adminName1 = place.adminName1;
+				$('#id_country').val(countryCodeLookups[place.countryCode]);
+			}
+		});
+	}
+	
+	var lookupTimer = false;
 	GEvent.addListener(gmap, 'move', function() {
 		map_has_moved = true;
 		var center = gmap.getCenter();
 		$('#id_latitude').val(center.lat());
 		$('#id_longitude').val(center.lng());
+		if (lookupTimer) {
+			clearTimeout(lookupTimer);
+		}
+		lookupTimer = setTimeout(lookupCountry, 1000);
 	});
+	
 	GEvent.addDomListener(crosshair[0], 'dblclick', function() {
 		gmap.zoomIn();
 	});
@@ -99,7 +124,7 @@ jQuery(window).load(function() {
 			{{ form.longitude }}
 		</div>
 	</div>
-    <p class="meta">The following information is optional, but we'd love to know more details:</p>
+	<p class="meta">The following information is optional, but we'd love to know more details:</p>
 
 	<div class="checkbox-container container">
 		<label for="id_{{ form.is_unlisted.html_name }}">Unlisted (e.g. my garden)</label>
