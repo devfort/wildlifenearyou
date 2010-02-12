@@ -18,15 +18,19 @@ from zoo.accounts.models import Profile
 from zoo.animals.forms import SpeciesField
 from zoo.search import NotFound, lookup_species, search_species
 from zoo.trips.utils import lookup_xapian_or_django_id
+from zoo.places.views import _get_place
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 import add_trip_utils
 
 @login_required
 def add_trip(request, country_code, slug):
-    place = place = get_object_or_404(Place,
-        slug = slug,
-        country__country_code = country_code
-    )
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-add-trip', args=redirect_args)
+        )
     
     selected = _get_selected(request.POST)
     unknowns = _get_unknowns(request.POST)
@@ -58,10 +62,12 @@ def add_trip(request, country_code, slug):
     })
 
 def ajax_search_species(request, country_code, slug):
-    place = place = get_object_or_404(Place,
-        slug = slug,
-        country__country_code = country_code
-    )
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-add-trip-ajax-search-species', args=redirect_args)
+        )
+    
     q = request.GET.get('q', '')
     if len(q) >= 3:
         return render(request, 'trips/ajax_search_species.html', {

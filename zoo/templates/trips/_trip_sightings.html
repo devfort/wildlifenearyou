@@ -1,5 +1,5 @@
 	<h{{htag}}>{% ifequal link_title "true" %}<a href="{% url trip-view trip.created_by, trip.id %}">{% endifequal %}{{ trip.compact_title }}{% ifequal link_title "true" %}</a>{% endifequal %}</h{{htag}}>
-	<p>A trip to <a href="{% url place trip.place.country.country_code,trip.place.slug %}">{{ trip.place }}</a>
+	<p>A trip to <a href="{% url place trip.place.country.country_code,trip.place.url_slug %}">{{ trip.place }}</a>
 		 with {{ trip.sightings.count }} animal sighting{{ trip.sightings.count|pluralize }} {% ifnotequal trip.formatted_date '' %}taken {{ trip.formatted_date }}{% endifnotequal %}</p>
 
 	<h{{htag2}}>Sighting{{ trip.sightings.count|pluralize }}</h{{htag2}}>

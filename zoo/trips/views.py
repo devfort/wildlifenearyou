@@ -21,6 +21,9 @@ from zoo.accounts.models import Profile
 from zoo.animals.forms import SpeciesField
 from zoo.search import NotFound, lookup_species, search_species
 from zoo.trips.utils import lookup_xapian_or_django_id
+from zoo.places.views import _get_place
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 BANNED_PLACE_SLUGS = ('by-category', 'unlisted')
 
@@ -68,10 +71,14 @@ def trip_photos(request, username, trip_id):
 
 @login_required
 def pick_sightings_for_place(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-pick_sightings_for_place', args=redirect_args)
+        )
+    
     return pick_sightings(request, '/%s/%s/add-sightings/' % (
-        country_code.lower(), slug
+        country_code.lower(), place.url_slug()
     ))
 
 @login_required
@@ -233,14 +240,19 @@ def finish_add_sightings_to_place(request, country_code, slug):
     a full trip (which has a date or a title or both, and a optional 
     description for their tripbook).
     """
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-add_sightings_to_place', args=redirect_args)
+        )
+    
     saw_ids = request.REQUEST.getlist('saw')
     trip_id = request.REQUEST.get('trip', None)
     if trip_id:
         trip = get_object_or_404(Trip, pk=trip_id)
         if request.user.is_anonymous() or request.user != trip.created_by:
-            # somehow they ended up trying to add something to a trip they didn't own
+            # somehow they ended up trying to add something to a trip they
+            # didn't own
             return HttpResponseForbidden()
     else:
         trip = None
@@ -287,8 +299,11 @@ def finish_add_sightings_to_place(request, country_code, slug):
             )
             if form.is_valid():
                 if request.POST.get('add-to-existing'):
-                    # if the user chose this option they want to add this sighting to an existing trip of theirs
-                    trip = Trip.objects.get(id=form.cleaned_data['user_trips'])
+                    # if the user chose this option they want to add this
+                    # sighting to an existing trip of theirs
+                    trip = Trip.objects.get(
+                        id = form.cleaned_data['user_trips']
+                    )
                 else:
                     # create a new trip
                     trip = Trip(
@@ -302,7 +317,8 @@ def finish_add_sightings_to_place(request, country_code, slug):
                     trip.save()
                     # created_by should happen automatically
 
-        # by now we should have a trip. If not, then it probably means the form was invalid
+        # by now we should have a trip. If not, then it probably means the
+        # form was invalid
         if trip:    
             # Now we finally add the sightings!
             for i, id in enumerate(saw_ids):
@@ -353,7 +369,9 @@ def finish_add_sightings_to_place(request, country_code, slug):
             'trip': trip,
         })
     else:
-        tcount = request.user.created_trip_set.all().filter(place=place).count()
+        tcount = request.user.created_trip_set.all().filter(
+            place = place
+        ).count()
         return render(request, 'trips/why-not-add-to-your-tripbook.html', {
             'hiddens': hiddens,
             'place': place,
@@ -563,7 +581,10 @@ def edit_trip(request, username, trip_id):
                 return Redirect(
                     reverse(
                         'place-pick_sightings_for_place',
-                        args=(trip2.place.country.country_code, trip2.place.slug,)
+                        args=(
+                            trip2.place.country.country_code,
+                            trip2.place.url_slug(),
+                        )
                     ) + '?' + urllib.urlencode(
                         next_vars
                     )
@@ -638,14 +659,6 @@ def add_trip_add_place(request):
     return render(request, 'trips/add_trip_add_place.html', {
         'form': form,
         'countries': Country.objects.all(),
-    })
-
-@login_required
-def add_trip(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-    return render(request, 'trips/add_trip.html', {
-        'place': place,
     })
 
 class AddPlaceForm(forms.ModelForm):

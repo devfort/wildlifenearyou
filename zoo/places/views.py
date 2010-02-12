@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseServerError
 from django.utils import dateformat
+from django.core.urlresolvers import reverse
 
 from zoo.shortcuts import render
 from zoo.places.models import Place, Country, PlaceOpening, \
@@ -114,18 +115,11 @@ def get_times_sorted(place):
     return times_sorted
 
 def place(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    
-    if slug.startswith('unlisted-'):
-        code = slug.replace('unlisted-', '')[1:]
-        pk = converter.to_int(code)
-        place = get_object_or_404(Place, pk=pk, country=country)
-        if not place.is_unlisted:
-            return HttpResponseRedirect(place.get_absolute_url())
-    else:
-        place = get_object_or_404(Place, slug=slug, country=country)
-        if place.is_unlisted:
-            return HttpResponseRedirect(place.get_absolute_url())
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place', args=redirect_args)
+        )
     
     species_list = place.get_species(request.user, SPECIES_ON_PLACE_PAGE + 1)
     times_sorted = get_times_sorted(place)
@@ -147,8 +141,11 @@ def place(request, country_code, slug):
     })
 
 def place_summary(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-summary', args=redirect_args)
+        )
     
     times_sorted = get_times_sorted(place)
     
@@ -158,8 +155,11 @@ def place_summary(request, country_code, slug):
     }, base='base_print.html')
 
 def place_animal_checklist(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-animal-checklist', args=redirect_args)
+        )
     
     species_list = place.get_species(request.user)
     
@@ -169,8 +169,11 @@ def place_animal_checklist(request, country_code, slug):
     }, base='base_print.html')
 
 def place_photos(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-photos', args=redirect_args)
+        )
     
     return render(request, 'photos/place_photos.html', {
         'place': place,
@@ -178,19 +181,26 @@ def place_photos(request, country_code, slug):
     })
 
 def place_species(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-species', args=redirect_args)
+        )
+    
     species_list = place.get_species(request.user)
-
+    
     return render(request, 'places/place_species.html', {
         'place': place,
         'species_list': species_list,
     })
 
 def place_species_view(request, country, place, species):
-    country = get_object_or_404(Country, country_code=country)
-    place = get_object_or_404(Place, slug=place, country=country)
+    place, redirect_args = _get_place(country, place)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-species-view', args=redirect_args + (species,))
+        )
+    
     species = get_object_or_404(Species, slug=species)
     place_species_list = PlaceSpeciesSolelyForLinking.objects.filter(
         place=place
@@ -290,25 +300,28 @@ from zoo.changerequests.models import ChangeRequestGroup, \
      ChangeAttributeRequest, CreateObjectRequest
 
 def place_edit(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-edit', args=redirect_args)
+        )
+    
     from django.contrib.contenttypes.models import ContentType
-
+    
     if request.method == 'POST':
         uf = PlaceUberForm(place, request.POST)
-
+        
         if uf.is_valid():
             if 'suggest all' in request.POST.get('submit', '').lower():
                 changes, deletions = uf.modifications()
-
+                
                 crg = [None]
                 def get_or_create_group():
                     # bad scoping! no binding.
                     if crg[0] is None:
                         crg[0] = ChangeRequestGroup.objects.create()
                     return crg[0]
-
+                
                 if changes:
                     for (obj, attrname), (oldval, newval) in changes.iteritems():
                         ChangeAttributeRequest.objects.create(
@@ -318,12 +331,12 @@ def place_edit(request, country_code, slug):
                             old_value=oldval,
                             new_value=newval,
                         )
-
+                
                 def create_add_request(uf, data, parent_ret):
                     if uf.parent_uform:
                         #    'place'        Place object
                         data[uf.relation] = uf.parent_uform.instance.id
-
+                        
                         ct = ContentType.objects.get_for_model(uf.model)
                         group = get_or_create_group()
                         cor = CreateObjectRequest.objects.create(
@@ -333,31 +346,59 @@ def place_edit(request, country_code, slug):
                             reverse_relation=uf.relation or '',
                             content_type=ct,
                         )
-
+                        
                         return cor
                 uf.mapadds(create_add_request)
-
+                
                 return HttpResponseRedirect(place.urls.changes_suggested)
     else:
         uf = PlaceUberForm(place)
-
+    
     return render(request, 'places/place_edit.html', {
         'place': place,
         'form': uf,
     })
 
 def place_edit_done(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-edit-done', args=redirect_args)
+        )
+    
     return render(request, 'places/place_edit_done.html', {
         'place': place,
-        })
+    })
 
 def support(request, country_code, slug):
-    country = get_object_or_404(Country, country_code=country_code)
-    place = get_object_or_404(Place, slug=slug, country=country)
-
+    place, redirect_args = _get_place(country_code, slug)
+    if redirect_args:
+        return HttpResponseRedirect(
+            reverse('place-support', args=redirect_args)
+        )
+    
     return render(request, 'places/place_support.html', {
         'place': place,
-        })
+    })
+
+def _get_place(country_code, url_slug):
+    if url_slug.startswith('unlisted-'):
+        code = url_slug.replace('unlisted-', '')[1:]
+        pk = converter.to_int(code)
+        place = get_object_or_404(Place,
+            pk = pk,
+            country__country_code = country_code
+        )
+        if not place.is_unlisted:
+            return place, (country_code, place.url_slug())
+        else:
+            return place, False
+    else:
+        place = get_object_or_404(Place,
+            slug = url_slug,
+            country__country_code = country_code
+        )
+        if place.is_unlisted:
+            return place, (country_code, place.url_slug())
+        else:
+            return place, False

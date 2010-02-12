@@ -75,11 +75,11 @@ jQuery(function($) {
 <h2>Animals you might see</h2>
 <ul class="specieslist">
 {% for species in species_list %}
-	<li{% if forloop.first %} class="first"{% endif %}><a class="cloud-quad-{{ species.quad }}" title="Seen by {{ species.count }} spotter{{ species.count|pluralize }}" href="{% filter lower %}{% url place-species-view place.country.country_code,place.slug,species.slug %}{% endfilter %}">{{ species.common_name }}</a></li>
+	<li{% if forloop.first %} class="first"{% endif %}><a class="cloud-quad-{{ species.quad }}" title="Seen by {{ species.count }} spotter{{ species.count|pluralize }}" href="{% filter lower %}{% url place-species-view place.country.country_code,place.url_slug,species.slug %}{% endfilter %}">{{ species.common_name }}</a></li>
 {% endfor %}
 </ul>
 {% if species_list_more %}
-<p class="more">See <a href="{% url place-species place.country.country_code,place.slug %}">all species that have been spotted here</a>.</p>
+<p class="more">See <a href="{% url place-species place.country.country_code,place.url_slug %}">all species that have been spotted here</a>.</p>
 {% endif %}
 {% endif %}
 
@@ -163,9 +163,9 @@ jQuery(function($) {
 <h2>Recent trips here</h2>
 
 {% if been_here %}
-<p class="add">Have you been here again? Tell us <a href="{% url place-add-trip place.country.country_code place.slug %}">what it was like this time</a>!</p>
+<p class="add">Have you been here again? Tell us <a href="{% url place-add-trip place.country.country_code place.url_slug %}">what it was like this time</a>!</p>
 {% else %}
-<p class="add">Have you been here? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
+<p class="add">Have you been here? Why not <a href="{% url place-add-trip place.country.country_code place.url_slug %}">add your trip</a>?</p>
 {% endif %}
 
 <ol class="comments tripbook">
@@ -212,7 +212,7 @@ jQuery(function($) {
 </p>
 {% endif %}
 
-<p class="add {% if not rating.on %}inital{% endif %}">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.slug %}">add your trip</a>?</p>
+<p class="add {% if not rating.on %}inital{% endif %}">Have you been here{% if been_here %} again{% endif %}? Why not <a href="{% url place-add-trip place.country.country_code place.url_slug %}">add your trip</a>?</p>
 
 <p class="suggest-changes">
 	Have we got our facts right? 
@@ -247,7 +247,7 @@ jQuery(function($) {
 					{% endfor %}
 				</ul><!-- /#thumbnails -->
 			</div><!-- /.slideshow -->
-			<p><a href="{% url place-photos place.country.country_code place.slug %}">All photos of this place</a></p>
+			<p><a href="{% url place-photos place.country.country_code place.url_slug %}">All photos of this place</a></p>
 			{% if place.has_flickr_tagged_photos %}
 			<p><a href="http://www.flickr.com/photos/tags/wlny%3Aplace%3D{{ place.short_code }}/show/">Slideshow on Flickr</a></p>
 			{% endif %}

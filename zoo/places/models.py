@@ -118,6 +118,12 @@ class Place(AuditedModel):
     
     needs_indexing = models.BooleanField(default = True)
     
+    def url_slug(self):
+        if self.is_unlisted:
+            return u'unlisted-%s' % self.short_code()
+        else:
+            return self.slug
+    
     @property
     def photo(self):
         photo = cache.get('photo-of-place:%s' % self.pk)
@@ -550,16 +556,16 @@ class PlaceSpeciesSolelyForLinking(models.Model):
     Do not use this except for linking other entities in to a particular
     species at a zoo. Before you DO use it, have a long hard think about
     whether the sightings table would be a better place to link to.
-
+    
     This was created because Django's comment system has to have a concrete
     object to connect to. We hope to never use it for anything else.
-
+    
     This is NOT how we know if a species exists at a zoo; that is entirely
     derived from sightings (trips.Sighting).
     """
     place = models.ForeignKey(Place)
     species = models.ForeignKey('animals.Species')
-
+    
     def visible_photos(self):
         from zoo.photos.models import Photo
         return Photo.objects.filter(
@@ -568,21 +574,21 @@ class PlaceSpeciesSolelyForLinking(models.Model):
         ).filter(
             is_visible = True
         ).distinct()
-
+    
     class Meta:
         db_table = 'places_placespecies'
-
+    
     def __unicode__(self):
-        return unicode(self.species.common_name) + u' at ' + unicode(self.place)
+        return u'%s at %s' % (self.species.common_name, self.place)
     
     @models.permalink
     def get_absolute_url(self):
         return ('place-species-view', (), {
-            'country_code': self.place.country.country_code.lower(),
-            'slug': self.place.slug,
-            'species_slug': self.species.slug,
+            'country': self.place.country.country_code.lower(),
+            'place': self.place.url_slug(),
+            'species': self.species.slug
         })
-
+    
     @attrproperty
     def urls(self, name):
         if name == 'absolute':

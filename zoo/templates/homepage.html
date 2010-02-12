@@ -168,7 +168,7 @@
 				<p>In {% if place.rough_location %}{{ place.rough_location }}, {% endif %}<a href="/{{ place.country.country_code }}/">{{ place.country }}</a>, visited by <strong>{{ place.num_visitors }}</strong>&nbsp;spotter{{ place.num_visitors|pluralize }}.</p>
 				{% if place.species %}
 				<h4>Animals spotted here</h4>
-				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+				<p>{% for species in place.species|slice:":10" %}<a href="{% url place-species-view place.country.country_code,place.url_slug,species.slug %}">{{ species.common_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
 				and <a href="{{ place.urls.species }}">more&hellip;</a>
 				</p>
 				{% endif %}

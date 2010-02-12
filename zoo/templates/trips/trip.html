@@ -58,7 +58,7 @@
 {% else %}
 		<h2>Sighting{{ trip.sightings.count|pluralize }}</h2>
 		{% for place in sightings_by_place %}
-				<h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.slug %}">{{ place.grouper }}</a>
+				<h3>{% for sighting in place.list|slice:":1" %}<a href="{% url place sighting.place.country.country_code,sighting.place.url_slug %}">{{ place.grouper }}</a>
 		{% endfor %}</h3>
 		<p>({{ place.list|length }} sighting{{ place.list|length|pluralize }})</p>
 
