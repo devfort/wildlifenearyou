@@ -60,9 +60,12 @@ class AbstractSpecies(models.Model):
             return '%s (%s)' % (self.common_name, self.latin_name)
         else:
             return self.common_name
-
+    
     def seen_at(self):
-        places = list(Place.objects.filter(sighting__species=self).distinct())
+        places = list(Place.objects.filter(
+            sighting__species = self,
+            is_unlisted = False,
+        ).distinct())
         for place in places:
             photos_of_self = place.visible_photos().filter(
                 sightings__species = self
