@@ -138,7 +138,9 @@ def recent_trips_for_homepage(count = 5):
     seen_user_ids = set()
     trip_ids = []
     skipped_trip_ids = []
-    for trip_id, user_id in Trip.objects.order_by('-created_at').values_list(
+    for trip_id, user_id in Trip.objects.filter(
+            place__is_unlisted = False
+        ).order_by('-created_at').values_list(
             'pk', 'created_by'
         )[:count * 4]:
         if user_id in seen_user_ids:
