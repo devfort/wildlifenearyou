@@ -62,7 +62,7 @@ jQuery(window).load(function() {
 		init_longitude = lon_val;
 	}
 	if (zoom_val) {
-		init_zoom = zoom_val;
+		init_zoom = parseInt(zoom_val, 10);
 	}
 	gmap.setCenter(new GLatLng(init_latitude, init_longitude), init_zoom);
 	
