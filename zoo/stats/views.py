@@ -78,6 +78,7 @@ def index(request):
             status = 'approved'
         ).count(),
         'num_places': Place.objects.count(),
+        'num_unlisted_places': Place.objects.filter(is_unlisted=True).count(),
         'num_sightings': Sighting.objects.count(),
         'new_users_last_48_hours': User.objects.filter(
             date_joined__gte = (

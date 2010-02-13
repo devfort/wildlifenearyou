@@ -25,7 +25,7 @@ jQuery(function($) {
 	gmap.addControl(new GMapTypeControl());
 	gmap.setMapType(G_NORMAL_MAP);
 	var point = new GLatLng(lat, lon);
-	gmap.setCenter(point, 12);
+	gmap.setCenter(point, {{ place.zoom_level }});
 	
 	var greenIcon = new GIcon(G_DEFAULT_ICON);
 	greenIcon.image ="http://maps.google.com/mapfiles/ms/icons/green-dot.png";
