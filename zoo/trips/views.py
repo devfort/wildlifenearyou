@@ -637,6 +637,7 @@ def add_trip_add_place(request):
         form = AddPlaceForm(request.POST)
         if form.is_valid():
             place = form.save(commit = False)
+            place.known_as = place.known_as.strip()
             if not place.legal_name:
                 place.legal_name = place.known_as
             place.is_confirmed = False

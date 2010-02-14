@@ -118,6 +118,9 @@ class Place(AuditedModel):
     
     needs_indexing = models.BooleanField(default = True)
     
+    class Meta:
+        ordering = ('known_as',)
+    
     def url_slug(self):
         if self.is_unlisted:
             return u'unlisted-%s' % self.short_code()
