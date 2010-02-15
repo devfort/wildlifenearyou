@@ -91,3 +91,28 @@ def index(request):
             )
         )
     })
+
+def top_users(request):
+    lookups = [
+        ('photos', 'photos'),
+        ('comments', 'comment_comments'),
+        ('trips', 'created_trip_set'),
+        ('sightings', 'created_sighting_set'),
+        ('suggestions', 'suggestions'),
+        ('places added', 'created_place_set'),
+        ('feedback', 'feedback_sumbissions'),
+        ('favourite species', 'favourite_species'),
+        ('favourite photos', 'favourite_photos'),
+    ]
+    counts = []
+    for description, lookup in lookups:
+        counts.append({
+            'description': description,
+            'users': User.objects.annotate(
+                n = Count(lookup)
+            ).order_by('-n')[:20]
+        })
+    
+    return render(request, 'stats/top_users.html', {
+        'counts': counts,
+    })

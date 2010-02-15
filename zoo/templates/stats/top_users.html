@@ -1,0 +1,20 @@
+{% extends base %}
+
+{% block title %}Top users{% endblock %}
+
+{% block content %}
+<h1>Top users</h1>
+<div style="overflow: hidden">
+{% for count in counts %}
+<div style="float: left; width: 15em; margin-bottom: 3em">
+<h3 style="padding-bottom: 3px; margin-bottom: 0.5em; border-bottom: 2px solid black">By {{ count.description }}</h3>
+<ol>
+	{% for user in count.users %}
+	<li><a href="/{{ user }}/">{{ user }}</a> - {{ user.n }}</li>
+	{% endfor %}
+</ol>
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}
