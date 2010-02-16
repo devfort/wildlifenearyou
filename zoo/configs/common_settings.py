@@ -206,3 +206,6 @@ FILE_UPLOAD_SIZE_LIMIT = 2*1024*1024
 
 # Used by zoo.utils.make_absolute_url to get the right netloc.
 HTTP_PORT = 8000
+
+FACEBOOK_API_KEY = '4969f4ac95f11dba4ced1b2846193a4b'
+FACEBOOK_SECRET_KEY = '6fbc125cf5b05e0e8b516a488a598aec'
