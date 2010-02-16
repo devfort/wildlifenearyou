@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Merge places{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Merge places</h1>
+
+<h3>{{ place1.pk }}: {{ place1 }} <label><input type="radio" name="keep" value="{{ place1.pk }}"> Keep this</label></h3>
+	- added by {{ place1.created_by }}, {{ place1.created_at|date:"jS F Y H:i" }}<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="{{ place1.get_absolute_url }}">{{ place1.get_absolute_url }}</a>
+<ul>
+	{% for field in fields_to_display1 %}
+	<li><strong>{{ field.name }}</strong> {{ field.value }}</li>
+	{% endfor %}
+</ul>
+
+<h3>{{ place2.pk }}: {{ place2 }} <label><input type="radio" name="keep" value="{{ place2.pk }}"> Keep this</label></h3>
+- added by {{ place2.created_by }}, {{ place2.created_at|date:"jS F Y H:i" }}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{{ place2.get_absolute_url }}">{{ place2.get_absolute_url }}</a><br>
+<ul>
+	{% for field in fields_to_display2 %}
+	<li><strong>{{ field.name }}</strong> {{ field.value }}</li>
+	{% endfor %}
+</ul>
+
+<h4>What will be merged...</h4>
+<ul>
+	<li>Comments on the place</li>
+	<li>Comments on the species-on-place pages</li>
+	<li>Trips to the place</li>
+	<li>Sightings at that place (a denormalisation from trip place)</li>
+	<li>Photos taken at that place (very rare, but it does happen)</li>
+	<li>Warn before merging unlisted places</li>
+	<li>Any nearby records referencing that place should just be flat-out deleted</li>
+	<li>We are IGNORING webcams, news, prices, facilities and extras - those all need to be merged across manually.</li>
+	<li>... and make sure everything gets re-indexed as well</li>
+	<li>(aside: needs_indexing boolean isn't quite enough, need a way of recording which objects need deleting as well. Probably a database model that just consists of IDs of things to delete - we would delete using this table first, before re-indexing anything, to avoid any weird problems caused by auto-incrementing IDs getting reused even though that should never happen)</li>
+	<li>A PlaceRedirect will be created pointing the old slug to the new one.
+		This will also prevent that slug from being reused in the future.</li>
+</ul>
+
+{% endblock %}

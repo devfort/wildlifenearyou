@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Merge places{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Merge places</h1>
+
+<form action="{{ request.path }}" method="get">
+	<p>
+		<label for="id_search">Search: </label>
+		<input type="search" id="id_search" name="q" value="{{ q }}">
+		<input type="submit" value="Search">
+	</p>
+</form>
+
+{% if message %}
+<p class="notification">{{ message }}</p>
+{% endif %}
+
+{% if results %}
+<form action="{{ request.path }}" method="get">
+<ul>
+	{% for result in results %}
+	<li>
+		<input type="checkbox" name="merge" value="{{ result.pk }}" id="id_merge_{{ result.pk }}"> <label for="id_merge_{{ result.pk }}" style="display: inline">{{ result }}</label> - added by {{ result.created_by }}, {{ result.created_at|date:"jS F Y H:i" }}<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href="{{ result.get_absolute_url }}">{{ result.get_absolute_url }}</a>
+	</li>
+	{% endfor %}
+</ul>
+<p>
+	<input type="hidden" name="q" value="{{ q }}">
+	<input type="submit" value="Merge these places">
+</p>
+</form>
+{% endif %}
+
+{% endblock %}

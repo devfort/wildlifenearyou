@@ -4,6 +4,7 @@ from models import PlaceNeedsCleanup
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 
 @login_required
 def cleanup_places(request):
@@ -38,4 +39,53 @@ def cleanup_places(request):
         'done': done,
         'reverse': reverse,
         'total_places': PlaceNeedsCleanup.objects.count(),
+    })
+
+@login_required
+def merge_places(request):
+    q = request.GET.get('q', '').strip()
+    results = []
+    if q:
+        results = Place.objects.filter(known_as__icontains = q)
+    
+    message = ''
+    selected = request.GET.getlist('merge')
+    if len(selected) == 2:
+        return HttpResponseRedirect('/cleanup/merge-places/%s/%s/' % tuple(
+            selected
+        ))
+    elif len(selected):
+        message = 'Please select exactly two items to merge'
+    
+    return render(request, 'cleanup/merge_places.html', {
+        'q': q,
+        'results': results,
+        'message': message,
+    })
+
+@login_required
+def confirm_merge_places(request, slug1, slug2):
+    place1 = get_object_or_404(Place, pk = slug1)
+    place2 = get_object_or_404(Place, pk = slug2)
+    
+    fields_to_display1 = []
+    fields_to_display2 = []
+    for field in (
+        'legal_name', 'known_as', 'phone', 'town', 'address_line_1',
+        'address_line_2', 'latitude', 'longitude', 'zoom_level'
+    ):
+        fields_to_display1.append({
+            'name': field,
+            'value': getattr(place1, field, ''),
+        })
+        fields_to_display2.append({
+            'name': field,
+            'value': getattr(place2, field, ''),
+        })
+    
+    return render(request, 'cleanup/confirm_merge_places.html', {
+        'place1': place1,
+        'place2': place2,
+        'fields_to_display1': fields_to_display1,
+        'fields_to_display2': fields_to_display2,
     })

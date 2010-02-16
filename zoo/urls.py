@@ -277,6 +277,11 @@ urlpatterns = patterns('',
 
     url(r'^cleanup/places/$', 'zoo.cleanup.views.cleanup_places',
         name='cleanup-places'),
+    url(r'^cleanup/merge-places/$', 'zoo.cleanup.views.merge_places',
+        name='cleanup-merge-places'),
+    url(r'^cleanup/merge-places/(\d+)/(\d+)/$',
+        'zoo.cleanup.views.confirm_merge_places',
+        name='cleanup-confirm-merge-places'),
     
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/$', 
         'zoo.places.views.place',
