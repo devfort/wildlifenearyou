@@ -413,6 +413,19 @@ class Place(AuditedModel):
             created_sighting_set__place = self
         ).distinct().count()
 
+class PlaceRedirect(models.Model):
+    slug = models.SlugField(max_length=255, null=False, blank=False,
+        unique=True
+    )
+    country = models.ForeignKey(Country, null=False, blank=False)
+    redirect_to = models.CharField(max_length = 255)
+    created = models.DateTimeField(auto_now_add = True)
+    
+    def __unicode__(self):
+        return u'%s/%s -> %s' % (
+            self.country.country_code, self.slug, self.redirect_to
+        )
+
 class DistanceBetween(models.Model):
     origin = models.ForeignKey(Place, related_name = 'nearby')
     place = models.ForeignKey(Place, related_name = 'nearby_rev')

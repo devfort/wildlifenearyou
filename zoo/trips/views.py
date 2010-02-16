@@ -14,7 +14,7 @@ from parsedatetime.parsedatetime import Calendar
 
 from zoo.shortcuts import render
 from zoo.trips.models import Trip, Sighting
-from zoo.places.models import Place, Country
+from zoo.places.models import Place, Country, PlaceRedirect
 from zoo.animals.models import Species
 from zoo.photos.models import Photo
 from zoo.accounts.models import Profile
@@ -648,6 +648,7 @@ def add_trip_add_place(request):
                 first_slug = 'x' + first_slug
             slug = first_slug
             while Place.objects.filter(slug = slug).count() or \
+                    PlaceRedirect.objects.filter(slug = slug).count() or \
                     slug in BANNED_PLACE_SLUGS:
                 slug = '%s-%d' % (first_slug, append)
                 append += 1
