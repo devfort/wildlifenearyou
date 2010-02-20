@@ -3,16 +3,66 @@ from zoo.places.models import Place
 from zoo.trips.models import Trip
 from zoo.linkeddata.models import ExternalIdentifier
 from zoo.animals.models import Species
+from zoo.shortcuts import render
 from django.db.models import Count
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
+from django.shortcuts import get_object_or_404
 from zoo.shorturl.utils import converter
+from utils import api_response, api_date, api_datetime
+from ratelimit import ratelimit
+from models import ApiKey, ApiKeyGroup
 
 MAX_METADATA = 20
 
 import urllib
 from collections import defaultdict
+
+def index(request):
+    return render(request, 'api/index.html')
+
+@login_required
+def your_keys(request):
+    if request.method == 'POST':
+        if 'create_key' in request.POST:
+            purpose = request.POST.get('purpose', '')
+            group, created = ApiKeyGroup.objects.get_or_create(
+                name = 'default'
+            )
+            key = ApiKey.create_for_user(request.user, group, purpose)
+            return HttpResponseRedirect('/api/your-keys/')
+        
+        # Are they deleting a key?
+        for k in request.POST.keys():
+            if k.startswith('delete_'):
+                key = k.replace('delete_', '')
+                try:
+                    api_key = ApiKey.objects.get(
+                        key = key,
+                        user = request.user
+                    )
+                    api_key.delete()
+                except ApiKey.DoesNotExist:
+                    pass
+                return HttpResponseRedirect('/api/your-keys/')
+    
+    return render(request, 'api/your_keys.html', {
+        'keys': request.user.api_keys.select_related('group').order_by(
+            'created_at'
+        ),
+    })
+
+@login_required
+def key_details(request, key):
+    api_key = get_object_or_404(ApiKey.objects.select_related('group'),
+        key = key,
+        user = request.user
+    )
+    return render(request, 'api/key_details.html', {
+        'key': api_key,
+    })
 
 trip_qs = Trip.objects.select_related('place').annotate(
     num_sightings = Count('sightings')
@@ -22,6 +72,7 @@ trip_qs = Trip.objects.select_related('place').annotate(
     'place__slug'
 )
 
+@ratelimit
 def user(request, username):
     try:
         profile = Profile.objects.annotate(
@@ -47,6 +98,7 @@ def user(request, username):
     }
     return api_response(request, 200, info)
 
+@ratelimit
 def tripbook(request, username):
     try:
         user = User.objects.get(username = username)
@@ -74,39 +126,15 @@ def tripbook(request, username):
         } for trip in trip_qs.filter(created_by = user)]
     })
 
+@ratelimit
 def trip(request, username, pk):
     pass
 
+@ratelimit
 def place(request, country_code, slug):
     pass
 
-def api_response(request, status_code, info):
-    info['status'] = status_code
-    if request.GET.get('format', '') == 'html':
-        return HttpResponse(
-            '<html><head><title>API response</title></head><body><pre>' + 
-            simplejson.dumps(info, indent=2) + 
-            '</pre></body></html>',
-            content_type='text/html; charset=utf8'
-        )
-    
-    return HttpResponse(
-        simplejson.dumps(info, indent=2),
-        content_type='text/plain; charset=utf8'
-    )
-
-def api_date(dt):
-    if dt:
-        return dt.strftime('%Y-%m-%d')
-    else:
-        return ''
-
-def api_datetime(dt):
-    if dt:
-        return dt.strftime('%Y-%m-%d %H:%M:%S')
-    else:
-        return ''
-
+@ratelimit
 def species_identifiers(request):
     all = Species.objects.all().order_by('slug')
     allowed_args = ('namespace', 'source', 'key', 'code', 'slug', 'after')
@@ -187,6 +215,7 @@ def species_identifiers(request):
     
     return api_response(request, 200, result)
 
+@ratelimit
 def metadata(request, ids):
     ids = ids.replace('/', '')
     ids = [id.strip() for id in ids.split(',') if id.strip()]

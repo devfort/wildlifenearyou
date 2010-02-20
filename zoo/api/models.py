@@ -4,7 +4,7 @@ import random
 from redis_db import r
 
 class ApiKeyGroup(models.Model):
-    name = models.CharField(max_length = 100)
+    name = models.CharField(max_length = 100, default='default')
     max_per_day = models.IntegerField(default = 60 * 30 * 24)
     max_per_hour = models.IntegerField(default = 60 * 30)
     max_per_minute = models.IntegerField(default = 30)
@@ -21,7 +21,7 @@ class ApiKeyGroup(models.Model):
         return self.name
 
 class ApiKey(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey('auth.User', related_name = 'api_keys')
     group = models.ForeignKey(ApiKeyGroup)
     key = models.CharField(max_length = 20, unique = True, db_index = True)
     purpose = models.TextField(blank = True)
@@ -34,6 +34,10 @@ class ApiKey(models.Model):
     def save(self, *args, **kwargs):
         super(ApiKey, self).save(*args, **kwargs)
         r.set('apikey:%s' % self.key, self.group.pk)
+    
+    def delete(self, *args, **kwargs):
+        super(ApiKey, self).delete(*args, **kwargs)
+        r.delete('apikey:%s' % self.key)
     
     @classmethod
     def create_for_user(cls, user, group, purpose = ''):

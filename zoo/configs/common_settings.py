@@ -190,6 +190,7 @@ RESERVED_USERNAMES = set(
     categories tag pick vote votes picks game games avatar avatars best
     explore better find pick choose chose winner winners loser losers lose win
     shorturl short shorturls user users metadata meta species-identifiers
+    bulk your-keys keys key
     """.strip().split()
 )
 

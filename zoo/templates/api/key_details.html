@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Key: {{ key.key }}{% endblock %}
+
+{% block content %}
+
+<h1>Key: {{ key.key }}</h1>
+
+<p><a href="/api/your-keys/">Back to your keys</a></p>
+
+<p><samp>{{ key.key }}</samp> - created {{ key.created_at|timesince }} ago</p>
+
+{% if key.purpose %}<p><strong>Purpose: </strong>"{{ key.purpose }}"</p>{% endif %}
+
+<h2>Rate limits for this key</h2>
+
+<table>
+<tr>
+	<th>Max uses per day</th><td>{{ key.group.max_per_day }}</td>
+</tr>
+<tr>
+	<th>Max uses per hour</th><td>{{ key.group.max_per_hour }}</td>
+</tr>
+<tr>
+	<th>Max uses per minute</th><td>{{ key.group.max_per_minute }}</td>
+</tr>
+<tr>
+	<th>Max burst per 5 seconds</th><td>{{ key.group.max_per_5_second_burst }}</td>
+</tr>
+</table>
+
+<form action="/api/your-keys/" method="post">
+<p><input type="submit" name="delete_{{ key.key }}" value="Delete this key"></p>
+</form>
+
+{% endblock %}

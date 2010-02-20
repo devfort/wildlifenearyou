@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Your API keys{% endblock %}
+
+{% block content %}
+
+<h1>Your API keys</h1>
+
+<p><a href="/api/">Back to API documentation</a></p>
+
+<form action="{{ request.path }}" method="post">
+{% if keys %}
+<p>You have {{ keys.count }} API key{{ keys.count|pluralize }}:</p>
+<ul>
+	{% for key in keys %}
+	<li><samp><a href="{{ key.key }}/">{{ key.key }}</a></samp> - {% if key.purpose %}<em>"{{ key.purpose }}"</em> - {% endif %}created {{ key.created_at|timesince }} ago</li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+<h2>Create an API key</h2>
+<p>
+	<label for="id_purpose">Purpose (optional): </label>
+	<input type="text" size="50" id="id_purpose" name="purpose">
+	<input type="submit" name="create_key" value="Create key">
+</p>
+
+<p>Please <a href="/feedback/">contact us</a> if you need a higher rate limit.</p>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}The WildlifeNearYou API{% endblock %}
+
+{% block content %}
+
+<h1>The WildlifeNearYou API</h1>
+
+<p class="intro">The WildlifeNearYou API provides JSON (and JSON-P) access to public data available on the site. The API is currently read-only.</p>
+
+<h2>Rate limits</h2>
+
+<p>Access to the API <strong>without</strong> an API key is rate limited by IP address to 30 hits a minute, with a peak burst of 5 hits in 5 seconds.</p>
+
+<p>The rate limit for access using an API key is higher. {% if request.user.is_anonymous %}<a href="/account/login/?suppress-register=true&amp;next=/api/your-keys/">Sign in</a> to create an API key.{% else %}<a href="/api/your-keys/">Manage your API keys here</a>.{% endif %}</p>
+
+<h2>API requests</h2>
+
+<p>All API requests use HTTP GET to a URL. Most of the API URLs are the same as the public URLs on the site, with the addition of the <samp>api/</samp> prefix at the start of the URL.</p>
+
+<p>The API supports JSON-P: just add <samp>?callback=foo</samp> to the URL.</p>
+
+<h2>API responses</h2>
+
+<p>All API responses are UTF-8 JSON.</p>
+
+<p>The default content type is "application/javascript", to ensure the API can be viewed using a regular web browser. If your request includes application/json in the Accept header, that content type will be returned instead.</p>
+
+<h2>API errors</h2>
+
+<p>All API responses have a top-level key called "ok", which will be <samp>true</samp> if the API response has succeeded and <samp>false</samp> if there was an error. The HTTP status code of the response can also be used to detect errors - 200 means everything was fine, any other code means an error occurred. Rate limit exceeded responses have a 403 status code.</p>
+
+<p>If you are using JSON-P (by providing a <samp>callback</samp> parameter), the HTTP status code will always be 200. The original status code will be available in the "status" key in the response.</p>
+
+<p>Here is an example error:</p>
+
+<pre><samp>{
+  "status": 403, 
+  "ok": false, 
+  "key": "1.2.3.4", 
+  "error": {
+    "code": "rate-exceeded", 
+    "description": "Rate limit exceeded", 
+    "detail": "Max burst 3 in 5 seconds"
+  }
+}</samp></pre>
+
+<h2>API methods</h2>
+
+<h3>/api/&lt;username&gt;/</h3>
+
+<p>Returns information about a WildlifeNearYou user. Example request:</p>
+
+<p><samp><a href="/api/simon/">/api/simon/</a></samp>
+
+<p>Example response:</p>
+
+<pre><samp>{
+  "username": "simon", 
+  "num_trips": 17, 
+  "first_name": "", 
+  "last_name": "", 
+  "ok": true, 
+  "url": "", 
+  "trips_api": "http://www.wildlifenearyou.com/api/simon/tripbook/", 
+  "status": 200, 
+  "biography": ""
+}</samp></pre>
+
+{% endblock %}
+
