@@ -42,12 +42,20 @@ def add_trip(request, country_code, slug):
     # Clear search if they selected one of the options
     if _add_selected_was_pressed(request.POST):
         q = ''
+    # Or if they hit the 'clear' button:
+    if 'clear' in request.POST:
+        q = ''
     
     results = []
+    showing_animals_seen_here = False
     if q:
         # Search for 10 but only show the first 5, so our custom ordering 
         # that shows animals spotted here before can take effect
         results = add_trip_utils.search(q, limit=10, place=place)[:5]
+    else:
+        # Show animals that other people have seen here
+        showing_animals_seen_here = True
+        results = add_trip_utils.previously_seen_at(place)
     
     details = add_trip_utils.bulk_lookup(selected, place=place)
     
@@ -58,7 +66,8 @@ def add_trip(request, country_code, slug):
         'q': q,
         'unknowns': unknowns,
         'request_path': request.path,
-        'debug': pformat(request.POST.lists())
+        'debug': pformat(request.POST.lists()),
+        'showing_animals_seen_here': showing_animals_seen_here,
     })
 
 def ajax_search_species(request, country_code, slug):
@@ -69,9 +78,18 @@ def ajax_search_species(request, country_code, slug):
         )
     
     q = request.GET.get('q', '')
+    if not q:
+        results = add_trip_utils.previously_seen_at(place)
+        return render(request, 'trips/ajax_search_species.html', {
+            'q': '',
+            'showing_animals_seen_here': True,
+            'results': results,
+        })
+    
     if len(q) >= 3:
         return render(request, 'trips/ajax_search_species.html', {
             'q': q,
+            'showing_animals_seen_here': False,
             'results': add_trip_utils.search(q, limit=10, place=place)[:5],
         })
     else:

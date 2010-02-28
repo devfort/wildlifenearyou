@@ -22,7 +22,11 @@
 {% endif %}
 
 {% if results %}
-<h2>Which of these was it?</h2>
+{% if showing_animals_seen_here %}
+<h2>Animals others have spotted here</h2>
+{% else %}
+<h2>You searched for "{{ q }}" &ndash; which did you mean?</h2>
+{% endif %}
 
 <ul class="animal-list">
 	
@@ -47,6 +51,7 @@
 	<input type="hidden" name="result_{{ forloop.counter0 }}" value="{{ result.id }}">
 	</li>
 {% endfor %}
+{% if not showing_animals_seen_here %}
 <li class="unknown">
     <input type="image" style="float: right;" src="/static/img/icons/add_big.png" name="add_unknown">
     <input type="hidden" name="add_unknown_text" value="{{ q }}">
@@ -54,6 +59,7 @@
     <p><span class="animal-name">{{ q }}</span></p>
     <p><i class="scientific">Add "{{ q }}" as an unknown species</i></p>
 </li>
+{% endif %}
 </ul>
 
 {% endif %}

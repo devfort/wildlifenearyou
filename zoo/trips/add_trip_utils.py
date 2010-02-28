@@ -82,6 +82,16 @@ def search(q, place=None, limit=5):
     
     return results
 
+def previously_seen_at(place):
+    return [{
+        'id': species.freebase_id,
+        'obj': species,
+        'local_sightings': species.count,
+    } for species in sorted(
+        place.get_species(), key = lambda s: s.count,
+        reverse = True
+    )]
+
 def _annotate_database_objects(objs, place=None):
     # Now see if any are already species in our database
     species_query = Species.objects.filter(

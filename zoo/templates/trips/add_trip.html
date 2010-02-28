@@ -18,6 +18,21 @@
 </style>
 <script type="text/javascript">
 jQuery(function($) {
+    function showClearButton() {
+        var button = $('#submit-clear');
+        if (button.length) {
+            button.show();
+        } else {
+            var button = $(
+                '<input id="submit-clear" type="submit" name="clear" value="Clear">'
+            );
+            button.insertAfter($('#i-saw-a-q').parent().find(':submit'));
+        }
+    }
+    function hideClearButton() {
+        $('#submit-clear').hide();
+    }
+    
     $('ul.animal-list :image').live('click', function(ev) {
         // Add this species to the spotted list
         ev.preventDefault();
@@ -37,21 +52,25 @@ jQuery(function($) {
             '" value="' + freebase_id + '"></li>'
         );
         ul.append(li);
-        $(this).closest('li').effect('transfer', {
+        var clicked_li = $(this).closest('li');
+        clicked_li.effect('transfer', {
             'to': li
         }, 500);
-        $('#results').empty();
-        $('#i-saw-a-q').val('').focus();
+        clicked_li.remove();
+        //$('#results').empty();
+        //$('#i-saw-a-q').val('').focus();
         return false;
     });
     
     // Rig up the Ajax search when 'Search' button is clicked
-    var search = $('#i-saw-a-q').parent().find(':submit');
+    var search =$('#i-saw-a-q').parent().find(':submit').not('#submit-clear');
     search.click(function(ev) {
         ev.preventDefault();
         var q = $('#i-saw-a-q').val();
         $('#results').load(
-            '{{ place.get_absolute_url }}add-trip/ajax-search/?q=' + encodeURIComponent(q)
+            '{{ place.get_absolute_url }}add-trip/ajax-search/?q=' +
+            encodeURIComponent(q),
+            showClearButton
         );
     });
     
@@ -114,7 +133,7 @@ jQuery(function($) {
 {% endblock %}
 
 {% block primary_content %}
-    <div class="container compact"><label for="i-saw-a-q">I saw a</label> <input type="text" name="q" id="i-saw-a-q" value="{{ q }}" size="30"> <input type="submit" value="Search"></div>
+    <div class="container compact"><label for="i-saw-a-q">I saw a</label> <input type="text" name="q" id="i-saw-a-q" value="{{ q }}" size="30"> <input type="submit" value="Search"> {% if q %}<input id="submit-clear" type="submit" name="clear" value="Clear">{% endif %}</div>
     
     <div id="results">
     
