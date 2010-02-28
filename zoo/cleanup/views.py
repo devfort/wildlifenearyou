@@ -3,7 +3,8 @@ from zoo.places.models import Place
 from models import PlaceNeedsCleanup
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, \
+    HttpResponse
 from django.shortcuts import get_object_or_404
 
 @login_required
@@ -68,11 +69,28 @@ def confirm_merge_places(request, slug1, slug2):
     place1 = get_object_or_404(Place, pk = slug1)
     place2 = get_object_or_404(Place, pk = slug2)
     
+    if request.method == 'POST':
+        keep = int(request.POST.get('keep', '0'))
+        if keep not in (place1.pk, place1.pk):
+            return HttpResponse('You did not select a place to keep')
+        
+        to_keep = Place.objects.get(pk = keep)
+        to_delete = [p for p in (place1, place2) if p.pk != keep]
+        assert False, ('keep: ', to_keep, 'delete: ', to_delete)
+        # First, save the new details from the form
+        for key in request.POST:
+            if key != 'keep':
+                setattr(to_keep, key, request.POST[key])
+        to_keep.save()
+        # Next, merge comments from to_delete over to to_keep
+        
+    
     fields_to_display1 = []
     fields_to_display2 = []
     for field in (
-        'legal_name', 'known_as', 'phone', 'town', 'address_line_1',
-        'address_line_2', 'latitude', 'longitude', 'zoom_level'
+        'known_as', 'legal_name', 'phone', 'url', 'address_line_1',
+        'address_line_2', 'town', 'state', 'zip', 'latitude', 'longitude',
+        'zoom_level'
     ):
         fields_to_display1.append({
             'name': field,

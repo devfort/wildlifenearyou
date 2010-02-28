@@ -3,37 +3,142 @@
 {% block title %}Merge places{% endblock %}
 
 {% block extra_head %}
-
+<style type="text/css">
+.place-details {
+	clear: both;
+	margin-bottom: 1em;
+	overflow: hidden;
+}
+.place-map {
+	float: right;
+	width: 50%;
+	margin-left: 1em;
+	border: 1px solid black;
+	height: 300px;
+}
+h2 label {
+	display: inline;
+	font-size: 0.8em;
+}
+</style>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_API_KEY }}" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(function($) {
+	
+	$('input[name=keep]').click(function() {
+		var input = $(this);
+		var lis = input.parents('div:first').find('li');
+		lis.each(function() {
+			var span = $(this).find('span');
+			var field = $('#f_' + span.attr('class').replace('field-', ''));
+			field.val(span.text());
+		});
+	});
+	$('div.place-details li').click(function() {
+		var span = $(this).find('span');
+		var id = span.attr('class').replace('field-', '');
+		var field = $('#f_' + id);
+		field.val(span.text());
+		if (id == 'latitude' || id == 'longitude' || id == 'zoom_level') {
+			var others = $(this).parents('div:first').find(
+				'.field-latitude,.field-longitude,.field-zoom_level'
+			).not('.field-' + id);
+			others.click();
+		}
+	}).css('cursor', 'pointer');
+	
+	$('div.place-map').each(function() {
+		var div = $(this);
+		var parent = div.parents('div:first');
+		var lat = parent.find('span.field-latitude');
+		var lon = parent.find('span.field-longitude');
+		var zoom = parent.find('span.field-zoom_level');
+		
+		var gmap = new GMap2(div[0]);
+		
+		var crosshair = $('<div />').css({
+			'position': 'absolute',
+			'top': '142px',
+			'height': '19px',
+			'width': '19px',
+			'left': '50%',
+			'margin-left': '-8px',
+			'display': 'block',
+			'background': 'url(/static/img/icons/crosshair.gif)',
+			'background-position': 'center center',
+			'background-repeat': 'no-repeat'
+		}).appendTo(div);
+		GEvent.addDomListener(crosshair[0], 'dblclick', function() {
+			gmap.zoomIn();
+		});
+		gmap.addControl(new GSmallMapControl());
+		gmap.addControl(new GMapTypeControl());
+		gmap.setMapType(G_NORMAL_MAP);
+		gmap.setCenter(new GLatLng(lat.text(), lon.text()), parseInt(
+			zoom.text(), 10
+		));
+		GEvent.addListener(gmap, 'move', function() {
+			var center = gmap.getCenter();
+			lat.text(center.lat());
+			lon.text(center.lng());
+		});
+	});
+});
+</script>
 {% endblock %}
 
 {% block content %}
 <h1>Merge places</h1>
 
-<h3>{{ place1.pk }}: {{ place1 }} <label><input type="radio" name="keep" value="{{ place1.pk }}"> Keep this</label></h3>
+<form action="{{ request.path }}" method="post">
+
+<div class="place-details">
+<div class="place-map"></div>
+<h2>{{ place1.pk }}: {{ place1 }} <label><input type="radio" name="keep" value="{{ place1.pk }}"> Keep this</label></h2>
 	- added by {{ place1.created_by }}, {{ place1.created_at|date:"jS F Y H:i" }}<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<a href="{{ place1.get_absolute_url }}">{{ place1.get_absolute_url }}</a>
 <ul>
 	{% for field in fields_to_display1 %}
-	<li><strong>{{ field.name }}</strong> {{ field.value }}</li>
+	<li><strong>{{ field.name }}</strong> <span class="field-{{ field.name }}">{{ field.value }}</span></li>
 	{% endfor %}
 </ul>
+</div>
 
-<h3>{{ place2.pk }}: {{ place2 }} <label><input type="radio" name="keep" value="{{ place2.pk }}"> Keep this</label></h3>
+<div class="place-details">
+<div class="place-map"></div>
+<h2>{{ place2.pk }}: {{ place2 }} <label><input type="radio" name="keep" value="{{ place2.pk }}"> Keep this</label></h2>
 - added by {{ place2.created_by }}, {{ place2.created_at|date:"jS F Y H:i" }}<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="{{ place2.get_absolute_url }}">{{ place2.get_absolute_url }}</a><br>
 <ul>
 	{% for field in fields_to_display2 %}
-	<li><strong>{{ field.name }}</strong> {{ field.value }}</li>
+	<li><strong>{{ field.name }}</strong> <span class="field-{{ field.name }}">{{ field.value }}</span></li>
 	{% endfor %}
 </ul>
+</div>
+
+<div style="clear: both; overflow: hidden">
+{% for field in fields_to_display1 %}
+<p style="float: left; width: 40%; margin: 0">
+	<label for="f_{{ field.name }}">{{ field.name }}:</label>
+	<input id="f_{{ field.name }}" type="text" name="{{ field.name }}"
+		size="40">
+</p>
+{% endfor %}
+</div>
+<p>
+	<input type="submit" value="Merge places">
+</p>
+
+</form>
 
 <h4>What will be merged...</h4>
 <ul>
 	<li>Comments on the place</li>
+	<li>NEED UI FOR SELECTING CATEGORIES OF NEWLY MERGED PLACE</li>
 	<li>Comments on the species-on-place pages</li>
 	<li>Trips to the place</li>
 	<li>Sightings at that place (a denormalisation from trip place)</li>
