@@ -145,6 +145,13 @@ INSTALLED_APPS = [
     'django.contrib.markup'
 ]
 
+try:
+    import memcache_status
+    INSTALLED_APPS.append('memcache_status')
+except ImportError:
+    pass
+
+
 ACTIVITY_MODELS = (
     'accounts.Profile',
     'animals.Species',

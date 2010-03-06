@@ -5,4 +5,5 @@ python-openid==2.2.4
 BeautifulSoup
 redis
 http://github.com/sciyoshi/pyfacebook/tarball/master
+http://github.com/bartTC/django-memcache-status/tarball/v1.0.1
 
