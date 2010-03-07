@@ -115,8 +115,8 @@ def tripbook(request, username):
                 username, trip['pk']
             ),
             'name': trip['name'],
-            'date': api_date(trip['start']),
-            'date_accuracy': trip['start_accuracy'],    
+            'trip_date': api_date(trip['start']),
+            'trip_date_accuracy': trip['start_accuracy'],    
             'created': api_datetime(trip['created_at']),
             'num_sightings': trip['num_sightings'],
             'place_known_as': trip['place__known_as'],
