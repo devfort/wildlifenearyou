@@ -92,7 +92,7 @@ def user(request, username):
         'url': profile.url,
         'biography': profile.biography,
         'num_trips': profile.num_trips,
-        'trips_api': 'http://www.wildlifenearyou.com/api/%s/tripbook/' % (
+        'trips_api': 'http://www.wildlifenearyou.com/api/%s/trips/' % (
              username
         )
     }
@@ -128,7 +128,18 @@ def tripbook(request, username):
 
 @ratelimit
 def trip(request, username, pk):
-    pass
+    try:
+        trip = Trip.objects.get(pk = pk, created_by__username = username)
+    except Trip.DoesNotExist:
+        return api_response(request, 404, {
+            'ok': False,
+            'trip_id': pk
+        })
+    return api_response(request, 200, {
+        'ok': True,
+        'name': trip.name,
+        'todo': 'finish me',
+    })
 
 @ratelimit
 def place(request, country_code, slug):
