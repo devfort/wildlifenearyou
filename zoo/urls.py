@@ -41,6 +41,11 @@ from favourites.models import FavouriteSpecies, FavouritePhoto
 fave_species = FavouriteView(FavouriteSpecies, 'species', Species)
 fave_photo = FavouriteView(FavouritePhoto, 'photo', Photo)
 
+def redirect_to(path):
+    def redirect(request, **kwargs):
+        return http.HttpResponsePermanentRedirect(path % kwargs)
+    return redirect
+
 urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.OUR_ROOT, 'static')
@@ -203,22 +208,33 @@ urlpatterns = patterns('',
     # Databrowse
     (r'^databrowse/(.*)', databrowse.site.root),
     
-    url(r'^animals/$', 'zoo.animals.views.all_species',
+    url(r'^animals/$', redirect_to('/species/')),
+    url(r'^species/$', 'zoo.animals.views.all_species',
         name='all-species'),
-    url(r'^animals/all\.xml$', 'zoo.animals.views.species_xml',
+    url(r'^animals/all\.xml$', redirect_to('/species/all.xml')),
+    url(r'^species/all\.xml$', 'zoo.animals.views.species_xml',
         name='species-xml'),
-    url(r'^animals/(?P<slug>[^/]+)/$', 'zoo.animals.views.species',
+    url(r'^animals/(?P<slug>[^/]+)/$', redirect_to('/species/%(slug)s/')),
+    url(r'^species/(?P<slug>[^/]+)/$', 'zoo.animals.views.species',
         name='species'),
-    url(r'^animals/(?P<slug>[^/]+)/spotters/$', 
+    url(r'^animals/(?P<slug>[^/]+)/spotters/$',
+        redirect_to('/species/%(slug)s/spotters/')),
+    url(r'^species/(?P<slug>[^/]+)/spotters/$', 
         'zoo.animals.views.species_spotters',
         name='species-spotters'),
-    url(r'^animals/(?P<slug>[^/]+)/photos/$', 
+    url(r'^animals/(?P<slug>[^/]+)/photos/$',
+        redirect_to('/species/%(slug)s/photos/')),
+    url(r'^species/(?P<slug>[^/]+)/photos/$', 
         'zoo.animals.views.species_photos',
         name='species-photos'),
     url(r'^animals/(?P<slug>[^/]+)/photos/best/$',
+        redirect_to('/species/%(slug)s/photos/best/')),
+    url(r'^species/(?P<slug>[^/]+)/photos/best/$',
         'zoo.bestpic.views.bestpic_of_species',
         name='bestpic-of-species'),
-    url(r'^animals/(?P<slug>[^/]+)/fans/$', 
+    url(r'^animals/(?P<slug>[^/]+)/fans/$',
+        redirect_to('/species/%(slug)s/fans/')),
+    url(r'^species/(?P<slug>[^/]+)/fans/$', 
         'zoo.animals.views.species_fans',
         name='species-fans'),
     
@@ -318,10 +334,14 @@ urlpatterns = patterns('',
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animal-checklist/$', 
         'zoo.places.views.place_animal_checklist',
         name='place-animal-checklist'),
-    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/$', 
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/$',
+        redirect_to('/%(country_code)s/%(slug)s/species/')),
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/species/$',
         'zoo.places.views.place_species',
         name='place-species'),
-    url(r'^(?P<country>\w{2})/(?P<place>[^/]+)/animals/(?P<species>[^/]+)/$',
+    url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/animals/(?P<sp>[^/]+)/$',
+        redirect_to('/%(country_code)s/%(slug)s/species/%(sp)s/')),
+    url(r'^(?P<country>\w{2})/(?P<place>[^/]+)/species/(?P<species>[^/]+)/$',
         'zoo.places.views.place_species_view',
         name='place-species-view'),
     url(r'^(?P<country_code>\w{2})/(?P<slug>[^/]+)/add-trip/$',

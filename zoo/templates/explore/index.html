@@ -71,7 +71,7 @@
 		<p>Check out the <a href="{% url popular %}">popular or unusual animals</a></p>
 		<p>Look at <a href="/recent/">recent activity</a> on the site</p>
 		<p>See all the <a href="/gb/">places in the UK</a></p>
-		<p>View <a href="/animals">all the animals</a></p>
+		<p>View <a href="{% url all-species %}">all the animals</a></p>
 	</div>
 	
 	{% if is_logged_in %}
