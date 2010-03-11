@@ -17,17 +17,19 @@
 
 <div>
 	{% if not faves %}
-		<p>{{ profile.user.username }} has not yet picked any favourite photos.</p>
+		<p class="notification">{{ profile.user.username }} has not yet picked any favourite photos.</p>
 	{% else %}
 		<h2>Favourite photos</h2>	
 		{% autopaginate faves 32 %}
 		{% paginate %}
-		<ul class="photo-display">
-				{% for fave in faves %}
-						<li>
-								<a href="{{ fave.photo.urls.absolute }}" title="{{ fave.photo.title }}">{{ fave.photo.thumb_75 }}</a>
-						</li>
-				{% endfor %}
+		<ul class="photo-jumble">
+			{% for fave in faves %}
+				{% with fave.photo as photo %}
+				<li>
+					<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}, by {{ photo.created_by }}"><img style="width: {{ photo.width_240_factor_7 }}px; height: {{ photo.height_240_factor_7 }}px" src="{{ photo.thumb_240_url }}" alt="{{ photo.title }}, by {{ photo.created_by }}"></a>
+				</li>
+				{% endwith %}
+			{% endfor %}
 		</ul>
 		{% paginate %}
 	{% endif %}

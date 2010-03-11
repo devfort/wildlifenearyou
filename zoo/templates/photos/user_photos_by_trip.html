@@ -24,12 +24,12 @@
 <h2>Photos by trip</h2>
 {% for trip in trips %}
 <h3>{{ trip.trip }}</h3>
-<ul class="photo-display">
-{% for photo in trip.visible_photos %}
-   <li>
-	   <a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-   </li>
-{% endfor %}
+<ul class="photo-jumble">
+	{% for photo in trip.visible_photos %}
+	<li>
+		<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}, by {{ photo.created_by }}"><img style="width: {{ photo.width_240_factor_7 }}px; height: {{ photo.height_240_factor_7 }}px" src="{{ photo.thumb_240_url }}" alt="{{ photo.title }}, by {{ photo.created_by }}"></a>
+	</li>
+	{% endfor %}
 </ul>
 <p><a href="{{ trip.trip.get_absolute_url }}">More on this trip</a>{% if trip.more_photos %} (including {{ trip.more_photos }} more photo{{ trip.more_photos|pluralize }}){% endif %}
 {% endfor %}

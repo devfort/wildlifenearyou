@@ -11,11 +11,11 @@
 	{% if is_logged_in %}
 		<h2 class="initial">Recent photos of your favourite animals</h2>
 	
-		<ul class="photo-display">
+		<ul class="photo-jumble">
 			{% for photo in photos_of_your_favourites %}
-				<li>
-					<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-				</li>
+			<li>
+				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}, by {{ photo.created_by }}"><img style="width: {{ photo.width_240_factor_7 }}px; height: {{ photo.height_240_factor_7 }}px" src="{{ photo.thumb_240_url }}" alt="{{ photo.title }}, by {{ photo.created_by }}"></a>
+			</li>
 			{% endfor %}
 		</ul>	
 		<h2>Recently uploaded photos</h2>
@@ -25,11 +25,11 @@
 	{% endif %}
 	
 	
-	<ul class="photo-display">
+	<ul class="photo-jumble">
 		{% for photo in photos %}
-			<li>
-				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-			</li>
+		<li>
+			<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}, by {{ photo.created_by }}"><img style="width: {{ photo.width_240_factor_7 }}px; height: {{ photo.height_240_factor_7 }}px" src="{{ photo.thumb_240_url }}" alt="{{ photo.title }}, by {{ photo.created_by }}"></a>
+		</li>
 		{% endfor %}
 	</ul>
 	

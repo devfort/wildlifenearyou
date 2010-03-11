@@ -17,19 +17,19 @@
 
 <div>
 	{% if not photos %}
-		<p>{{ profile.user.username }} has not yet imported any photos.</p>
+		<p class="notification">{{ profile.user.username }} has not yet imported any photos.</p>
 	{% else %}
 		<h2>Photos</h2>	
 		{% with photos.all as photos %}
 		{% autopaginate photos 32 %}
 		{% paginate %}
-		<ul class="photo-display">
-				{% for photo in photos.all %}
-						<li>
-								<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
-						</li>
-				{% endfor %}
-		</ul>
+		<ul class="photo-jumble">
+    		{% for photo in photos %}
+    		<li>
+    			<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}, by {{ photo.created_by }}"><img style="width: {{ photo.width_240_factor_7 }}px; height: {{ photo.height_240_factor_7 }}px" src="{{ photo.thumb_240_url }}" alt="{{ photo.title }}, by {{ photo.created_by }}"></a>
+    		</li>
+    		{% endfor %}
+    	</ul>
 		{% paginate %}
 		{% endwith %}
 	{% endif %}

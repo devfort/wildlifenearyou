@@ -1,13 +1,20 @@
-/*
-Harmonise
-Internet Explorer fixes
-By Richard Rutter, clearleft.com
-*/
-
 body {
 	font-size: 100%;
 }
 .contents,
 .receptacle {
 	zoom: 1;
+}
+
+.photo-jumble {
+    zoom: 1;
+}
+.photo-jumble li {
+    display: inline;
+    margin: 5px;
+}
+.photo-jumble li a,
+.photo-jumble li img {
+    display: inline;
+    margin: 0;
 }

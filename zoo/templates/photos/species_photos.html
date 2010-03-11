@@ -10,14 +10,14 @@
 
 <div>
 	{% if not photos %}
-		<p>There are no photos of this species yet.</p>
+		<p class="notification">There are no photos of this species yet.</p>
 	{% else %}
 		{% autopaginate photos 32 %}
 		{% paginate %}
-		<ul class="photo-display">
+		<ul class="photo-jumble">
 			{% for photo in photos %}
 			<li>
-				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}">{{ photo.thumb_75 }}</a>
+				<a href="{{ photo.urls.absolute }}" title="{{ photo.title }}, by {{ photo.created_by }}"><img style="width: {{ photo.width_240_factor_7 }}px; height: {{ photo.height_240_factor_7 }}px" src="{{ photo.thumb_240_url }}" alt="{{ photo.title }}, by {{ photo.created_by }}"></a>
 			</li>
 			{% endfor %}
 		</ul>

@@ -142,6 +142,12 @@ class Photo(models.Model):
         else:
             return self.photo.thumbnail.absolute_url
     
+    def width_240_factor_7(self):
+        return int(((240.0 / 500) * self.width_max_500) * 0.7)
+    
+    def height_240_factor_7(self):
+        return int(((240.0 / 500) * self.height_max_500) * 0.7)
+    
     def original_url(self):
         if self.photo:
             return self.photo.url
