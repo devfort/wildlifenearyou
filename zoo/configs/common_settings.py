@@ -138,6 +138,7 @@ INSTALLED_APPS = [
     'zoo.lists',
     'zoo.api',
     'zoo.itis',
+    'zoo.statichashes',
     # The next four items are dependencies for basic.blog
     'basic.blog',
     'basic.inlines',
@@ -217,3 +218,29 @@ HTTP_PORT = 8000
 
 FACEBOOK_API_KEY = '4969f4ac95f11dba4ced1b2846193a4b'
 FACEBOOK_SECRET_KEY = '6fbc125cf5b05e0e8b516a488a598aec'
+
+STATIC_ROOT = os.path.realpath(os.path.join(OUR_ROOT, 'static'))
+STATIC_HASHDIR_PATH = 'hs' # Relative to STATIC_ROOT
+STATIC_HASHDIR_URLPATH = '/static/hs/'
+STATIC_FILES = ( # Just the files we want versioned filenames for
+    'css/general.css',
+    'css/helper_styles.css',
+    'css/ie.css',
+    'css/ielt7.css',
+    'css/overrides.css',
+    'css/page_components.css',
+    'css/page_structure.css',
+    'css/print.css',
+    'css/x-near-you.css',
+    'js/gallery.js',
+    'js/global.js',
+    'js/home.js',
+    'js/i-saw-and-a.js',
+    'js/star-select-replace.js',
+)
+STATIC_FILE_HASHES = {}
+STATIC_FILE_SETTINGS = os.path.join(OUR_ROOT, 'configs/static_file_hashes.py')
+try:
+    from static_file_hashes import STATIC_FILE_HASHES
+except ImportError:
+    pass
