@@ -1688,3 +1688,17 @@ div.photo-listing {
 }
 
 /* @end */
+
+/* @group Homepage login box */
+
+.sign-in-through {
+    margin-top: 10px;
+    overflow: hidden;
+}
+.sign-in-through form {
+    width: 165px;
+    height: 22px;
+    float: left;
+}
+
+/* @end */
