@@ -8,22 +8,31 @@ SPECIES_SET = 'species-with-multiple-photos'
 SEEN_KEY = 'bestpics-photo-times-seen:%s'
 WON_KEY = 'bestpics-photo-times-won:%s'
 BESTPICS_KEY = 'bestpics-species:%s'
+USER_SEEN_SET = 'bestpic-species-seen-set:%s'
+USER_SEEN_LIST = 'bestpic-species-seen-list:%s'
+USER_NOTSEEN_TEMP_SET = 'bestpic-species-temp-set:%s'
 
 MIN_VIEWING_REQUIREMENT = 3 # Must be rated three times to show up in scores
 
-def random_species_with_multiple_photos():
-    #return Species.objects.get(slug = 'otter')
+def random_species_with_multiple_photos(user = None):
+    if user is not None:
+        # Use set difference to avoid returning a species user has seen in 
+        # the past 100 goes
+        species_set = USER_NOTSEEN_TEMP_SET % user.username
+        r.sdiffstore(species_set, SPECIES_SET, USER_SEEN_SET % user.username)
+    else:
+        species_set = SPECIES_SET
     while True:
-        pk = r.srandmember(SPECIES_SET)
+        pk = r.srandmember(species_set)
         if pk is None:
             update_redis_set()
-            pk = r.srandmember(SPECIES_SET)
+            pk = r.srandmember(species_set)
             if pk is None:
                 raise ValueError('No species has more than 1 visible photo')
         try:
             return Species.objects.get(pk = pk)
         except Species.DoesNotExist:
-            r.srem(SPECIES_SET, pk)
+            r.srem(species_set, pk)
 
 def random_photos_for_species(species, num=2):
     key = 'species-photo-ids:%s' % species.pk

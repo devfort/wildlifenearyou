@@ -7,8 +7,14 @@ from zoo.photos.models import Photo
 from zoo.animals.models import Species
 from redis_db import r
 
+# Track this number of species so logged in users don't see repeats
+SEEN_SPECIES_COUNT = 150
+
 def bestpic(request):
-    species = utils.random_species_with_multiple_photos()
+    if request.user.is_anonymous():
+        species = utils.random_species_with_multiple_photos()
+    else:
+        species = utils.random_species_with_multiple_photos(request.user)
     photo1, photo2 = utils.random_photos_for_species(species, 2)
     # We use a token to ensure any given form we serve up can only be
     # submitted once. Used tokens are stored in Redis for 6 minutes. Forms
@@ -81,6 +87,14 @@ def process_submission(request):
         description += ' (rated by <a href="%s">%s</a>)' % (
             request.user.username, request.user.username
         )
+        # And record the species so we don't show it to them multiple times
+        set_key = utils.USER_SEEN_SET % request.user.username
+        list_key = utils.USER_SEEN_LIST % request.user.username
+        r.push(list_key, species_pk, head=True)
+        r.sadd(set_key, species_pk)
+        if r.scard(set_key) >= SEEN_SPECIES_COUNT:
+            r.srem(set_key, r.pop(list_key, tail=True))
+    
     r.push('bestpic-activity', description, head=True)
     r.ltrim('bestpic-activity', 0, 200)
     
