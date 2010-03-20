@@ -34,7 +34,7 @@ def random_species_with_multiple_photos(user = None):
         except Species.DoesNotExist:
             r.srem(species_set, pk)
 
-def random_photos_for_species(species, num=2):
+def random_photos_for_species(species):
     key = 'species-photo-ids:%s' % species.pk
     photo_ids = r.smembers(key)
     if not photo_ids or len(photo_ids) < 2:
@@ -44,9 +44,19 @@ def random_photos_for_species(species, num=2):
             r.sadd(key, id)
             r.expire(key, 10 * 60)
     
+    counts = [
+        c or 0 for c in r.mget(
+            *['bestpics-photo-times-seen:%s' % i for i in photo_ids]
+        )
+    ]
+    # Pick first photo biased based on number of times they have been seen
+    inverted_scores = [max(counts) - c for c in counts]
+    first_photo = photo_ids[random_index_with_bias(inverted_scores)]
+    remainder = list(id for id in photo_ids if id != first_photo)
+    second_photo = random.choice(remainder)
     photos = list(
         Photo.objects.select_related('created_by').filter(
-            pk__in = random.sample(photo_ids, num)
+            pk__in = [first_photo, second_photo]
         )
     )
     random.shuffle(photos)
@@ -137,3 +147,11 @@ def top_10_for_species(species):
 def species_has_top_10(species):
     species_key = BESTPICS_KEY % species.pk
     return r.zcard(species_key)
+
+def random_index_with_bias(bias_scores):
+    rand = random.uniform(0, sum(bias_scores))
+    total = 0
+    for i, score in enumerate(bias_scores):
+        total += score
+        if rand <= total:
+            return i

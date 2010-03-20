@@ -15,7 +15,7 @@ def bestpic(request):
         species = utils.random_species_with_multiple_photos()
     else:
         species = utils.random_species_with_multiple_photos(request.user)
-    photo1, photo2 = utils.random_photos_for_species(species, 2)
+    photo1, photo2 = utils.random_photos_for_species(species)
     # We use a token to ensure any given form we serve up can only be
     # submitted once. Used tokens are stored in Redis for 6 minutes. Forms
     # are time-stamped, and a submission from a form older than five minutes
