@@ -4,6 +4,6 @@ python-openid==2.2.4
 -e git://github.com/simonw/django-openid.git#egg=django-openid
 BeautifulSoup
 redis
-http://github.com/sciyoshi/pyfacebook/tarball/master
+#http://github.com/sciyoshi/pyfacebook/tarball/master
 http://github.com/bartTC/django-memcache-status/tarball/v1.0.1
 
