@@ -80,12 +80,10 @@ def user(request, username):
         ).select_related('user').get(user__username = username)
     except Profile.DoesNotExist:
         return api_response(request, 404, {
-            'ok': False,
             'username': username
-        })
+        }, ok = False)
     
     info = {
-        'ok': True,
         'username': username,
         'first_name': profile.user.first_name,
         'last_name': profile.user.first_name,
@@ -94,36 +92,77 @@ def user(request, username):
         'num_trips': profile.num_trips,
         'trips_api': 'http://www.wildlifenearyou.com/api/%s/trips/' % (
              username
-        )
+        ),
+        'species_seen_api': 'http://www.wildlifenearyou.com/api/%s/species/'%(
+             username
+        ),
     }
     return api_response(request, 200, info)
 
 @ratelimit
-def tripbook(request, username):
+def user_trips(request, username):
     try:
         user = User.objects.get(username = username)
     except User.DoesNotExist:
         return api_response(request, 404, {
-            'ok': False,
             'username': username
-        })
+        }, ok = False)
     return api_response(request, 200, {
-        'ok': True,
         'username': username,
         'trips': [{
             'api_url': 'http://www.wildlifenearyou.com/api/%s/trips/%s/' % (
                 username, trip['pk']
             ),
+            'url': 'http://www.wildlifenearyou.com/%s/trips/%s/' % (
+                username, trip['pk']
+            ),
             'name': trip['name'],
-            'trip_date': api_date(trip['start']),
-            'trip_date_accuracy': trip['start_accuracy'],    
+            'code': 't' + converter.from_int(trip['pk']),
+            'short_url': 'http://wlny.eu/t' + converter.from_int(trip['pk']),
+            'date': api_date(trip['start']),
+            'date_accuracy': trip['start_accuracy'],    
             'created': api_datetime(trip['created_at']),
             'num_sightings': trip['num_sightings'],
-            'place_known_as': trip['place__known_as'],
-            'place_api': 'http://www.wildlifenearyou.com/api/%s/%s/' % (
-                trip['place__country__country_code'], trip['place__slug']
-            )
+            'place': {
+                'known_as': trip['place__known_as'],
+                'api_url': 'http://www.wildlifenearyou.com/api/%s/%s/' % (
+                    trip['place__country__country_code'], trip['place__slug']
+                ),
+                'code': 'p' + converter.from_int(trip['place__pk']),
+                'short_url': 'http://wlny.eu/p' + \
+                    converter.from_int(trip['place__pk']),
+                'url': 'http://www.wildlifenearyou.com/%s/%s/' % (
+                     trip['place__country__country_code'], trip['place__slug']
+                )
+            },
         } for trip in trip_qs.filter(created_by = user)]
+    })
+
+@ratelimit
+def user_species(request, username):
+    try:
+        user = User.objects.get(username = username)
+    except User.DoesNotExist:
+        return api_response(request, 404, {
+            'username': username
+        }, ok = False)
+    species_seen = Species.objects.filter(
+        sightings__created_by = user
+    ).annotate(
+        times_seen = Count('sightings')
+    ).values('common_name', 'latin_name', 'slug', 'times_seen', 'pk')
+    return api_response(request, 200, {
+        'username': username,
+        'species': [{
+            'api_url': 'http://www.wildlifenearyou.com/api/species/%s/' % (
+                species['slug']
+            ),
+            'common_name': species['common_name'],
+            'latin_name': species['latin_name'],
+            'code': 's' + converter.from_int(species['pk']),
+            'short_url': 'http://wlny.eu/s'+converter.from_int(species['pk']),
+            'times_seen': species['times_seen'],
+        } for species in species_seen]
     })
 
 @ratelimit
@@ -132,11 +171,10 @@ def trip(request, username, pk):
         trip = Trip.objects.get(pk = pk, created_by__username = username)
     except Trip.DoesNotExist:
         return api_response(request, 404, {
-            'ok': False,
-            'trip_id': pk
-        })
+            'username': username,
+            'trip_id': pk,
+        }, ok = False)
     return api_response(request, 200, {
-        'ok': True,
         'name': trip.name,
         'todo': 'finish me',
     })
