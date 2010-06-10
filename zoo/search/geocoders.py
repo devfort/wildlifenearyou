@@ -4,6 +4,28 @@ from django.conf import settings
 from django.utils import simplejson
 
 def google_geocode(q, country_code = None):
+    # http://maps.google.com/maps/api/geocode/json?address=...&sensor=false
+    # http://code.google.com/apis/maps/documentation/geocoding/
+    args = {
+        'address': q,
+        'sensor': 'false',
+    }
+    if country_code:
+        args['region'] = country_code
+    json = simplejson.load(urllib.urlopen(
+        'http://maps.google.com/maps/api/geocode/json?' + 
+        urllib.urlencode(args)
+    ))
+    try:
+        location = json['results'][0]['geometry']['location']
+        lon = location['lng']
+        lat = location['lat']
+    except KeyError, IndexError:
+        return None, (None, None)
+    name = json['results'][0]['formatted_address']
+    return name, (lat, lon)
+
+def google_geocode_old(q, country_code = None):
     args = {
         'q': q,
         'output': 'json',
